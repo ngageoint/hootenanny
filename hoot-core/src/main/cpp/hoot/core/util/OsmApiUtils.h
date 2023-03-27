@@ -42,6 +42,7 @@ public:
   static constexpr const char* OSM_API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close";
   static constexpr const char* OSM_API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload";
   static constexpr const char* OSM_API_PATH_GET_ELEMENT = "/api/0.6/%1/%2";
+  static constexpr const char* OSM_API_PATH_GET_ELEMENT_FULL = "/api/0.6/%1/%2/full";
   /** Overpass API URL path */
   static constexpr const char* OVERPASS_API_PATH = "api/interpreter";
 };

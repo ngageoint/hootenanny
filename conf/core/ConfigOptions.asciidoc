@@ -3272,6 +3272,15 @@ value is set to 0 a single polygon using the bounds of the source data is being 
 List of tag/value pairs of metatdata tags with default values to be distributed (import) or
 collected (export).
 
+=== missing.element.retrieval.url
+
+* Data Type: string
+* Default Value: `https://overpass-api.de/api/interpreter`
+
+URL to an API (OSM or Overpass) to retrieving an missing elements in the initial data.  Can be the OSM API
+`https://www.openstreetmap.org/api/0.6/map` or Overpass API `https://overpass-api.de/api/interpreter`
+or any local OSM or Overpass APIs.
+
 === multilinestring.relation.collapser.types
 
 * Data Type: list

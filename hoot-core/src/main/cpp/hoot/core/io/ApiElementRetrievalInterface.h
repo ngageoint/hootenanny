@@ -22,46 +22,50 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
 
-#ifndef MAPCLEANER_H
-#define MAPCLEANER_H
+#ifndef API_ELELENT_RETRIEVAL_INTERFACE_H
+#define API_ELELENT_RETRIEVAL_INTERFACE_H
 
-// Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Progress.h>
+//  Hootenanny
+#include <hoot/core/elements/ElementId.h>
+
+//  Qt
+#include <QString>
+
+//  Standard
+#include <set>
 
 namespace hoot
 {
 
 /**
- * A composite class for cleaning maps to prep them for conflation.
+ * @brief The ApiElementRetrievalInterface contains all element retrieval related functions for readers.
  */
-class MapCleaner : public OsmMapOperation
+class ApiElementRetrievalInterface
 {
 public:
 
-  static QString className() { return "MapCleaner"; }
+  ApiElementRetrievalInterface();
+  virtual ~ApiElementRetrievalInterface() = default;
 
-  static QString opsKey() { return ConfigOptions::getMapCleanerTransformsKey(); }
+  bool hasMoreQueries() const;
+  QString getNextQuery(const QString& baseUrl);
 
-  MapCleaner() = default;
-  MapCleaner(const Progress& progress);
-  ~MapCleaner() override = default;
+  void setMissingElements(const std::set<ElementId>& elements);
 
-  void apply(std::shared_ptr<OsmMap>& map) override;
+protected:
 
-  QString getDescription() const override { return "Cleans map data"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
+  std::set<ElementId> _missingElements;
+  std::set<ElementId>::iterator _current;
 
-private:
+  bool _isOverpassQuery;
 
-  Progress _progress;
+  /**  Allow test class to access protected members for white box testing */
+//  friend class OverpassReaderInterfaceTest;
 };
 
 }
 
-#endif // MAPCLEANER_H
+#endif  //  API_ELELENT_RETRIEVAL_INTERFACE_H

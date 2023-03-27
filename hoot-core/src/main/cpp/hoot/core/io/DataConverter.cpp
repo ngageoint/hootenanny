@@ -207,8 +207,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
 
   //  Check to see if all of the i/o can be streamed.
-  const bool isStreamable =
-    IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
+  const bool isStreamable = IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
   LOG_VARD(isStreamable);
   if (isStreamable)
     _convertStreamable(inputs, output);

@@ -212,9 +212,9 @@ protected:
    */
   std::shared_ptr<geos::geom::Geometry> _cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
   /** writePartial functions that do the actual writing with the ElementProvider to look up "cached" elements */
-  void _writePartial(ElementProviderPtr& provider, const ConstNodePtr& n);
-  void _writePartial(ElementProviderPtr& provider, const ConstWayPtr& w);
-  void _writePartial(ElementProviderPtr& provider, const ConstRelationPtr& r);
+  void _writePartial(const ElementProviderPtr& provider, const ConstNodePtr& n);
+  void _writePartial(const ElementProviderPtr& provider, const ConstWayPtr& w);
+  void _writePartial(const ElementProviderPtr& provider, const ConstRelationPtr& r);
   /** Tasking Manager requires that all bounding geometries are MultiPolygons and not Polygons or Linestrings,
    *  set to true when the GeoJSON output is being used for Tasking Manager bounding polygons.
    */

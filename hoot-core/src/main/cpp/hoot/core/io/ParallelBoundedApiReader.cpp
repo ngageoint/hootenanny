@@ -87,7 +87,7 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
   }
   _sourceUrl.setQuery(urlQuery);
 
-  std::vector<std::shared_ptr<ParallelApiJob>> splits = std::make_shared<BoundedParallelApiJob>(envelope, _coordGridSize)->CreateInitialJob();
+  std::vector<std::shared_ptr<ParallelApiJob>> splits = std::make_shared<BoundedParallelApiJob>(_sourceUrl.toString(), envelope, _coordGridSize)->CreateInitialJob();
   //  No need to lock the mutex here because the other threads that access these member variables haven't started up yet
   _totalWork = static_cast<int>(splits.size());
   for (const auto& j : splits)
@@ -97,13 +97,40 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
     _threads.push_back(std::thread(&ParallelBoundedApiReader::_process, this));
 }
 
+void ParallelBoundedApiReader::beginRead(const QUrl& endpoint)
+{
+  //  Save the endpoint URL to query
+  _sourceUrl = endpoint;
+  //  Load the query from a file if requested
+  QUrlQuery urlQuery(_sourceUrl);
+  if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
+  {
+    QString query = _readOverpassQueryFile(_queryFilepath);
+    //  Should the query be validated here?
+    urlQuery.addQueryItem("data", query);
+  }
+  _sourceUrl.setQuery(urlQuery);
+
+  std::vector<std::shared_ptr<ParallelApiJob>> queries;
+  while (hasMoreQueries())
+    queries.push_back(std::make_shared<QueryParallelApiJob>(getNextQuery(_sourceUrl.toString())));
+  //  No need to lock the mutex here because the other threads that access these member variables haven't started up yet
+  _totalWork = static_cast<int>(queries.size());
+  for (const auto& j : queries)
+    _workQueue.emplace(j);
+  //  Start up the processing threads
+  for (int i = 0; i < _threadCount; ++i)
+    _threads.push_back(std::thread(&ParallelBoundedApiReader::_process, this));
+}
+
+
 bool ParallelBoundedApiReader::isComplete()
 {
-  //  Get the total number of envelopes
-  int envelopes = 0;
+  //  Get the total number of jobs
+  int jobs = 0;
   {
     std::lock_guard<std::mutex> work_lock(_workMutex);
-    envelopes = _totalWork;
+    jobs = _totalWork;
   }
   //  Get the total number of results
   int results = 0;
@@ -112,7 +139,7 @@ bool ParallelBoundedApiReader::isComplete()
     results = _totalResults;
   }
   //  Done means there is one result for each job
-  return envelopes == results && results > 0;
+  return jobs == results && results > 0;
 }
 
 bool ParallelBoundedApiReader::getSingleResult(QString& result)
@@ -209,45 +236,50 @@ void ParallelBoundedApiReader::_process()
     //  Make sure that we got a valid envelope
     if (job)
     {
-      //  Add the bbox to the query string
-      bool add_bbox = true;
-      QUrl url = _sourceUrl;
-      QUrlQuery query(_sourceUrl);
-      //  Remove any bbox that comes in so it can be updated
-      if (query.hasQueryItem("bbox"))
-        query.removeQueryItem("bbox");
-      //  Use the correct type of bbox for this query
-      QString bboxQuery;
-      if (_useOsmApiBboxFormat)
-        bboxQuery = GeometryUtils::toLonLatString(job->getBounds());
-      else
-        bboxQuery = GeometryUtils::toMinMaxString(job->getBounds());
-      //  Overpass queries operate a little differently with the bbox
-      if (_isOverpass)
+      QUrl url(job->getQuery());
+      if (job->isBounded())
       {
-        //  Get the data parameter
-        QString data = query.queryItemValue("data");
-        //  Search the data parameter for {{bbox}} and replace it with the actual bounds
-        if (data.contains("{{bbox}}"))
+        //  Add the bbox to the query string
+        QUrlQuery query(url);
+        bool add_bbox = true;
+        //  Remove any bbox that comes in so it can be updated
+        if (query.hasQueryItem("bbox"))
+          query.removeQueryItem("bbox");
+        //  Use the correct type of bbox for this query
+        QString bboxQuery;
+        if (_useOsmApiBboxFormat)
+          bboxQuery = GeometryUtils::toLonLatString(job->getBounds());
+        else
+          bboxQuery = GeometryUtils::toMinMaxString(job->getBounds());
+        //  Overpass queries operate a little differently with the bbox
+        if (_isOverpass)
         {
-          //  Embedded {{bbox}} data requires a Lat/Lon string
-          bboxQuery = GeometryUtils::toLatLonString(job->getBounds());
-          //  Remove the old 'data' query
-          query.removeQueryItem("data");
-          //  Replace the bbox place holder
-          data = data.replace("{{bbox}}", QString("%1").arg(bboxQuery));
-          //  Set the data query item back to the query
-          query.addQueryItem("data", data);
-          //  Don't add the bbox query item later because it is embedded in the data query item
-          add_bbox = false;
+          //  Get the data parameter
+          QString data = query.queryItemValue("data");
+          //  Search the data parameter for {{bbox}} and replace it with the actual bounds
+          if (data.contains("{{bbox}}"))
+          {
+            //  Embedded {{bbox}} data requires a Lat/Lon string
+            bboxQuery = GeometryUtils::toLatLonString(job->getBounds());
+            //  Remove the old 'data' query
+            query.removeQueryItem("data");
+            //  Replace the bbox place holder
+            data = data.replace("{{bbox}}", QString("%1").arg(bboxQuery));
+            //  Set the data query item back to the query
+            query.addQueryItem("data", data);
+            //  Don't add the bbox query item later because it is embedded in the data query item
+            add_bbox = false;
+          }
         }
+        else if (_addProjection)
+          bboxQuery += ",EPSG:4326";  //  Some APIs require the bounding box's projection, add it here
+        //  Add the bbox query item if necessary
+        if (add_bbox)
+          query.addQueryItem("bbox", bboxQuery);
+        url.setQuery(query);
       }
-      else if (_addProjection)
-        bboxQuery += ",EPSG:4326";  //  Some APIs require the bounding box's projection, add it here
-      //  Add the bbox query item if necessary
-      if (add_bbox)
-        query.addQueryItem("bbox", bboxQuery);
-      url.setQuery(query);
+      else if (url.toString().isEmpty())  //  Ignore empty URLs
+        continue;
 
       HootNetworkRequest request;
       LOG_DEBUG(url);
@@ -280,7 +312,14 @@ void ParallelBoundedApiReader::_process()
             //  Reset the timeout because this thread has successfully received a response
             timeout = 0;
             //  Update the user status
-            LOG_STATUS("Downloaded area (" << GeometryUtils::toLonLatString(job->getBounds()) << ")");
+            if (job->isBounded())
+            {
+              LOG_STATUS("Downloaded area (" << GeometryUtils::toLonLatString(job->getBounds()) << ")");
+            }
+            else
+            {
+              LOG_STATUS("Downloaded elements: " << FileUtils::toLogFormat(url.toString()));
+            }
           }
         }
         catch(const std::bad_alloc&)

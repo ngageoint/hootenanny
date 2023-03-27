@@ -41,13 +41,18 @@ using ParallelApiJobPtr = std::shared_ptr<ParallelApiJob>;
 /** Job class representing a single job that is run through the ParallelBoundedReader,
  *  can be divided into multiple jobs.
  */
-class ParallelApiJob
+class ParallelApiJob : public std::enable_shared_from_this<ParallelApiJob>
 {
 public:
-  virtual std::vector<ParallelApiJobPtr> CreateInitialJob() const = 0;
-  virtual std::vector<ParallelApiJobPtr> SplitJob() const = 0;
+  ParallelApiJob(const QString& query) : _query(query) { }
+  virtual ~ParallelApiJob() = default;
+  virtual std::vector<ParallelApiJobPtr> CreateInitialJob() = 0;
+  virtual std::vector<ParallelApiJobPtr> SplitJob() = 0;
   virtual bool isBounded() const { return false; }
   virtual geos::geom::Envelope getBounds() const { geos::geom::Envelope e;  e.setToNull(); return e; }
+  virtual QString getQuery() const { return _query; }
+protected:
+  QString _query;
 };
 
 
@@ -55,9 +60,14 @@ public:
 class BoundedParallelApiJob : public ParallelApiJob
 {
 public:
-  BoundedParallelApiJob(const geos::geom::Envelope& env, double grid_size) : _envelope(env), _coordGridSize(grid_size) { }
-  std::vector<ParallelApiJobPtr> CreateInitialJob() const override;
-  std::vector<ParallelApiJobPtr> SplitJob() const override;
+  BoundedParallelApiJob(const QString& query, const geos::geom::Envelope& env, double grid_size)
+    : ParallelApiJob(query),
+      _envelope(env),
+      _coordGridSize(grid_size)
+  { }
+  ~BoundedParallelApiJob() override = default;
+  std::vector<ParallelApiJobPtr> CreateInitialJob() override;
+  std::vector<ParallelApiJobPtr> SplitJob() override;
   bool isBounded() const override { return true; }
   geos::geom::Envelope getBounds() const override { return _envelope; }
 
@@ -74,11 +84,10 @@ private:
 class QueryParallelApiJob : public ParallelApiJob
 {
 public:
-  QueryParallelApiJob();
-  std::vector<ParallelApiJobPtr> CreateInitialJob() const override;
-  std::vector<ParallelApiJobPtr> SplitJob() const override;
-  bool isBounded() const override { return false; }
-private:
+  QueryParallelApiJob(const QString& query) : ParallelApiJob(query) { }
+  ~QueryParallelApiJob() override = default;
+  std::vector<ParallelApiJobPtr> CreateInitialJob() override;
+  std::vector<ParallelApiJobPtr> SplitJob() override;
 };
 
 }
