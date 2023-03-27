@@ -61,9 +61,6 @@ protected:
   std::set<ElementId>::iterator _current;
 
   bool _isOverpassQuery;
-
-  /**  Allow test class to access protected members for white box testing */
-//  friend class OverpassReaderInterfaceTest;
 };
 
 }

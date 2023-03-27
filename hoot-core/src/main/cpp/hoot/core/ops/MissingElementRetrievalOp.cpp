@@ -114,40 +114,4 @@ void MissingElementRetrievalOp::setApiEndpointUrl(const QString& url)
   _apiEndpoint = url;
 }
 
-/*
-QString MissingElementRetrievalOp::createOverpassQuery(const std::set<long>& missingNodes, const std::set<long>& missingWays, const std::set<long>& missingRelations) const
-{
-  QString query;
-  //  Don't make any requests if all sets are empty
-  if (!missingNodes.empty() || !missingWays.empty() || !missingRelations.empty())
-  {
-    //  Create an overpass query or a series of OSM API queries
-    QTextStream s(&query);
-    s << "[out:xml];(";
-    writeOverpassIdString(s, missingNodes, "node");
-    writeOverpassIdString(s, missingWays, "way");
-    writeOverpassIdString(s, missingRelations, "relation");
-    s << "(._;<;>;););out body;";
-  }
-  return query;
-}
-
-void MissingElementRetrievalOp::writeOverpassIdString(QTextStream& s, const std::set<long>& missingIds, const QString& elementType) const
-{
-  if (!missingIds.empty())
-  {
-    s << elementType << "(id:";
-    bool addComma = false;
-    for (auto id : missingIds)
-    {
-      if (addComma)
-        s << ",";
-      else
-        addComma = true;
-      s << QString::number(id);
-    }
-    s << ");";
-  }
-}
-*/
 }

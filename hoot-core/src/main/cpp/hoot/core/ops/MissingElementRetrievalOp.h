@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * A
+ * Map operation that requests any missing elements from an API to fill out the map
  */
 class MissingElementRetrievalOp : public OsmMapOperation
 {
@@ -60,10 +60,7 @@ public:
   void setApiEndpointUrl(const QString& url);
 
 private:
-/*
-  QString createOverpassQuery(const std::set<long>& missingNodes, const std::set<long>& missingWays, const std::set<long>& missingRelations) const;
-  void writeOverpassIdString(QTextStream& s, const std::set<long>& missingIds, const QString& elementType) const;
-*/
+
   QString _apiEndpoint;
 
   //  Allow test class to access private members for white box testing
@@ -72,4 +69,5 @@ private:
 
 }
 
-#endif // MAPCLEANER_H
+#endif // MISSING_ELEMENT_RETRIEVAL_OP_H
+
