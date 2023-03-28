@@ -4,6 +4,7 @@ set -e
 
 HVF=HOOT_VERSION_FILE
 DEF_VER=UNKNOWN-VERSION
+DEF_DATE=UNKNOWN-DATE
 
 LF='
 '
@@ -18,6 +19,9 @@ fi
 if test -f version
 then
         VN=$(cat version) || VN="$DEF_VER"
+elif test -f version_date
+then
+        VD=$(cat version_date) || VN="$DEF_DATE"
 elif test "$HAS_GIT" = "true" &&
         VD=$(git show -s --format=%ci | awk '{print $1;}') &&
         VN=$(git describe --match "v[0-9]*" --abbrev=7 --tags HEAD 2>/dev/null | sed -e s/-/_/g) &&
