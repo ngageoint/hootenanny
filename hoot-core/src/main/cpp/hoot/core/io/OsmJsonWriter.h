@@ -92,7 +92,7 @@ public:
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
   void setIncludeCircularError(bool includeCircularError)
-  { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
+  { _addExportTagsVisitor.setIncludeCircularError(includeCircularError); }
 
 protected:
 
@@ -135,14 +135,11 @@ protected:
 
 private:
 
-  bool _includeDebug;
   bool _includeIds;
   // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
   bool _includeCompatibilityTags;
   bool _pretty;
   bool _writeEmptyTags;
-
-  AddExportTagsVisitor _addExportTagsVisitor;
 
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeMetadata(const Element& element);

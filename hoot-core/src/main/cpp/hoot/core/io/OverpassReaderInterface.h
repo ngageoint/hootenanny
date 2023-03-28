@@ -41,13 +41,7 @@ class OverpassReaderInterface
 {
 public:
 
-  /**
-   * @brief ParallelBoundedApiReader - Constructor
-   * @param useOsmApiBboxFormat True for using the x1,y1,x2,y2 format, false for the x1,x2,y1,y2 format
-   * @param addProjection True adds the projection ",EPSG:4326" to the query string
-   */
   OverpassReaderInterface();
-  /** Destructor that stops all threads if necessary */
   virtual ~OverpassReaderInterface() = default;
 
   bool isOverpassUrl(const QString& url) const;

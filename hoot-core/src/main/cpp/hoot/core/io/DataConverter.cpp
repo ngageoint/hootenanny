@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 #include "DataConverter.h"
 
@@ -207,8 +207,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
 
   //  Check to see if all of the i/o can be streamed.
-  const bool isStreamable =
-    IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
+  const bool isStreamable = IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
   LOG_VARD(isStreamable);
   if (isStreamable)
     _convertStreamable(inputs, output);

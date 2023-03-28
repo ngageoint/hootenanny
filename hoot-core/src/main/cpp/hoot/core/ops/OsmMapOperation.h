@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OsmMapOperation_H
 #define OsmMapOperation_H
 
 // Hoot
-#include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/info/OperationStatus.h>
 
 // Boost
@@ -51,8 +51,7 @@ class OsmMap;
  * @see notes in ElementVisitor about FilteredByGeometryTypeCriteria, OperationStatus, and
  * ConflateInfoCacheConsumer implementations
  */
-class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatus
+class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria, public OperationStatus
 {
 public:
 

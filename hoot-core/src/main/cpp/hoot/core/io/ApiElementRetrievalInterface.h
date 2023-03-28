@@ -22,31 +22,47 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
 
-#ifndef OSM_API_UTILS_H
-#define OSM_API_UTILS_H
+#ifndef API_ELELENT_RETRIEVAL_INTERFACE_H
+#define API_ELELENT_RETRIEVAL_INTERFACE_H
+
+//  Hootenanny
+#include <hoot/core/elements/ElementId.h>
+
+//  Qt
+#include <QString>
+
+//  Standard
+#include <set>
 
 namespace hoot
 {
 
-class OsmApiEndpoints
+/**
+ * @brief The ApiElementRetrievalInterface contains all element retrieval related functions for readers.
+ */
+class ApiElementRetrievalInterface
 {
 public:
-  /** OSM API URL paths */
-  static constexpr const char* OSM_API_PATH_MAP = "/api/0.6/map";
-  static constexpr const char* OSM_API_PATH_CAPABILITIES = "/api/capabilities";
-  static constexpr const char* OSM_API_PATH_PERMISSIONS = "/api/0.6/permissions";
-  static constexpr const char* OSM_API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create";
-  static constexpr const char* OSM_API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close";
-  static constexpr const char* OSM_API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload";
-  static constexpr const char* OSM_API_PATH_GET_ELEMENT = "/api/0.6/%1/%2";
-  static constexpr const char* OSM_API_PATH_GET_ELEMENT_FULL = "/api/0.6/%1/%2/full";
-  /** Overpass API URL path */
-  static constexpr const char* OVERPASS_API_PATH = "api/interpreter";
+
+  ApiElementRetrievalInterface();
+  virtual ~ApiElementRetrievalInterface() = default;
+
+  bool hasMoreQueries() const;
+  QString getNextQuery(const QString& baseUrl);
+
+  void setMissingElements(const std::set<ElementId>& elements);
+
+protected:
+
+  std::set<ElementId> _missingElements;
+  std::set<ElementId>::iterator _current;
+
+  bool _isOverpassQuery;
 };
 
 }
 
-#endif  //  OSM_API_UTILS_H
+#endif  //  API_ELELENT_RETRIEVAL_INTERFACE_H

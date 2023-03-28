@@ -211,13 +211,6 @@ void OsmApiReader::initializePartial()
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  //  Set the bounds once we begin the read if setBounds() hasn't already been called
-  if (_bounds == nullptr)
-    _loadBounds();
-
-  if (_bounds == nullptr)
-    throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
-
   //  Reusing the reader for multiple reads has two options, the first is the
   //  default where the reader is reset and duplicates error out.  The second
   //  is where duplicates are ignored in the same dataset and across datasets
@@ -232,9 +225,24 @@ void OsmApiReader::initializePartial()
     finalizePartial();
   }
 
-  //  Spin up the threads. Use the envelope of the bounds to throw away any non-retangular bounds
-  //  that may have been passed.
-  beginRead(_url, *(_bounds->getEnvelopeInternal()));
+  if (_missingElements.empty())
+  {
+    //  Set the bounds once we begin the read if setBounds() hasn't already been called
+    if (_bounds == nullptr)
+      _loadBounds();
+
+    if (_bounds == nullptr)
+      throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
+
+    //  Spin up the threads and use the envelope of the bounds to throw away any non-retangular bounds
+    //  that may have been passed.
+    beginRead(_url, *(_bounds->getEnvelopeInternal()));
+  }
+  else
+  {
+    //  Spin up the threads and use the missing elements to run separate queries
+    beginRead(_url);
+  }
 }
 
 bool OsmApiReader::hasMoreElements()

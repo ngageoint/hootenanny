@@ -188,7 +188,7 @@ public:
    { _logWarningWhenRequirementsNotFound = logWarning; }
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
    void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
-   void setProjection(std::shared_ptr<OGRSpatialReference>& projection) { _projection = projection; }
+   void setProjection(const std::shared_ptr<OGRSpatialReference>& projection) { _projection = projection; }
 
 private:
 

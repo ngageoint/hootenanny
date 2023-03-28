@@ -22,46 +22,52 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
 
-#ifndef MAPCLEANER_H
-#define MAPCLEANER_H
+#ifndef MISSING_ELEMENT_RETRIEVAL_OP_H
+#define MISSING_ELEMENT_RETRIEVAL_OP_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Progress.h>
 
+// Qt
+#include <QTextStream>
+
 namespace hoot
 {
 
 /**
- * A composite class for cleaning maps to prep them for conflation.
+ * Map operation that requests any missing elements from an API to fill out the map
  */
-class MapCleaner : public OsmMapOperation
+class MissingElementRetrievalOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "MapCleaner"; }
+  static QString className() { return "MissingElementRetrievalOp"; }
 
-  static QString opsKey() { return ConfigOptions::getMapCleanerTransformsKey(); }
-
-  MapCleaner() = default;
-  MapCleaner(const Progress& progress);
-  ~MapCleaner() override = default;
+  MissingElementRetrievalOp();
+  ~MissingElementRetrievalOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getDescription() const override { return "Cleans map data"; }
+  QString getDescription() const override { return "Retrieve missing elements from the current map from an API"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
+  void setApiEndpointUrl(const QString& url);
+
 private:
 
-  Progress _progress;
+  QString _apiEndpoint;
+
+  //  Allow test class to access private members for white box testing
+  friend class MissingElementRetrievalOpTest;
 };
 
 }
 
-#endif // MAPCLEANER_H
+#endif // MISSING_ELEMENT_RETRIEVAL_OP_H
+

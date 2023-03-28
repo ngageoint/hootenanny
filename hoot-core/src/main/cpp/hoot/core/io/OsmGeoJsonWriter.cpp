@@ -186,7 +186,7 @@ void OsmGeoJsonWriter::writePartial(const ConstNodePtr& n)
   _writePartial(provider, n);
 }
 
-void OsmGeoJsonWriter::_writePartial(ElementProviderPtr& provider, const ConstNodePtr& n)
+void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const ConstNodePtr& n)
 {
   if (NoInformationCriterion().isSatisfied(n))
     return;
@@ -214,7 +214,7 @@ void OsmGeoJsonWriter::writePartial(const ConstWayPtr& w)
   _writePartial(provider, w);
 }
 
-void OsmGeoJsonWriter::_writePartial(ElementProviderPtr& provider, const ConstWayPtr& w)
+void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const ConstWayPtr& w)
 {
   //  Translate the element
   std::shared_ptr<geos::geom::Geometry> geometry = _translateElement(provider, w);
@@ -295,7 +295,7 @@ void OsmGeoJsonWriter::writePartial(const ConstRelationPtr& r)
   _writePartial(provider, r);
 }
 
-void OsmGeoJsonWriter::_writePartial(ElementProviderPtr& provider, const ConstRelationPtr& r)
+void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const ConstRelationPtr& r)
 {
   //  Translate the element
   std::shared_ptr<geos::geom::Geometry> geometry = _translateElement(provider, r);

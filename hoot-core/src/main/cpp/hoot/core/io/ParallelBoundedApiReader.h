@@ -40,6 +40,7 @@
 #include <geos/geom/Geometry.h>
 
 //  Hootenanny
+#include <hoot/core/io/ApiElementRetrievalInterface.h>
 #include <hoot/core/io/OverpassReaderInterface.h>
 #include <hoot/core/io/ParallelApiJob.h>
 
@@ -56,7 +57,7 @@ class HootNetworkRequest;
  *  example) that area is divided into quarters and reprocessed until all areas are successfully read.
  *  Also some responses may be too large to handle and those are split and re-handled.
  */
-class ParallelBoundedApiReader : protected OverpassReaderInterface
+class ParallelBoundedApiReader : protected OverpassReaderInterface, public ApiElementRetrievalInterface
 {
 public:
 
@@ -75,6 +76,12 @@ public:
    * @param envelope Bounding box of the area to query
    */
   void beginRead(const QUrl& endpoint, const geos::geom::Envelope& envelope);
+  /**
+   * @brief beginRead - Start the reading process by creating all queries and starting
+   *   the receiving threads
+   * @param endpoint URL to the HTTP endpoint to query
+   */
+  void beginRead(const QUrl& endpoint);
   /**
    * @brief isComplete
    * @return True if all bounding boxes have been successfully queried

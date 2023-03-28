@@ -60,7 +60,6 @@ OsmJsonWriter::OsmJsonWriter(int precision)
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _writeSplitFiles(false),
     _sortTags(ConfigOptions().getWriterSortTagsByKey()),
-    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _includeIds(ConfigOptions().getWriterIncludeIdTag()),
     _includeCompatibilityTags(true),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
@@ -332,10 +331,7 @@ void OsmJsonWriter::_writeNodes()
   for (auto node_id : nids)
   {
     ConstNodePtr n = _map->getNode(node_id);
-    const QString msg = "Writing node: " + n->toString() + "...";
-
     writePartial(n);
-
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {
@@ -411,10 +407,7 @@ void OsmJsonWriter::_writeWays()
   for (auto way_id : wids)
   {
     ConstWayPtr w = _map->getWay(way_id);
-    const QString msg = "Writing way: " + w->toString() + "...";
-
     writePartial(w);
-
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {
@@ -436,10 +429,7 @@ void OsmJsonWriter::_writeRelations()
   for (auto relation_id : rids)
   {
     ConstRelationPtr r = _map->getRelation(relation_id);
-    const QString msg = "Writing relation: " + r->toString() + "...";
-
     writePartial(r);
-
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {

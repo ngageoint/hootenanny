@@ -36,7 +36,7 @@ namespace hoot
 bool BoundedParallelApiJob::_boundsIsPolygon = false;
 std::shared_ptr<geos::geom::Geometry> BoundedParallelApiJob::_boundingPoly;
 
-std::vector<ParallelApiJobPtr> BoundedParallelApiJob::CreateInitialJob() const
+std::vector<ParallelApiJobPtr> BoundedParallelApiJob::CreateInitialJob()
 {
   //  Split the envelope if it is bigger than the prescribed max
   int lon_div = 1;
@@ -57,13 +57,13 @@ std::vector<ParallelApiJobPtr> BoundedParallelApiJob::CreateInitialJob() const
       double lat = _envelope.getMinY() + _coordGridSize * j;
       double lat2 = std::min(lat + _coordGridSize, _envelope.getMaxY());
       //  Start at the upper right corner and create boxes left to right, top to bottom
-      jobs.push_back(std::make_shared<BoundedParallelApiJob>(geos::geom::Envelope(lon, lon2, lat, lat2), _coordGridSize));
+      jobs.push_back(std::make_shared<BoundedParallelApiJob>(_query, geos::geom::Envelope(lon, lon2, lat, lat2), _coordGridSize));
     }
   }
   return jobs;
 }
 
-std::vector<ParallelApiJobPtr> BoundedParallelApiJob::SplitJob() const
+std::vector<ParallelApiJobPtr> BoundedParallelApiJob::SplitJob()
 {
   //  Split the envelope in quarters and push them all back on the queue
   double lon1 = _envelope.getMinX();
@@ -94,31 +94,29 @@ std::vector<ParallelApiJobPtr> BoundedParallelApiJob::SplitJob() const
       std::unique_ptr<geos::geom::Geometry> g = factory->toGeometry(&e);
       //  Don't push envelopes that don't intersect the original geometry
       if (g->intersects(_boundingPoly.get()))
-        splits.push_back(std::make_shared<BoundedParallelApiJob>(e, _coordGridSize));
+        splits.push_back(std::make_shared<BoundedParallelApiJob>(_query, e, _coordGridSize));
     }
   }
   else
   {
     //  Split the boxes into quads and push them all onto the queue
     for (const auto& e : envelopes)
-      splits.push_back(std::make_shared<BoundedParallelApiJob>(e, _coordGridSize));
+      splits.push_back(std::make_shared<BoundedParallelApiJob>(_query, e, _coordGridSize));
   }
   return splits;
 }
 
-QueryParallelApiJob::QueryParallelApiJob()
-{
-}
-
-std::vector<ParallelApiJobPtr> QueryParallelApiJob::CreateInitialJob() const
+std::vector<ParallelApiJobPtr> QueryParallelApiJob::CreateInitialJob()
 {
   std::vector<ParallelApiJobPtr> jobs;
+  jobs.push_back(this->shared_from_this());
   return jobs;
 }
 
-std::vector<ParallelApiJobPtr> QueryParallelApiJob::SplitJob() const
+std::vector<ParallelApiJobPtr> QueryParallelApiJob::SplitJob()
 {
   std::vector<ParallelApiJobPtr> splits;
+  splits.push_back(this->shared_from_this());
   return splits;
 }
 

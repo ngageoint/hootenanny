@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSM_API_READER_H
 #define OSM_API_READER_H
@@ -49,7 +49,7 @@ namespace hoot
  * subsequently filter the resulting map on the polygon afterwards
  * https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_map_data_by_bounding_box:_GET_.2Fapi.2F0.6.2Fmap
  */
-class OsmApiReader : public OsmXmlReader, private ParallelBoundedApiReader
+class OsmApiReader : public OsmXmlReader, public ParallelBoundedApiReader
 {
 public:
 
