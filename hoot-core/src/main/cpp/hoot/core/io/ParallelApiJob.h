@@ -84,7 +84,7 @@ private:
 class QueryParallelApiJob : public ParallelApiJob
 {
 public:
-  QueryParallelApiJob(const QString& query) : ParallelApiJob(query) { }
+  using ParallelApiJob::ParallelApiJob;
   ~QueryParallelApiJob() override = default;
   std::vector<ParallelApiJobPtr> CreateInitialJob() override;
   std::vector<ParallelApiJobPtr> SplitJob() override;

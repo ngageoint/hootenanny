@@ -44,7 +44,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, MissingElementRetrievalOp)
 MissingElementRetrievalOp::MissingElementRetrievalOp()
 {
   //  This operator requires that missing child references aren't removed (or nothing would be downloaded)
-  conf().set(ConfigOptions().getMapReaderAddChildRefsWhenMissingKey(), true);
+  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   //  Validate the retrieval URL
   setApiEndpointUrl(ConfigOptions().getMissingElementRetrievalUrl());
 }
