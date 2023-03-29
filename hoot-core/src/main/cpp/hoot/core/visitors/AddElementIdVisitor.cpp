@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 #include "AddElementIdVisitor.h"
 
@@ -37,8 +37,11 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddElementIdVisitor)
 
 void AddElementIdVisitor::visit(const ElementPtr& pElement)
 {
-  Tags& tags = pElement->getTags();
-  tags[MetadataTags::HootId()] = pElement->getElementId().toString();
+  if (pElement)
+  {
+    Tags& tags = pElement->getTags();
+    tags[MetadataTags::HootId()] = pElement->getElementId().toString();
+  }
 }
 
 }
