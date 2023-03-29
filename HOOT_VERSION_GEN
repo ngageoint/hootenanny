@@ -19,9 +19,7 @@ fi
 if test -f version
 then
         VN=$(cat version) || VN="$DEF_VER"
-elif test -f version_date
-then
-        VD=$(cat version_date) || VN="$DEF_DATE"
+        VD=$(cat version_date) || VD="$DEF_DATE"
 elif test "$HAS_GIT" = "true" &&
         VD=$(git show -s --format=%ci | awk '{print $1;}') &&
         VN=$(git describe --match "v[0-9]*" --abbrev=7 --tags HEAD 2>/dev/null | sed -e s/-/_/g) &&
@@ -37,6 +35,7 @@ then
         PASS=1
 else
         VN="$DEF_VER"
+        VD="$DEF_DATE"
 fi
 
 # VN is the full version number. E.g. 0.1.0 if it is a tag. 0.1.0-2-deadbeef
