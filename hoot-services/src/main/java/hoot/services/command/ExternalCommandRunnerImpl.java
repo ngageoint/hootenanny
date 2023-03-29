@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.command;
 
@@ -122,25 +122,22 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         this.stdout = new LogOutputStream() {
             @Override
             protected void processLine(String line, int level) {
-                String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
                 String currentLine = obfuscateConsoleLog(line) + "\n";
 
-                // Had to add because ran into case where same line was processed twice in a row
-                if(!currentOut.equals(currentLine)) {
-                    currentOut = currentOut.concat(currentLine);
-                    commandResult.setStdout(currentOut);
+                if (trackable) {
+                    commandResult.setStdout(currentLine);
 
-                    if (trackable) {
-                        // if includes percent progress, update that as well
-                        Matcher matcher = pattern.matcher(currentLine);
-                        if (matcher.find()) {
-                            commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
-                        }
-
-                        // update command status table stdout
-                        DbUtils.upsertCommandStatus(commandResult);
-                        logger.info("Command stdout: {}", currentLine);
+                    // if includes percent progress, update that as well
+                    Matcher matcher = pattern.matcher(currentLine);
+                    if (matcher.find()) {
+                        commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
                     }
+
+                    // update command status table stdout
+                    DbUtils.upsertCommandStatus(commandResult);
+                    logger.info("Command stdout: {}", currentLine);
+                } else {
+                    commandResult.setStdout(commandResult.getStdout().concat(currentLine));
                 }
             }
         };
@@ -148,20 +145,16 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         this.stderr = new LogOutputStream() {
             @Override
             protected void processLine(String line, int level) {
-                String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
                 String currentLine = obfuscateConsoleLog(line) + "\n";
+                logger.error(line);
 
-                // Had to add because ran into case where same line was processed twice in a row
-                if(!currentErr.equals(currentLine)) {
-                    logger.error(line);
+                if (trackable) {
+                    commandResult.setStderr(currentLine);
 
-                    currentErr = currentErr.concat(currentLine);
-                    commandResult.setStderr(currentErr);
-
-                    if (trackable) {
-                        // update command status table stderr
-                        DbUtils.upsertCommandStatus(commandResult);
-                    }
+                    // update command status table stderr
+                    DbUtils.upsertCommandStatus(commandResult);
+                } else {
+                    commandResult.setStderr(commandResult.getStderr().concat(currentLine));
                 }
             }
         };

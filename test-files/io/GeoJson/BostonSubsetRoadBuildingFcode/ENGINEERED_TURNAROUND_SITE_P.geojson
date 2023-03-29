@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"179969","F_CODE":"AP033","OSMTAGS":{"source":"massgis_import_v0.1_20071009100433"},"OTH":"(ZI004_RCG:Office of Geographic and Environmental Information MassGIS)","ZI004_RCG":"999","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4686093, 42.4735655]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"179969","F_CODE":"AP033","OSMTAGS":{"source":"massgis_import_v0.1_20071009100433"},"OTH":"(ZI004_RCG:Office of Geographic and Environmental Information MassGIS)","ZI004_RCG":"999","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4551017, 42.4894111]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"179969","F_CODE":"AP033","OSMTAGS":{"source":"massgis_import_v0.1_20071009100433"},"OTH":"(ZI004_RCG:Office of Geographic and Environmental Information MassGIS)","ZI004_RCG":"999","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.470561, 42.4774347]}},

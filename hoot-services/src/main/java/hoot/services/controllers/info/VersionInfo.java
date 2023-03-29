@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.info;
 
@@ -33,6 +33,7 @@ package hoot.services.controllers.info;
 public class VersionInfo {
     private String name;
     private String version;
+    private String date;
     private String builtBy;
 
     public VersionInfo() {
@@ -54,6 +55,14 @@ public class VersionInfo {
         this.version = version;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getBuiltBy() {
         return builtBy;
     }
@@ -66,6 +75,7 @@ public class VersionInfo {
     public String toString() {
         return "Name: " + name + System.lineSeparator() +
                "Version: " + version + System.lineSeparator() +
+               "Date: " + date + System.lineSeparator() +
                "Built By: " + builtBy;
     }
 }

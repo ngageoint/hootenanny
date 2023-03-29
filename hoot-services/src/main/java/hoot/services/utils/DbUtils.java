@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.utils;
 
@@ -991,7 +991,7 @@ public class DbUtils {
             else {
                 String queryUpdate = String.format(
                         "UPDATE command_status " +
-                        "SET stdout = '%s', stderr = '%s', percent_complete = '%d' " +
+                        "SET stdout = concat(stdout, '%s'), stderr = concat(stderr, '%s'), percent_complete = '%d' " +
                         "WHERE id=%d",
                         commandResult.getStdout(), commandResult.getStderr(), commandResult.getPercentProgress(), commandResult.getId());
 

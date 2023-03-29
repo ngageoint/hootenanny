@@ -10,7 +10,7 @@ This file is found in the hoot-services.war file under the path `WEB-INF/classes
 The default value works for the UI running separately in development mode with webpack.
 The proper redirect-uri value for the UI deployed by tomcat on vagrant is `https://localhost:8443/hootenanny-id/login.html`.
 
-There is a sed script that will update this config `scripts/tomcat/configure_oauth_8888.sh`, which is also used by the RPM-based vm defined in the Vagrantfile as `hoot_centos7_rpm`, which is the quickest way to get Hootenanny up and running.
+There is a sed script that will update this config `scripts/tomcat/configure_oauth_8443.sh`, which is also used by the RPM-based vm defined in the Vagrantfile as `hoot_centos7_rpm`, which is the quickest way to get Hootenanny up and running.
 
 Out of the box, the Hoot OAuth2 config uses OSM as the OAuth provider only to authenticate users.  The default client registration does not have the permission to write back to the OSM API.
 There are more config settings to change the OAuth provider from public OpenStreetMap to another private instance.  This will require registering a new client application with the rails app and then updating this section in oauth2-client.properties.

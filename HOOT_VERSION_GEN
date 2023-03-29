@@ -4,6 +4,7 @@ set -e
 
 HVF=HOOT_VERSION_FILE
 DEF_VER=UNKNOWN-VERSION
+DEF_DATE=UNKNOWN-DATE
 
 LF='
 '
@@ -18,7 +19,9 @@ fi
 if test -f version
 then
         VN=$(cat version) || VN="$DEF_VER"
+        VD=$(cat version_date) || VD="$DEF_DATE"
 elif test "$HAS_GIT" = "true" &&
+        VD=$(git show -s --format=%ci | awk '{print $1;}') &&
         VN=$(git describe --match "v[0-9]*" --abbrev=7 --tags HEAD 2>/dev/null | sed -e s/-/_/g) &&
         case "$VN" in
         *$LF*) (exit 1) ;;
@@ -32,9 +35,10 @@ then
         PASS=1
 else
         VN="$DEF_VER"
+        VD="$DEF_DATE"
 fi
 
-# VN is the full version number. E.g. 0.1.0 if it is a tag. 0.1.0-2-deadbeef 
+# VN is the full version number. E.g. 0.1.0 if it is a tag. 0.1.0-2-deadbeef
 # if it is not a tagged version
 VN=$(expr "$VN" : v*'\(.*\)')
 
@@ -54,10 +58,13 @@ fi
 # If the version has changed, then rewrite the version header file.
 test "$VN" = "$VC" || {
     echo "HOOT_VERSION = $VN" >$HVF
+    echo "HOOT_DATE = $VD" >>$HVF
+    echo "HOOT_BUILT_BY = $(whoami)" >>$HVF
 
     cat hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h.in |  \
     sed -e "s/@HOOT_VERSION@/$VN/g" |  \
     sed -e "s/@HOOT_REVISION@/$HOOT_REVISION/g" |  \
+    sed -e "s/@HOOT_DATE@/$VD/g" |  \
     sed -e "s/@HOOT_BUILT_BY@/$(whoami)/g" > \
     hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
 }

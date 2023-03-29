@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"100104","F_CODE":"AL105","OSMTAGS":{"ele":"70","gnis:Class":"Populated Place","gnis:County":"Middlesex","gnis:County_num":"017","gnis:ST_alpha":"MA","gnis:ST_num":"25","gnis:id":"611516","import_uuid":"bb7269ee-502a-5391-8056-e3ce0e66489c","is_in":"Middlesex,Massachusetts,Mass.,MA,USA"},"ZI005_FNA":"West Acton","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4746914, 42.4761381]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100104","F_CODE":"AL105","OSMTAGS":{"ele":"68","gnis:Class":"Populated Place","gnis:id":"611462"},"ZI005_FNA":"Kelly's Corner","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4525539, 42.474929]}}]
 }

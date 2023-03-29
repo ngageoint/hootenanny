@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"tag1":{"building":"yes","o2s_reason":"Line geometry is not valid for AL013","source:datetime":"2012-12-15T01:48:10Z"}},"geometry": {"type":"LineString","coordinates": [[-71.462524, 42.4718488],[-71.46243010000001, 42.4718293]]}},
 {"type":"Feature","properties":{"tag1":{"building":"yes","o2s_reason":"Line geometry is not valid for AL013","source:datetime":"2012-12-15T01:46:50Z"}},"geometry": {"type":"Point","coordinates": [-71.4504139, 42.4840991]}},
 {"type":"Feature","properties":{"tag1":{"building":"yes","o2s_reason":"Line geometry is not valid for AL013","source:datetime":"2012-02-21T01:44:02Z"}},"geometry": {"type":"LineString","coordinates": [[-71.45065150000001, 42.4752546],[-71.4505908, 42.4755525],[-71.45065150000001, 42.4752546]]}},

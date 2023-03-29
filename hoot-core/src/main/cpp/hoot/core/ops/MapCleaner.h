@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MAPCLEANER_H
@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Progress.h>
 
 namespace hoot
@@ -44,7 +45,7 @@ public:
 
   static QString className() { return "MapCleaner"; }
 
-  static QString opsKey() { return "map.cleaner.transforms"; }
+  static QString opsKey() { return ConfigOptions::getMapCleanerTransformsKey(); }
 
   MapCleaner() = default;
   MapCleaner(const Progress& progress);

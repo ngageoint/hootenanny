@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReader.h"
@@ -160,7 +160,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
 
   //  Filter the map based on the polygon
-  if (_isPolygon)
+  if (_getIsBoundsPoly())
   {
     size_t element_count = _map->getElementCount();
     //  Remove any elements that don't meet the criterion
@@ -185,20 +185,21 @@ void OsmApiReader::close()
 void OsmApiReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
 {
   //  Check if the bounds are rectangular
-  _isPolygon = bounds ? !bounds->isRectangle() : false;
-  _boundingPoly = bounds;
+  _setIsBoundsPoly(bounds ? !bounds->isRectangle() : false);
+  _setBoundingPoly(bounds);
   _polyCriterion = std::make_shared<InBoundsCriterion>(false);
-  _polyCriterion->setBounds(_boundingPoly);
+  _polyCriterion->setBounds(bounds);
   Boundable::setBounds(bounds);
 }
 
 void OsmApiReader::setBounds(const geos::geom::Envelope& bounds)
 {
+  std::shared_ptr<geos::geom::Geometry> geometry(std::shared_ptr<geos::geom::Geometry>(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release()));
   //  An envelope isn't a poly bounds
-  _isPolygon = false;
-  _boundingPoly.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release());
+  _setIsBoundsPoly(false);
+  _setBoundingPoly(geometry);
   _polyCriterion = std::make_shared<InBoundsCriterion>(false);
-  _polyCriterion->setBounds(_boundingPoly);
+  _polyCriterion->setBounds(geometry);
   Boundable::setBounds(bounds);
 }
 
@@ -209,13 +210,6 @@ void OsmApiReader::initializePartial()
   LOG_VART(_useFileStatus);
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
-
-  //  Set the bounds once we begin the read if setBounds() hasn't already been called
-  if (_bounds == nullptr)
-    _loadBounds();
-
-  if (_bounds == nullptr)
-    throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
 
   //  Reusing the reader for multiple reads has two options, the first is the
   //  default where the reader is reset and duplicates error out.  The second
@@ -231,9 +225,24 @@ void OsmApiReader::initializePartial()
     finalizePartial();
   }
 
-  //  Spin up the threads. Use the envelope of the bounds to throw away any non-retangular bounds
-  //  that may have been passed.
-  beginRead(_url, *(_bounds->getEnvelopeInternal()));
+  if (_missingElements.empty())
+  {
+    //  Set the bounds once we begin the read if setBounds() hasn't already been called
+    if (_bounds == nullptr)
+      _loadBounds();
+
+    if (_bounds == nullptr)
+      throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
+
+    //  Spin up the threads and use the envelope of the bounds to throw away any non-retangular bounds
+    //  that may have been passed.
+    beginRead(_url, *(_bounds->getEnvelopeInternal()));
+  }
+  else
+  {
+    //  Spin up the threads and use the missing elements to run separate queries
+    beginRead(_url);
+  }
 }
 
 bool OsmApiReader::hasMoreElements()
@@ -248,6 +257,8 @@ bool OsmApiReader::hasMoreElements()
     //  map needed for assigning new element ids only (not actually putting any of the elements that
     //  are read into this map, since this is the partial reading logic)
     _map = std::make_shared<OsmMap>();
+    //  Update the map in the polygon criterion everytime a new one is created
+    _polyCriterion->setOsmMap(_map.get());
 
     QString xmlResult;
     //  Get one XML string to parse
@@ -324,7 +335,7 @@ bool OsmApiReader::_canUseElement(const ElementPtr& element) const
     return false;
   else if (_elementSet.find(element->getElementId()) != _elementSet.end())
     return false;
-  else if (_isPolygon && element->getElementType() != ElementType::Node && !_polyCriterion->isSatisfied(element))
+  else if (_getIsBoundsPoly() && element->getElementType() != ElementType::Node && !_polyCriterion->isSatisfied(element))
     return false;
   else
     return true;

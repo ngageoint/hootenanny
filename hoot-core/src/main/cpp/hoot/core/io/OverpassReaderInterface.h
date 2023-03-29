@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OVERPASS_READER_INTERFACE_H
@@ -41,13 +41,7 @@ class OverpassReaderInterface
 {
 public:
 
-  /**
-   * @brief ParallelBoundedApiReader - Constructor
-   * @param useOsmApiBboxFormat True for using the x1,y1,x2,y2 format, false for the x1,x2,y1,y2 format
-   * @param addProjection True adds the projection ",EPSG:4326" to the query string
-   */
   OverpassReaderInterface();
-  /** Destructor that stops all threads if necessary */
   virtual ~OverpassReaderInterface() = default;
 
   bool isOverpassUrl(const QString& url) const;
@@ -69,7 +63,7 @@ protected:
   /** Overpass */
   QString _queryFilepath;
 
-  QString _readOverpassQueryFile(const QString& path) const;
+  QString _readOverpassQueryFile(const QString& path, bool stripNewLines = true) const;
 
   /**  Allow test class to access protected members for white box testing */
   friend class OverpassReaderInterfaceTest;

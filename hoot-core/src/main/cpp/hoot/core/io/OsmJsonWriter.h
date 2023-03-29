@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -31,7 +31,7 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/io/MultiFileWriter.h>
-#include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
@@ -49,7 +49,7 @@ namespace hoot
  * methods. There is not proper JSON writer. This both simplifies dependencies, code and should
  * make things a bit faster.
  */
-class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter, public Configurable
+class OsmJsonWriter : public QXmlDefaultHandler, public PartialOsmMapWriter, public Configurable
 {
 public:
 
@@ -62,9 +62,16 @@ public:
 
   bool isSupported(const QString& url) const override { return url.endsWith(".json", Qt::CaseInsensitive); }
   void open(const QString& url) override;
-  virtual void close() { if (_writer.isOpen()) _writer.close(); }
+  void close() override { if (_writer.isOpen()) _writer.close(); }
   void write(const ConstOsmMapPtr& map) override;
   QString supportedFormats() const override { return ".json"; }
+
+  /** See PartialOsmMapWriter */
+  void initializePartial() override;
+  void finalizePartial() override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
@@ -85,7 +92,7 @@ public:
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
   void setIncludeCircularError(bool includeCircularError)
-  { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
+  { _addExportTagsVisitor.setIncludeCircularError(includeCircularError); }
 
 protected:
 
@@ -128,14 +135,11 @@ protected:
 
 private:
 
-  bool _includeDebug;
   bool _includeIds;
   // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
   bool _includeCompatibilityTags;
   bool _pretty;
   bool _writeEmptyTags;
-
-  AddExportTagsVisitor _addExportTagsVisitor;
 
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeMetadata(const Element& element);

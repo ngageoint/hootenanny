@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"tag1":{"highway":"traffic_signals","o2s_reason":"Point geometry is not valid for AP030"}},"geometry": {"type":"Point","coordinates": [-71.4747, 42.476152]}},
 {"type":"Feature","properties":{"tag1":{"highway":"motorway_junction","o2s_reason":"Point geometry is not valid for AP030","ref":"41"}},"geometry": {"type":"Point","coordinates": [-71.472939, 42.499278]}},
 {"type":"Feature","properties":{"tag1":{"highway":"traffic_signals","o2s_reason":"Point geometry is not valid for AP030"}},"geometry": {"type":"Point","coordinates": [-71.45376400000001, 42.474867]}},

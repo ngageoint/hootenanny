@@ -73,7 +73,11 @@ class OsmApiReaderTest : public HootTestFixture
 public:
 
   const QString OSM_API_URL = "https://www.openstreetmap.org";
+  const QString OVERPASS_API_URL = "https://overpass-api.de";
+
   const QString LOCAL_TEST_API_URL = "http://localhost:%1";
+
+  const QString OVERPASS_QUERY_STRING = "?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;";
 
   /** Separate port numbers so that tests can run in parallel */
   const int PORT_SIMPLE =         9900;
@@ -96,31 +100,31 @@ public:
     s.set(ConfigOptions::getBoundsKey(), "38.4902,35.7982,38.6193,35.8536");
     s.set(ConfigOptions::getBoundsInputFileKey(), "");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(!reader._isPolygon);
+    CPPUNIT_ASSERT(!reader._getIsBoundsPoly());
 
     //  Use a bounding polygon that is a rectangle in `bounds`
     s.set(ConfigOptions::getBoundsKey(), "-72.474,18.545;-72.474,18.548;-72.471,18.548;-72.471,18.545;-72.474,18.545");
     s.set(ConfigOptions::getBoundsInputFileKey(), "");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(!reader._isPolygon);
+    CPPUNIT_ASSERT(!reader._getIsBoundsPoly());
 
     //  Use a bounding polygon in `bounds`
     s.set(ConfigOptions::getBoundsKey(), "-72.474,18.545;-72.471,18.548;-72.471,18.545;-72.474,18.545");
     s.set(ConfigOptions::getBoundsInputFileKey(), "");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._isPolygon);
+    CPPUNIT_ASSERT(reader._getIsBoundsPoly());
 
     //  Use a bounding box in `bounds.input.file`
     s.set(ConfigOptions::getBoundsKey(), "");
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(!reader._isPolygon);
+    CPPUNIT_ASSERT(!reader._getIsBoundsPoly());
 
     //  Use a bounding polygon in `bounds.input.file`
     s.set(ConfigOptions::getBoundsKey(), "");
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestPolyBounds.osm");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._isPolygon);
+    CPPUNIT_ASSERT(reader._getIsBoundsPoly());
   }
 
   void runSimpleTest()
@@ -134,7 +138,7 @@ public:
     OsmApiReader reader;
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that there is no splitting
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::API_PATH_MAP);
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::OSM_API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -163,7 +167,7 @@ public:
     reader.setConfiguration(s);
     //  Set the bounds to be larger than 0.25 degrees by 0.25 degrees to cause a geographic split
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1142, 40.4557, 40.7577));
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + OsmApiEndpoints::API_PATH_MAP);
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + OsmApiEndpoints::OSM_API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -192,7 +196,7 @@ public:
     reader.setConfiguration(s);
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that it is split by elements on the server
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + OsmApiEndpoints::API_PATH_MAP);
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + OsmApiEndpoints::OSM_API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -218,7 +222,7 @@ public:
       //  Set the bounds to be larger than 1 degree by 1 degree so that it will fail
       reader.setBounds(geos::geom::Envelope(-111.3914, -110.2914, 40.5557, 41.7557));
       //  Can reuse PORT_SIMPLE here because it isn't actually used before the test fails
-      reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::API_PATH_MAP);
+      reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::OSM_API_PATH_MAP);
       reader.read(map);
     }
     catch (const UnsupportedException& e)
@@ -242,7 +246,7 @@ public:
     s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestPolyBounds.osm");
     reader.setConfiguration(s);
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_POLYGON) + OsmApiEndpoints::API_PATH_MAP);
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_POLYGON) + OsmApiEndpoints::OSM_API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -268,7 +272,7 @@ public:
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
     reader.setConfiguration(s);
     //  Read XML from OSM API and parse it
-    reader.open(OSM_API_URL + OsmApiEndpoints::API_PATH_MAP);
+    reader.open(OSM_API_URL + OsmApiEndpoints::OSM_API_PATH_MAP);
     reader.read(map);
 
     QString output = _outputPath + "OsmApiOutput.osm";
@@ -289,7 +293,7 @@ public:
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
     reader.setConfiguration(s);
     //  Read XML from Overpass and parse it
-    reader.open("https://overpass-api.de/api/interpreter?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;");
+    reader.open(OVERPASS_API_URL + "/" + OsmApiEndpoints::OVERPASS_API_PATH + OVERPASS_QUERY_STRING);
     reader.read(map);
 
     QString output = _outputPath + "OverpassOutput.osm";
@@ -318,7 +322,7 @@ public:
          << "-D schema.translation.script=translations/TDSv71.js"
          << "-D bounds=2.277303,48.851684,2.311635,48.864701"
          << "-D overpass.api.host=localhost"
-         << "\"http://localhost:9904/api/interpreter?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;\""
+         << "\"" << LOCAL_TEST_API_URL << "/" << OsmApiEndpoints::OVERPASS_API_PATH << OVERPASS_QUERY_STRING << "\""
          << output_file;
 
     QProcess p;

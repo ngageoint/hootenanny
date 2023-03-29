@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RUBBERSHEET_H
@@ -54,6 +54,24 @@ class Status;
 class RubberSheet : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
+
+  class Tie
+  {
+  public:
+    Tie() = default;
+    Tie(const geos::geom::Coordinate& coord1, const geos::geom::Coordinate& coord2) : c1(coord1), c2(coord2) { }
+
+    // Unknown1 coordinate
+    geos::geom::Coordinate c1;
+    // Unknown2 coordinate
+    geos::geom::Coordinate c2;
+
+    double dx() const { return c1.x - c2.x; }
+    double dy() const { return c1.y - c2.y; }
+
+    QString toString() const
+    { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
+  };
 
   static QString className() { return "RubberSheet"; }
 
@@ -92,7 +110,11 @@ public:
    * @return true if the operation succeeded; false otherwise
    */
   bool calculateTransform(const std::shared_ptr<OsmMap>& map);
-
+  /**
+   * @brief createTransform calculates the transform based on the input vector of tie points
+   * @param tiepoints vector of tie objects
+   */
+  void createTransform(const std::vector<Tie>& tiepoints);
   /**
    * @brief readTransform1to2 reads the data necessary to perform a transform from unknown1 to
    * unknown2.
@@ -166,28 +188,13 @@ public:
    { _logWarningWhenRequirementsNotFound = logWarning; }
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
    void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
+   void setProjection(const std::shared_ptr<OGRSpatialReference>& projection) { _projection = projection; }
 
 private:
 
   static int logWarnCount;
 
   using MatchList = std::map<long, std::list<Match>>;
-
-  class Tie
-  {
-  public:
-
-    // Unknown1 coordinate
-    geos::geom::Coordinate c1;
-    // Unknown2 coordinate
-    geos::geom::Coordinate c2;
-
-    double dx() const { return c1.x - c2.x; }
-    double dy() const { return c1.y - c2.y; }
-
-    QString toString() const
-    { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
-  };
 
   std::shared_ptr<OsmMap> _map;
 
@@ -241,6 +248,8 @@ private:
   std::shared_ptr<Tgs::Interpolator> _readInterpolator(QIODevice& is);
   void _writeInterpolator(const std::shared_ptr<const Tgs::Interpolator>& interpolator,
                           QIODevice& os) const;
+
+  void _createInterpolators();
 
   const Match& _findMatch(long nid1, long nid2);
 

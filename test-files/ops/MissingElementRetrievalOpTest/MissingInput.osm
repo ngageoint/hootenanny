@@ -1,0 +1,8 @@
+<osm version="0.6" generator="Hootenanny">
+  <relation id="4049833" visible="true" version="1" changeset="25517867" timestamp="2014-09-18T10:51:18Z" user="dmgroom_ct" uid="437598">
+    <member type="way" ref="101983518" role="outer"/>
+    <member type="way" ref="101983837" role="inner"/>
+    <tag k="natural" v="water"/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+</osm>

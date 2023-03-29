@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.info;
 
@@ -72,6 +72,7 @@ public class AboutResource {
             versionInfo = new VersionInfo();
             versionInfo.setName(buildInfo.getProperty("name"));
             versionInfo.setVersion(buildInfo.getProperty("version"));
+            versionInfo.setDate(buildInfo.getProperty("date"));
             versionInfo.setBuiltBy(buildInfo.getProperty("user"));
         }
         catch (Exception e) {
@@ -100,9 +101,10 @@ public class AboutResource {
             String versionStr = this.getCoreInfo(false);
             String[] versionInfoParts = versionStr.split(" ");
             versionInfo = new VersionInfo();
-            versionInfo.setName("Hootenanny Core");
+            versionInfo.setName("Core");
             versionInfo.setVersion(versionInfoParts[1]);
-            versionInfo.setBuiltBy(versionInfoParts[4]);
+            versionInfo.setDate(versionInfoParts[2]);
+            versionInfo.setBuiltBy(versionInfoParts[5]);
         }
         catch (Exception e) {
             String msg = "Error retrieving core version info!  Cause: " + e.getMessage();
@@ -161,6 +163,7 @@ public class AboutResource {
             buildInfo = new Properties();
             buildInfo.setProperty("name", "unknown");
             buildInfo.setProperty("version", "unknown");
+            buildInfo.setProperty("date", "unknown");
             buildInfo.setProperty("user", "unknown");
         }
 
@@ -174,7 +177,7 @@ public class AboutResource {
         String[] lines = text.split("\\r?\\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i].trim();
-            if (line.startsWith("Hootenanny") && line.contains("Built By:")) {
+            if (line.startsWith("Hootenanny") && line.contains("built by")) {
                 coreVersion = line;
                 if (withDetails) {
                     if ((i + 1) < lines.length) {

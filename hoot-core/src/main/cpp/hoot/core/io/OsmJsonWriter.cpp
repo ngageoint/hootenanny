@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmJsonWriter.h"
 
@@ -60,7 +60,6 @@ OsmJsonWriter::OsmJsonWriter(int precision)
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _writeSplitFiles(false),
     _sortTags(ConfigOptions().getWriterSortTagsByKey()),
-    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _includeIds(ConfigOptions().getWriterIncludeIdTag()),
     _includeCompatibilityTags(true),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
@@ -141,6 +140,20 @@ void OsmJsonWriter::write(const ConstOsmMapPtr& map)
   if (!_writer.isOpen())
     throw HootException("Please open the file before attempting to write.");
 
+  //  Write the header
+  initializePartial();
+  //  Write all elements
+  _writeNodes();
+  _writeWays();
+  _writeRelations();
+  //  Write the footer
+  finalizePartial();
+
+  close();
+}
+
+void OsmJsonWriter::initializePartial()
+{
   //  Write the following to the header of the file
   _writer.setHeaderSection();
   _write("{");
@@ -150,15 +163,103 @@ void OsmJsonWriter::write(const ConstOsmMapPtr& map)
   _firstElement = true;
   //  Write the following to the body of the file
   _writer.setBodySection();
-  _writeNodes();
-  _writeWays();
-  _writeRelations();
+}
+
+void OsmJsonWriter::finalizePartial()
+{
   //  Lastly write the footer of the file
   _writer.setFooterSection();
   _writeLn("]");
   _writeLn("}");
 
   close();
+}
+
+void OsmJsonWriter::writePartial(const ConstNodePtr& n)
+{
+  if (_writer.isCurrentIndexWritten())
+    _write(",", true);
+
+  _write("{");
+  _writeKvp("type", "node");
+  _write(",");
+  _writeKvp("id", n->getId());
+  _write(",");
+
+  _writeMetadata(*n);
+
+  _writeKvp("lat", n->getY());
+  _write(",");
+  _writeKvp("lon", n->getX());
+  if (_hasTags(n))
+    _write(",");
+  _writeTags(n);
+  _write("}", false);
+}
+
+void OsmJsonWriter::writePartial(const ConstWayPtr& w)
+{
+  if (_writer.isCurrentIndexWritten())
+    _write(",", true);
+
+  _write("{");
+  _writeKvp("type", "way");
+  _write(",");
+  _writeKvp("id", w->getId());
+  _write(",");
+
+  _writeMetadata(*w);
+
+  _write("\"nodes\":[");
+  for (size_t j = 0; j < w->getNodeCount(); j++)
+  {
+    _write(QString::number(w->getNodeId(static_cast<int>(j))), false);
+    if (j != w->getNodeCount() - 1)
+      _write(",");
+  }
+  _write("]");
+  if (_hasTags(w))
+    _write(",");
+  _writeTags(w);
+  _write("}", false);
+}
+
+void OsmJsonWriter::writePartial(const ConstRelationPtr& r)
+{
+  if (_writer.isCurrentIndexWritten())
+    _write(",", true);
+
+  _write("{");
+  _writeKvp("type", "relation");
+  _write(",");
+  _writeKvp("id", r->getId());
+  _write(",");
+
+  _writeMetadata(*r);
+
+  const vector<RelationData::Entry>& members = r->getMembers();
+  _write("\"members\":[");
+  for (size_t j = 0; j < members.size(); j++)
+  {
+    const RelationData::Entry& e = members[j];
+    if (j != 0)
+      _write(",", true);
+    else
+      _write("", true);
+
+    _write("{");
+    _writeKvp("type", _typeName(e.getElementId().getType()));
+    _write(",");
+    _writeKvp("ref", e.getElementId().getId());
+    _write(",");
+    _writeKvp("role", e.getRole());
+    _write("}");
+  }
+  _write("]");
+  if (_hasTags(r))
+    _write(",");
+  _writeTags(r);
+  _write("}", false);
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, const QString& value)
@@ -221,8 +322,6 @@ void OsmJsonWriter::_writeMetadata(const Element& element)
 
 void OsmJsonWriter::_writeNodes()
 {
-  const long debugId = 0;
-
   vector<long> nids;
   const NodeMap& nodes = _map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
@@ -232,35 +331,7 @@ void OsmJsonWriter::_writeNodes()
   for (auto node_id : nids)
   {
     ConstNodePtr n = _map->getNode(node_id);
-    const QString msg = "Writing node: " + n->toString() + "...";
-    if (n->getId() == debugId)
-    {
-      LOG_VARD(msg);
-    }
-    else
-    {
-      LOG_VART(msg);
-    }
-
-    if (_writer.isCurrentIndexWritten())
-      _write(",", true);
-
-    _write("{");
-    _writeKvp("type", "node");
-    _write(",");
-    _writeKvp("id", n->getId());
-    _write(",");
-
-    _writeMetadata(*n);
-
-    _writeKvp("lat", n->getY());
-    _write(",");
-    _writeKvp("lon", n->getX());
-    if (_hasTags(n))
-      _write(",");
-    _writeTags(n);
-    _write("}", false);
-
+    writePartial(n);
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {
@@ -325,8 +396,6 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 
 void OsmJsonWriter::_writeWays()
 {
-  const long debugId = 0;
-
   vector<long> wids;
   const WayMap& ways = _map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -338,54 +407,17 @@ void OsmJsonWriter::_writeWays()
   for (auto way_id : wids)
   {
     ConstWayPtr w = _map->getWay(way_id);
-    const QString msg = "Writing way: " + w->toString() + "...";
-
-    if (w->getId() == debugId)
-    {
-      LOG_VARD(msg);
-    }
-    else
-    {
-      LOG_VART(msg);
-    }
-
-    if (_writer.isCurrentIndexWritten())
-      _write(",", true);
-
-    _write("{");
-    _writeKvp("type", "way");
-    _write(",");
-    _writeKvp("id", w->getId());
-    _write(",");
-
-    _writeMetadata(*w);
-
-    _write("\"nodes\":[");
-    for (size_t j = 0; j < w->getNodeCount(); j++)
-    {
-      _write(QString::number(w->getNodeId(static_cast<int>(j))), false);
-      if (j != w->getNodeCount() - 1)
-        _write(",");
-    }
-    _write("]");
-    if (_hasTags(w))
-      _write(",");
-    _writeTags(w);
-    _write("}", false);
-
+    writePartial(w);
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+      PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
 }
 
 void OsmJsonWriter::_writeRelations()
 {
-  const long debugId = 0;
-
   vector<long> rids;
   const RelationMap& relations = _map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
@@ -397,56 +429,11 @@ void OsmJsonWriter::_writeRelations()
   for (auto relation_id : rids)
   {
     ConstRelationPtr r = _map->getRelation(relation_id);
-    const QString msg = "Writing relation: " + r->toString() + "...";
-    if (r->getId() == debugId)
-    {
-      LOG_VARD(msg);
-    }
-    else
-    {
-      LOG_VART(msg);
-    }
-
-    if (_writer.isCurrentIndexWritten())
-      _write(",", true);
-
-    _write("{");
-    _writeKvp("type", "relation");
-    _write(",");
-    _writeKvp("id", r->getId());
-    _write(",");
-
-    _writeMetadata(*r);
-
-    const vector<RelationData::Entry>& members = r->getMembers();
-    _write("\"members\":[");
-    for (size_t j = 0; j < members.size(); j++)
-    {
-      const RelationData::Entry& e = members[j];
-      if (j != 0)
-        _write(",", true);
-      else
-        _write("", true);
-
-      _write("{");
-      _writeKvp("type", _typeName(e.getElementId().getType()));
-      _write(",");
-      _writeKvp("ref", e.getElementId().getId());
-      _write(",");
-      _writeKvp("role", e.getRole());
-      _write("}");
-    }
-    _write("]");
-    if (_hasTags(r))
-      _write(",");
-    _writeTags(r);
-    _write("}", false);
-
+    writePartial(r);
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+      PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
 }

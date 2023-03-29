@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/algorithms/rubber-sheet/RubberSheeter.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheetApplier.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetCreator.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheetDeriver.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
@@ -90,6 +91,30 @@ public:
       }
 
       RubberSheetApplier().apply(args[0], args[1], args[2]);
+    }
+    else if (args.contains("--create"))
+    {
+      args.removeAt(args.indexOf("--create"));
+      if (args.size() != 5)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(QString("%1 with the --create option takes five parameters.").arg(getName()));
+      }
+
+      bool ref = false;
+      if (args.contains("--ref"))
+      {
+        ref = true;
+        args.removeAt(args.indexOf("--ref"));
+      }
+
+      QString transform1to2Path;
+      if (args.size() == 5)
+        transform1to2Path = args[4];
+      else if (ref == false)
+        throw HootException(QString("You must specify a transform1to2.rs argument if --ref isn't specified."));
+
+      RubberSheetCreator().create(args[0], args[1], args[2], args[3], transform1to2Path, ref);
     }
     else
     {

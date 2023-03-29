@@ -1,3 +1,3 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-77.055, 38.89, -77.052, 38.892],"source":"DcGisRoads.osm;DcTigerRoads.osm","features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-77.055, 38.89, -77.052, 38.892],"source":"DcGisRoads.osm;DcTigerRoads.osm","features": [
 {"type":"Feature","properties":{"task":"3","node_count":"129"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0551, 38.8895],[-77.0551, 38.8915],[-77.0521, 38.8915],[-77.0521, 38.8895],[-77.0551, 38.8895]]]]}}]
 }

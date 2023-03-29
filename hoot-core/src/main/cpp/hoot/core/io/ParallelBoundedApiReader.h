@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PARALLEL_BOUNDED_API_READER_H
@@ -40,12 +40,15 @@
 #include <geos/geom/Geometry.h>
 
 //  Hootenanny
+#include <hoot/core/io/ApiElementRetrievalInterface.h>
 #include <hoot/core/io/OverpassReaderInterface.h>
+#include <hoot/core/io/ParallelApiJob.h>
 
 namespace hoot
 {
 
 class HootNetworkRequest;
+
 /**
  * @brief The ParallelBoundedApiReader class is a base class for HTTP reader classes that are bounded
  *  by an envelope bounding box.  If the bounding box exceeds the `reader.http.bbox.max.size` value
@@ -54,7 +57,7 @@ class HootNetworkRequest;
  *  example) that area is divided into quarters and reprocessed until all areas are successfully read.
  *  Also some responses may be too large to handle and those are split and re-handled.
  */
-class ParallelBoundedApiReader : protected OverpassReaderInterface
+class ParallelBoundedApiReader : protected OverpassReaderInterface, public ApiElementRetrievalInterface
 {
 public:
 
@@ -73,6 +76,12 @@ public:
    * @param envelope Bounding box of the area to query
    */
   void beginRead(const QUrl& endpoint, const geos::geom::Envelope& envelope);
+  /**
+   * @brief beginRead - Start the reading process by creating all queries and starting
+   *   the receiving threads
+   * @param endpoint URL to the HTTP endpoint to query
+   */
+  void beginRead(const QUrl& endpoint);
   /**
    * @brief isComplete
    * @return True if all bounding boxes have been successfully queried
@@ -137,10 +146,6 @@ protected:
   double _coordGridSize;
   /** Number of threads to process the HTTP requests */
   int _threadCount;
-  /** Is the bounds a polygon */
-  bool _isPolygon;
-  /** Value of the bounding box or polygon */
-  std::shared_ptr<geos::geom::Geometry> _boundingPoly;
 
   /**
    * @brief _sleep Sleep the current thread
@@ -153,6 +158,11 @@ protected:
    * @return
    */
   bool _isQueryError(const QString& result, QString& error) const;
+
+  std::shared_ptr<geos::geom::Geometry> _getBoundingPoly() const { return _boundingPoly; }
+  void _setBoundingPoly(const std::shared_ptr<geos::geom::Geometry>& poly);
+  bool _getIsBoundsPoly() const { return _isPolygon; }
+  void _setIsBoundsPoly(bool isPoly);
 
 private:
 
@@ -174,12 +184,10 @@ private:
    */
   void _logNetworkError(const HootNetworkRequest& request);
   /**
-   * @brief _splitEnvelope Split the envelope into four quadrants and push them
-   *  back on to the work queue
-   * @param envelope Envelope that needs to be split, should have already been removed
-   *  from the work queue
+   * @brief _splitJob
+   * @param job
    */
-  void _splitEnvelope(const geos::geom::Envelope& envelope);
+  void _splitJob(const ParallelApiJobPtr& job);
 
   /** List of result strings, one for each HTTP response */
   QStringList _resultsList;
@@ -188,11 +196,11 @@ private:
   /** Mutex guarding the results list */
   std::mutex _resultsMutex;
   /** Essentially the work queue of bounding boxes that the threads query from */
-  std::queue<geos::geom::Envelope> _bboxes;
+  std::queue<ParallelApiJobPtr> _workQueue;
   /** Total number of envelopes created to query */
-  int _totalEnvelopes;
+  int _totalWork;
   /** Mutex guarding the bounding box list */
-  std::mutex _bboxMutex;
+  std::mutex _workMutex;
   /** Maximum size of an area, in square degrees, that can be downloaded */
   double _maxGridSize;
   /** Processing thread pool */
@@ -214,6 +222,10 @@ private:
   std::mutex _filenumberMutex;
   /** HTTP timeout in seconds */
   int _timeout;
+  /** Is the bounds a polygon */
+  bool _isPolygon;
+  /** Value of the bounding box or polygon */
+  std::shared_ptr<geos::geom::Geometry> _boundingPoly;
   /**  Allow test class to access protected members for white box testing */
   friend class ParallelBoundedApiReaderTest;
 };

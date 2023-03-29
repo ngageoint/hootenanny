@@ -22,13 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetApplier.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetCreator.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetDeriver.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -56,6 +59,7 @@ class RubberSheetTest : public HootTestFixture
   CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest2);
   CPPUNIT_TEST(runFilterTest1);
   CPPUNIT_TEST(runFilterTest2);
+  CPPUNIT_TEST(runJsonTiePointsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -279,6 +283,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(5419L, uut.getNumFeaturesProcessed());
     CPPUNIT_ASSERT_EQUAL(4026L, uut.getNumFeaturesAffected());
     HOOT_FILE_EQUALS(_inputPath + "runFilterTest2-out.osm", _outputPath + "runFilterTest2-out.osm");
+  }
+
+  void runJsonTiePointsTest()
+  {
+    RubberSheetCreator().create(_inputPath + "manual_tie_points.json",
+                                _inputPath + "manual_tie_points_original.osm",
+                                _inputPath + "manual_tie_points_offset.osm",
+                                _outputPath + "manual_tie_points_transform.rs", "",
+                                true);
+    RubberSheetApplier().apply(_outputPath + "manual_tie_points_transform.rs",
+                               _inputPath + "manual_tie_points_offset.osm",
+                               _outputPath + "manual_tie_points_output.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "manual_tie_points_expected.osm", _outputPath + "manual_tie_points_output.osm");
   }
 };
 

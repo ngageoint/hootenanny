@@ -1,3 +1,3 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"100088","F_CODE":"AL019","ZI001_SDV":"2014-11-16T05:11:18Z","ZI026_CTUC":"5"},"geometry": {"type":"Polygon","coordinates": [[[-71.4696976, 42.4722878],[-71.46964370000001, 42.4722925],[-71.4696385, 42.47226],[-71.4696924, 42.4722553],[-71.4696976, 42.4722878]]]}}]
 }
