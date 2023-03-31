@@ -17,7 +17,6 @@ if ! grep -i --quiet 'certificateKeyAlias="tomcat"' ${TOMCAT_CONFIG}/server.xml;
     sed -i.bak 's@<!-- Define an AJP 1.3 Connector on port 8009 -->@<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" maxThreads="150" SSLEnabled="true">\n        <SSLHostConfig>\n            <Certificate certificateKeyAlias="tomcat" certificateKeystorePassword="changeme" certificateKeystoreFile="/etc/tomcat8/localhost-rsa.jks" type="RSA" />\n        </SSLHostConfig>\n    </Connector>\n\n    &@' ${TOMCAT_CONFIG}/server.xml
 fi
 
-mkdir -p $TOMCAT8_HOME/webapps/{hootenanny-id,hoot-services}
-chown -R $HOOT_USER:tomcat $TOMCAT8_HOME/webapps/hootenanny-id/
+mkdir -p $TOMCAT8_HOME/webapps/hoot-services
 chown -R $HOOT_USER:tomcat $TOMCAT8_HOME/webapps/hoot-services/
 

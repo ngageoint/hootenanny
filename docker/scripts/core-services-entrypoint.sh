@@ -21,19 +21,15 @@ stop_tomcat()
 
 copy_war_to_tomcat()
 {
-    rm -f $TOMCAT8_HOME/webapps/hoot-services.war
-    cp hoot-services/target/hoot-services-$HOOT_USER.war $TOMCAT8_HOME/webapps/hoot-services.war
     rm -rf $TOMCAT8_HOME/webapps/hoot-services/*
     cp -R hoot-services/target/hoot-services-$HOOT_USER/* $TOMCAT8_HOME/webapps/hoot-services
 }
 
-copy_frontend_to_tomcat()
-{
-    rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/*
-    cp -R hoot-ui-2x/dist/ $TOMCAT8_HOME/webapps/hootenanny-id/
-}
-
 touch core-services-building.txt
+
+if [ "${HOOT_CLEAN:-0}" = "1" ]; then
+    make -f Makefile.hoot clean
+fi;
 
 if [ ! -f configure ]; then
     ./docker/scripts/core-services-configure.sh
@@ -48,7 +44,7 @@ if [ "${HOOT_BUILD_CORE:-0}" = "1" ] || [ ! -f ./bin/hoot.bin ]; then
         hoot-services/src/main/resources/language-translation/langdetect-183.bin
 fi
 
-if [ "${HOOT_BUILD_HOOT_SERVICES_UI:-0}" = "1" ] || [ ! -f hoot-services/target/hoot-services-$HOOT_USER.war ]; then
+if [ "${HOOT_BUILD_HOOT_SERVICES:-0}" = "1" ] || [ ! -f hoot-services/target/hoot-services-$HOOT_USER.war ]; then
     make services-build
     copy_war_to_tomcat
 fi;
@@ -56,7 +52,6 @@ fi;
 # translation server is tied to services so need to build schema files and its dependencies
 if [ "${HOOT_BUILD_JS_SCHEMA:-0}" = "1" ] || [ ! -f translations/tds71_schema.js ]; then
     make -f Makefile.hoot js-make
-    copy_frontend_to_tomcat
 fi
 
 if [ "${HOOT_BUILD_TRANSLATION_SERVER:-0}" = "1" ] || [ ! -d translations/node_modules ]; then
