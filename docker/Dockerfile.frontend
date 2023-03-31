@@ -6,7 +6,7 @@ ARG hoot_gid
 ARG hoot_group
 ARG hoot_shell=/bin/bash
 ARG hoot_home
-ARG node_version=16
+ARG node_version=14
 
 ENV HOOT_HOME=$hoot_home
 
@@ -23,6 +23,8 @@ RUN --mount=type=cache,target=/var/cache/yum \
     yum -q -y install epel-release && \
     yum -y install \
         bzip2 \
+        git \
+        git-core \
         nodejs-devel yarn \
         google-chrome-stable-91.0.4472.114 && \
     yum -q -y clean all && rm -f /tmp*.sh
