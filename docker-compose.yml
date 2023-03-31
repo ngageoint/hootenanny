@@ -19,6 +19,7 @@ services:
       - hoot.env
     volumes:
       - ./hoot-ui-2x:${HOOT_HOME}/hoot-ui-2x:rw
+      - ./.git/modules/hoot-ui-2x:${HOOT_HOME}/.git/modules/hoot-ui-2x:rw
   postgres:
     build:
       context: .
@@ -51,9 +52,7 @@ services:
     volumes:
       - ./:${HOOT_HOME}:rw
       - tomcat8-hoot-services:/var/lib/tomcat8/webapps/hoot-services:rw
-      - tomcat8-hootenanny-id:/var/lib/tomcat8/webapps/hootenanny-id:rw
 
 volumes:
   postgres-data:
   tomcat8-hoot-services:
-  tomcat8-hootenanny-id:
