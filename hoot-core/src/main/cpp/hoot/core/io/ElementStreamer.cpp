@@ -27,6 +27,7 @@
 #include "ElementStreamer.h"
 
 // Hoot
+#include <hoot/core/io/CachedElementInterface.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/IoUtils.h>
@@ -82,6 +83,13 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     reader->setConfiguration(conf());
     partialReader = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+
+    //  Share the cache between reader and writer if they are both cached
+    std::shared_ptr<CachedElementInterface> cachedIn = std::dynamic_pointer_cast<CachedElementInterface>(reader);
+    std::shared_ptr<CachedElementInterface> cachedOut = std::dynamic_pointer_cast<CachedElementInterface>(writer);
+    if (cachedIn && cachedOut)
+      cachedOut->setCache(cachedIn->getCache());
+
     std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
     std::shared_ptr<OgrWriter> ogrWriter = std::dynamic_pointer_cast<OgrWriter>(writer);
 

@@ -254,11 +254,13 @@ bool OsmApiReader::hasMoreElements()
   if (!_xmlBuffer.isOpen())
   {
     finalizePartial();
+    if (!_elementConverter)
+      _elementConverter = std::make_shared<ElementToGeometryConverter>(_getElementProvider());
     //  map needed for assigning new element ids only (not actually putting any of the elements that
     //  are read into this map, since this is the partial reading logic)
-    _map = std::make_shared<OsmMap>();
+//    _map = std::make_shared<OsmMap>();
     //  Update the map in the polygon criterion everytime a new one is created
-    _polyCriterion->setOsmMap(_map.get());
+//    _polyCriterion->setOsmMap(_map.get());
 
     QString xmlResult;
     //  Get one XML string to parse
@@ -317,7 +319,8 @@ ElementPtr OsmApiReader::readNextElement()
       return ElementPtr();
   }
   //  Add the element to the set
-  _elementSet.emplace(result->getElementType(), result->getId());
+  ConstElementPtr e = std::const_pointer_cast<const Element>(result);
+  _elementCache->addElement(e);
   //  Return the element read
   return result;
 }
@@ -333,12 +336,19 @@ bool OsmApiReader::_canUseElement(const ElementPtr& element) const
 {
   if (!element)
     return false;
-  else if (_elementSet.find(element->getElementId()) != _elementSet.end())
+  else if (_elementCache->containsElement(element->getElementId()))
     return false;
-  else if (_getIsBoundsPoly() && element->getElementType() != ElementType::Node && !_polyCriterion->isSatisfied(element))
+  else if (_getIsBoundsPoly() && element->getElementType() != ElementType::Node && !_isInPolyBounds(element))
     return false;
   else
     return true;
+}
+
+bool OsmApiReader::_isInPolyBounds(const ElementPtr& element) const
+{
+  std::shared_ptr<geos::geom::Geometry> e = _elementConverter->convertToGeometry(element);
+  std::shared_ptr<geos::geom::Geometry> b = _getBoundingPoly();
+  return (e && b && e->intersects(b.get()));
 }
 
 }
