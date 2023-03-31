@@ -10,7 +10,7 @@ else
         --output /dev/null \
         --silent \
         --user-agent docker-healthcheck \
-        "http://0.0.0.0:8080/hootenanny-id/" && \
+        "http://0.0.0.0:8080/hoot-services/auth/oauth2/authorize" && \
     /usr/bin/curl \
         --request OPTIONS \
         --fail \
