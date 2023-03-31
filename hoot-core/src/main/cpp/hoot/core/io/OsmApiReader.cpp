@@ -256,11 +256,6 @@ bool OsmApiReader::hasMoreElements()
     finalizePartial();
     if (!_elementConverter)
       _elementConverter = std::make_shared<ElementToGeometryConverter>(_getElementProvider());
-    //  map needed for assigning new element ids only (not actually putting any of the elements that
-    //  are read into this map, since this is the partial reading logic)
-//    _map = std::make_shared<OsmMap>();
-    //  Update the map in the polygon criterion everytime a new one is created
-//    _polyCriterion->setOsmMap(_map.get());
 
     QString xmlResult;
     //  Get one XML string to parse
