@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/CachedElementInterface.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/ParallelBoundedApiReader.h>
 #include <hoot/core/util/Units.h>
@@ -49,7 +50,7 @@ namespace hoot
  * subsequently filter the resulting map on the polygon afterwards
  * https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_map_data_by_bounding_box:_GET_.2Fapi.2F0.6.2Fmap
  */
-class OsmApiReader : public OsmXmlReader, public ParallelBoundedApiReader
+class OsmApiReader : public OsmXmlReader, public ParallelBoundedApiReader, public CachedElementInterface
 {
 public:
 
@@ -123,6 +124,9 @@ private:
    * @brief _canUseElement
    */
   bool _canUseElement(const ElementPtr& element) const;
+
+  bool _isInPolyBounds(const ElementPtr& element) const;
+
   /** Bounds information */
   QString _boundsString;
   QString _boundsFilename;
@@ -132,6 +136,7 @@ private:
   std::set<ElementId> _elementSet;
 
   std::shared_ptr<InBoundsCriterion> _polyCriterion;
+  std::shared_ptr<ElementToGeometryConverter> _elementConverter;
 
   /** For testing */
   friend class OsmApiReaderTest;
