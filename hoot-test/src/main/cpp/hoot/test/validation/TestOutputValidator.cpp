@@ -22,16 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #include "TestOutputValidator.h"
 
 // hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-
-#include <hoot/core/TestUtils.h>
 
 #include <hoot/josm/validation/MapValidator.h>
 
@@ -43,10 +42,8 @@
 namespace hoot
 {
 
-void TestOutputValidator::validate(
-  const QString& testName, const QString& testOutputPath,
-  const QString& goldValidationReportPath, const bool suppressFailureDetail,
-  const bool printValidationReportDiff)
+void TestOutputValidator::validate(const QString& testName, const QString& testOutputPath, const QString& goldValidationReportPath,
+                                   const bool suppressFailureDetail, const bool printValidationReportDiff)
 {
   LOG_VART(testName);
   LOG_VART(testOutputPath);
@@ -55,9 +52,7 @@ void TestOutputValidator::validate(
 
   // Make sure the baseline report file is valid first.
   if (!_validateGoldReport(testName, goldValidationReportPath))
-  {
     return;
-  }
 
   QFileInfo goldValidationReport(goldValidationReportPath);
   QFileInfo testOutput(testOutputPath);
@@ -78,8 +73,7 @@ void TestOutputValidator::validate(
   // The same behavior occurs for both case and script tests.
   const QString validatedOutputPath =
     testOutput.dir().absolutePath() + "/" +
-    testOutput.completeBaseName().replace(
-      testOutput.baseName(), testOutput.baseName() + "-validated.") + testOutput.completeSuffix();
+    testOutput.completeBaseName().replace(testOutput.baseName(), testOutput.baseName() + "-validated.") + testOutput.completeSuffix();
   LOG_VART(validatedOutputPath);
 
   // Write our validated output and validation report. The validated output is for debugging
@@ -89,8 +83,7 @@ void TestOutputValidator::validate(
   validator.validate(QStringList(testOutputPath), validatedOutputPath);
 
   // Compare the validation reports and fail if there are any differences.
-  if (FileUtils::readFully(goldValidationReportPath) !=
-      FileUtils::readFully(outputValidationReportPath))
+  if (FileUtils::readFully(goldValidationReportPath) != FileUtils::readFully(outputValidationReportPath))
   {
     QString msg = "Validation reports for test: " + testName + " do not match.";
     if (!suppressFailureDetail)
@@ -104,21 +97,15 @@ void TestOutputValidator::validate(
              "    mv " + outputValidationReportPath + " " + goldValidationReportPath + "\n"
              "*************************";
     }
+    //  Validation reports are small and shouldn't take more than a minute
     if (printValidationReportDiff)
-    {
-      msg +=
-        "\n" +
-        _printValidationReportDiff(
-          testName, goldValidationReportPath, outputValidationReportPath,
-          ConfigOptions().getTestScriptMaxExecTime())
-          .trimmed();
-    }
+      msg += "\n" + _printValidationReportDiff(testName, goldValidationReportPath, outputValidationReportPath, 60).trimmed();
+
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 }
 
-bool TestOutputValidator::_validateGoldReport(
-  const QString& testName, const QString& goldValidationReportPath)
+bool TestOutputValidator::_validateGoldReport(const QString& testName, const QString& goldValidationReportPath)
 {
   // Arbitrarily, we pick a standardized name for validation reports. Note this is currently used
   // with case tests only.
@@ -126,20 +113,14 @@ bool TestOutputValidator::_validateGoldReport(
   // Make sure we have a base validation report to compare against.
   if (!goldValidationReportPath.endsWith(goldValidationReportPathEndText))
   {
-    QString errorMsg =
-      QString("Validation report gold files for case tests should follow the naming ") +
-      QString("convention: \"validation-report\".");
+    QString errorMsg = "Validation report gold files for case tests should follow the naming convention: \"validation-report\".";
     throw TestConfigurationException(errorMsg);
   }
   const QString goldValidationReportOffPath = goldValidationReportPath + ".off";
   QFileInfo goldValidationReport(goldValidationReportPath);
   QFileInfo goldValidationReportOff(goldValidationReportOffPath);
   if (!goldValidationReport.exists() && !goldValidationReportOff.exists())
-  {
-    throw TestConfigurationException(
-      "No gold validation report exists for test: " + testName + " at: " +
-      goldValidationReportPath);
-  }
+    throw TestConfigurationException("No gold validation report exists for test: " + testName + " at: " + goldValidationReportPath);
   // If we have an .off file present, skip validation.
   if (goldValidationReportOff.exists())
   {
@@ -150,8 +131,8 @@ bool TestOutputValidator::_validateGoldReport(
   return true;
 }
 
-QString TestOutputValidator::_printValidationReportDiff(
-  const QString& testName, const QString& filePath1, const QString& filePath2, const int timeout)
+QString TestOutputValidator::_printValidationReportDiff(const QString& testName, const QString& filePath1,
+                                                        const QString& filePath2, const int timeout)
 {
   // Lifted this code from ScriptTest. It initially proved to be painful to try to refactor it out
   // of there for shared use...should probably eventually be done.
@@ -168,6 +149,8 @@ QString TestOutputValidator::_printValidationReportDiff(
   bool first = true;
   QElapsedTimer timer;
   timer.start();
+  int retryCount = 0;
+  const int RETRY_MAX = 3;
   while (diffProcess.waitForFinished(timeout * 1000) == false)
   {
     if (first)
@@ -182,16 +165,18 @@ QString TestOutputValidator::_printValidationReportDiff(
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= timeout)
     {
-      LOG_ERROR(
-        "Forcefully ending diff command for: " << testName << " after " << timeElapsedSeconds <<
-        " seconds.");
+      diffProcess.terminate();
+      retryCount++;
+      if (retryCount <= RETRY_MAX)
+        return _printValidationReportDiff(testName, filePath1, filePath2, timeout);
+      else
+        LOG_ERROR("Forcefully ending diff command for: " << testName << " after " << timeElapsedSeconds << " seconds.");
       break;
     }
   }
 
- return
-   "Validation report diff: \n" + QString::fromUtf8(diffProcess.readAllStandardOutput()) + "\n" +
-   QString::fromUtf8(diffProcess.readAllStandardError());
+ return QString("Validation report diff: \n%1\n%2")
+          .arg(QString::fromUtf8(diffProcess.readAllStandardOutput()), QString::fromUtf8(diffProcess.readAllStandardError()));
 }
 
 }
