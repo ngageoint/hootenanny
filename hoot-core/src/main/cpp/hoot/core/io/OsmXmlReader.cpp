@@ -446,21 +446,25 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 
     QXmlInputSource xmlInputSource(&buffer);
     if (reader.parse(xmlInputSource) == false)
-      throw HootException(_errorString);
-
-    LOG_DEBUG("Parsed map from xml.");
-
-    LOG_VARD(_bounds.get());
-    if (_bounds.get())
     {
-      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-      LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
+      LOG_ERROR(_errorString);
     }
+    else
+    {
+      LOG_DEBUG("Parsed map from xml.");
 
-    ReportMissingElementsVisitor visitor;
-    LOG_INFO("\t" << visitor.getInitStatusMessage());
-    _map->visitRw(visitor);
-    LOG_INFO("\t" << visitor.getCompletedStatusMessage());
+      LOG_VARD(_bounds.get());
+      if (_bounds.get())
+      {
+        IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+        LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
+      }
+
+      ReportMissingElementsVisitor visitor;
+      LOG_INFO("\t" << visitor.getInitStatusMessage());
+      _map->visitRw(visitor);
+      LOG_INFO("\t" << visitor.getCompletedStatusMessage());
+    }
   }
   _map.reset();
 }
