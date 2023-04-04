@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -66,6 +66,17 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
+  }
+
+  void runEmptyStringTest()
+  {
+    OsmXmlReader uut;
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    uut.readFromString("", map);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
   }
 
   void runUseIdTest()
