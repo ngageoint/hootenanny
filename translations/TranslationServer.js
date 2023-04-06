@@ -171,6 +171,12 @@ if (require.main === module) {
     http.createServer(TranslationServer);
 }
 
+class HTTPError extends Error {
+    constructor(status, message) {
+        super(message);
+        this.status = status;
+    }
+}
 
 function TranslationServer(request, response) {
     try {
@@ -187,10 +193,21 @@ function TranslationServer(request, response) {
                 params.method = request.method;
                 params.path = request.path || urlbits.pathname;
                 params.osm = payload;
-                header['Accept'] = 'text/xml';
-                header['Content-Type'] = 'text/xml';
-                var result = handleInputs(params);
-                response.writeHead(200, header);
+                var result;
+                try {
+                    header['Accept'] = 'text/xml';
+                    header['Content-Type'] = 'text/xml';
+                    result = handleInputs(params);
+                    response.writeHead(200, header);
+                } catch (error) {
+                    if (error instanceof HTTPError) {
+                        result = JSON.stringify({'message': error.message});
+                        response.writeHead(error.status, header);
+                    } else {
+                        result = JSON.stringify({'message': 'Unknown error'});
+                        response.writeHead(500, header);
+                    }
+                }
                 response.end(result);
             });
 
@@ -322,6 +339,8 @@ var getPresets = function(params) {
 
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
+    if (data.osm === '')
+        throw new HTTPError(404, 'Payload cannot be empty')
     if (availableTranslations.indexOf(data.translation) === -1) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
