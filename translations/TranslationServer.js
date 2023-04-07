@@ -363,8 +363,6 @@ var postHandler = function(data) {
     // loadMapFrom(JSON)String arguments: map, XML, preserve ID's, hoot:status
     if (data.osm[0] === "{")
         hoot.loadMapFromJSONString(map, data.osm, true);
-    else if (data.osm === '')
-        return JSON.stringify({error: 'Payload cannot be empty', status: 400});
     else
         hoot.loadMapFromString(map, data.osm, true);
 
