@@ -216,15 +216,24 @@ function TranslationServer(request, response) {
             var params = request.params || urlbits.query;
             params.method = request.method;
             params.path = request.path || urlbits.pathname;
-            var result = handleInputs(params);
-
-            if (params.path === '/presets') {
-                header['Content-Type'] = 'application/xml';
-            } else {
-                header['Content-Type'] = 'application/json';
-                result = JSON.stringify(result);
+            var result;
+            try {
+                if (params.path === '/presets') {
+                    header['Content-Type'] = 'application/xml';
+                } else {
+                    header['Content-Type'] = 'application/json';
+                }
+                result = handleInputs(params);
+                response.writeHead(200, header);
+            } catch (error) {
+                if (error instanceof HTTPError) {
+                    result = JSON.stringify({'message': error.message});
+                    response.writeHead(error.status, header);
+                } else {
+                    result = JSON.stringify({'message': 'Unknown error'});
+                    response.writeHead(500, header);
+                }
             }
-            response.writeHead(200, header);
             response.end(result);
         } else if (request.method === 'OPTIONS') {
             header["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS";
