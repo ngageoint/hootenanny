@@ -171,12 +171,6 @@ if (require.main === module) {
     http.createServer(TranslationServer);
 }
 
-class HTTPError extends Error {
-    constructor(status, message) {
-        super(message);
-        this.status = status;
-    }
-}
 
 function TranslationServer(request, response) {
     try {
@@ -193,21 +187,10 @@ function TranslationServer(request, response) {
                 params.method = request.method;
                 params.path = request.path || urlbits.pathname;
                 params.osm = payload;
-                var result;
-                try {
-                    header['Accept'] = 'text/xml';
-                    header['Content-Type'] = 'text/xml';
-                    result = handleInputs(params);
-                    response.writeHead(200, header);
-                } catch (error) {
-                    if (error instanceof HTTPError) {
-                        result = JSON.stringify({'message': error.message});
-                        response.writeHead(error.status, header);
-                    } else {
-                        result = JSON.stringify({'message': 'Unknown error'});
-                        response.writeHead(500, header);
-                    }
-                }
+                header['Accept'] = 'text/xml';
+                header['Content-Type'] = 'text/xml';
+                var result = handleInputs(params);
+                response.writeHead(200, header);
                 response.end(result);
             });
 
@@ -216,24 +199,15 @@ function TranslationServer(request, response) {
             var params = request.params || urlbits.query;
             params.method = request.method;
             params.path = request.path || urlbits.pathname;
-            var result;
-            try {
-                if (params.path === '/presets') {
-                    header['Content-Type'] = 'application/xml';
-                } else {
-                    header['Content-Type'] = 'application/json';
-                }
-                result = handleInputs(params);
-                response.writeHead(200, header);
-            } catch (error) {
-                if (error instanceof HTTPError) {
-                    result = JSON.stringify({'message': error.message});
-                    response.writeHead(error.status, header);
-                } else {
-                    result = JSON.stringify({'message': 'Unknown error'});
-                    response.writeHead(500, header);
-                }
+            var result = handleInputs(params);
+
+            if (params.path === '/presets') {
+                header['Content-Type'] = 'application/xml';
+            } else {
+                header['Content-Type'] = 'application/json';
+                result = JSON.stringify(result);
             }
+            response.writeHead(200, header);
             response.end(result);
         } else if (request.method === 'OPTIONS') {
             header["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS";
@@ -349,7 +323,7 @@ var getPresets = function(params) {
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
     if (data.osm === '')
-        throw new HTTPError(404, 'Payload cannot be empty')
+        throw new Error('Payload cannot be empty')
     if (availableTranslations.indexOf(data.translation) === -1) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
