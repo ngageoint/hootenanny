@@ -535,9 +535,9 @@ std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QS
 {
   OsmMapPtr map = std::make_shared<OsmMap>();
   LOG_DEBUG("Loading map bounds from ..." << FileUtils::toLogFormat(input, 50) << "...");
-  conf().set(ConfigOptions().getBoundsInputFileKey(), "");
+  conf().set(ConfigOptions::getBoundsInputFileKey(), "");
   OsmMapReaderFactory::read(map, input, true, Status::Invalid, false, true);
-  conf().set(ConfigOptions().getBoundsInputFileKey(), input);
+  conf().set(ConfigOptions::getBoundsInputFileKey(), input);
   //  If there is one way in the map, assume it is a polygon and convert it
   if (map->getWayCount() == 1)
   {
