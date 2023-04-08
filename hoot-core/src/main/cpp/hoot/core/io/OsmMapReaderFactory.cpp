@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -135,22 +135,28 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   return "";
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus, bool cropOnReadIfBounded)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus, bool cropOnReadIfBounded, bool suppressLogging)
 {
-  LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
+  if (!suppressLogging)
+  {
+    LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
+  }
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus, cropOnReadIfBounded);
-  _read(map, reader, url);
+  _read(map, reader, url, suppressLogging);
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url, bool cropOnReadIfBounded)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url, bool cropOnReadIfBounded, bool suppressLogging)
 {
-  LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
-  LOG_VART(useFileStatus);
+  if (!suppressLogging)
+  {
+    LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
+    LOG_VART(useFileStatus);
+  }
   std::shared_ptr<OsmMapReader> reader = createReader(useDataSourceIds, useFileStatus, url, cropOnReadIfBounded);
-  _read(map, reader, url);
+  _read(map, reader, url, suppressLogging);
 }
 
-void OsmMapReaderFactory::_read(const OsmMapPtr& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url)
+void OsmMapReaderFactory::_read(const OsmMapPtr& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url, bool suppressLogging)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getBounds().trimmed().isEmpty() && !boundable.get())
@@ -177,9 +183,11 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map, const std::shared_ptr<OsmM
     }
   }
   VALIDATE(map->validate(true));
-  LOG_STATUS(
-    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  if (!suppressLogging)
+  {
+    LOG_STATUS("Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+               " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  }
 }
 
 }
