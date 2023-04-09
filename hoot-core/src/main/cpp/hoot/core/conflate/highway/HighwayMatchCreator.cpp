@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMatchCreator.h"
 
@@ -122,8 +122,7 @@ public:
     // Find other nearby candidates.
     std::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
-    set<ElementId> neighbors =
-      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+    set<ElementId> neighbors = SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
     ElementId elementBeingMatched(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -145,9 +144,7 @@ public:
         if (medianMatchEnabled)
         {
           // neighbor always is a secondary feature (unknown2).
-          const QString kvp =
-            neighbor->getTags().getFirstMatchingKvp(
-              ConfigOptions().getHighwayMedianIdentifyingTags());
+          const QString kvp = neighbor->getTags().getFirstMatchingKvp(ConfigOptions().getHighwayMedianIdentifyingTags());
           medianTagFound = !kvp.isEmpty();
           LOG_VART(medianTagFound);
           if (medianTagFound)
@@ -157,8 +154,7 @@ public:
           classifier = _classifier;
 
         // Score each candidate.
-        std::shared_ptr<HighwayMatch> match =
-          createMatch(_map, classifier, _sublineMatcher, _threshold, _tagAncestorDiff, e, neighbor);
+        std::shared_ptr<HighwayMatch> match = createMatch(_map, classifier, _sublineMatcher, _threshold, _tagAncestorDiff, e, neighbor);
         if (match)
         {
           _result.push_back(match);
@@ -181,8 +177,7 @@ public:
     std::shared_ptr<HighwayMatch> result;
 
     HighwayCriterion highwayCrit(map);
-    if (e1 && e2 && e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
-        highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2))
+    if (e1 && e2 && e1->getStatus() != e2->getStatus() && e2->isUnknown() && highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2))
     {
       double maxEnumDiff = ConfigOptions().getHighwayMaxEnumDiff();
 
@@ -204,9 +199,7 @@ public:
       if (tagAncestorDiff->diff(map, e1, e2) <= maxEnumDiff)
       {
         // score each candidate and push it on the result vector
-        result =
-          std::make_shared<HighwayMatch>(
-            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
+        result = std::make_shared<HighwayMatch>(classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
         // if we're confident this is a miss
         if (result->getType() == MatchType::Miss)
           result.reset();
@@ -256,11 +249,8 @@ public:
   bool isMatchCandidate(ConstElementPtr element) const
   {
     // The special tag is currently only used by roundabout processing to mark temporary features.
-    if (element->getTags().contains(MetadataTags::HootSpecial()) ||
-        (_filter && !_filter->isSatisfied(element)))
-    {
+    if (element->getTags().contains(MetadataTags::HootSpecial()) || (_filter && !_filter->isSatisfied(element)))
       return false;
-    }
     return HighwayCriterion(_map).isSatisfied(element);
   }
 
@@ -275,13 +265,10 @@ public:
       _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements satisfy isMatchCandidate(e)
-      std::function<bool (ConstElementPtr e)> f =
-        std::bind(&HighwayMatchVisitor::isMatchCandidate, this, placeholders::_1);
+      std::function<bool (ConstElementPtr e)> f = std::bind(&HighwayMatchVisitor::isMatchCandidate, this, placeholders::_1);
       std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
-      SpatialIndexer v(
-        _index, _indexToEid, pCrit,
-        std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
+      SpatialIndexer v(_index, _indexToEid, pCrit, std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();
@@ -332,8 +319,7 @@ private:
 };
 
 HighwayMatchCreator::HighwayMatchCreator()
-  : _classifier(Factory::getInstance().constructObject<HighwayClassifier>(
-                  ConfigOptions().getConflateMatchHighwayClassifier())),
+  : _classifier(Factory::getInstance().constructObject<HighwayClassifier>(ConfigOptions().getConflateMatchHighwayClassifier())),
     _sublineMatcher(SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
     _tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
 {

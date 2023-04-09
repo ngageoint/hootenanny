@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -55,15 +55,17 @@ public:
    */
   static bool supportsPartialReading(const QString& url);
 
-  static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true, Status defaultStatus = Status::Invalid, bool cropOnReadIfBounded = true);
+  static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true, Status defaultStatus = Status::Invalid,
+                   bool cropOnReadIfBounded = true, bool suppressLogging = false);
   // See note for createReader.
-  static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus, const QString& url, bool cropOnReadIfBounded = true);
+  static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus, const QString& url,
+                   bool cropOnReadIfBounded = true, bool suppressLogging = false);
 
   static QString getReaderName(const QString& url);
 
 private:
 
-  static void _read(const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url);
+  static void _read(const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url, bool suppressLogging);
 
   static std::shared_ptr<OsmMapReader> _createReader(const QString& url);
 };
