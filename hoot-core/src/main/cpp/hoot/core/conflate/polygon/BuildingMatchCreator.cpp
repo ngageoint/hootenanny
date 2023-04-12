@@ -22,40 +22,18 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatchCreator.h"
 
 // hoot
-//#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-//#include <hoot/core/conflate/matching/MatchThreshold.h>
-//#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
-//#include <hoot/core/criterion/ArbitraryCriterion.h>
-//#include <hoot/core/criterion/BuildingCriterion.h>
-//#include <hoot/core/elements/OsmMap.h>
-//#include <hoot/core/schema/OsmSchema.h>
-//#include <hoot/core/util/CollectionUtils.h>
-//#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
-//#include <hoot/core/util/MemoryUsageChecker.h>
-//#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/BuildingMatchVisitor.h>
-//#include <hoot/core/visitors/ConstElementVisitor.h>
-//#include <hoot/core/visitors/SpatialIndexer.h>
-
-// Standard
-//#include <fstream>
-//#include <functional>
-
-// tgs
-//#include <tgs/RandomForest/RandomForest.h>
-//#include <tgs/RStarTree/IntersectionIterator.h>
-//#include <tgs/RStarTree/MemoryPageStore.h>
 
 // Qt
 #include <QElapsedTimer>
