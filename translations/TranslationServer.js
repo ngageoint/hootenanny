@@ -322,6 +322,8 @@ var getPresets = function(params) {
 
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
+    if (data.osm === '')
+        throw new Error('Payload cannot be empty')
     if (availableTranslations.indexOf(data.translation) === -1) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
