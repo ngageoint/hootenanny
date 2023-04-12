@@ -48,8 +48,8 @@ void RubberSheetDeriver::derive(const QString& input1, const QString& input2, co
     " and " << FileUtils::toLogFormat(input2, 25) << "...");
 
   OsmMapPtr map = std::make_shared<OsmMap>();
-  IoUtils::loadMap(map, input1, true, Status::Unknown1);
-  IoUtils::loadMap(map, input2, true, Status::Unknown2);
+  IoUtils::loadMap(map, input1, false, Status::Unknown1);
+  IoUtils::loadMap(map, input2, false, Status::Unknown2);
 
   // make sure rubber sheeting isn't applied during cleaning.
   QStringList l = ConfigOptions().getMapCleanerTransforms();
