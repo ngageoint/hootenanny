@@ -31,10 +31,16 @@ See the User Guide for more specific details on command usage. Most of these exa
 
 === Alignment
 
-==== Bring two maps closer in alignment without merging them:
+==== Bring two maps closer in alignment without merging them, using road intersections as tie-points:
 
 -----
     hoot align input1.osm input2.osm output.osm
+-----
+
+==== Bring two maps closer in alignment without merging them, using building centroids as tie-points:
+
+-----
+    hoot align -D rubber.sheet.use.buildings=true input1.osm input2.osm output.osm
 -----
 
 ==== Derive an alignment transform for two maps:
