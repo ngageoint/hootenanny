@@ -182,16 +182,26 @@ function TranslationServer(request, response) {
             });
 
             request.on('end', function() {
-                var urlbits = url.parse(request.url, true);
-                var params = request.params || urlbits.query;
-                params.method = request.method;
-                params.path = request.path || urlbits.pathname;
-                params.osm = payload;
-                header['Accept'] = 'text/xml';
-                header['Content-Type'] = 'text/xml';
-                var result = handleInputs(params);
-                response.writeHead(200, header);
-                response.end(result);
+                try {
+                    var urlbits = url.parse(request.url, true);
+                    var params = request.params || urlbits.query;
+                    params.method = request.method;
+                    params.path = request.path || urlbits.pathname;
+                    params.osm = payload;
+                    header['Accept'] = 'text/xml';
+                    header['Content-Type'] = 'text/xml';
+                    var result = handleInputs(params);
+                    response.writeHead(200, header);
+                    response.end(result);
+                } catch (err) {
+                    var status = 500;
+                    if (err.message.indexOf('Unsupported') > -1)
+                        status = 400;
+                    if (err.message.indexOf('Not found') > -1)
+                        status = 404;
+                    response.writeHead(status, header);
+                    response.end(JSON.stringify({error: err.message}));
+                }
             });
 
         } else if (request.method === 'GET') {
