@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
-#include "CachedElementWriterInterface.h"
+#include "CachedElementInterface.h"
 
 // hoot
 #include <hoot/core/elements/Element.h>
@@ -35,20 +35,21 @@
 namespace hoot
 {
 
-CachedElementWriterInterface::CachedElementWriterInterface()
+CachedElementInterface::CachedElementInterface()
   : _elementCache(std::make_shared<ElementCacheLRU>(ConfigOptions().getElementCacheSizeNode(),
                                                     ConfigOptions().getElementCacheSizeWay(),
                                                     ConfigOptions().getElementCacheSizeRelation()))
 {
 }
 
-void CachedElementWriterInterface::_addElementToCache(const ConstElementPtr& element)
+void CachedElementInterface::_addElementToCache(const ConstElementPtr& element)
 {
   ConstElementPtr e(element);
-  _elementCache->addElement(e);
+  if (!_elementCache->containsElement(e->getElementId()))
+    _elementCache->addElement(e);
 }
 
-ElementProviderPtr CachedElementWriterInterface::_getElementProvider() const
+ElementProviderPtr CachedElementInterface::_getElementProvider() const
 {
   return ElementProviderPtr(_elementCache);
 }

@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
 
-#ifndef CACHED_ELEMENT_WRITER_INTERFACE_H
-#define CACHED_ELEMENT_WRITER_INTERFACE_H
+#ifndef CACHED_ELEMENT_INTERFACE_H
+#define CACHED_ELEMENT_INTERFACE_H
 
 // hoot
 #include <hoot/core/io/ElementCache.h>
@@ -35,17 +35,16 @@ namespace hoot
 {
 
 /**
- * Interface for writers that must cache nodes, ways, and relations.
+ * Interface for io classes that must cache nodes, ways, and relations.
  */
-class CachedElementWriterInterface
+class CachedElementInterface
 {
 public:
 
-  static QString className() { return "OgrWriter"; }
+  CachedElementInterface();
+  virtual ~CachedElementInterface() = default;
 
-  CachedElementWriterInterface();
-  virtual ~CachedElementWriterInterface() = default;
-
+  ElementCachePtr getCache() const { return _elementCache; }
   void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
   /** Get max size of the cache for each element type */
   unsigned long getNodeCacheSize() const { return _elementCache->getNodeCacheSize(); }
@@ -70,4 +69,4 @@ protected:
 
 }
 
-#endif // CACHED_ELEMENT_WRITER_INTERFACE_H
+#endif // CACHED_ELEMENT_INTERFACE_H

@@ -28,7 +28,7 @@
 #define OSM_GEOJSON_WRITER_H
 
 // hoot
-#include <hoot/core/io/CachedElementWriterInterface.h>
+#include <hoot/core/io/CachedElementInterface.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
 #include <hoot/core/util/Boundable.h>
@@ -42,7 +42,7 @@ namespace hoot
  *
  * https://geojson.org/geojson-spec.html
  */
-class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface, public Boundable, public CachedElementWriterInterface
+class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface, public Boundable, public CachedElementInterface
 {
 public:
   static QString className() { return "OsmGeoJsonWriter"; }

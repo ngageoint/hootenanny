@@ -29,7 +29,7 @@
 #define OGRWRITER_H
 
 // hoot
-#include <hoot/core/io/CachedElementWriterInterface.h>
+#include <hoot/core/io/CachedElementInterface.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
 #include <hoot/core/util/Boundable.h>
@@ -48,7 +48,7 @@ class Layer;
 /**
  * Writes a file to an OGR data source.
  */
-class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface, public Boundable, public CachedElementWriterInterface
+class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface, public Boundable, public CachedElementInterface
 {
 public:
 
