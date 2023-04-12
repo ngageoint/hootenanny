@@ -87,7 +87,7 @@ public:
 
   struct Match
   {
-    long nid1, nid2;
+    long id1, id2;
     double score;
     double p;
   };
@@ -176,16 +176,15 @@ public:
     */
    QString getCompletedStatusMessage() const override
    {
-     return "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-            StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
+     return QString("Rubbersheeted %1 / %2 linear features.")
+              .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
    }
 
    void setReference(bool ref) { _ref = ref; }
    void setDebug(bool debug) { _debug = debug; }
    void setMinimumTies(int minTies) { _minimumTies = minTies; }
    void setFailWhenMinimumTiePointsNotFound(bool fail) { _failWhenMinTiePointsNotFound = fail; }
-   void setLogWarningWhenRequirementsNotFound(bool logWarning)
-   { _logWarningWhenRequirementsNotFound = logWarning; }
+   void setLogWarningWhenRequirementsNotFound(bool logWarning) { _logWarningWhenRequirementsNotFound = logWarning; }
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
    void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
    void setProjection(const std::shared_ptr<OGRSpatialReference>& projection) { _projection = projection; }
@@ -236,9 +235,10 @@ private:
   bool _calcAndApplyTransform(const OsmMapPtr& map);
   void _filterCalcAndApplyTransform(OsmMapPtr& map);
 
-  bool _findTies();
+  bool _findIntersectionTies();
+  bool _findBuildingTies();
   void _addIntersection(long nid, const std::set<long>& wids);
-
+  bool _createInterpolatorsFromTies();
   /**
    * Build a data frame for use with interpolators.
    */

@@ -5,31 +5,55 @@ TEST_PATH="cmd/slow/AlignApplyCmdTest"
 INPUT_PATH="$HOOT_HOME/test-files/$TEST_PATH"
 OUTPUT_PATH="$HOOT_HOME/test-output/$TEST_PATH"
 
-mkdir -p $HOOT_HOME/test-output/cmd/slow/AlignApplyCmdTest
+mkdir -p $OUTPUT_PATH
 
 CONFIG="-C Testing.conf"
 
-# First we derive a rubber sheet
-hoot align --error $CONFIG --derive --ref \
-  $HOOT_HOME/test-files/DcGisRoads.osm \
-  $HOOT_HOME/test-files/DcTigerRoads.osm \
-  $OUTPUT_PATH/DcTigerToDcGis.rs
+derive_and_apply() {
+  INPUT1=$1
+  INPUT2=$2
+  RUBBERSHEET=$3
+  GOLD_RUBBERSHEET=$4
+  OUTPUT_FILE=$5
+  GOLD_OUTPUT=$6
+  BUILDING=$7
 
-# Compare to known-good
-goodfile=$INPUT_PATH/DcTigerToDcGis.rs
-testfile=$OUTPUT_PATH/DcTigerToDcGis.rs
-cmp $goodfile $testfile
-if [ "$?" = "1" ]; then
-  echo "Rubber Sheet files are not equal! Try cmp -l $goodfile $testfile"
-  exit 1
-fi
+  # First we derive a rubber sheet
+  hoot align --error $CONFIG -D rubber.sheet.use.buildings=$BUILDING --derive \
+    $INPUT1 \
+    $INPUT2 \
+    $RUBBERSHEET --ref
 
-# Now we apply the rubber sheet
-hoot align --error $CONFIG --apply \
-  $OUTPUT_PATH/DcTigerToDcGis.rs \
-  $HOOT_HOME/test-files/DcTigerRoads.osm \
-  $OUTPUT_PATH/DcTigerToDcGis.osm
+  # Compare to known-good
+  cmp $GOLD_RUBBERSHEET $RUBBERSHEET
+  if [ "$?" = "1" ]; then
+    echo "Rubber Sheet files are not equal! Try cmp -l $GOLD_RUBBERSHEET $RUBBERSHEET"
+    exit 1
+  fi
 
-goodfile=$INPUT_PATH/DcTigerToDcGis.osm
-testfile=$OUTPUT_PATH/DcTigerToDcGis.osm
-hoot diff $CONFIG $goodfile $testfile || diff $goodfile $testfile
+  # Now we apply the rubber sheet
+  hoot align --error $CONFIG --apply \
+    $RUBBERSHEET \
+    $INPUT2 \
+    $OUTPUT_FILE
+
+  hoot diff $CONFIG $GOLD_OUTPUT $OUTPUT_FILE || diff $GOLD_OUTPUT $OUTPUT_FILE
+}
+
+# First derive and apply a road network
+derive_and_apply $HOOT_HOME/test-files/DcGisRoads.osm \
+                 $HOOT_HOME/test-files/DcTigerRoads.osm \
+                 $OUTPUT_PATH/DcTigerToDcGis.rs \
+                 $INPUT_PATH/DcTigerToDcGis.rs \
+                 $OUTPUT_PATH/DcTigerToDcGis.osm \
+                 $INPUT_PATH/DcTigerToDcGis.osm \
+                 false
+
+# Then derive and apply a building file
+derive_and_apply $INPUT_PATH/ToyBuildingsTest1.osm \
+                 $INPUT_PATH/ToyBuildingsTest2.osm \
+                 $OUTPUT_PATH/ToyBuildingsTest.rs \
+                 $INPUT_PATH/ToyBuildingsTest.rs \
+                 $OUTPUT_PATH/ToyBuildingsTest.osm \
+                 $INPUT_PATH/ToyBuildingsTest.osm \
+                 true

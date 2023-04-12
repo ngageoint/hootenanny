@@ -67,10 +67,10 @@ public:
       }
 
       bool ref = false;
-      if (args[0] == "--ref")
+      if (args.contains("--ref"))
       {
         ref = true;
-        args.pop_front();
+        args.removeAt(args.indexOf("--ref"));
       }
 
       QString transform1to2Path;

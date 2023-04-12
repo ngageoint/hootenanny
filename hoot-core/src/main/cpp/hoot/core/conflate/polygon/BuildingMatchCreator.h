@@ -42,7 +42,7 @@ public:
 
   static QString className() { return "BuildingMatchCreator"; }
 
-  BuildingMatchCreator();
+  BuildingMatchCreator() = default;
   ~BuildingMatchCreator() override = default;
 
   MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
@@ -70,13 +70,13 @@ public:
    */
   QStringList getCriteria() const override;
 
+  static std::shared_ptr<BuildingRfClassifier> loadBuildingClassifier();
+
 private:
 
   // Don't use this directly. See below.
   std::shared_ptr<BuildingRfClassifier> _rf;
   std::shared_ptr<MatchThreshold> _matchThreshold;
-
-  QString _conflateMatchBuildingModel;
 
   BuildingCriterion _buildingCrit;
 
