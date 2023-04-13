@@ -91,7 +91,6 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   Meters _searchRadius;
 
   // Used for finding neighbors
