@@ -3,9 +3,9 @@
 
 === Description
 
-The `align` command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them
-into alignment.  It reads from inputs, matches nodes, transforms input2, and writes the combined data to output.  The input
-parameters are:
+The `align` command finds common high confidence road intersection matches or building matches and rubber sheets two map
+datasets to bring them into alignment.  It reads from inputs, matches nodes, transforms input2, and writes the combined data
+to output.  The input parameters are:
 
 * `input1` - Input 1; may be any supported input format (e.g. OSM file).
 * `input2` - Input 2; may be any supported input format (e.g. OSM file).
@@ -19,6 +19,8 @@ The following optional defines can be set:
 * `rubber.sheet.kernel.estimate.sigma` - The sigma to use when applying a kernel estimation interpolation. By default 
                                          cross validation is used to determine an appropriate sigma and should be adequate 
                                          for most purposes.
+* `rubber.sheet.use.buildings`         - If set to true the algorithm uses building matches instead of intersection
+                                         matches.  Building polygon centroids are used as tie-points for the calculations.
 
 === Usage
 

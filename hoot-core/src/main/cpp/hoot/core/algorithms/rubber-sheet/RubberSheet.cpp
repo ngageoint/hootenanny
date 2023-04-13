@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
@@ -36,6 +38,8 @@
 #include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
@@ -51,6 +55,9 @@
 #include <tgs/Interpolation/IdwInterpolator.h>
 #include <tgs/Interpolation/KernelEstimationInterpolator.h>
 #include <tgs/RandomForest/DataFrame.h>
+
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/visitors/BuildingMatchVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -74,6 +81,11 @@ HOOT_FACTORY_REGISTER(Interpolator, IdwInterpolator)
 bool compareMatches(const RubberSheet::Match& m1, const RubberSheet::Match& m2)
 {
   return m1.p > m2.p;
+}
+
+bool compareScores(const ConstMatchPtr& m1, const ConstMatchPtr& m2)
+{
+  return m1->getScore() > m2->getScore();
 }
 
 RubberSheet::RubberSheet()
@@ -448,7 +460,10 @@ bool RubberSheet::calculateTransform(const OsmMapPtr& map)
   MapProjector::projectToPlanar(_map);
   _projection = _map->getProjection();
 
-  return _findTies();
+  if (ConfigOptions().getRubberSheetUseBuildings())
+    return _findBuildingTies();
+  else
+    return _findIntersectionTies();
 }
 
 void RubberSheet::createTransform(const std::vector<Tie>& tiepoints)
@@ -463,7 +478,7 @@ void RubberSheet::createTransform(const std::vector<Tie>& tiepoints)
   _createInterpolators();
 }
 
-bool RubberSheet::_findTies()
+bool RubberSheet::_findIntersectionTies()
 {
   _nm.setMap(_map);
   // The search radius is two times the max circular error which handles if
@@ -511,7 +526,7 @@ bool RubberSheet::_findTies()
       {
         // set the new score for the pair to the product of the pair
         LOG_TRACE(m1.score);
-        const Match& m2 = _findMatch(m1.nid2, m1.nid1);
+        const Match& m2 = _findMatch(m1.id2, m1.id1);
         LOG_TRACE(m2.score);
         m1.p = m1.p * m2.p;
         _finalPairs.push_back(m1);
@@ -535,9 +550,9 @@ bool RubberSheet::_findTies()
   ctr = 0;
   for (size_t i = 0; i < _finalPairs.size(); ++i)
   {
-    NodePtr n1 = _map->getNode(_finalPairs[i].nid1);
+    NodePtr n1 = _map->getNode(_finalPairs[i].id1);
     LOG_VART(n1->getElementId());
-    NodePtr n2 = _map->getNode(_finalPairs[i].nid2);
+    NodePtr n2 = _map->getNode(_finalPairs[i].id2);
     LOG_VART(n2->getElementId());
     if (touched.find(n1->getId()) == touched.end() &&
         touched.find(n2->getId()) == touched.end())
@@ -572,7 +587,78 @@ bool RubberSheet::_findTies()
         StringUtils::formatLargeNumber(_finalPairs.size()));
     }
   }
+  return _createInterpolatorsFromTies();
+}
 
+bool RubberSheet::_findBuildingTies()
+{
+  ElementToGeometryConverter ec(_map->shared_from_this());
+  double match = ConfigOptions().getBuildingMatchThreshold();
+  double miss = ConfigOptions().getBuildingMissThreshold();
+  double review = ConfigOptions().getBuildingReviewThreshold();
+  std::vector<ConstMatchPtr> matches;
+  std::shared_ptr<BuildingCriterion> filter = std::make_shared<BuildingCriterion>(_map);
+  std::shared_ptr<MatchThreshold> threshold = std::make_shared<MatchThreshold>(match, miss, review);
+
+  std::shared_ptr<BuildingRfClassifier> rf = BuildingMatchCreator::loadBuildingClassifier();
+  BuildingMatchVisitor v(_map, matches, rf, threshold, filter, Status::Unknown1);
+  _map->visitWaysRo(v);
+  _map->visitRelationsRo(v);
+
+  //  Sort the matches by score
+  sort(matches.begin(), matches.end(), compareScores);
+
+  std::set<ElementId> usedIds;
+
+  for (const auto& m : matches)
+  {
+    if (m->getScore() < match)
+      continue;
+    std::set<std::pair<ElementId, ElementId>> pairs = m->getMatchPairs();
+    for (const auto& p : pairs)
+    {
+      ElementId eid1 = p.first;
+      ElementId eid2 = p.second;
+
+      if (usedIds.find(eid1) != usedIds.end())
+        continue;
+      usedIds.insert(eid1);
+
+      //  Find the center point of each element as the tie-point
+      ElementPtr e1 = _map->getElement(eid1);
+      ElementPtr e2 = _map->getElement(eid2);
+
+      if (!e1 || !e2)
+        continue;
+
+      std::shared_ptr<Geometry> g1 = ec.convertToGeometry(e1);
+      std::shared_ptr<Geometry> g2 = ec.convertToGeometry(e2);
+
+      if (g1->isEmpty() || g2->isEmpty())
+        continue;
+
+      g1.reset(GeometryUtils::validateGeometry(g1.get()));
+      g2.reset(GeometryUtils::validateGeometry(g2.get()));
+      std::shared_ptr<Point> c1(g1->getCentroid());
+      std::shared_ptr<Point> c2(g2->getCentroid());
+
+      if (!c1 || !c2)
+        continue;
+
+      Tie t;
+      t.c1 = geos::geom::Coordinate(c1->getX(), c1->getY());
+      t.c2 = geos::geom::Coordinate(c2->getX(), c2->getY());
+      LOG_VART(t.c1);
+      LOG_VART(t.c2);
+      _ties.push_back(t);
+    }
+  }
+
+  return _createInterpolatorsFromTies();
+}
+
+bool RubberSheet::_createInterpolatorsFromTies()
+{
   LOG_VARD(_ties.size());
   LOG_VARD(_minimumTies);
   if ((long)_ties.size() >= _minimumTies)
@@ -605,14 +691,11 @@ bool RubberSheet::_findTies()
         LOG_INFO(msg);
       }
     }
-
     _interpolator1to2.reset();
     _interpolator2to1.reset();
     _interpolatorClassName = "";
-
     return false;
   }
-
   return true;
 }
 
@@ -622,8 +705,8 @@ const RubberSheet::Match& RubberSheet::_findMatch(long nid1, long nid2)
 
   for (const auto& match : matches)
   {
-    LOG_VART(match.nid2);
-    if (match.nid2 == nid2)
+    LOG_VART(match.id2);
+    if (match.id2 == nid2)
       return match;
   }
 
@@ -693,8 +776,8 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
       if (score > 0.0)
       {
         Match m;
-        m.nid1 = nid;
-        m.nid2 = neighbor_id;
+        m.id1 = nid;
+        m.id2 = neighbor_id;
         m.score = score;
         matches.push_back(m);
         sum += m.score;
