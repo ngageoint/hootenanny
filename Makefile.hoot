@@ -399,9 +399,10 @@ else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 
-FORCE:
+HOOT_VERSION_FILE: hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
+  -include HOOT_VERSION_FILE
 
-HOOT_VERSION_FILE: FORCE
+hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h:
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
 
 rebuild-db:
