@@ -403,7 +403,6 @@ FORCE:
 
 HOOT_VERSION_FILE: FORCE
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
--include HOOT_VERSION_FILE
 
 hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h:
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
