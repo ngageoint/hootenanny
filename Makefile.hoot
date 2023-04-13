@@ -404,9 +404,6 @@ FORCE:
 HOOT_VERSION_FILE: FORCE
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
 
-hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h:
-	$(SHELL_PATH) ./HOOT_VERSION_GEN;
-
 rebuild-db:
 	scripts/database/DeleteAllTables.sh
 	cd hoot-services && $(MAKE) -f Makefile build
