@@ -47,6 +47,17 @@ run-owt-import()
         "${OP_URL}" $OUTPUT_OSM
 }
 
+run-owt-import-bounds-file()
+{
+    hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        "${OP_URL}" ${OUTPUT_GPKG} 
+
+    hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        "${OP_URL}" $OUTPUT_OSM
+}
+
 run-owt-export-osm()
 {
     hoot convert -D schema.translation.script=$TRANSLATE_SCRIPT PG:"dbname=$PGDATABASE host=$PGHOST port=5432 user=$PGUSER schemas=$SCHEMAS" $OUTPUT_OSM
@@ -92,6 +103,16 @@ case "$1" in
         OUTPUT_GPKG=${11}
         OUTPUT_OSM=${12}
         run-owt-import ;;
+    -b)
+        BOUNDING_BOX=$2
+        OQF=$3
+        TRANSLATE_SCRIPT=$4
+        CERT_PATH=$5
+        CERT_PW=$6
+        OP_URL=$7
+        OUTPUT_GPKG=$8
+        OUTPUT_OSM=$9
+        run-owt-import-bounds-file ;;
     -e)
         TRANSLATE_SCRIPT=$2
         PGDATABASE=$3
