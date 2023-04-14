@@ -9,7 +9,7 @@ endif
 
 SHELL=/bin/bash
 
-.PHONY: clean-ccache
+.PHONY: clean-ccache HOOT_VERSION_FILE
 
 # This list is for manually rebuilding the schema files.  The files have been commited to the main GitHub repo
 SCHEMA_FILES= translations/tds71_schema.js translations/tds70_schema.js translations/tds61_schema.js translations/tds40_schema.js translations/mgcp_schema.js translations/ggdm30_schema.js translations/tds71_thematic_schema.js translations/tds71_full_schema.js translations/tds61_full_schema.js translations/tds70_full_schema.js translations/tds40_full_schema.js translations/ggdm30_full_schema.js translations/etds71_rules.js translations/etds70_rules.js translations/etds61_rules.js translations/etds40_rules.js translations/emgcp_rules.js translations/eggdm30_rules.js translations/etds71_osm_rules.js translations/etds61_osm_rules.js translations/etds40_osm_rules.js translations/emgcp_osm_rules.js translations/eggdm30_osm_rules.js translations/etds70_osm_rules.js
@@ -399,11 +399,9 @@ else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 
-HOOT_VERSION_FILE: hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
-  -include HOOT_VERSION_FILE
-
-hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h:
+HOOT_VERSION_FILE:
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
+-include HOOT_VERSION_FILE
 
 rebuild-db:
 	scripts/database/DeleteAllTables.sh
