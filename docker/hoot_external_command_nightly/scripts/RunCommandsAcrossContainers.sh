@@ -39,22 +39,22 @@ run-translate()
 run-owt-import()
 {
     hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
-        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         "${OP_URL}" ${OUTPUT_GPKG} 
 
     hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF \
-        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         "${OP_URL}" $OUTPUT_OSM
 }
 
 run-owt-import-bounds-file()
 {
     hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
-        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         "${OP_URL}" ${OUTPUT_GPKG} 
 
     hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF \
-        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         "${OP_URL}" $OUTPUT_OSM
 }
 
@@ -102,6 +102,7 @@ case "$1" in
         OP_URL=${10}
         OUTPUT_GPKG=${11}
         OUTPUT_OSM=${12}
+        OVERPASS_API_HOST=${13}
         run-owt-import ;;
     -b)
         BOUNDING_BOX=$2
@@ -112,6 +113,7 @@ case "$1" in
         OP_URL=$7
         OUTPUT_GPKG=$8
         OUTPUT_OSM=$9
+        OVERPASS_API_HOST=${10}
         run-owt-import-bounds-file ;;
     -e)
         TRANSLATE_SCRIPT=$2
