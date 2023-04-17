@@ -36,6 +36,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
@@ -624,30 +625,15 @@ bool RubberSheet::_findBuildingTies()
         continue;
       usedIds.insert(eid1);
 
-      //  Find the center point of each element as the tie-point
-      ElementPtr e1 = _map->getElement(eid1);
-      ElementPtr e2 = _map->getElement(eid2);
+      Coordinate c1 = ElementGeometryUtils::calculateElementCentroid(eid1, _map);
+      Coordinate c2 = ElementGeometryUtils::calculateElementCentroid(eid2, _map);
 
-      if (!e1 || !e2)
-        continue;
-
-      std::shared_ptr<Geometry> g1 = ec.convertToGeometry(e1);
-      std::shared_ptr<Geometry> g2 = ec.convertToGeometry(e2);
-
-      if (g1->isEmpty() || g2->isEmpty())
-        continue;
-
-      g1.reset(GeometryUtils::validateGeometry(g1.get()));
-      g2.reset(GeometryUtils::validateGeometry(g2.get()));
-      std::shared_ptr<Point> c1(g1->getCentroid());
-      std::shared_ptr<Point> c2(g2->getCentroid());
-
-      if (!c1 || !c2)
+      if (c1 == Coordinate::getNull() || c2 == Coordinate::getNull())
         continue;
 
       Tie t;
-      t.c1 = geos::geom::Coordinate(c1->getX(), c1->getY());
-      t.c2 = geos::geom::Coordinate(c2->getX(), c2->getY());
+      t.c1 = c1;
+      t.c2 = c2;
       LOG_VART(t.c1);
       LOG_VART(t.c2);
       _ties.push_back(t);

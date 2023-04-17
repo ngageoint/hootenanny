@@ -66,11 +66,24 @@ public:
    */
   static Meters calculateLength(const ConstElementPtr& e, const ConstElementProviderPtr& constProvider);
 
+  /**
+   * @brief calculateElementCentroid
+   * @param eid element ID to calculate
+   * @param map
+   * @return centroid of the element as a coordinate
+   */
+  static geos::geom::Coordinate calculateElementCentroid(const ElementId& eid, const OsmMapPtr& map);
+
 private:
 
   static int _badGeomCount;
 
   static std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element, ConstOsmMapPtr map);
+
+  static bool _getNodeCentroidValues(const NodePtr& node, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getWayCentroidValues(const WayPtr& way, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getRelationCentroidValues(const RelationPtr& relation, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+
 };
 
 }

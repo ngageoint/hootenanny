@@ -386,7 +386,7 @@ using OsmMapPtr = std::shared_ptr<OsmMap>;
 using ConstOsmMapPtr = std::shared_ptr<const OsmMap>;
 
 template<class T>
-void addElements(T it, T end)
+void OsmMap::addElements(T it, T end)
 {
   while (it != end)
   {
