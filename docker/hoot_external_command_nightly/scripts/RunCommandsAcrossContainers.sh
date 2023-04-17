@@ -40,8 +40,8 @@ run-translate()
     hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT $FILE_NAME $OUTPUT_FILE
 }
 
-# Import data from OWT overpass using specific bounding box coordinates
-run-owt()
+# Import data from overpass instance using specific bounding box coordinates
+run-overpass()
 {
     hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
@@ -52,8 +52,8 @@ run-owt()
         "${OP_URL}" $OUTPUT_OSM
 }
 
-# Import data from OWT overpass using a bounding box file
-run-owt-bounds()
+# Import data from overpass instance using a bounding box file
+run-overpass-bounds()
 {
     hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
@@ -65,7 +65,7 @@ run-owt-bounds()
 }
 
 # Export data from the database as an OSM file
-run-owt-osm()
+run-export-database-osm()
 {
     hoot convert -D schema.translation.script=$TRANSLATE_SCRIPT PG:"dbname=$PGDATABASE host=$PGHOST port=5432 user=$PGUSER schemas=$SCHEMAS" $OUTPUT_OSM
 }
@@ -110,7 +110,7 @@ case "$1" in
         OUTPUT_GPKG=${11}
         OUTPUT_OSM=${12}
         OVERPASS_API_HOST=${13}
-        run-owt ;;
+        run-overpass ;;
     -b)
         BOUNDING_BOX=$2
         OQF=$3
@@ -121,7 +121,7 @@ case "$1" in
         OUTPUT_GPKG=$8
         OUTPUT_OSM=$9
         OVERPASS_API_HOST=${10}
-        run-owt-bounds ;;
+        run-overpass-bounds ;;
     -e)
         TRANSLATE_SCRIPT=$2
         PGDATABASE=$3
@@ -129,5 +129,5 @@ case "$1" in
         PGUSER=$5
         SCHEMAS=$6
         OUTPUT_OSM=$7
-        run-owt-osm ;;
+        run-export-database-osm ;;
 esac
