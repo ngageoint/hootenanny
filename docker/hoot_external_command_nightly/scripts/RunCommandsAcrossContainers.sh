@@ -36,7 +36,7 @@ run-translate()
     hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT $FILE_NAME $OUTPUT_FILE
 }
 
-run-owt-import()
+run-owt()
 {
     hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
@@ -47,7 +47,7 @@ run-owt-import()
         "${OP_URL}" $OUTPUT_OSM
 }
 
-run-owt-import-bounds-file()
+run-owt-bounds()
 {
     hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
@@ -58,7 +58,7 @@ run-owt-import-bounds-file()
         "${OP_URL}" $OUTPUT_OSM
 }
 
-run-owt-export-osm()
+run-owt-osm()
 {
     hoot convert -D schema.translation.script=$TRANSLATE_SCRIPT PG:"dbname=$PGDATABASE host=$PGHOST port=5432 user=$PGUSER schemas=$SCHEMAS" $OUTPUT_OSM
 }
@@ -103,7 +103,7 @@ case "$1" in
         OUTPUT_GPKG=${11}
         OUTPUT_OSM=${12}
         OVERPASS_API_HOST=${13}
-        run-owt-import ;;
+        run-owt ;;
     -b)
         BOUNDING_BOX=$2
         OQF=$3
@@ -114,7 +114,7 @@ case "$1" in
         OUTPUT_GPKG=$8
         OUTPUT_OSM=$9
         OVERPASS_API_HOST=${10}
-        run-owt-import-bounds-file ;;
+        run-owt-bounds ;;
     -e)
         TRANSLATE_SCRIPT=$2
         PGDATABASE=$3
@@ -122,5 +122,5 @@ case "$1" in
         PGUSER=$5
         SCHEMAS=$6
         OUTPUT_OSM=$7
-        run-owt-export-osm ;;
+        run-owt-osm ;;
 esac
