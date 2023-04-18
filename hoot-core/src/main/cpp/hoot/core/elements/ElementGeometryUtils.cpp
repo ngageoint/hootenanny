@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementGeometryUtils.h"
@@ -160,7 +160,7 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e, const Con
   return 0;
 }
 
-Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, const OsmMapPtr& map)
+Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, const ConstOsmMapPtr& map)
 {
   if (!map)
     return Coordinate::getNull();
@@ -169,26 +169,26 @@ Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, 
   double centroid_x = 0.0;
   double centroid_y = 0.0;
   double centroid_count = 0.0;
-  ElementPtr element = map->getElement(eid);
+  ConstElementPtr element = map->getElement(eid);
   switch(eid.getType().getEnum())
   {
   case ElementType::Node:
   {
-    NodePtr node = std::dynamic_pointer_cast<Node>(element);
+    ConstNodePtr node = std::dynamic_pointer_cast<const Node>(element);
     if (!_getNodeCentroidValues(node, map, centroid_x, centroid_y, centroid_count))
       return Coordinate::getNull();
     break;
   }
   case ElementType::Way:
   {
-    WayPtr way = std::dynamic_pointer_cast<Way>(element);
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
     if (!_getWayCentroidValues(way, map, centroid_x, centroid_y, centroid_count))
       return Coordinate::getNull();
     break;
   }
   case ElementType::Relation:
   {
-    RelationPtr r = std::dynamic_pointer_cast<Relation>(element);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(element);
     if (!_getRelationCentroidValues(r, map, centroid_x, centroid_y, centroid_count))
       return Coordinate::getNull();
     break;
@@ -204,7 +204,7 @@ Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, 
   return Coordinate(centroid_x, centroid_y);
 }
 
-bool ElementGeometryUtils::_getNodeCentroidValues(const NodePtr& node, const OsmMapPtr& /*map*/, double& centroid_x, double& centroid_y, double& centroid_count)
+bool ElementGeometryUtils::_getNodeCentroidValues(const ConstNodePtr& node, const ConstOsmMapPtr& /*map*/, double& centroid_x, double& centroid_y, double& centroid_count)
 {
   if (!node)
     return false;
@@ -214,7 +214,7 @@ bool ElementGeometryUtils::_getNodeCentroidValues(const NodePtr& node, const Osm
   return true;
 }
 
-bool ElementGeometryUtils::_getWayCentroidValues(const WayPtr& way, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
+bool ElementGeometryUtils::_getWayCentroidValues(const ConstWayPtr& way, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
 {
   if (!way || !map)
     return false;
@@ -233,7 +233,7 @@ bool ElementGeometryUtils::_getWayCentroidValues(const WayPtr& way, const OsmMap
     long node_id = node_ids[index];
     if (!map->containsNode(node_id))
       return false;
-    NodePtr node = map->getNode(node_id);
+    ConstNodePtr node = map->getNode(node_id);
     x += node->getX();
     y += node->getY();
   }
@@ -243,7 +243,7 @@ bool ElementGeometryUtils::_getWayCentroidValues(const WayPtr& way, const OsmMap
   return true;
 }
 
-bool ElementGeometryUtils::_getRelationCentroidValues(const RelationPtr& relation, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
+bool ElementGeometryUtils::_getRelationCentroidValues(const ConstRelationPtr& relation, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
 {
   if (!relation || !map)
     return false;
@@ -255,26 +255,26 @@ bool ElementGeometryUtils::_getRelationCentroidValues(const RelationPtr& relatio
   {
     if (!map->containsElement(member.getElementId()))
       return false;
-    ElementPtr element = map->getElement(member.getElementId());
+    ConstElementPtr element = map->getElement(member.getElementId());
     switch(element->getElementType().getEnum())
     {
     case ElementType::Node:
     {
-      NodePtr node = std::dynamic_pointer_cast<Node>(element);
+      ConstNodePtr node = std::dynamic_pointer_cast<const Node>(element);
       if (!_getNodeCentroidValues(node, map, x, y, count))
         return false;
       break;
     }
     case ElementType::Way:
     {
-      WayPtr way = std::dynamic_pointer_cast<Way>(element);
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
       if (!_getWayCentroidValues(way, map, x, y, count))
         return false;
       break;
     }
     case ElementType::Relation:
     {
-      RelationPtr r = std::dynamic_pointer_cast<Relation>(element);
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(element);
       if (!_getRelationCentroidValues(r, map, x, y, count))
         return false;
       break;

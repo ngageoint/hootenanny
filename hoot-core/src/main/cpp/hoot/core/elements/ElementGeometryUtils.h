@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_GEOMETRY_UTILS_H
@@ -72,7 +72,7 @@ public:
    * @param map
    * @return centroid of the element as a coordinate
    */
-  static geos::geom::Coordinate calculateElementCentroid(const ElementId& eid, const OsmMapPtr& map);
+  static geos::geom::Coordinate calculateElementCentroid(const ElementId& eid, const ConstOsmMapPtr& map);
 
 private:
 
@@ -80,9 +80,9 @@ private:
 
   static std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element, ConstOsmMapPtr map);
 
-  static bool _getNodeCentroidValues(const NodePtr& node, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
-  static bool _getWayCentroidValues(const WayPtr& way, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
-  static bool _getRelationCentroidValues(const RelationPtr& relation, const OsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getNodeCentroidValues(const ConstNodePtr& node, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getWayCentroidValues(const ConstWayPtr& way, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getRelationCentroidValues(const ConstRelationPtr& relation, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
 
 };
 
