@@ -149,15 +149,29 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e, const Con
   // NOTE: Originally, we used isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that it is not
   // linear before it will assume it doesn't have a length.
-  if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
+  Meters length = 0.0;
+  if (!AreaCriterion().isSatisfied(e))
   {
-    // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
-    // and sum up the distance.
-    std::shared_ptr<Geometry> geom = ElementToGeometryConverter(constProvider).convertToGeometry(e);
-    if (geom && geom->isValid())
-      return geom->getLength();
+    switch (e->getElementType().getEnum())
+    {
+    case ElementType::Way:
+    {
+      ConstWayPtr w = std::static_pointer_cast<const Way>(e);
+      length = _calculateLength(w, constProvider);
+      break;
+    }
+    case ElementType::Relation:
+    {
+      ConstRelationPtr r = std::static_pointer_cast<const Relation>(e);
+      length = _calculateLength(r, constProvider);
+      break;
+    }
+    default:
+    case ElementType::Node:
+      break;
+    }
   }
-  return 0;
+  return length;
 }
 
 Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, const ConstOsmMapPtr& map)
@@ -175,21 +189,21 @@ Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, 
   case ElementType::Node:
   {
     ConstNodePtr node = std::dynamic_pointer_cast<const Node>(element);
-    if (!_getNodeCentroidValues(node, map, centroid_x, centroid_y, centroid_count))
+    if (!_getCentroidValues(node, map, centroid_x, centroid_y, centroid_count))
       return Coordinate::getNull();
     break;
   }
   case ElementType::Way:
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-    if (!_getWayCentroidValues(way, map, centroid_x, centroid_y, centroid_count))
+    if (!_getCentroidValues(way, map, centroid_x, centroid_y, centroid_count))
       return Coordinate::getNull();
     break;
   }
   case ElementType::Relation:
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(element);
-    if (!_getRelationCentroidValues(r, map, centroid_x, centroid_y, centroid_count))
+    if (!_getCentroidValues(r, map, centroid_x, centroid_y, centroid_count))
       return Coordinate::getNull();
     break;
   }
@@ -204,7 +218,7 @@ Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, 
   return Coordinate(centroid_x, centroid_y);
 }
 
-bool ElementGeometryUtils::_getNodeCentroidValues(const ConstNodePtr& node, const ConstOsmMapPtr& /*map*/, double& centroid_x, double& centroid_y, double& centroid_count)
+bool ElementGeometryUtils::_getCentroidValues(const ConstNodePtr& node, const ConstOsmMapPtr& /*map*/, double& centroid_x, double& centroid_y, double& centroid_count)
 {
   if (!node)
     return false;
@@ -214,7 +228,7 @@ bool ElementGeometryUtils::_getNodeCentroidValues(const ConstNodePtr& node, cons
   return true;
 }
 
-bool ElementGeometryUtils::_getWayCentroidValues(const ConstWayPtr& way, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
+bool ElementGeometryUtils::_getCentroidValues(const ConstWayPtr& way, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
 {
   if (!way || !map)
     return false;
@@ -243,7 +257,7 @@ bool ElementGeometryUtils::_getWayCentroidValues(const ConstWayPtr& way, const C
   return true;
 }
 
-bool ElementGeometryUtils::_getRelationCentroidValues(const ConstRelationPtr& relation, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
+bool ElementGeometryUtils::_getCentroidValues(const ConstRelationPtr& relation, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
 {
   if (!relation || !map)
     return false;
@@ -261,21 +275,21 @@ bool ElementGeometryUtils::_getRelationCentroidValues(const ConstRelationPtr& re
     case ElementType::Node:
     {
       ConstNodePtr node = std::dynamic_pointer_cast<const Node>(element);
-      if (!_getNodeCentroidValues(node, map, x, y, count))
+      if (!_getCentroidValues(node, map, x, y, count))
         return false;
       break;
     }
     case ElementType::Way:
     {
       ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-      if (!_getWayCentroidValues(way, map, x, y, count))
+      if (!_getCentroidValues(way, map, x, y, count))
         return false;
       break;
     }
     case ElementType::Relation:
     {
       ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(element);
-      if (!_getRelationCentroidValues(r, map, x, y, count))
+      if (!_getCentroidValues(r, map, x, y, count))
         return false;
       break;
     }
@@ -287,6 +301,29 @@ bool ElementGeometryUtils::_getRelationCentroidValues(const ConstRelationPtr& re
   centroid_y += y;
   centroid_count += count;
   return true;
+}
+
+Meters ElementGeometryUtils::_calculateLength(const ConstWayPtr& w, const ConstElementProviderPtr& constProvider)
+{
+  Meters length = 0.0;
+  const std::vector<long>& node_ids = w->getNodeIds();
+  for (size_t i = 0; i < node_ids.size() - 1; ++i)
+  {
+    ConstNodePtr n1 = constProvider->getNode(node_ids[i]);
+    ConstNodePtr n2 = constProvider->getNode(node_ids[i + 1]);
+    if (!n1 || !n2)
+      continue;
+    length += std::sqrt(std::pow(n2->getX() - n1->getX(), 2.0) + std::pow(n2->getY() - n1->getY(), 2));
+  }
+  return length;
+}
+
+Meters ElementGeometryUtils::_calculateLength(const ConstRelationPtr& r, const ConstElementProviderPtr& constProvider)
+{
+  Meters length = 0.0;
+  for (const auto& member : r->getMembers())
+    length += calculateLength(constProvider->getElement(member.getElementId()), constProvider);
+  return length;
 }
 
 }
