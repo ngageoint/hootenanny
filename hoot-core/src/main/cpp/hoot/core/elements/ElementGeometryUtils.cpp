@@ -154,6 +154,9 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e, const Con
   {
     switch (e->getElementType().getEnum())
     {
+    case ElementType::Node:
+      //  Nodes don't have a length
+      break;
     case ElementType::Way:
     {
       ConstWayPtr w = std::static_pointer_cast<const Way>(e);
@@ -167,7 +170,6 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e, const Con
       break;
     }
     default:
-    case ElementType::Node:
       break;
     }
   }
