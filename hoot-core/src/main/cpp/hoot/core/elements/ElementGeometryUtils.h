@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_GEOMETRY_UTILS_H
@@ -66,11 +66,27 @@ public:
    */
   static Meters calculateLength(const ConstElementPtr& e, const ConstElementProviderPtr& constProvider);
 
+  /**
+   * @brief calculateElementCentroid
+   * @param eid element ID to calculate
+   * @param map
+   * @return centroid of the element as a coordinate
+   */
+  static geos::geom::Coordinate calculateElementCentroid(const ElementId& eid, const ConstOsmMapPtr& map);
+
 private:
 
   static int _badGeomCount;
 
   static std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element, ConstOsmMapPtr map);
+
+  static bool _getCentroidValues(const ConstNodePtr& node, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getCentroidValues(const ConstWayPtr& way, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+  static bool _getCentroidValues(const ConstRelationPtr& relation, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count);
+
+  static Meters _calculateLength(const ConstWayPtr& w, const ConstElementProviderPtr& constProvider);
+  static Meters _calculateLength(const ConstRelationPtr& r, const ConstElementProviderPtr& constProvider);
+
 };
 
 }
