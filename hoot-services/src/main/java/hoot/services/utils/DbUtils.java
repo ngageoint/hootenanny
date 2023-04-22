@@ -38,7 +38,9 @@ import static hoot.services.models.db.QTranslations.translations;
 import static hoot.services.models.db.QTranslationFolders.translationFolders;
 import static hoot.services.models.db.QUsers.users;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,6 +55,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1149,6 +1152,39 @@ public class DbUtils {
         }
 
         return elementInfo;
+    }
+
+    public static String getStdoutStats(String jobId) {
+        List<String> stats = new ArrayList<>();
+        if (jobId != null) {
+            String stdOutWithId = createQuery()
+                .select(commandStatus.stdout)
+                .from(commandStatus)
+                .where(commandStatus.jobId.eq(jobId))
+                .fetchFirst();
+
+            if (stdOutWithId == null) return "";
+
+            Scanner scanner = new Scanner(stdOutWithId);
+            boolean capture = false;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                int idx;
+                if ((idx = line.indexOf("stats = ")) > -1) {
+                    capture = true;
+                    line = line.substring(idx);
+                }
+                if (line.isEmpty()) {
+                    break;
+                }
+                if (capture) {
+                    stats.add(line);
+                }
+            }
+            scanner.close();
+        }
+
+        return String.join("\n", stats);
     }
 
     public static boolean didChangesetsUpload(String jobId) {
