@@ -809,6 +809,12 @@ var searchSchema = function(options) {
             });
     }
 
+    result.forEach(r => {
+        r.tags = fcodeLookup[translation].toOsm({
+            'FCODE': r.fcode
+        }, '', geomType);
+    })
+
     return result;
 }
 
