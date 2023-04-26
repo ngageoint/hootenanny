@@ -98,6 +98,7 @@ public:
   void setIncludePointsInWays(bool includePoints) { _includePointInWays = includePoints; }
   void setPrecision(int p) { _precision = p; }
   void setFormatXml(const bool format) { _formatXml = format; }
+  void setIgnoreProgress(const bool ignore) { _ignoreProgress = ignore; }
 
 private:
 
@@ -121,6 +122,8 @@ private:
 
   int _numWritten;
   int _statusUpdateInterval;
+  /** Some usages of the OsmXmlWriter don't need progress status written out so it can be ignored */
+  bool _ignoreProgress;
 
   static QString _typeName(ElementType e);
 

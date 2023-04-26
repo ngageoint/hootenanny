@@ -120,6 +120,7 @@ public:
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
+  void setIgnoreProgress(const bool ignore) { _ignoreProgress = ignore; }
 
 protected:
 
@@ -180,6 +181,8 @@ protected:
 
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
+  /** Some usages of the OsmXmlReader don't need progress status written out so it can be ignored */
+  bool _ignoreProgress;
 
   void _createNode(const QXmlAttributes& attributes);
   void _createWay(const QXmlAttributes& attributes);
