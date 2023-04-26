@@ -1581,6 +1581,13 @@ merged together regardless of whether all of their non-name tags match.
 
 The spacing, in meters, used by `EdgeDistanceExtractor`.
 
+=== element.cache.size.auto.threshold
+
+* Data Type: int
+* Default Value: `80`
+
+Percentage of available memory to use when calculating the element cache sizes using cache auto configure
+
 === element.cache.size.node
 
 * Data Type: long

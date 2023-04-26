@@ -67,6 +67,12 @@ public:
     LOG_VART(args.size());
     LOG_VART(args);
 
+    if (args.contains("--autoconfig-cache"))
+    {
+      setupAutoConfigCache();
+      args.removeAll("--autoconfig-cache");
+    }
+
     BoundedCommand::runSimple(args);
 
     bool separateOutput = false;
@@ -74,12 +80,6 @@ public:
     {
       separateOutput = true;
       args.removeAt(args.indexOf("--separate-output"));
-    }
-
-    if (args.contains("--auto-cache"))
-    {
-      setupAutoCache();
-      args.removeAll("--auto-cache");
     }
 
     bool recursive = false;
@@ -144,7 +144,7 @@ public:
     return 0;
   }
 
-  void setupAutoCache()
+  void setupAutoConfigCache()
   {
     //  These values were found through testing
     const double node_size = 350.0;
@@ -159,13 +159,14 @@ public:
     const long default_cache_ways = options.getElementCacheSizeWay();
     const long default_cache_relations = options.getElementCacheSizeRelation();
     //  Calculate a number of nodes/ways/relations that will "fit" in that memory
-    //  Use the memory usage checker threshold so that some memory remains
-    const double memory_threshold = static_cast<double>(ConfigOptions().getMemoryUsageCheckerThreshold()) / 100.0;
+    //  Use the element cache memory threshold so that some memory remains
+    const double memory_threshold = static_cast<double>(ConfigOptions().getElementCacheSizeAutoThreshold()) / 100.0;
     //  The current defaults are 10M nodes, 2M ways, and 2M relations since most nodes don't have tags which are the most expensive part
     const double available_for_cache = static_cast<double>(memory_available) * memory_threshold;
     const long cache_nodes = static_cast<long>((available_for_cache * 5.0 / 7.0) / node_size);
     const long cache_ways = static_cast<long>((available_for_cache * 1.0 / 7.0) / way_size);
     const long cache_relations = static_cast<long>((available_for_cache * 1.0 / 7.0) / relation_size);
+    LOG_DEBUG("Available memory for element cache: " << memory_available << " bytes (threshold: " << memory_threshold << ")");
     //  Update the values of the cache size if smaller than the settings
     if (cache_nodes < default_cache_nodes)
     {
