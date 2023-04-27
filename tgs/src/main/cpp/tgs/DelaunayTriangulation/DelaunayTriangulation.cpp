@@ -53,7 +53,8 @@ private:
   Point2d *data;
 public:
   InternalEdge()
-    : next(nullptr),
+    : num(-1),
+      next(nullptr),
       data(nullptr)
   {
   }

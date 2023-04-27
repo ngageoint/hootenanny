@@ -144,7 +144,7 @@ public:
     return 0;
   }
 
-  void setupAutoConfigCache()
+  void setupAutoConfigCache() const
   {
     //  These values were found through testing
     const double node_size = 350.0;
