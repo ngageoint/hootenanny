@@ -29,11 +29,12 @@
 
 // hoot
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/StringMemoryInterface.h>
 
 namespace hoot
 {
 
-class GeoNamesReader : public PartialOsmMapReader
+class GeoNamesReader : public PartialOsmMapReader, public StringMemoryInterface
 {
 public:
 
@@ -71,10 +72,7 @@ private:
   QStringList _columns;
   QFile _fp;
   Status _status;
-  QHash<QString, QString> _strings;
   mutable std::shared_ptr<OGRSpatialReference> _wgs84;
-
-  QString _saveMemory(const QString& s);
 };
 
 }

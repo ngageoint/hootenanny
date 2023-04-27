@@ -31,6 +31,7 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
+#include <hoot/core/io/StringMemoryInterface.h>
 #include <hoot/core/io/schema/StrictChecking.h>
 
 namespace hoot
@@ -42,7 +43,7 @@ class Tags;
  * A script for translating feature attributes.
  * See ScriptSchemaTranslatorFactory for constructing a ScriptSchemaTranslator.
  */
-class ScriptSchemaTranslator
+class ScriptSchemaTranslator : public StringMemoryInterface
 {
 public:
 
@@ -113,8 +114,6 @@ protected:
    */
   virtual void _finalize() = 0;
 
-  virtual const QString& _saveMemory(const QString& s);
-
   virtual void strictError(const QString& s) const;
 
   /**
@@ -122,11 +121,6 @@ protected:
    */
   virtual void _translateToOsm(Tags& tags, const char* layerName, const char* geomType) = 0;
 
-private:
-
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
 };
 
 using ScriptSchemaTranslatorPtr = std::shared_ptr<ScriptSchemaTranslator>;

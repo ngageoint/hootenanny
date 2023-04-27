@@ -156,10 +156,6 @@ private:
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
 
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
-
   QString _translatePath;
 
   Progress _progress;

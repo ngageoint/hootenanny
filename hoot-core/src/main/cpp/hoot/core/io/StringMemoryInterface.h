@@ -22,55 +22,38 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
-#include "ScriptSchemaTranslator.h"
 
-// Standard
-#include <assert.h>
+#ifndef STRING_MEMORY_INTERFACE_H
+#define STRING_MEMORY_INTERFACE_H
+
+//  Qt
+#include <QString>
 
 namespace hoot
 {
 
-ScriptSchemaTranslator::ScriptSchemaTranslator()
+/**
+ * @brief The StringMemoryInterface contains a memory saving technique based on QStrings
+ */
+class StringMemoryInterface
 {
-  _initialized = false;
-  _strict = StrictOn;
-}
+public:
+  StringMemoryInterface() = default;
+  virtual ~StringMemoryInterface() = default;
+  /**
+   * @brief getStringLocation Get a string with a consistant internal memory address
+   * @param s String to save or get the memory location of
+   * @return QString object that points to the string located in the string table
+   */
+  const QString& getStringLocation(const QString& s);
 
-ScriptSchemaTranslator::~ScriptSchemaTranslator()
-{
-  // the child class should call close since _finalize is virtual.
-  assert (_initialized == false);
-}
+protected:
 
-void ScriptSchemaTranslator::close()
-{
-  if (_initialized)
-  {
-    _finalize();
-    _initialized = false;
-  }
-}
-
-void ScriptSchemaTranslator::strictError(const QString& s) const
-{
-  if (_strict == StrictOn)
-    throw HootException(s);
-  else if (_strict == StrictWarn)
-  {
-    LOG_WARN(s);
-  }
-}
-
-void ScriptSchemaTranslator::translateToOsm(Tags& tags, const char* layerName, const char* geomType)
-{
-  if (!_initialized)
-  {
-    _init();
-    _initialized = true;
-  }
-  _translateToOsm(tags, layerName, geomType);
-}
+  QHash<QString, QString> _strings;
+};
 
 }
+
+#endif  //  STRING_MEMORY_INTERFACE_H

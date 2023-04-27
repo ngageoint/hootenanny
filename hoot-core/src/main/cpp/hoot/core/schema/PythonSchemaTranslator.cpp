@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 // Python redefines these two macros from /usr/include/features.h
@@ -216,12 +216,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
       Py_DECREF(valueUnicode);
 
       if (qValue.isEmpty() == false)
-      {
-        qKey = _saveMemory(qKey);
-        qValue = _saveMemory(qValue);
-
-        tags[qKey] = qValue;
-      }
+        tags[getStringLocation(qKey)] = getStringLocation(qValue);
     }
   }
   Py_DECREF(pyResult);

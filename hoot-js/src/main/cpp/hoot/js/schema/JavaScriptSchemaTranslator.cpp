@@ -808,7 +808,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& tags, const char* layerNa
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
       if (v != Undefined(current))
-        tags.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
+        tags.insert(getStringLocation(toCpp<QString>(arr->Get(context, i).ToLocalChecked())), getStringLocation(toCpp<QString>(v)));
 
       LOG_VART(tags);
     }

@@ -475,13 +475,6 @@ void OsmXmlReader::read(const QString& path, const OsmMapPtr& map)
   read(map);
 }
 
-const QString& OsmXmlReader::_saveMemory(const QString& s)
-{
-  if (!_strings.contains(s))
-    _strings[s] = s;
-  return _strings[s];
-}
-
 bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/,
                                 const QString& qName, const QXmlAttributes& attributes)
 {
@@ -571,8 +564,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     else if (qName == QLatin1String("member") && _element)
     {
       long ref = _parseLong(attributes.value("ref"));
-      QString type = attributes.value("type");
-      QString role = attributes.value("role");
+      const QString& type = getStringLocation(attributes.value("type"));
+      const QString& role = getStringLocation(attributes.value("role"));
 
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
 
@@ -669,8 +662,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     }
     else if (qName == QLatin1String("tag") && _element)
     {
-      const QString& key = _saveMemory(attributes.value("k").trimmed());
-      const QString& value = _saveMemory(attributes.value("v").trimmed());
+      const QString& key = getStringLocation(attributes.value("k").trimmed());
+      const QString& value = getStringLocation(attributes.value("v").trimmed());
       LOG_VART(key);
       LOG_VART(value);
       if (!key.isEmpty() && !value.isEmpty())
@@ -683,8 +676,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           if (_keepStatusTag)
             _element->setTag(key, value);
         }
-        else if (key == MetadataTags::RelationType() &&
-                 _element->getElementType() == ElementType::Relation)
+        else if (key == MetadataTags::RelationType() && _element->getElementType() == ElementType::Relation)
         {
           RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
