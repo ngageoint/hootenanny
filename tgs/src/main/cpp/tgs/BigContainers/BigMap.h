@@ -58,13 +58,9 @@ public:
   const V& at(const K& k) const
   {
     if (_inMemory)
-    {
       return _smallMap.at(k);
-    }
     else
-    {
       return _bigMap->at(k);
-    }
   }
 
   bool contains(const K& k) const { return count(k) > 0; }
@@ -72,13 +68,9 @@ public:
   size_t count(const K& k) const
   {
     if (_inMemory)
-    {
       return _smallMap.count(k);
-    }
     else
-    {
       return _bigMap->count(k);
-    }
   }
 
   void insert(const K& k, const V& v) { operator[](k) = v; }
@@ -87,25 +79,17 @@ public:
   {
     _checkSize();
     if (_inMemory)
-    {
       return _smallMap[k];
-    }
     else
-    {
       return (*_bigMap)[k];
-    }
   }
 
   void clear()
   {
     if (_inMemory)
-    {
       return _smallMap.clear();
-    }
     else
-    {
       return _bigMap->clear();
-    }
   }
 
 private:
@@ -119,14 +103,9 @@ private:
   {
     if (_inMemory && _smallMap.size() > _maxEntriesInRam)
     {
-      //std::cerr << "Creating stxxl" << std::endl;
       _bigMap = std::make_shared<BigMapStxxl<K,V>>();
-      for (typename std::map<K, V>::const_iterator it = _smallMap.begin(); it != _smallMap.end();
-           ++it)
-      {
+      for (auto it = _smallMap.begin(); it != _smallMap.end(); ++it)
         _bigMap->insert(it->first, it->second);
-      }
-      //std::cerr << "Created stxxl" << std::endl;
       _smallMap.clear();
       _inMemory = false;
     }

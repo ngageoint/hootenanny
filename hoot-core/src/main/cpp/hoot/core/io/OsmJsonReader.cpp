@@ -627,7 +627,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   if (item.not_found() != item.find("nodes"))
   {
     pt::ptree nodes = item.get_child("nodes");
-    pt::ptree::const_iterator nodeIt = nodes.begin();
+    auto nodeIt = nodes.begin();
     while (nodeIt != nodes.end())
     {
       const long wayNodeId = nodeIt->second.get_value<long>();

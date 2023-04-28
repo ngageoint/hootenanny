@@ -116,7 +116,7 @@ long OsmPbfWriter::_convertLat(double lat) const
 int OsmPbfWriter::_convertString(const QString& s)
 {
   int id;
-  QHash<QString, int>::const_iterator sit = _strings.find(s);
+  auto sit = _strings.find(s);
   if (sit != _strings.end())
     id = sit.value();
   else

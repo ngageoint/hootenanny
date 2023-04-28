@@ -42,7 +42,7 @@ double SqliteWordWeightDictionary::getWeight(const QString& word) const
   LOG_VART(word);
   QString normalized = word.toLower().normalized(QString::NormalizationForm_C);
   normalized.replace(_nonWord, "");
-  WeightHash::const_iterator it = _weights.find(normalized);
+  auto it = _weights.find(normalized);
 
   long c;
   if (it == _weights.end())

@@ -49,8 +49,6 @@ class BigMapTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(BigMapTest);
   CPPUNIT_TEST(simpleTest);
-  //CPPUNIT_TEST(benchmarkTest);
-  //CPPUNIT_TEST(runStxxlTest);
   CPPUNIT_TEST_SUITE_END();
 public:
 
@@ -68,7 +66,7 @@ public:
       t[k] = v;
     }
 
-    for (map<long, long>::const_iterator it = m.begin(); it != m.end(); ++it)
+    for (auto it = m.begin(); it != m.end(); ++it)
     {
       CPPUNIT_ASSERT_EQUAL(it->second, t[it->first]);
     }
@@ -92,175 +90,6 @@ public:
     static long max_value() { return std::numeric_limits<long>::max(); }
   };
 
-//  void runStxxlTest()
-//  {
-////    stxxl::config* cfg = stxxl::config::get_instance();
-////    cfg->
-//    const int m = 1;
-//    using MayType = stxxl::map<long, long, CompareLess, 4096 * m, 4096 * m>;
-//    MapType foo(1024 * 1024 * 512, 1024 * 1024 * 256);
-
-//    using VectorType = stxxl::VECTOR_GENERATOR<long>::result;
-//    VectorType bar;
-
-//    size_t iterations = 10000000;
-//    bool doReadTest = false;
-//    map<long, long> bax;
-//    vector<pair<long, long>> pairs;
-//    if (doReadTest)
-//    {
-//      pairs.reserve(iterations);
-//    }
-
-//    double start = Tgs::Time::getTime();
-//    double lastStart = start;
-//    int reportInterval = 100000;
-//    cout << "Inserting...asdf" << endl;
-//    for (size_t i = 0; i < iterations; i++)
-//    {
-//      long key = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
-//      long value = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
-//      if (doReadTest)
-//      {
-//        pairs.push_back(pair<long, long>(key, value));
-//      }
-//      //bar.push_back(Tgs::Random::instance()->generateInt());
-//      foo.insert(std::pair<long, long>(key, value));
-//      //foo[key] = value;
-//      //foo.insert(std::pair<int, double>(key, value));
-//      //bax[key] = value;
-
-
-////      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->generateInt(keys.size())]);
-////      assert(it != bax.end());
-
-//      if (doReadTest)
-//      {
-//        size_t ki = Tgs::Random::instance()->generateInt(pairs.size());
-//        assert(foo[pairs[ki].first] == pairs[ki].second);
-//      }
-
-//      if (i % reportInterval == 0)
-//      {
-//        double now = Tgs::Time::getTime();
-//        cout << "Last iteration: " << 1000.0 * (now - lastStart) / (double)reportInterval << "ms" << endl;
-//        lastStart = now;
-//        cout << i << " since start: " << 1000.0 * (Tgs::Time::getTime() - start) / (double)i << "ms" << endl;
-//      }
-//    }
-//    cout << "...Done " << Tgs::Time::getTime() - start << "sec" << endl;
-//    foo.print_statistics(cout);
-
-//    if (doReadTest)
-//    {
-//      start = Tgs::Time::getTime();
-//      lastStart = start;
-//      for (size_t i = 0; i < 10000000; i++)
-//      {
-//  //      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->generateInt(keys.size())]);
-//  //      assert(it != bax.end());
-
-//        //MapType::const_iterator it = constFoo.find(keys[Tgs::Random::instance()->generateInt(keys.size())]);
-//        //assert(it != foo.end());
-//        //assert(foo.count(keys[Tgs::Random::instance()->generateInt(keys.size())]) == 1);
-//        size_t ki = Tgs::Random::instance()->generateInt(pairs.size());
-//        assert(foo[pairs[ki].first] == pairs[ki].second);
-
-//        if (i % reportInterval == 0)
-//        {
-//          double now = Tgs::Time::getTime();
-//          cout << "Last iteration: " << 1000.0 * (now - lastStart) / (double)reportInterval << "ms" << endl;
-//          lastStart = now;
-//          cout << i << " since start: " << 1000.0 * (Tgs::Time::getTime() - start) / (double)i << "ms" << endl;
-//        }
-//      }
-//      cout << "...Done " << Tgs::Time::getTime() - start << "sec" << endl;
-//    }
-//  }
-
-
-//  void benchmarkTest()
-//  {
-//    size_t iterations = 10000000;
-//    bool doReadTest = false;
-//    //BigMap<long, long> foo;
-//    using MapType = stxxl::map<long, long, CompareLess, 4096, 4096>;
-//    MapType bar(1024 * 1024 * 512, 1024 * 1024 * 256);
-
-//    using VectorType stxxl::VECTOR_GENERATOR<long>::result;
-//    VectorType v;
-
-//    vector<pair<long, long>> pairs;
-//    if (doReadTest)
-//    {
-//      pairs.reserve(iterations);
-//    }
-
-//    double start = Tgs::Time::getTime();
-//    double lastStart = start;
-//    int reportInterval = 100000;
-//    cout << "Inserting...";
-//    for (size_t i = 0; i < iterations; i++)
-//    {
-//      long key = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
-//      long value = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
-//      if (doReadTest)
-//      {
-//        pairs.push_back(pair<long, long>(key, value));
-//      }
-//      //bar.push_back(Tgs::Random::instance()->generateInt());
-//      //foo[key] = value;
-//      //foo.insert(key, value);
-//      bar.insert(std::pair<long, long>(key, value));
-//      //bax[key] = value;
-
-//  //      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->generateInt(keys.size())]);
-//  //      assert(it != bax.end());
-
-//      if (doReadTest)
-//      {
-//        size_t ki = Tgs::Random::instance()->generateInt(pairs.size());
-//        assert(bar.count(pairs[ki].first) == 1);
-//        assert(bar.count(Tgs::Random::instance()->generateInt()) == 0);
-//      }
-
-//      if (i % reportInterval == 0)
-//      {
-//        double now = Tgs::Time::getTime();
-//        cout << "Last iteration: " << 1000.0 * (now - lastStart) / (double)reportInterval << "ms" << endl;
-//        lastStart = now;
-//        cout << i << " since start: " << 1000.0 * (Tgs::Time::getTime() - start) / (double)i << "ms" << endl;
-//      }
-//    }
-//    cout << "...Done " << Tgs::Time::getTime() - start << "sec" << endl;
-
-//    if (doReadTest)
-//    {
-//      start = Tgs::Time::getTime();
-//      lastStart = start;
-//      for (size_t i = 0; i < 10000000; i++)
-//      {
-//        if (Tgs::Random::instance()->generateInt(2) == 0)
-//        {
-//          size_t ki = Tgs::Random::instance()->generateInt(pairs.size());
-//          assert(bar[pairs[ki].first] == pairs[ki].second);
-//        }
-//        else
-//        {
-//          assert(bar.count(Tgs::Random::instance()->generateInt()) == 0);
-//        }
-
-//        if (i % reportInterval == 0)
-//        {
-//          double now = Tgs::Time::getTime();
-//          cout << "Last iteration: " << 1000.0 * (now - lastStart) / (double)reportInterval << "ms" << endl;
-//          lastStart = now;
-//          cout << i << " since start: " << 1000.0 * (Tgs::Time::getTime() - start) / (double)i << "ms" << endl;
-//        }
-//      }
-//      cout << "...Done " << Tgs::Time::getTime() - start << "sec" << endl;
-//    }
-//  }
 };
 
 }

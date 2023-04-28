@@ -415,7 +415,7 @@ inline ConstNodePtr OsmMap::getNode(long id) const
 
 inline ConstRelationPtr OsmMap::getRelation(long id) const
 {
-  RelationMap::iterator it = _relations.find(id);
+  auto it = _relations.find(id);
   if (it != _relations.end())
     return it->second;
   else

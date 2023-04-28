@@ -63,7 +63,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   bool result = false;
   const Tags& tags = element->getTags();
 
-  Tags::const_iterator it = tags.find("highway");
+  auto it = tags.find("highway");
   const bool containsHighwayTag = it != tags.end() && it.value() != "";
 
   // Is it a legit highway?

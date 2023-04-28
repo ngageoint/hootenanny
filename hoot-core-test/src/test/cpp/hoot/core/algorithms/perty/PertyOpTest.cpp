@@ -51,8 +51,7 @@ class PertyOpTest : public HootTestFixture
 public:
 
   PertyOpTest()
-    : HootTestFixture(UNUSED_PATH,
-                      "test-output/rnd/perty/")
+    : HootTestFixture(UNUSED_PATH, "test-output/rnd/perty/")
   {
   }
 
@@ -74,9 +73,7 @@ public:
     for (double x = 0.0; x <= 500.0; x += 220)
     {
       for (double y = 0.0; y <= 500.0; y += 260)
-      {
         map->addNode(std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10));
-      }
     }
 
     PertyOp uut;
@@ -90,7 +87,7 @@ public:
     ////
     QSet<long> nids;
     const NodeMap& nodes = map->getNodes();
-    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    for (auto it = nodes.begin(); it != nodes.end(); ++it)
       nids.insert(it->first);
     QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
@@ -145,9 +142,7 @@ public:
     for (double x = 0.0; x < 200.0; x += gridSpacing / 4)
     {
       for (double y = 0.0; y < 100.0; y += gridSpacing / 4)
-      {
         map->addNode(std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10));
-      }
     }
 
     OsmXmlWriter writer;

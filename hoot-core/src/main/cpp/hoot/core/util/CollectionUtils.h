@@ -61,14 +61,12 @@ public:
    * @note std::set is ordered and QSet is not
    */
   template<typename T>
-  static QSet<T> stdSetToQSet(const std::set<T>& set)
+  static QSet<T> stdSetToQSet(const std::set<T>& s)
   {
     // There's probably a more efficient way to do this...
     QSet<T> qSet;
-    for (typename std::set<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
-    {
+    for (auto itr = s.begin(); itr != s.end(); ++itr)
       qSet.insert(*itr);
-    }
     return qSet;
   }
 
@@ -80,14 +78,12 @@ public:
    * @note std::set is ordered and QSet is not
    */
   template<typename T>
-  static std::set<T> qSetToStdSet(const QSet<T>& set)
+  static std::set<T> qSetToStdSet(const QSet<T>& s)
   {
     // There's probably a more efficient way to do this...
     std::set<T> stdSet;
-    for (typename QSet<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
-    {
+    for (auto itr = s.begin(); itr != s.end(); ++itr)
       stdSet.insert(*itr);
-    }
     return stdSet;
   }
 

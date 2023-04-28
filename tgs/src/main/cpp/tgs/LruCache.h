@@ -65,7 +65,7 @@ public:
     assert(_cacheMap.find(k) == _cacheMap.end());
 
     _cacheList.push_back(Entry(k, v));
-    typename CacheList::iterator e = _cacheList.end();
+    auto e = _cacheList.end();
     e--;
     _cacheMap[k] = e;
 
@@ -81,7 +81,7 @@ public:
   bool get(const K& k, V& v)
   {
     bool result = false;
-    typename CacheMap::iterator it = _cacheMap.find(k);
+    auto it = _cacheMap.find(k);
     if (it != _cacheMap.end())
     {
       result = true;

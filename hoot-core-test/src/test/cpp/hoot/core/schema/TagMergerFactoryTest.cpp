@@ -68,7 +68,7 @@ public:
   {
     CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
 
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+    for (auto it = t1.begin(); it != t1.end(); ++it)
     {
       CPPUNIT_ASSERT_EQUAL(t1[it.key()].toStdString(), t2[it.key()].toStdString());
     }

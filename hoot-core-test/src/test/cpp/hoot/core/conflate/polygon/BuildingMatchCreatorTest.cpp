@@ -108,7 +108,7 @@ public:
     {
       //  Make a copy of the ways to remove some later
       WayMap wm = map->getWays();
-      for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+      for (auto it = wm.begin(); it != wm.end(); ++it)
       {
         const ConstWayPtr& w = it->second;
         const Tags& t = w->getTags();
@@ -378,7 +378,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMatchCreatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMatchCreatorTest, "quick");
 
 }

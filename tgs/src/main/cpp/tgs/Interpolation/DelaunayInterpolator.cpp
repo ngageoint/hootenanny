@@ -52,7 +52,7 @@ DelaunayInterpolator::DelaunayInterpolator()
 
 double DelaunayInterpolator::_addToResult(const Point2d& p, double w) const
 {
-  std::map<Point2d, int>::const_iterator it = _pointToIndex.find(p);
+  auto it = _pointToIndex.find(p);
   assert(it != _pointToIndex.end());
   if (it->second == -1)
     return 0.0;

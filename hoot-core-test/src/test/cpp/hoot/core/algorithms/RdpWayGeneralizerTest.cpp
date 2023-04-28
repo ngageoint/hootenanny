@@ -140,8 +140,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     // Points will be empty for the generalize calls with way inputs instead of points.
-    for (QList<ConstNodePtr>::const_iterator it = points.constBegin();
-         it != points.constEnd(); ++it)
+    for (auto it = points.constBegin(); it != points.constEnd(); ++it)
     {
       NodePtr nodeCopy = std::make_shared<Node>(*(*it).get());
       map->addNode(nodeCopy);

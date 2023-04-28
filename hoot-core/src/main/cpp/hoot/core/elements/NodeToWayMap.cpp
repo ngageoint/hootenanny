@@ -56,7 +56,7 @@ void NodeToWayMap::addWay(const std::shared_ptr<const Way>& w)
 
 const set<long>& NodeToWayMap::getWaysByNode(long nid) const
 {
-  NodeToWayMap::const_iterator it = this->find(nid);
+  auto it = this->find(nid);
   if (it == this->end())
     return _emptySet;
   else

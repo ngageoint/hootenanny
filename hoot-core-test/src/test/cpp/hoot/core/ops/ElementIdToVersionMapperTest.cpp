@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/ElementIdToVersionMapper.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/ops/ElementIdToVersionMapper.h>
 
 namespace hoot
 {
@@ -43,9 +43,9 @@ class ElementIdToVersionMapperTest : public HootTestFixture
 
 public:
 
-  ElementIdToVersionMapperTest() :
-  HootTestFixture(
-    "test-files/ops/ElementIdToVersionMapper", "test-output/ops/ElementIdToVersionMapper")
+  ElementIdToVersionMapperTest()
+    : HootTestFixture("test-files/ops/ElementIdToVersionMapper",
+                      "test-output/ops/ElementIdToVersionMapper")
   {
   }
 
@@ -79,13 +79,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(40, mappings.size());
     // If the elements in the input have no versions, all mapped versions will equal zero.
     int zeroVersionCtr = 0;
-    for (QList<long>::const_iterator mappingItr = mappings.constBegin();
-         mappingItr != mappings.constEnd(); ++mappingItr)
+    for (auto mappingItr = mappings.constBegin(); mappingItr != mappings.constEnd(); ++mappingItr)
     {
       if (*mappingItr == 0)
-      {
         zeroVersionCtr++;
-      }
     }
     CPPUNIT_ASSERT_EQUAL(40, zeroVersionCtr);
   }

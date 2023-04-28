@@ -294,7 +294,7 @@ v8::Local<v8::Value> toV8(const std::set<T>& v)
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), static_cast<int>(v.size()));
   uint32_t i = 0;
-  for (typename std::set<T>::const_iterator it = v.begin(); it != v.end(); ++it)
+  for (auto it = v.begin(); it != v.end(); ++it)
     result->Set(context, i++, toV8(*it));
   return scope.Escape(result);
 }

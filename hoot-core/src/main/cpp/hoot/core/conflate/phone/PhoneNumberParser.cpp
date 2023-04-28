@@ -105,7 +105,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
   //fairly loose for now
   QList<ElementPhoneNumber> parsedPhoneNums;
   const Tags& tags = element.getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);

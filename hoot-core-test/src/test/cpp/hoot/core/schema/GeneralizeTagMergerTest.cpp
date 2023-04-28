@@ -80,7 +80,7 @@ private:
       CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
     }
 
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+    for (auto it = t1.begin(); it != t1.end(); ++it)
     {
       if (t1[it.key()] != t2[it.key()])
       {

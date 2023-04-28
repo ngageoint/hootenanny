@@ -49,18 +49,18 @@ class OptimalConstrainedFakeMatch : public Match
 public:
 
   OptimalConstrainedFakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
-  OptimalConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
-    ConstMatchThresholdPtr threshold) :
-    Match(threshold, eid1, eid2),
-    _p(p)
-  {}
+  OptimalConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p, ConstMatchThresholdPtr threshold)
+    : Match(threshold, eid1, eid2),
+      _p(p)
+  {
+  }
 
   void addConflict(const ConstMatchPtr& conflict)
   {
     _conflicts.insert(conflict);
   }
 
-  virtual const MatchClassification& getClassification() const override
+  const MatchClassification& getClassification() const override
   {
     _c.setMatchP(_p);
     _c.setMissP(1 - _p);
@@ -71,28 +71,28 @@ public:
   QString getName() const override { return "Fake Match"; }
   QString getClassName() const override { return ""; }
 
-  virtual double getProbability() const override { return _p; }
+  double getProbability() const override { return _p; }
 
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
-                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     QString otherString = other->toString();
-    for (MatchSet::iterator it = _conflicts.begin(); it != _conflicts.end(); ++it)
+    for (const auto& c : _conflicts)
     {
-      if (otherString == (*it)->toString())
+      if (otherString == c->toString())
         return true;
     }
     return false;
   }
 
-  virtual set<pair<ElementId, ElementId>> getMatchPairs() const override
+  set<pair<ElementId, ElementId>> getMatchPairs() const override
   {
     set<pair<ElementId, ElementId>> result;
     result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
     return result;
   }
 
-  virtual QString toString() const override
+  QString toString() const override
   {
     stringstream ss;
     ss << "pairs: " << getMatchPairs() << " p: " << getProbability();
@@ -112,19 +112,19 @@ class OptimalConstrainedFakeCreator : public MergerCreator
 {
 public:
 
-  virtual bool createMergers(const MatchSet&, vector<MergerPtr>&) const override
+  bool createMergers(const MatchSet&, vector<MergerPtr>&) const override
   {
     assert(false);
     return false;
   }
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     return m1->isConflicting(m2, map);
   }
 
-  vector<CreatorDescription> getAllCreators() const
+  vector<CreatorDescription> getAllCreators() const override
   {
     return vector<CreatorDescription>();
   }

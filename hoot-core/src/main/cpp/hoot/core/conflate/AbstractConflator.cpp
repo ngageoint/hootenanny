@@ -315,7 +315,7 @@ void AbstractConflator::_replaceElementIds(const std::vector<std::pair<ElementId
 {
   for (const auto& replaced_pair : replaced)
   {
-    HashMap<ElementId, std::vector<MergerPtr>>::const_iterator it = _e2m.find(replaced_pair.first);
+    auto it = _e2m.find(replaced_pair.first);
     if (it != _e2m.end())
     {
       const std::vector<MergerPtr>& mergers = it->second;
@@ -483,8 +483,7 @@ void AbstractConflator::_addConflateScoreTags(const ElementPtr& e, const MatchCl
     tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
     tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
     tags.appendValue(MetadataTags::HootScoreClassification(), matchType.toString());
-    tags.appendValue(
-      MetadataTags::HootScoreDetail(), matchThreshold.getTypeDetail(matchClassification));
+    tags.appendValue(MetadataTags::HootScoreDetail(), matchThreshold.getTypeDetail(matchClassification));
     // The thresholds are global, so don't append.
     tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
     tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
@@ -517,10 +516,7 @@ void AbstractConflator::_updateProgress(const int currentStep, const QString mes
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
   // just an empty progress object, and we shouldn't log progress.
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
-  }
+    _progress.setFromRelative((float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
 }
 
 }

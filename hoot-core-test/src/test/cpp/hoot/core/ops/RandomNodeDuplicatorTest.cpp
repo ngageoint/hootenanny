@@ -78,7 +78,7 @@ public:
 
     QSet<long> nids;
     const NodeMap& nodes = map->getNodes();
-    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    for (auto it = nodes.begin(); it != nodes.end(); ++it)
       nids.insert(it->first);
     QList<long> keys = QList<long>::fromSet(nids);
 

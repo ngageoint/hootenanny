@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
+
 #include <hoot/js/conflate/merging/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -182,13 +183,13 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
 
   bool foundCache = false;
   bool cacheConflict = false;
-  QHash<ConflictKey, bool>::const_iterator cit1 = _conflicts.find(hm->_getConflictKey());
+  auto cit1 = _conflicts.find(hm->_getConflictKey());
   if (cit1 != _conflicts.end())
   {
     foundCache = true;
     cacheConflict = cit1.value();
   }
-  QHash<ConflictKey, bool>::const_iterator cit2 = hm->_conflicts.find(_getConflictKey());
+  auto cit2 = hm->_conflicts.find(_getConflictKey());
   if (cit2 != hm->_conflicts.end())
   {
     foundCache = true;

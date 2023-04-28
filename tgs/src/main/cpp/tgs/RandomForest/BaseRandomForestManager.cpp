@@ -177,10 +177,7 @@ void BaseRandomForestManager::generateRemappedReports(std::string& reportName,
       generateTopFactors(reportName);
     }
     else
-    {
-      throw Exception(__LINE__,
-        "Unable to generate reports from an empty result set. Test on the model");
-    }
+      throw Exception(__LINE__, "Unable to generate reports from an empty result set. Test on the model");
   }
   catch(const Exception & e)
   {
@@ -198,10 +195,7 @@ void BaseRandomForestManager::generateReports(std::string& filename)
       generateTopFactors(filename);
     }
     else
-    {
-      throw Exception(__LINE__,
-        "Unable to generate reports from an empty result set. Test on the model");
-    }
+      throw Exception(__LINE__, "Unable to generate reports from an empty result set. Test on the model");
   }
   catch(const Exception & e)
   {
@@ -218,7 +212,6 @@ void BaseRandomForestManager::generateResults(const std::string& filename)
       //Get the labels in the random forest training set
       std::set<std::string> classLabels = _data->getClassLabels();
       //classLabels.insert("zz00");
-      std::set<std::string>::iterator setItr2;
 
       std::string rsltfile = filename + "_results.txt";
       std::string conffile = filename + "_confusion.txt";
@@ -298,15 +291,10 @@ void BaseRandomForestManager::generateResults(const std::string& filename)
         rsltStream.close();
       }
       else
-      {
-        throw Exception(__LINE__,
-          "Unable to open results file or confusion matrix file for writing");
-      }
+        throw Exception(__LINE__, "Unable to open results file or confusion matrix file for writing");
     }
     else
-    {
       throw Exception(__LINE__, "Unable to generate reports from empty result set");
-    }
   }
   catch(const Exception & e)
   {
@@ -413,9 +401,7 @@ void BaseRandomForestManager::importModel(const std::string& sourceFile)
     for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
     {
       if (childList.at(i).nodeType() == QDomNode::CommentNode)
-      {
         continue;
-      }
 
       if (childList.at(i).isElement())
       {

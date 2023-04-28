@@ -954,11 +954,8 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 
   LOG_TRACE("Replace node in relations: replace " << oldId << " with " << newId );
 
-  NodeMap::iterator it;
-
   // Make sure both nodes exist; calling getNode on non-existent IDs causes failed assert
-
-  it = _nodes.find(oldId);
+  auto it = _nodes.find(oldId);
   if (it == _nodes.end())
   {
     LOG_TRACE("Tried to replace a non-existent node " << oldId );
@@ -966,7 +963,7 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   }
 
   it = _nodes.find(newId);
-  if ( it == _nodes.end() )
+  if (it == _nodes.end())
   {
     LOG_TRACE("Replacement node " << newId << "does not exist");
     return;

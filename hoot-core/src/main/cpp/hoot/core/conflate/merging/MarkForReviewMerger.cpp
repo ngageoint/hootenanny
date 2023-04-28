@@ -121,7 +121,7 @@ void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
       ++it;
   }
 
-  set<ElementId>::iterator it2 = _eids.find(oldEid);
+  auto it2 = _eids.find(oldEid);
   if (it2 != _eids.end())
   {
     _eids.erase(it2);

@@ -76,7 +76,7 @@ public:
         throw Exception(ss.str());
       }
 #   endif
-    typename MapType::const_iterator it = _map->find(k);
+    auto it = _map->find(k);
     if (it == _map->end())
     {
       std::stringstream ss;
@@ -93,10 +93,9 @@ public:
   {
     // check the least expensive operations first.
     if (_bloom->probably_contains(k) == false)
-    {
       return 0;
-    }
-    typename MapType::const_iterator it = _map->find(k);
+
+    auto it = _map->find(k);
     return it == _map->end() ? (size_t)0 : (size_t)1;
   }
 
