@@ -75,7 +75,8 @@ OsmXmlReader::OsmXmlReader()
     _addChildRefsWhenMissing(false),
     _logWarningsForMissingElements(true),
     _statusUpdateInterval(1000),
-    _keepImmediatelyConnectedWaysOutsideBounds(false)
+    _keepImmediatelyConnectedWaysOutsideBounds(false),
+    _ignoreProgress(false)
 {
   setConfiguration(conf());
 }
@@ -818,7 +819,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
       _numRead++;
     }
 
-    if (_numRead % _statusUpdateInterval == 0)
+    if (_numRead % _statusUpdateInterval == 0 && !_ignoreProgress)
     {
       PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
     }

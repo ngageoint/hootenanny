@@ -59,6 +59,7 @@ OsmXmlDiskCache::OsmXmlDiskCache()
   _writer.setIncludeHootInfo(true);
   _writer.setIncludePid(true);
   _writer.setIncludeDebug(true);
+  _writer.setIgnoreProgress(true);
   _writer.openunbuff(_tempFileName);
 
   // Setup our reader
