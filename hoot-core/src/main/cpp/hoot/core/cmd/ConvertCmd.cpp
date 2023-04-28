@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -36,6 +36,9 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+
+// Tgs
+#include <tgs/System/SystemInfo.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -64,6 +67,12 @@ public:
     LOG_VART(args.size());
     LOG_VART(args);
 
+    if (args.contains("--autoconfig-cache"))
+    {
+      setupAutoConfigCache();
+      args.removeAll("--autoconfig-cache");
+    }
+
     BoundedCommand::runSimple(args);
 
     bool separateOutput = false;
@@ -88,8 +97,7 @@ public:
 
     ConfigOptions configOpts(conf());
 
-    if (configOpts.getConvertOps().contains(MapCropper::className()) &&
-        configOpts.getCropBounds().trimmed().isEmpty())
+    if (configOpts.getConvertOps().contains(MapCropper::className()) && configOpts.getCropBounds().trimmed().isEmpty())
     {
       throw IllegalArgumentException(
         "When using " + MapCropper::className() + " with the convert command, the " +
@@ -134,6 +142,47 @@ public:
     LOG_STATUS("Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
+  }
+
+  void setupAutoConfigCache() const
+  {
+    //  These values were found through testing
+    const double node_size = 350.0;
+    const double way_size = 400.0;
+    const double relation_size = 375.0;
+    //  Get the amount of memory available
+    const long memory_available = Tgs::SystemInfo::getPhysicalMemoryAvailable();
+    //  Get the current cache size values from the settings
+    Settings& settings = conf();
+    ConfigOptions options(settings);
+    const long default_cache_nodes = options.getElementCacheSizeNode();
+    const long default_cache_ways = options.getElementCacheSizeWay();
+    const long default_cache_relations = options.getElementCacheSizeRelation();
+    //  Calculate a number of nodes/ways/relations that will "fit" in that memory
+    //  Use the element cache memory threshold so that some memory remains
+    const double memory_threshold = static_cast<double>(ConfigOptions().getElementCacheSizeAutoThreshold()) / 100.0;
+    //  The current defaults are 10M nodes, 2M ways, and 2M relations since most nodes don't have tags which are the most expensive part
+    const double available_for_cache = static_cast<double>(memory_available) * memory_threshold;
+    const long cache_nodes = static_cast<long>((available_for_cache * 5.0 / 7.0) / node_size);
+    const long cache_ways = static_cast<long>((available_for_cache * 1.0 / 7.0) / way_size);
+    const long cache_relations = static_cast<long>((available_for_cache * 1.0 / 7.0) / relation_size);
+    LOG_DEBUG("Available memory for element cache: " << memory_available << " bytes (threshold: " << memory_threshold << ")");
+    //  Update the values of the cache size if smaller than the settings
+    if (cache_nodes < default_cache_nodes)
+    {
+      settings.set(ConfigOptions::getElementCacheSizeNodeKey(), QString::number(cache_nodes));
+      LOG_DEBUG("Setting element.cache.size.node=" << cache_nodes);
+    }
+    if (cache_ways < default_cache_ways)
+    {
+      settings.set(ConfigOptions::getElementCacheSizeWayKey(), QString::number(cache_ways));
+      LOG_DEBUG("Setting element.cache.size.way=" << cache_ways);
+    }
+    if (cache_relations < default_cache_relations)
+    {
+      settings.set(ConfigOptions::getElementCacheSizeRelationKey(), QString::number(cache_relations));
+      LOG_DEBUG("Setting element.cache.size.relation=" << cache_relations);
+    }
   }
 };
 

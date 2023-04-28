@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLREADER_H
 #define OSMXMLREADER_H
@@ -120,6 +120,7 @@ public:
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
+  void setIgnoreProgress(const bool ignore) { _ignoreProgress = ignore; }
 
 protected:
 
@@ -180,6 +181,8 @@ protected:
 
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
+  /** Some usages of the OsmXmlReader don't need progress status written out so it can be ignored */
+  bool _ignoreProgress;
 
   void _createNode(const QXmlAttributes& attributes);
   void _createWay(const QXmlAttributes& attributes);

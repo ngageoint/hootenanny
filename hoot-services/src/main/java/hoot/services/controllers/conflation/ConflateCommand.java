@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -56,6 +56,7 @@ import org.json.simple.parser.ParseException;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.models.db.Users;
+import hoot.services.utils.DbUtils;
 
 
 class ConflateCommand extends ExternalCommand {
@@ -383,7 +384,7 @@ class ConflateCommand extends ExternalCommand {
         if (conflateParams.getCollectStats()) {
             File statsFile = new File(RPT_STORE_PATH, conflateParams.getOutputName() + "-stats.csv");
             try {
-                FileUtils.write(statsFile, commandResult.getStdout(), Charset.defaultCharset());
+                FileUtils.write(statsFile, DbUtils.getStdoutStats(commandResult.getJobId()), Charset.defaultCharset());
             }
             catch (IOException ioe) {
                 throw new RuntimeException("Error writing to " + statsFile.getAbsolutePath(), ioe);

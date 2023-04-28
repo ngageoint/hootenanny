@@ -4,11 +4,12 @@
 
 An option while conflating two datasets is to use rubber sheeting (See
 <<hootuser>>, _Rubber Sheeting_ for usage details). The rubber sheeting
-operation uses intersections in roads to determine high confidence intersection
-matches. The high confidence matches are then considered to be tie points for
-determining rubber sheeting transforms.
+operation can use intersections in roads to determine high confidence
+intersection matches or building centroids to determine high confidence
+building matches. The high confidence matches are then considered to be tie
+points for determining rubber sheeting transforms.
 
-===== Identify Tie Points
+===== Identify Intersection Tie Points
 
 Intersections are matched if there are three or more roads that intersect at a
 point and the intersection does not have any similar pairs nearby. Generally
@@ -80,6 +81,21 @@ single intersection as the denominator.
 The candidate tie points are sorted by score, descending. All candidate tie
 points with a score greater than 0.5 are accepted as _confident tie points_. No
 intersection is used in more than one confident tie point.
+
+===== Identify building Centroid Tie Points
+
+When the `rubber.sheet.use.buildings` configuration option is set to `true` the
+rubbersheeting algorithm uses the `BuildingMatchVisitor` to find building matches
+within the supplied datasets. This uses the random forest building matching algorithm
+created for building conflation to find all matches to evaluate. Each building match
+is sorted in order of match score and then iterated once per building in the source
+data using the building centroid for the two building polygons in the match. The ID
+of the reference building is not used again for any other matches because of the
+previous sort by highest match score.
+
+Any match that doesn't meet or exceed the building match threshold is excluded and not
+used in the _confident tie points_.  No building is used more than once in the resulting
+tie points.
 
 ===== Evaluate Interpolation Methods
 

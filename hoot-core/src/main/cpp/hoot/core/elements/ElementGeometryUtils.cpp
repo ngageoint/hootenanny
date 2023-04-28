@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementGeometryUtils.h"
@@ -39,6 +39,8 @@
 // GEOS
 #include <geos/util/TopologyException.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -50,8 +52,8 @@ bool ElementGeometryUtils::haveGeometricRelationship(const ConstElementPtr& elem
   if (!element1 || !element2)
     throw IllegalArgumentException("One of the input elements is null.");
 
-  std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1, map);
-  std::shared_ptr<geos::geom::Geometry> geom2 = _getGeometry(element2, map);
+  std::shared_ptr<Geometry> geom1 = _getGeometry(element1, map);
+  std::shared_ptr<Geometry> geom2 = _getGeometry(element2, map);
   bool haveRelationship = false;
   if (geom1 && geom2)
   {
@@ -97,12 +99,12 @@ bool ElementGeometryUtils::haveGeometricRelationship(const ConstElementPtr& elem
   return haveRelationship;
 }
 
-std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(const ConstElementPtr& element, ConstOsmMapPtr map)
+std::shared_ptr<Geometry> ElementGeometryUtils::_getGeometry(const ConstElementPtr& element, ConstOsmMapPtr map)
 {
   if (!element)
     throw IllegalArgumentException("The input element is null.");
 
-  std::shared_ptr<geos::geom::Geometry> newGeom;
+  std::shared_ptr<Geometry> newGeom;
   QString errorMsg = "Feature passed to ElementGeometryUtils caused topology exception on conversion to a geometry: ";
   try
   {
@@ -147,15 +149,183 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e, const Con
   // NOTE: Originally, we used isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that it is not
   // linear before it will assume it doesn't have a length.
-  if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
+  Meters length = 0.0;
+  if (!AreaCriterion().isSatisfied(e))
   {
-    // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
-    // and sum up the distance.
-    std::shared_ptr<geos::geom::Geometry> geom = ElementToGeometryConverter(constProvider).convertToGeometry(e);
-    if (geom && geom->isValid())
-      return geom->getLength();
+    switch (e->getElementType().getEnum())
+    {
+    case ElementType::Node:
+      //  Nodes don't have a length
+      break;
+    case ElementType::Way:
+    {
+      ConstWayPtr w = std::static_pointer_cast<const Way>(e);
+      length = _calculateLength(w, constProvider);
+      break;
+    }
+    case ElementType::Relation:
+    {
+      ConstRelationPtr r = std::static_pointer_cast<const Relation>(e);
+      length = _calculateLength(r, constProvider);
+      break;
+    }
+    default:
+      break;
+    }
   }
-  return 0;
+  return length;
+}
+
+Coordinate ElementGeometryUtils::calculateElementCentroid(const ElementId& eid, const ConstOsmMapPtr& map)
+{
+  if (!map)
+    return Coordinate::getNull();
+  if (!map->containsElement(eid))
+    return Coordinate::getNull();
+  double centroid_x = 0.0;
+  double centroid_y = 0.0;
+  double centroid_count = 0.0;
+  ConstElementPtr element = map->getElement(eid);
+  switch(eid.getType().getEnum())
+  {
+  case ElementType::Node:
+  {
+    ConstNodePtr node = std::dynamic_pointer_cast<const Node>(element);
+    if (!_getCentroidValues(node, map, centroid_x, centroid_y, centroid_count))
+      return Coordinate::getNull();
+    break;
+  }
+  case ElementType::Way:
+  {
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+    if (!_getCentroidValues(way, map, centroid_x, centroid_y, centroid_count))
+      return Coordinate::getNull();
+    break;
+  }
+  case ElementType::Relation:
+  {
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(element);
+    if (!_getCentroidValues(r, map, centroid_x, centroid_y, centroid_count))
+      return Coordinate::getNull();
+    break;
+  }
+  default:
+    return Coordinate::getNull();
+  }
+  if (centroid_count < 1.0)
+    return Coordinate::getNull();
+  //  Divide by the node count to find centroid
+  centroid_x /= centroid_count;
+  centroid_y /= centroid_count;
+  return Coordinate(centroid_x, centroid_y);
+}
+
+bool ElementGeometryUtils::_getCentroidValues(const ConstNodePtr& node, const ConstOsmMapPtr& /*map*/, double& centroid_x, double& centroid_y, double& centroid_count)
+{
+  if (!node)
+    return false;
+  centroid_x += node->getX();
+  centroid_y += node->getY();
+  centroid_count++;
+  return true;
+}
+
+bool ElementGeometryUtils::_getCentroidValues(const ConstWayPtr& way, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
+{
+  if (!way || !map)
+    return false;
+  if (way->getNodeCount() < 1)
+    return false;
+  double x = 0.0;
+  double y = 0.0;
+  const std::vector<long> node_ids = way->getNodeIds();
+  size_t size = node_ids.size();
+  //  Don't include the last ID if it is a closed way
+  if (node_ids[0] == node_ids[size - 1])
+    size--;
+  //  Sum all way nodes
+  for (size_t index = 0; index < size; ++index)
+  {
+    long node_id = node_ids[index];
+    if (!map->containsNode(node_id))
+      return false;
+    ConstNodePtr node = map->getNode(node_id);
+    x += node->getX();
+    y += node->getY();
+  }
+  centroid_x += x;
+  centroid_y += y;
+  centroid_count += static_cast<double>(size);
+  return true;
+}
+
+bool ElementGeometryUtils::_getCentroidValues(const ConstRelationPtr& relation, const ConstOsmMapPtr& map, double& centroid_x, double& centroid_y, double& centroid_count)
+{
+  if (!relation || !map)
+    return false;
+  double x = 0.0;
+  double y = 0.0;
+  double count = 0.0;
+  //  Sum all members
+  for (const auto& member : relation->getMembers())
+  {
+    if (!map->containsElement(member.getElementId()))
+      return false;
+    ConstElementPtr element = map->getElement(member.getElementId());
+    switch(element->getElementType().getEnum())
+    {
+    case ElementType::Node:
+    {
+      ConstNodePtr node = std::dynamic_pointer_cast<const Node>(element);
+      if (!_getCentroidValues(node, map, x, y, count))
+        return false;
+      break;
+    }
+    case ElementType::Way:
+    {
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+      if (!_getCentroidValues(way, map, x, y, count))
+        return false;
+      break;
+    }
+    case ElementType::Relation:
+    {
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(element);
+      if (!_getCentroidValues(r, map, x, y, count))
+        return false;
+      break;
+    }
+    default:
+      return false;
+    }
+  }
+  centroid_x += x;
+  centroid_y += y;
+  centroid_count += count;
+  return true;
+}
+
+Meters ElementGeometryUtils::_calculateLength(const ConstWayPtr& w, const ConstElementProviderPtr& constProvider)
+{
+  Meters length = 0.0;
+  const std::vector<long>& node_ids = w->getNodeIds();
+  for (size_t i = 0; i < node_ids.size() - 1; ++i)
+  {
+    ConstNodePtr n1 = constProvider->getNode(node_ids[i]);
+    ConstNodePtr n2 = constProvider->getNode(node_ids[i + 1]);
+    if (!n1 || !n2)
+      continue;
+    length += std::sqrt(std::pow(n2->getX() - n1->getX(), 2.0) + std::pow(n2->getY() - n1->getY(), 2));
+  }
+  return length;
+}
+
+Meters ElementGeometryUtils::_calculateLength(const ConstRelationPtr& r, const ConstElementProviderPtr& constProvider)
+{
+  Meters length = 0.0;
+  for (const auto& member : r->getMembers())
+    length += calculateLength(constProvider->getElement(member.getElementId()), constProvider);
+  return length;
 }
 
 }

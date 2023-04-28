@@ -77,6 +77,7 @@ XmlChangeset::XmlChangeset(const QList<QString>& changesets)
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
     _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _sentCount(0),
     _processedCount(0),
     _failedCount(0),

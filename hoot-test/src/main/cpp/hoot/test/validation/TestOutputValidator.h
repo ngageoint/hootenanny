@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef TEST_OUTPUT_VALIDATOR_H
 #define TEST_OUTPUT_VALIDATOR_H
@@ -55,10 +55,9 @@ public:
    * @param printValidationReportDiff if true, for failing tests prints the difference between the
    * baseline validation report and the test validation report output
    */
-  static void validate(
-    const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath, const bool suppressFailureDetail = false,
-    const bool printValidationReportDiff = false);
+  static void validate(const QString& testName, const QString& testOutputPath,
+                       const QString& goldValidationReportPath, const bool suppressFailureDetail = false,
+                       const bool printValidationReportDiff = false);
 
 private:
 
@@ -69,8 +68,7 @@ private:
    * @param goldValidationReportPath path to the baseline validation report for the test
    * @return true if the baseline report file is valid; false otherwise
    */
-  static bool _validateGoldReport(
-    const QString& testName, const QString& goldValidationReportPath);
+  static bool _validateGoldReport(const QString& testName, const QString& goldValidationReportPath);
 
   /**
    * @brief _printValidationReportDiff Prints the difference between two files
@@ -80,8 +78,7 @@ private:
    * @param timeout how long to wait for the diff command to finish
    * @return difference string
    */
-  static QString _printValidationReportDiff(
-    const QString& testName, const QString& filePath1, const QString& filePath2, const int timeout);
+  static QString _printValidationReportDiff(const QString& testName, const QString& filePath1, const QString& filePath2, const int timeout);
 };
 
 }

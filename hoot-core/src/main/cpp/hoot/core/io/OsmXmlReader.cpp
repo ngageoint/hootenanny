@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmXmlReader.h"
@@ -75,7 +75,8 @@ OsmXmlReader::OsmXmlReader()
     _addChildRefsWhenMissing(false),
     _logWarningsForMissingElements(true),
     _statusUpdateInterval(1000),
-    _keepImmediatelyConnectedWaysOutsideBounds(false)
+    _keepImmediatelyConnectedWaysOutsideBounds(false),
+    _ignoreProgress(false)
 {
   setConfiguration(conf());
 }
@@ -434,32 +435,38 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 
   LOG_DEBUG("Parsing map from xml...");
 
-  // do xml parsing
-  QXmlSimpleReader reader;
-  reader.setContentHandler(this);
-  reader.setErrorHandler(this);
-
-  QBuffer buffer;
-  buffer.setData(xml.toUtf8());
-
-  QXmlInputSource xmlInputSource(&buffer);
-  if (reader.parse(xmlInputSource) == false)
-    throw HootException(_errorString);
-
-  LOG_DEBUG("Parsed map from xml.");
-
-  LOG_VARD(_bounds.get());
-  if (_bounds.get())
+  if (!xml.isEmpty())
   {
-    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
+    // do xml parsing
+    QXmlSimpleReader reader;
+    reader.setContentHandler(this);
+    reader.setErrorHandler(this);
+
+    QBuffer buffer;
+    buffer.setData(xml.toUtf8());
+
+    QXmlInputSource xmlInputSource(&buffer);
+    if (reader.parse(xmlInputSource) == false)
+    {
+      LOG_ERROR(_errorString);
+    }
+    else
+    {
+      LOG_DEBUG("Parsed map from xml.");
+
+      LOG_VARD(_bounds.get());
+      if (_bounds.get())
+      {
+        IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+        LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
+      }
+
+      ReportMissingElementsVisitor visitor;
+      LOG_INFO("\t" << visitor.getInitStatusMessage());
+      _map->visitRw(visitor);
+      LOG_INFO("\t" << visitor.getCompletedStatusMessage());
+    }
   }
-
-  ReportMissingElementsVisitor visitor;
-  LOG_INFO("\t" << visitor.getInitStatusMessage());
-  _map->visitRw(visitor);
-  LOG_INFO("\t" << visitor.getCompletedStatusMessage());
-
   _map.reset();
 }
 
@@ -812,7 +819,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
       _numRead++;
     }
 
-    if (_numRead % _statusUpdateInterval == 0)
+    if (_numRead % _statusUpdateInterval == 0 && !_ignoreProgress)
     {
       PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
     }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -43,6 +43,7 @@ class ElementGeometryUtilsTest : public HootTestFixture
   CPPUNIT_TEST(haveRelationshipTest);
   CPPUNIT_TEST(haveRelationshipNullInputTest);
   CPPUNIT_TEST(geometricRelationshipToStringTest);
+  CPPUNIT_TEST(calculateElementCentroid);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -161,6 +162,56 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(QString("Unknown type.").toStdString(), exceptionMsg.toStdString());
+  }
+
+  void calculateElementCentroid()
+  {
+    //  Setup nodes
+    std::vector<NodePtr> nodes(
+      {
+        std::make_shared<Node>(Status::Unknown1, 1,  9.0,  9.0),
+        std::make_shared<Node>(Status::Unknown1, 2, 11.0,  9.0),
+        std::make_shared<Node>(Status::Unknown1, 3, 11.0, 11.0),
+        std::make_shared<Node>(Status::Unknown1, 4,  9.0, 11.0),
+        std::make_shared<Node>(Status::Unknown1, 5,  8.0,  8.0),
+        std::make_shared<Node>(Status::Unknown1, 6, 16.0,  8.0),
+        std::make_shared<Node>(Status::Unknown1, 7, 16.0, 16.0),
+        std::make_shared<Node>(Status::Unknown1, 8,  8.0, 16.0),
+      });
+    //  Setup ways
+    std::vector<WayPtr> ways(
+      {
+        std::make_shared<Way>(Status::Unknown1, 1),
+        std::make_shared<Way>(Status::Unknown1, 2),
+        std::make_shared<Way>(Status::Unknown1, 3),
+        std::make_shared<Way>(Status::Unknown1, 4)
+      });
+    ways[0]->addNodes({ 1, 2, 3, 4 });
+    ways[1]->addNodes({ 1, 2, 3, 4, 1 });
+    ways[2]->addNodes({ 5, 6, 7, 8 });
+    ways[3]->addNodes({ 5, 6, 7, 8, 5 });
+    //  Setup relation
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, 1);
+    relation->addElement("inner", ElementType::Way, 2);
+    relation->addElement("outer", ElementType::Way, 4);
+    //  Add all elements to the map
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    map->addElements(nodes.begin(), nodes.end());
+    map->addElements(ways.begin(), ways.end());
+    map->addRelation(relation);
+    //  Validate the centroids of each type
+    geos::geom::Coordinate n = ElementGeometryUtils::calculateElementCentroid(ElementId(ElementType::Node, 1), map);
+    CPPUNIT_ASSERT_EQUAL(geos::geom::Coordinate(9.0, 9.0), n);
+    geos::geom::Coordinate w1 = ElementGeometryUtils::calculateElementCentroid(ElementId(ElementType::Way, 1), map);
+    CPPUNIT_ASSERT_EQUAL(geos::geom::Coordinate(10.0, 10.0), w1);
+    geos::geom::Coordinate w2 = ElementGeometryUtils::calculateElementCentroid(ElementId(ElementType::Way, 2), map);
+    CPPUNIT_ASSERT_EQUAL(geos::geom::Coordinate(10.0, 10.0), w2);
+    geos::geom::Coordinate w3 = ElementGeometryUtils::calculateElementCentroid(ElementId(ElementType::Way, 3), map);
+    CPPUNIT_ASSERT_EQUAL(geos::geom::Coordinate(12.0, 12.0), w3);
+    geos::geom::Coordinate w4 = ElementGeometryUtils::calculateElementCentroid(ElementId(ElementType::Way, 4), map);
+    CPPUNIT_ASSERT_EQUAL(geos::geom::Coordinate(12.0, 12.0), w4);
+    geos::geom::Coordinate r = ElementGeometryUtils::calculateElementCentroid(ElementId(ElementType::Relation, 1), map);
+    CPPUNIT_ASSERT_EQUAL(geos::geom::Coordinate(11.0, 11.0), r);
   }
 };
 

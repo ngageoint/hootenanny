@@ -59,6 +59,7 @@ OsmXmlDiskCache::OsmXmlDiskCache()
   _writer.setIncludeHootInfo(true);
   _writer.setIncludePid(true);
   _writer.setIncludeDebug(true);
+  _writer.setIgnoreProgress(true);
   _writer.openunbuff(_tempFileName);
 
   // Setup our reader
@@ -88,11 +89,9 @@ OsmXmlDiskCache::~OsmXmlDiskCache()
 void OsmXmlDiskCache::_initCacheDir()
 {
   _tempDir = ConfPath::getHootHome() + "/tmp";
+  // If it exists, and we can't write to it, use system temp
   if (QDir(_tempDir).exists() && !QFileInfo(_tempDir).isWritable())
-  {
-    // If it exists, and we can't write to it, use system temp
     _tempDir = QDir::tempPath();
-  }
   else if (!QDir(_tempDir).exists())
   {
     // Try to make it
@@ -103,9 +102,7 @@ void OsmXmlDiskCache::_initCacheDir()
                                      | QFileDevice::ReadOther | QFileDevice::WriteOther | QFileDevice::ExeOther);
     }
     else
-    {
       _tempDir = QDir::tempPath();
-    }
   }
 
   LOG_DEBUG(QString("OsmXmlDiskCache: using temp dir: %1").arg(_tempDir));
@@ -114,7 +111,7 @@ void OsmXmlDiskCache::_initCacheDir()
 void OsmXmlDiskCache::_initCache()
 {
   // Make a bogus node for the cache, otherwise our reader gets angry
-  uint64_t nodeId(UINT64_MAX);
+  long nodeId(0); //  Zero is the only invalid ID
   double lat(1.123456);
   double lon(1.123456);
   Meters circularError(13.13);
@@ -127,14 +124,11 @@ void OsmXmlDiskCache::addElement(const ConstElementPtr &newElement)
 {
   LOG_TRACE("Adding element: " + newElement->toString() + " to cache...");
 
-  ConstNodePtr newNode;
-  ConstWayPtr newWay;
-  ConstRelationPtr newRelation;
-
   switch (newElement->getElementType().getEnum())
   {
   case ElementType::Node:
-    newNode = std::dynamic_pointer_cast<const Node>(newElement);
+  {
+    ConstNodePtr newNode = std::dynamic_pointer_cast<const Node>(newElement);
     if (newNode != ConstNodePtr())
     {
       uint64_t id = newNode->getId();
@@ -147,8 +141,10 @@ void OsmXmlDiskCache::addElement(const ConstElementPtr &newElement)
       }
     }
     break;
+  }
   case ElementType::Way:
-    newWay = std::dynamic_pointer_cast<const Way>(newElement);
+  {
+    ConstWayPtr newWay = std::dynamic_pointer_cast<const Way>(newElement);
     if (newWay != ConstWayPtr())
     {
       uint64_t id = newWay->getId();
@@ -161,8 +157,10 @@ void OsmXmlDiskCache::addElement(const ConstElementPtr &newElement)
       }
     }
     break;
+  }
   case ElementType::Relation:
-    newRelation = std::dynamic_pointer_cast<const Relation>(newElement);
+  {
+    ConstRelationPtr newRelation = std::dynamic_pointer_cast<const Relation>(newElement);
     if (newRelation != ConstRelationPtr())
     {
       uint64_t id = newRelation->getId();
@@ -175,6 +173,7 @@ void OsmXmlDiskCache::addElement(const ConstElementPtr &newElement)
       }
     }
     break;
+  }
   default:
     throw HootException(QString("Unexpected element type: %1").arg(newElement->getElementType().toString()));
     break;
