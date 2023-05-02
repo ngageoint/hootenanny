@@ -32,6 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/ParallelBoundedApiReader.h>
+#include <hoot/core/io/StringMemoryInterface.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Boundable.h>
@@ -64,7 +65,7 @@ namespace hoot
  * Also, be aware that this class can stream large datasets into an OsmMap so there is only one copy
  * of everything in memory. Be careful if you want to use it with large datasets.
  */
-class OsmJsonReader : public OsmMapReader, public Boundable, protected ParallelBoundedApiReader
+class OsmJsonReader : public OsmMapReader, public Boundable, protected ParallelBoundedApiReader, protected StringMemoryInterface
 {
 public:
 
@@ -221,8 +222,7 @@ protected:
    * @param item Property Tree (subtree)
    * @param pElement Element to which we will add the tags
    */
-  void _addTags(const boost::property_tree::ptree& item,
-                ElementPtr pElement) const;
+  void _addTags(const boost::property_tree::ptree& item, ElementPtr pElement);
 
   /**
    * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON and parses the results,

@@ -826,7 +826,7 @@ long OsmJsonReader::_getRelationId(long fileId)
   return newId;
 }
 
-void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, ElementPtr pElement) const
+void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, ElementPtr pElement)
 {
   // Find tags and add them
   if (item.not_found() != item.find("tags"))
@@ -834,8 +834,8 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, ElementPtr
     pt::ptree tags = item.get_child("tags");
     for (auto tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
     {
-      const QString key = QString::fromStdString(tagIt->first).trimmed();
-      const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+      const QString& key = getStringLocation(QString::fromStdString(tagIt->first).trimmed());
+      const QString& value = getStringLocation(QString::fromStdString(tagIt->second.get_value<string>()).trimmed());
 
       // If we are a CE key, need to set it on the element object rather than add it as a tag.
       // Arbitrarily pick the first error tag found. If the element has both, the last one parsed

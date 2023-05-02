@@ -833,7 +833,7 @@ void OsmGeoJsonReader::_addTags(const pt::ptree& item, const ElementPtr& element
         if (key.compare("other_tags", Qt::CaseInsensitive) == 0)
           _parseOtherTags(element, value);
         else if (value.compare("null", Qt::CaseInsensitive) != 0)  //  Don't include tags with a 'null' value
-          element->setTag(key, value);
+          element->setTag(getStringLocation(key), getStringLocation(value));
       }
     }
   }
@@ -868,7 +868,7 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree& item)
     return ss.str();
 }
 
-void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString& tags) const
+void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString& tags)
 {
   QString tag_string = tags;
   //  Remove the beginning and ending double quotes
@@ -883,7 +883,7 @@ void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString&
     //  Each tag looks like `key\"=>\"value` at this point, parse them
     QStringList key_value = tag.split("\"=>\"");
     if (key_value.size() == 2)
-      element->setTag(key_value[0], key_value[1]);
+      element->setTag(getStringLocation(key_value[0]), getStringLocation(key_value[1]));
   }
 }
 
