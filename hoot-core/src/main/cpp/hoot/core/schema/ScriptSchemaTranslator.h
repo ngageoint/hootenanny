@@ -50,7 +50,7 @@ public:
   static QString className() { return "ScriptSchemaTranslator"; }
 
   ScriptSchemaTranslator();
-  virtual ~ScriptSchemaTranslator();
+  ~ScriptSchemaTranslator() override;
 
   /**
    * This can be called to force the script to close out and uninitialize. This will be called
