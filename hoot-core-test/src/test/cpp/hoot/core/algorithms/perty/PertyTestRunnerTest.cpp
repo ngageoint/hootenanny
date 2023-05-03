@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -86,9 +86,8 @@ public:
     testRunner.setDynamicVariableStartValue(1.0);
     QStringList expectedScores;
     for (int i = 0; i < numTestRuns; i++)
-    {
       expectedScores.append("1.0");
-    }
+
     testRunner.setExpectedScores(expectedScores);
     testRunner.setNumTestRuns(numTestRuns);
     testRunner.setNumTestSimulations(2);
@@ -102,19 +101,15 @@ public:
     testRunner._testScores.append(0.85);
 
     const QList<std::shared_ptr<const PertyTestRunResult>> results =
-      testRunner.runTest(
-        _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-        _outputPath + "Dynamic");
+      testRunner.runTest(_inputPath + "PertyTestRunnerTest-reference-in-1.osm", _outputPath + "Dynamic");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
-         it != results.end(); ++it)
+    for (auto it = results.begin(); it != results.end(); ++it)
     {
       std::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
-      testRunPlotResultsStr +=
-        QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
+      testRunPlotResultsStr += QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
       dynamicVariableValue += testRunner._dynamicVariableIncrement;
     }
 
@@ -189,9 +184,8 @@ public:
     testRunner.setDynamicVariableStartValue(0.0);
     QStringList expectedScores;
     for (int i = 0; i < numTestRuns; i++)
-    {
       expectedScores.append("1.0");
-    }
+
     testRunner.setExpectedScores(expectedScores);
     testRunner.setNumTestRuns(numTestRuns);
     testRunner.setNumTestSimulations(2);
@@ -209,8 +203,7 @@ public:
         _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
         _outputPath + "Static");
     QString testRunResultsStr = "";
-    for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
-         it != results.end(); ++it)
+    for (auto it = results.begin(); it != results.end(); ++it)
     {
       std::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
@@ -300,8 +293,7 @@ public:
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
-         it != results.end(); ++it)
+    for (auto it = results.begin(); it != results.end(); ++it)
     {
       std::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
@@ -367,8 +359,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid number of test runs"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid number of test runs"));
 
     PertyTestRunner testRunner;
     QStringList expectedScores;
@@ -385,8 +376,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("does not equal the number of expected scores"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("does not equal the number of expected scores"));
   }
 
   void runInvalidNumTestSimulationsTest()
@@ -401,8 +391,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid number of test simulations"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid number of test simulations"));
   }
 
   void runInvalidNumExpectedScoresTest()
@@ -423,8 +412,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("does not equal the number of expected scores"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("does not equal the number of expected scores"));
   }
 
   void runInvalidAllowedScoreVarianceTest()
@@ -439,8 +427,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid allowed score variance"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid allowed score variance"));
 
     try
     {
@@ -451,8 +438,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid allowed score variance"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("Invalid allowed score variance"));
   }
 
   void runBadDynamicVariableTest()
@@ -471,9 +457,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains(
-        "Only PERTY variables may be manipulated during a PERTY test"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("Only PERTY variables may be manipulated during a PERTY test"));
   }
 
   void runInvalidExpectedScoreTest()
@@ -491,8 +475,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(
-      QString::fromStdString(exceptionMsg.toStdString()).contains("Error parsing expected score value"));
+    CPPUNIT_ASSERT(QString::fromStdString(exceptionMsg.toStdString()).contains("Error parsing expected score value"));
   }
 
 };

@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
@@ -48,17 +49,15 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/BuildingMatchVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Tgs
-#include <tgs/Statistics/Normal.h>
 #include <tgs/Interpolation/DelaunayInterpolator.h>
 #include <tgs/Interpolation/IdwInterpolator.h>
 #include <tgs/Interpolation/KernelEstimationInterpolator.h>
 #include <tgs/RandomForest/DataFrame.h>
-
-#include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/visitors/BuildingMatchVisitor.h>
+#include <tgs/Statistics/Normal.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -134,9 +133,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         // rubbersheet any elements we're not conflating.
         if (_conflateInfoCache && !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
         {
-          LOG_TRACE(
-            "Excluding " << critName << " filter due it not being in use by an active conflate " <<
-            "matcher.");
+          LOG_TRACE("Excluding " << critName << " filter due it not being in use by an active conflate " << "matcher.");
           continue;
         }
 
@@ -555,8 +552,7 @@ bool RubberSheet::_findIntersectionTies()
     LOG_VART(n1->getElementId());
     NodePtr n2 = _map->getNode(_finalPairs[i].id2);
     LOG_VART(n2->getElementId());
-    if (touched.find(n1->getId()) == touched.end() &&
-        touched.find(n2->getId()) == touched.end())
+    if (touched.find(n1->getId()) == touched.end() && touched.find(n2->getId()) == touched.end())
     {
       if (_finalPairs[i].p > 0.5)
       {
@@ -753,7 +749,7 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   {
     NodePtr aNeighbor = _map->getNode(neighbor_id);
     LOG_VART(aNeighbor->getElementId());
-    NodeToWayMap::const_iterator it = n2w->find(neighbor_id);
+    auto it = n2w->find(neighbor_id);
     if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
     {
       double score = _nm.scorePair(nid, neighbor_id);

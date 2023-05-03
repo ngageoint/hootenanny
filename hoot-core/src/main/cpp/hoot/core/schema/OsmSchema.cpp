@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 // Boost
@@ -240,8 +240,7 @@ public:
     return result;
   }
 
-  pair<EdgeId, EdgeId> addSimilarTo(QString name1, QString name2, double weight,
-                                    bool oneway = false)
+  pair<EdgeId, EdgeId> addSimilarTo(QString name1, QString name2, double weight, bool oneway = false)
   {
     TagEdge similarTo;
     similarTo.similarToWeight = weight;
@@ -294,7 +293,7 @@ public:
       VertexId vid2 = _name2Vertex[kvpNormalized2];
 
       AverageKey key(vid1, w1, vid2, w2);
-      HashMap<AverageKey, AverageResult>::iterator it = _cachedAverages.find(key);
+      auto it = _cachedAverages.find(key);
       if (it != _cachedAverages.end())
       {
         score = it->second.score;
@@ -303,9 +302,7 @@ public:
       else
       {
         VertexId avgVid = _calculateAverage(vid1, w1, vid2, w2, score);
-
         _cachedAverages[key] = AverageResult(avgVid, score);
-
         result = _graph[avgVid].getName();
       }
     }
@@ -615,7 +612,7 @@ public:
       VertexId childVid = _name2Vertex[nChildKvp];
       VertexId parentVid = _name2Vertex[nParentKvp];
       pair<VertexId, VertexId> key(childVid, parentVid);
-      HashMap<pair<VertexId, VertexId>, bool>::const_iterator it = _isAncestorCache.find(key);
+      auto it = _isAncestorCache.find(key);
       if (it == _isAncestorCache.end())
       {
         result = _isAncestor(_name2Vertex[nChildKvp], _name2Vertex[nParentKvp]);
@@ -946,7 +943,7 @@ private:
   {
     const SchemaVertex& sv = _graph[vid];
 
-    QMultiHash<QString, VertexId>::const_iterator it = _name2CompoundVertex.find(sv.getName());
+    auto it = _name2CompoundVertex.find(sv.getName());
     while (it != _name2CompoundVertex.end() && it.key() == sv.getName())
     {
       compoundTags.insert(it.value());
@@ -985,7 +982,7 @@ private:
   {
     VertexId result = numeric_limits<VertexId>::max();
 
-    HashMap<VertexId, VertexId>::const_iterator it = _parents.find(child);
+    auto it = _parents.find(child);
     if (it != _parents.end())
       result = it->second;
     return result;

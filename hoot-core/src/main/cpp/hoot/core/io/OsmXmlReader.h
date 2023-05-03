@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/StringMemoryInterface.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Units.h>
 
@@ -45,7 +46,7 @@ class Element;
 /**
  * Reads a .osm file into an OsmMap data structure.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable, public StringMemoryInterface
 {
 public:
 
@@ -168,10 +169,6 @@ protected:
   QFile _inputFile;  // used for partial reading
   QXmlStreamReader _streamReader; // used for partial reading
 
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
-
   //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
   // determines whether missing elements trigger a warning
@@ -205,8 +202,6 @@ protected:
   long _parseLong(const QString& s) const;
 
   bool _setElementCircularError(const Tags& tags, const QString& key) const;
-
-  const QString& _saveMemory(const QString& s);
 
   QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes) const;
 

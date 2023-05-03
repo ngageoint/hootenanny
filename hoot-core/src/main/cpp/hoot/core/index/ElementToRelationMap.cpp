@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "ElementToRelationMap.h"
 
@@ -43,9 +43,10 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
   {
   public:
 
-    AddMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
+    AddMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid)
+      : _mapping(mapping),
+        _rid(rid)
     {
-      _rid = rid;
       LOG_VART(_rid);
     }
     ~AddMemberVisitor() override = default;
@@ -76,7 +77,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
 const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
 {
   LOG_TRACE("Checking relation map for member: " << eid << "...");
-  HashMap<ElementId, set<long>>::const_iterator it = _mapping.find(eid);
+  auto it = _mapping.find(eid);
   if (it == _mapping.end())
     return _emptySet;
   else
@@ -99,9 +100,10 @@ void ElementToRelationMap::removeRelation(const OsmMap& map, const std::shared_p
   {
   public:
 
-    RemoveMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
+    RemoveMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid)
+      : _mapping(mapping),
+        _rid(rid)
     {
-      _rid = rid;
     }
     ~RemoveMemberVisitor() override = default;
 

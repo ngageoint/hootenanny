@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef LRUCACHE_H
 #define LRUCACHE_H
@@ -65,7 +65,7 @@ public:
     assert(_cacheMap.find(k) == _cacheMap.end());
 
     _cacheList.push_back(Entry(k, v));
-    typename CacheList::iterator e = _cacheList.end();
+    auto e = _cacheList.end();
     e--;
     _cacheMap[k] = e;
 
@@ -81,7 +81,7 @@ public:
   bool get(const K& k, V& v)
   {
     bool result = false;
-    typename CacheMap::iterator it = _cacheMap.find(k);
+    auto it = _cacheMap.find(k);
     if (it != _cacheMap.end())
     {
       result = true;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "GeoNamesReader.h"
 
@@ -39,8 +39,8 @@ HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
 GeoNamesReader::GeoNamesReader()
   : _maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
-  _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
-  _useDataSourceIds(false)
+    _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+    _useDataSourceIds(false)
 {
 }
 
@@ -92,42 +92,42 @@ void GeoNamesReader::open(const QString& url)
 
     // Geonames.nga.mil column names
     // https://geonames.nga.mil/gns/html/gis_countryfiles.html
-    _columns << "region_font_code"; // RC
-    _columns << "ufi";
-    _columns << "uni";
-    _columns << "latitude";
-    _columns << "longitude";
-    _columns << "dms_latitude"; // DMS_LAT
-    _columns << "dms_longitude"; // DMS_LONG
-    _columns << "mgrs";
-    _columns << "jog";
-    _columns << "feature_class"; // FC
-    _columns << "feature_code"; // DSG
-    _columns << "populated_place_code"; // PC
-    _columns << "country_code"; // CC1
-    _columns << "admin1_code"; // ADM1
-    _columns << "population"; // POP - not populated
-    _columns << "elevation"; // ELEV - not populated
-    _columns << "secondary_country_code"; // CC2
-    _columns << "name_type"; // NT
-    _columns << "language_code"; // LC
-    _columns << "short_name"; // SHORT_FORM
-    _columns << "generic_name"; // GENERIC
-    _columns << "sort_name_reading_order"; // SORT_NAME_RO
-    _columns << "full_name_reading_order"; // FULL_NAME_RO
-    _columns << "full_name_reading_order_no_diacritics"; // FULL_NAME_ND_RO
-    _columns << "sort_name_reversed_generic"; // SORT_NAME_RG
-    _columns << "full_name_reversed_generic"; // FULL_NAME_RG
-    _columns << "full_name_reversed_generic_no_diacritics"; // FULL_NAME_ND_RO
-    _columns << "note"; // NOTE
-    _columns << "modification_date"; // MODIFY_DATE
-    _columns << "display_scale"; // DISPLAY
-    _columns << "name_rank"; // NAME_RANK
-    _columns << "name_link"; // NAME_LINK
-    _columns << "transliteration_code"; // TRANSL_CODE
-    _columns << "name_modification_date"; // NM_MODIFY_DATE
-    _columns << "effective_date"; // F_EFCTV_DDT
-    _columns << "termination_date"; // F_TERM_DT
+    _columns << getStringLocation("region_font_code"); // RC
+    _columns << getStringLocation("ufi");
+    _columns << getStringLocation("uni");
+    _columns << getStringLocation("latitude");
+    _columns << getStringLocation("longitude");
+    _columns << getStringLocation("dms_latitude"); // DMS_LAT
+    _columns << getStringLocation("dms_longitude"); // DMS_LONG
+    _columns << getStringLocation("mgrs");
+    _columns << getStringLocation("jog");
+    _columns << getStringLocation("feature_class"); // FC
+    _columns << getStringLocation("feature_code"); // DSG
+    _columns << getStringLocation("populated_place_code"); // PC
+    _columns << getStringLocation("country_code"); // CC1
+    _columns << getStringLocation("admin1_code"); // ADM1
+    _columns << getStringLocation("population"); // POP - not populated
+    _columns << getStringLocation("elevation"); // ELEV - not populated
+    _columns << getStringLocation("secondary_country_code"); // CC2
+    _columns << getStringLocation("name_type"); // NT
+    _columns << getStringLocation("language_code"); // LC
+    _columns << getStringLocation("short_name"); // SHORT_FORM
+    _columns << getStringLocation("generic_name"); // GENERIC
+    _columns << getStringLocation("sort_name_reading_order"); // SORT_NAME_RO
+    _columns << getStringLocation("full_name_reading_order"); // FULL_NAME_RO
+    _columns << getStringLocation("full_name_reading_order_no_diacritics"); // FULL_NAME_ND_RO
+    _columns << getStringLocation("sort_name_reversed_generic"); // SORT_NAME_RG
+    _columns << getStringLocation("full_name_reversed_generic"); // FULL_NAME_RG
+    _columns << getStringLocation("full_name_reversed_generic_no_diacritics"); // FULL_NAME_ND_RO
+    _columns << getStringLocation("note"); // NOTE
+    _columns << getStringLocation("modification_date"); // MODIFY_DATE
+    _columns << getStringLocation("display_scale"); // DISPLAY
+    _columns << getStringLocation("name_rank"); // NAME_RANK
+    _columns << getStringLocation("name_link"); // NAME_LINK
+    _columns << getStringLocation("transliteration_code"); // TRANSL_CODE
+    _columns << getStringLocation("name_modification_date"); // NM_MODIFY_DATE
+    _columns << getStringLocation("effective_date"); // F_EFCTV_DDT
+    _columns << getStringLocation("termination_date"); // F_TERM_DT
   }
   else
   {
@@ -139,25 +139,25 @@ void GeoNamesReader::open(const QString& url)
     _LONGITUDE = 5;
 
     // Geonames.org column names
-    _columns << "geonameid";
-    _columns << "name";
-    _columns << "asciiname";
-    _columns << "alternatenames";
-    _columns << "latitude";
-    _columns << "longitude";
-    _columns << "feature_class";
-    _columns << "feature_code";
-    _columns << "country_code";
-    _columns << "cc2";
-    _columns << "admin1_code";
-    _columns << "admin2_code";
-    _columns << "admin3_code";
-    _columns << "admin4_code";
-    _columns << "population";
-    _columns << "elevation";
-    _columns << "dem";
-    _columns << "timezone";
-    _columns << "modification_date";
+    _columns << getStringLocation("geonameid");
+    _columns << getStringLocation("name");
+    _columns << getStringLocation("asciiname");
+    _columns << getStringLocation("alternatenames");
+    _columns << getStringLocation("latitude");
+    _columns << getStringLocation("longitude");
+    _columns << getStringLocation("feature_class");
+    _columns << getStringLocation("feature_code");
+    _columns << getStringLocation("country_code");
+    _columns << getStringLocation("cc2");
+    _columns << getStringLocation("admin1_code");
+    _columns << getStringLocation("admin2_code");
+    _columns << getStringLocation("admin3_code");
+    _columns << getStringLocation("admin4_code");
+    _columns << getStringLocation("population");
+    _columns << getStringLocation("elevation");
+    _columns << getStringLocation("dem");
+    _columns << getStringLocation("timezone");
+    _columns << getStringLocation("modification_date");
   }
 
 }
@@ -200,30 +200,11 @@ ElementPtr GeoNamesReader::readNextElement()
     int j = i; //convertColumns[i];
     QString val = fields[j].trimmed();
     if (!val.isEmpty())
-      n->getTags()[_columns[j]] = _saveMemory(val);
+      n->getTags()[_columns[j]] = getStringLocation(val);
   }
 
   LOG_VART(n);
   return n;
-}
-
-QString GeoNamesReader::_saveMemory(const QString& s)
-{
-  QString result;
-  if (_strings.size() < _maxSaveMemoryStrings)
-  {
-    if (!_strings.contains(s))
-    {
-      result = s;
-      _strings[s] = s;
-    }
-    else
-      result = _strings[s];
-  }
-  else
-    result = s;
-
-  return result;
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -49,18 +49,18 @@ class GreedyConstrainedFakeMatch : public Match
 public:
 
   GreedyConstrainedFakeMatch() : Match(MatchThresholdPtr()) {}
-  GreedyConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
-    ConstMatchThresholdPtr threshold) :
-    Match(threshold, eid1, eid2),
-    _p(p)
-  {}
+  GreedyConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p, ConstMatchThresholdPtr threshold)
+    : Match(threshold, eid1, eid2),
+      _p(p)
+  {
+  }
 
   void addConflict(ConstMatchPtr conflict)
   {
     _conflicts.insert(conflict);
   }
 
-  virtual const MatchClassification& getClassification() const override
+  const MatchClassification& getClassification() const override
   {
     _c.setMatchP(_p);
     _c.setMissP(1 - _p);
@@ -69,23 +69,23 @@ public:
   }
 
   QString getName() const override { return "Fake Match"; }
-  QString getClassName() const { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual double getProbability() const override { return _p; }
+  double getProbability() const override { return _p; }
 
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
-                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     QString otherString = other->toString();
-    for (MatchSet::iterator it = _conflicts.begin(); it != _conflicts.end(); ++it)
+    for (const auto& c : _conflicts)
     {
-      if (otherString == (*it)->toString())
+      if (otherString == c->toString())
         return false;
     }
     return true;
   }
 
-  virtual set<pair<ElementId, ElementId>> getMatchPairs() const override
+  set<pair<ElementId, ElementId>> getMatchPairs() const override
   {
     set<pair<ElementId, ElementId>> result;
     result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
@@ -112,19 +112,19 @@ class GreedyConstrainedFakeCreator : public MergerCreator
 {
 public:
 
-  virtual bool createMergers(const MatchSet&, vector<MergerPtr>&) const override
+  bool createMergers(const MatchSet&, vector<MergerPtr>&) const override
   {
     assert(false);
     return false;
   }
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-                             const QHash<QString, ConstMatchPtr>& /*matches*/) const
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     return m1->isConflicting(m2, map);
   }
 
-  vector<CreatorDescription> getAllCreators() const
+  vector<CreatorDescription> getAllCreators() const override
   {
     return vector<CreatorDescription>();
   }

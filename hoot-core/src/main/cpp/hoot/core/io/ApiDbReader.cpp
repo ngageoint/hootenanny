@@ -585,6 +585,14 @@ void ApiDbReader::read(const OsmMapPtr& map)
   }
 }
 
+void ApiDbReader::_setTags(const ElementPtr& element, const Tags& tags)
+{
+  element->getTags().clear();
+  //  Save all of the string memory locations for reuse
+  for (auto tag = tags.begin(); tag != tags.end(); ++tag)
+    element->setTag(getStringLocation(tag.key()), getStringLocation(tag.value()));
+}
+
 void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
   // This method could possibly be replaced by the _readBounds method set to a global extent.

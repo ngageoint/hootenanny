@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReaderTestServer.h"
@@ -83,7 +83,7 @@ HttpResponsePtr GeographicSplitReaderTestServer::get_sequence_response(const std
   if (_current < _max)
   {
     //  If the same thing is being requested again, respond with the previous value
-    std::map<std::string, HttpResponsePtr>::iterator it = _sequence_responses.find(request);
+    auto it = _sequence_responses.find(request);
     if (it != _sequence_responses.end())
       response = it->second;
     else
@@ -141,7 +141,7 @@ HttpResponsePtr ElementSplitReaderTestServer::get_sequence_response(const std::s
     else
     {
       //  If the same thing is being requested again, respond with the previous value
-      std::map<std::string, HttpResponsePtr>::iterator it = _sequence_responses.find(request);
+      auto it = _sequence_responses.find(request);
       if (it != _sequence_responses.end())
         response = it->second;
       else
@@ -190,7 +190,7 @@ HttpResponsePtr OverpassReaderTestServer::get_sequence_response(const std::strin
   if (_current < _max)
   {
     //  If the same thing is being requested again, respond with the previous value
-    std::map<std::string, HttpResponsePtr>::iterator it = _sequence_responses.find(request);
+    auto it = _sequence_responses.find(request);
     if (it != _sequence_responses.end())
       response = it->second;
     else

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OgrReader.h"
@@ -155,10 +155,6 @@ private:
   NodeMap::const_iterator _nodesItr;
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
-
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
 
   QString _translatePath;
 

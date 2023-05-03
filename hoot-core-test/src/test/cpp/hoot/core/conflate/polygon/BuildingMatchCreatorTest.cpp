@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -108,7 +108,7 @@ public:
     {
       //  Make a copy of the ways to remove some later
       WayMap wm = map->getWays();
-      for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+      for (auto it = wm.begin(); it != wm.end(); ++it)
       {
         const ConstWayPtr& w = it->second;
         const Tags& t = w->getTags();
@@ -378,7 +378,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMatchCreatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMatchCreatorTest, "quick");
 
 }

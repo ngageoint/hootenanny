@@ -118,7 +118,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
 
-  node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
+  _setTags(node, ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   _updateMetadataOnElement(node);
 
   // We want the reader's status to always override any existing status
@@ -150,7 +150,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(), dt.toMSecsSinceEpoch() / 1000);
 
-  way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
+  _setTags(way, ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
@@ -186,7 +186,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000);
 
-  relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
+  _setTags(relation, ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)

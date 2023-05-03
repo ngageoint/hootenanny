@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
@@ -808,7 +808,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& tags, const char* layerNa
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
       if (v != Undefined(current))
-        tags.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
+        tags.insert(getStringLocation(toCpp<QString>(arr->Get(context, i).ToLocalChecked())), getStringLocation(toCpp<QString>(v)));
 
       LOG_VART(tags);
     }

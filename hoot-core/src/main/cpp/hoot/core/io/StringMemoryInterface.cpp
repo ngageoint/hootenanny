@@ -22,55 +22,19 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
-#include "ScriptSchemaTranslator.h"
 
-// Standard
-#include <assert.h>
+#include "StringMemoryInterface.h"
 
 namespace hoot
 {
 
-ScriptSchemaTranslator::ScriptSchemaTranslator()
+const QString& StringMemoryInterface::getStringLocation(const QString& s)
 {
-  _initialized = false;
-  _strict = StrictOn;
-}
-
-ScriptSchemaTranslator::~ScriptSchemaTranslator()
-{
-  // the child class should call close since _finalize is virtual.
-  assert (_initialized == false);
-}
-
-void ScriptSchemaTranslator::close()
-{
-  if (_initialized)
-  {
-    _finalize();
-    _initialized = false;
-  }
-}
-
-void ScriptSchemaTranslator::strictError(const QString& s) const
-{
-  if (_strict == StrictOn)
-    throw HootException(s);
-  else if (_strict == StrictWarn)
-  {
-    LOG_WARN(s);
-  }
-}
-
-void ScriptSchemaTranslator::translateToOsm(Tags& tags, const char* layerName, const char* geomType)
-{
-  if (!_initialized)
-  {
-    _init();
-    _initialized = true;
-  }
-  _translateToOsm(tags, layerName, geomType);
+  if (!_strings.contains(s))
+    _strings[s] = s;
+  return _strings[s];
 }
 
 }

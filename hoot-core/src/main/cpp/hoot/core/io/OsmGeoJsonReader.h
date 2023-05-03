@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -201,7 +201,7 @@ private:
    * @param element Element to add the tags to
    * @param tags String of tags in the above format
    */
-  void _parseOtherTags(const ElementPtr& element, const QString& tags) const;
+  void _parseOtherTags(const ElementPtr& element, const QString& tags);
   /**
    * @brief _readCoordinate Convert property_tree coordinates to geos coordinates
    * @param coordsIt property_tree coordinates

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014-2023 Maxar (http://www.maxar.com/)
  */
 
 // boost
@@ -140,8 +140,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     // Points will be empty for the generalize calls with way inputs instead of points.
-    for (QList<ConstNodePtr>::const_iterator it = points.constBegin();
-         it != points.constEnd(); ++it)
+    for (auto it = points.constBegin(); it != points.constEnd(); ++it)
     {
       NodePtr nodeCopy = std::make_shared<Node>(*(*it).get());
       map->addNode(nodeCopy);
