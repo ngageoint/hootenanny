@@ -3,21 +3,37 @@
 # https://stackoverflow.com/questions/7998302/graphing-a-processs-memory-usage
 # https://gist.github.com/nicolasazrak/32d68ed6c845a095f75f037ecc2f0436
 
-if [ $# -lt 1 ] || [ $# -gt 2 ]
+if [ $# -gt 3 ]
 then
-  echo "graph_memory.sh requires 1 or 2 command line arguments"
+  echo "graph_memory.sh requires 0, 1, or 2 command line arguments"
   echo "Usage:"
-  echo "     graph_memory.sh <process name> [PNG image path]"
+  echo "     graph_memory.sh [--proc <process name>] [PNG image path]"
   exit -1
 fi
 
 LOG=$(mktemp)
 SCRIPT=$(mktemp)
+PROC="total memory"
+if [ "$1" == "--pid" ]
+then
+  $PROC=""
+  PID=$2
+  SAVE_PID=$2
+  shift 2
+elif [ "$1" == "--proc" ]
+then
+  PROC=$2
+  shift 2
+else
+  PID=0
+  SAVE_PID=0
+fi
+
 if [ $# -eq 1 ]
 then
-  IMAGE=$(mktemp)
+  IMAGE=$1
 else
-  IMAGE=$2
+  IMAGE=$(mktemp)
 fi
 
 echo "Output to LOG=$LOG and SCRIPT=$SCRIPT and IMAGE=$IMAGE"
@@ -39,35 +55,52 @@ plot "$LOG" using (\$2/1024) with filledcurves title "Virtual Memory" lc rgb "#0
 
 EOL
 
-echo "Waiting for $1 to start..."
+trap render_graph INT
 
-PID=`pidof $1`
-while [ -z $PID ]
-do
-  sleep 0.1
+function render_graph() {
+  echo "Rendering graph..."
+  echo "$SAVE_PID 0 0" >> $LOG
+  gnuplot $SCRIPT > /dev/null
+  xdg-open $IMAGE > /dev/null &
+  exit 0
+}
+
+if [ "$PROC" != "total memory" ]
+then
+  echo "Waiting for $PROC to start..."
+
   PID=`pidof $1`
-done
+  while [ -z $PID ]
+  do
+    sleep 0.1
+    PID=`pidof $1`
+  done
 
-echo "Logging $1 info..."
+  echo "Logging $PROC..."
 
-SAVE_PID=$PID
-#echo "$SAVE_PID 0 0" >> $LOG
-echo "$SAVE_PID 0 0" >> $LOG
+  SAVE_PID=$PID
+  echo "$SAVE_PID 0 0" >> $LOG
 
-while true
-do
-  # Drop out when the process doesn't exist anymore
-  if [ -z $PID ]
-  then
-    echo "Rendering graph..."
-    echo "$SAVE_PID 0 0" >> $LOG
-    gnuplot $SCRIPT > /dev/null
-    xdg-open $IMAGE > /dev/null &
-    exit 0
-  fi
-  # Log the process information
-  ps -p $PID -o pid= -o vsz= -o rss= >> $LOG
-  sleep 1
-  PID=`pidof $1`
-done
+  while true
+  do
+    # Drop out when the process doesn't exist anymore
+    if [ -z $PID ]
+    then
+      render_graph
+    fi
+    # Log the process information
+    ps -p $PID -o pid= -o vsz= -o rss= >> $LOG
+    sleep 1
+    PID=`pidof $1`
+  done
+else
+  echo "Logging $PROC..."
+  echo "Press Ctrl-C to end."
+  echo "0 0 0" >> $LOG
+  while true
+  do
+    free -w | grep Mem | sed 's/Mem: \+[0-9]\+ \+\([0-9]\+\).*/0 \1 0/' >> $LOG
+    sleep 1
+  done
+fi
 
