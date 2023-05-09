@@ -208,9 +208,10 @@ protected:
   /**
    * @brief _cropGeometryToBounds Crops geometry to the _bounds if needed
    * @param geometry Geometry to crop
+   * @param validate Flag set to validate geometry if an error occurs before trying once again
    * @return whole geometry if inside the bounds (or no crop is desired), cropped geometry if on the border, nullptr if outside of bounds
    */
-  std::shared_ptr<geos::geom::Geometry> _cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  std::shared_ptr<geos::geom::Geometry> _cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry, bool validate = true) const;
   /** writePartial functions that do the actual writing with the ElementProvider to look up "cached" elements */
   void _writePartial(const ElementProviderPtr& provider, const ConstNodePtr& n);
   void _writePartial(const ElementProviderPtr& provider, const ConstWayPtr& w);
