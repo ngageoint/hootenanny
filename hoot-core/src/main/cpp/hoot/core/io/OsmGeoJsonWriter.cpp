@@ -905,30 +905,38 @@ QString OsmGeoJsonWriter::_getFcodeUnknown(const std::shared_ptr<geos::geom::Geo
   return "UNKNOWN";
 }
 
-std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry, bool validate) const
 {
-  //  Treat bounded vs unbounded differently
-  if (geometry && _bounds)
+  try
   {
-    if (geometry->intersects(_bounds.get()))
+    //  Treat bounded vs unbounded differently
+    if (geometry && _bounds)
     {
-      if (_cropFeaturesCrossingBounds)
+      if (geometry->intersects(_bounds.get()))
       {
-        //  Get the intersection of the geometry with the bounding envelope
-        try
+        if (_cropFeaturesCrossingBounds)
         {
+          //  Get the intersection of the geometry with the bounding envelope
           std::unique_ptr<geos::geom::Geometry> intersection = geometry->intersection(_bounds.get());
           return std::shared_ptr<geos::geom::Geometry>(intersection.release());
         }
-        catch (const geos::util::TopologyException& e)
-        {
-          LOG_WARN(e.what());
-          return nullptr;
-        }
       }
+      else  //  Geometry is outside of the bounds, eliminate it
+        return nullptr;
     }
-    else  //  Geometry is outside of the bounds, eliminate it
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (validate)
+    {
+      std::shared_ptr<geos::geom::Geometry> g(GeometryUtils::validateGeometry(geometry.get()));
+      return _cropGeometryToBounds(g, false);
+    }
+    else
+    {
+      LOG_WARN(e.what());
       return nullptr;
+    }
   }
   return geometry;
 }
