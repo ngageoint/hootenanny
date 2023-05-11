@@ -43,26 +43,27 @@ tds71.rules = {
   // This is where anything "unique" to TDS goes.
   fcodeOne2oneIn : [
     ['F_CODE','FA091','geophysical_data_track','yes'], // Geophysical Data Track Line
+    ['F_CODE','FLWAR','flow_arrow','yes'], // Flow Arrow - No F_CODE
     ['F_CODE','GA005','airspace','yes'], // Airspace
     ['F_CODE','GA035','navaid:aeronautical','yes'], // Aeronautical Navaids
     ['F_CODE','GA036','navaid:beacon','vor'], // Vhf Omni Radio Beacon
     ['F_CODE','GA037','navaid:beacon','tacan'], // Tactical Air Navigation Aid Beacon
     ['F_CODE','GA038','navaid:beacon','ndb'], // Nondirectional Radio Beacon
     ['F_CODE','GA041','navaid:beacon','dme'], // Distance Measuring Equipment
-    ['F_CODE','ZC050','isogonic_line','yes'], // Isogonic Line
-    ['F_CODE','ZD015','point_of_change','yes'], // Point Of Change
-    ['F_CODE','FLWAR','flow_arrow','yes'], // Flow Arrow - No F_CODE
     ['F_CODE','LDRLN','leader_line','yes'], // Leader Line - No F_CODE
     ['F_CODE','MXELE','maximum_elevation','yes'], // Maximum Elevation - No F_CODE
     ['F_CODE','RDMKR','road_marker','yes'], // Road Marker - No F_CODE
     ['F_CODE','UNSCW','unescow_point','yes'], // Unescow - No F_CODE
     ['F_CODE','VOBST','vertical_obstruction','yes'], // Vertical Obstruction - No F_CODE
+    ['F_CODE','ZC050','isogonic_line','yes'], // Isogonic Line
+    ['F_CODE','ZD015','point_of_change','yes'], // Point Of Change
 
   ], // End fcodeOne2oneIn
 
   // These are for finding an FCODE for export.
   // Note: These get swapped around before being used
   fcodeOne2oneOut : [
+    ['F_CODE','DA010','natural','desert'], // EE030 Desert - mapped to DA010 Soil Surface Region
     ['F_CODE','FA091','geophysical_data_track','yes'], // Geophysical Data Track Line
     ['F_CODE','GA005','airspace','yes'], // Airspace
     ['F_CODE','GA035','navaid:aeronautical','yes'], // Aeronautical Navaids
@@ -3482,22 +3483,22 @@ tds71.rules = {
     // TRS3 - Transportation System Type [3]
 
     // TSM - Terrain Surface Material - Added to ZI016_ROC list
-    ['TSM','-999999','desert_surface','unknown'], // No Information
-    ['TSM','1','desert_surface','asphalt'], // Asphalt
-    ['TSM','2','desert_surface','bedrock'], // Bedrock
-    ['TSM','3','desert_surface','boulders'], // Boulders
-    ['TSM','4','desert_surface','concrete'], // Concrete
-    ['TSM','5','desert_surface','evaporite'], // Evaporite
-    ['TSM','6','desert_surface','frozen_water'], // Frozen Water
-    ['TSM','7','desert_surface','gravel'], // Gravel
-    ['TSM','8','desert_surface','lava_flow'], // Lava Flow
-    ['TSM','9','desert_surface','loess'], // Loess
-    ['TSM','10','desert_surface','mud'], // Mud
-    ['TSM','11','desert_surface','paved'], // Paved
-    ['TSM','12','desert_surface','rock'], // Rock
-    ['TSM','13','desert_surface','sand'], // Sand
-    ['TSM','14','desert_surface','soil'], // Soil
-    ['TSM','999','desert_surface','other'], // Other
+    ['TSM','-999999','terrain_surface','unknown'], // No Information
+    ['TSM','1','terrain_surface','asphalt'], // Asphalt
+    ['TSM','2','terrain_surface','bedrock'], // Bedrock
+    ['TSM','3','terrain_surface','boulders'], // Boulders
+    ['TSM','4','terrain_surface','concrete'], // Concrete
+    ['TSM','5','terrain_surface','evaporite'], // Evaporite
+    ['TSM','6','terrain_surface','frozen_water'], // Frozen Water
+    ['TSM','7','terrain_surface','gravel'], // Gravel
+    ['TSM','8','terrain_surface','lava_flow'], // Lava Flow
+    ['TSM','9','terrain_surface','loess'], // Loess
+    ['TSM','10','terrain_surface','mud'], // Mud
+    ['TSM','11','terrain_surface','paved'], // Paved
+    ['TSM','12','terrain_surface','rock'], // Rock
+    ['TSM','13','terrain_surface','sand'], // Sand
+    ['TSM','14','terrain_surface','soil'], // Soil
+    ['TSM','999','terrain_surface','other'], // Other
 
     // TSM2 - Terrain Surface Material [2]
     // TSM3 - Terrain Surface Material [3]
@@ -4877,21 +4878,22 @@ tds71.rules = {
   swapListIn : {
     'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
     'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'desert_surface':'terrain_surface',
     'MEM':'ZI006_MEM',
-    'RCG':'ZI004_RCG',
-    'ZI002_UFI':'UFI',
-    'ZI025_WLE':'WLE',
-    'ZI032_GUG':'GUG',
-    'PFD':'PWA',
     'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+    'PFD':'PWA',
     'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
     'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'RCG':'ZI004_RCG',
     'URI':'UFI',
     'WBD':'PWA',
     'YWQ':'ZI024_YWQ',
-    'ZI032_TOS':'TOS',
+    'ZI002_UFI':'UFI',
+    'ZI025_WLE':'WLE',
+    'ZI032_GUG':'GUG',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
+    'ZI032_TOS':'TOS',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
     'ZVH_VDT':'VDT'
   },

@@ -101,6 +101,7 @@ tds70.rules = {
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DA010','natural','desert'], // EE030 Desert - mapped to DA010 Soil Surface Region
     ['F_CODE','DB090','embankment','mound'], // Embankment
     ['F_CODE','DB090','embankment','berm'],
     ['F_CODE','DB090','man_made','dyke'],
@@ -2650,21 +2651,21 @@ tds70.rules = {
 
     // TSM - Terrain Surface Material - Added to ZI016_ROC list
     // ['TSM','-999999',undefined,undefined], // No Information
-    ['TSM','1','desert_surface','asphalt'], // Asphalt
-    ['TSM','2','desert_surface','bedrock'], // Bedrock
-    ['TSM','3','desert_surface','boulders'], // Boulders
-    ['TSM','4','desert_surface','concrete'], // Concrete
-    ['TSM','5','desert_surface','evaporite'], // Evaporite
-    ['TSM','6','desert_surface','frozen_water'], // Frozen Water
-    ['TSM','7','desert_surface','gravel'], // Gravel
-    ['TSM','8','desert_surface','lava_flow'], // Lava Flow
-    ['TSM','9','desert_surface','loess'], // Loess
-    ['TSM','10','desert_surface','mud'], // Mud
-    ['TSM','11','desert_surface','paved'], // Paved
-    ['TSM','12','desert_surface','rock'], // Rock
-    ['TSM','13','desert_surface','sand'], // Sand
-    ['TSM','14','desert_surface','soil'], // Soil
-    ['TSM','999','desert_surface','other'], // Other
+    ['TSM','1','terrain_surface','asphalt'], // Asphalt
+    ['TSM','2','terrain_surface','bedrock'], // Bedrock
+    ['TSM','3','terrain_surface','boulders'], // Boulders
+    ['TSM','4','terrain_surface','concrete'], // Concrete
+    ['TSM','5','terrain_surface','evaporite'], // Evaporite
+    ['TSM','6','terrain_surface','frozen_water'], // Frozen Water
+    ['TSM','7','terrain_surface','gravel'], // Gravel
+    ['TSM','8','terrain_surface','lava_flow'], // Lava Flow
+    ['TSM','9','terrain_surface','loess'], // Loess
+    ['TSM','10','terrain_surface','mud'], // Mud
+    ['TSM','11','terrain_surface','paved'], // Paved
+    ['TSM','12','terrain_surface','rock'], // Rock
+    ['TSM','13','terrain_surface','sand'], // Sand
+    ['TSM','14','terrain_surface','soil'], // Soil
+    ['TSM','999','terrain_surface','other'], // Other
 
     // TSM2 - Terrain Surface Material [2]
     // TSM3 - Terrain Surface Material [3]
@@ -4039,20 +4040,21 @@ tds70.rules = {
   swapListIn : {
     'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
     'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'desert_surface':'terrain_surface',
     'MEM':'ZI006_MEM',
+    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+    'PFD':'PWA',
+    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
+    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
     'RCG':'ZI004_RCG',
+    'WBD':'PWA',
+    'YWQ':'ZI024_YWQ',
     'ZI002_UFI':'UFI',
     'ZI025_WLE':'WLE',
     'ZI032_GUG':'GUG',
-    'PFD':'PWA',
-    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
-    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
-    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
-    'WBD':'PWA',
-    'YWQ':'ZI024_YWQ',
-    'ZI032_TOS':'TOS',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
+    'ZI032_TOS':'TOS',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
   },
   // ##### End of swapListIn #####
