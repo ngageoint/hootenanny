@@ -46,6 +46,7 @@
 #include <QXmlStreamWriter>
 #include <QtCore/QStringBuilder>
 
+namespace pt = boost::property_tree;
 using namespace std;
 
 namespace hoot
@@ -87,7 +88,7 @@ QString OsmJsonWriter::markupString(const QString& str)
   s.replace('\t', "\\t");
   s.replace('\r', "\\r");
   //  Don't add quotes around JSON values
-  if (s.startsWith("{") || s.startsWith("[") || s == "null")
+  if ((s.startsWith("{") && s.endsWith("}")) || (s.startsWith("[") && s.endsWith("]")) || (s.startsWith("\"") && s.endsWith("\"")) || s == "null")
     return s;
   else
   {
@@ -386,6 +387,8 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
     {
       if (key == "uuid")
         value = value.replace("{", "").replace("}", "");
+      else if (value.contains("{") || value.contains("["))
+        value = _validateJsonString(value);
       _writeTag(key, value, firstTag);
     }
   }
@@ -436,6 +439,33 @@ void OsmJsonWriter::_writeRelations()
       PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
+}
+
+QString OsmJsonWriter::_validateJsonString(const QString &value) const
+{
+  bool isJson = false;
+
+  boost::property_tree::ptree t;
+  // Convert string to stringstream
+  stringstream ss(value.toUtf8().constData(), ios::in);
+
+  if (ss.good())
+  {
+    try
+    {
+      pt::read_json(ss, t);
+      isJson = true;
+    }
+    catch (const std::exception& e)
+    {
+      //  Do nothing here since isJson is already false
+    }
+  }
+  //  JSON data can be returned, otherwise it is book-ended with quotes
+  if (isJson)
+    return value;
+  else
+    return QString("\"%1\"").arg(value);
 }
 
 }
