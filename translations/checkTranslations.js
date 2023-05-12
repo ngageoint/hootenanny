@@ -298,42 +298,43 @@ function testTranslated(schema,featureCode,tagList,geomList = ['Point','Line','A
     var toOgr = osmToOgr(toOsm,schema);
     var ogrJson = makeJson(toOgr);
 
-    if (Object.keys(ogrJson).length > 0)
+    if (ogrJson.error)
+    {
+      console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+    }
+    else if (Object.keys(ogrJson).length > 0)
     {
       // console.log(ogrJson);
       console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
 
-    if (JSON.stringify(inputJson,Object.keys(inputJson).sort()) !== JSON.stringify(ogrJson,Object.keys(ogrJson).sort()))
-    {
-      console.log('');
-      console.log('\n  ## Not Same OGR Attributes');
-      for (var i in tagList)
+      if (JSON.stringify(inputJson,Object.keys(inputJson).sort()) !== JSON.stringify(ogrJson,Object.keys(ogrJson).sort()))
       {
-        if (!ogrJson[i])
+        console.log('');
+        console.log('\n  ## Not Same OGR Attributes');
+        for (var i in tagList)
         {
-          console.log('  Input Attribute :' + i + ': not in output');
-        }
-        else
-        {
-          if (ogrJson[i] !== tagList[i])
+          if (!ogrJson[i])
           {
-            console.log('  Attribute value for :' + i + ': different in output. :' + tagList[i] + ': vs ;' + ogrJson[i] + ':');
+            console.log('  Input Attribute :' + i + ': not in output');
+          }
+          else
+          {
+            if (ogrJson[i] !== tagList[i])
+            {
+              console.log('  Attribute value for :' + i + ': different in output. :' + tagList[i] + ': vs ;' + ogrJson[i] + ':');
+            }
           }
         }
-      }
-      var keys = Object.keys(ogrJson);
-      for (var i in keys)
-      {
-        if (!tagList[keys[i]])
+        var keys = Object.keys(ogrJson);
+        for (var i in keys)
         {
-          console.log('  Output tag :' + keys[i] + ': not in input');
+          if (!tagList[keys[i]])
+          {
+            console.log('  Output tag :' + keys[i] + ': not in input');
+          }
         }
+        console.log('');
       }
-      console.log('');
-    }
-
-
-
     }
     else
     {
