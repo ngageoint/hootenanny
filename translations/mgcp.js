@@ -387,7 +387,7 @@ mgcp = {
   cleanAttrs: function (attrs)
   {
     // Switch to keep all of the default values. Mainly for the schema switcher
-    if (mgcp.configIn.ReaderDropDefaults == 'true')
+    if (mgcp.configIn.ReaderDropDefaults)
     {
       mgcp.dropDefaults(attrs);
     }
@@ -770,7 +770,7 @@ mgcp = {
     }
     else
     {
-      if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (mgcp.configIn.OgrAddUuid) tags.uuid = createUuid();
     }
 
     // Railway Yard
@@ -1962,7 +1962,7 @@ mgcp = {
     else
     {
       // Moving to upper case as a test
-      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','').toUpperCase();
+      if (mgcp.configOut.OgrAddUuid) attrs.UID = createUuid().replace('{','').replace('}','').toUpperCase();
     }
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
@@ -2411,19 +2411,19 @@ mgcp = {
     if (mgcp.configIn == undefined)
     {
       mgcp.configIn = {};
-      mgcp.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      mgcp.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-      mgcp.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      mgcp.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      mgcp.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+      mgcp.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
     }
 
     // Moved this so it gets checked for each call
-    mgcp.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
+    mgcp.configIn.ReaderDropDefaults = (hoot.Settings.get('reader.drop.defaults') === 'true');
 
     // Debug:
-    if (mgcp.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
+    if (mgcp.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
@@ -2437,13 +2437,13 @@ mgcp = {
       if (! tags.uuid)
       {
         // Upper case as a test
-        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid().toUpperCase();
+        if (mgcp.configIn.OgrAddUuid) tags.uuid = createUuid().toUpperCase();
       }
 
       if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();
 
       // Debug:
-      if (mgcp.configIn.OgrDebugDumptags == 'true')
+      if (mgcp.configIn.OgrDebugDumptags)
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
@@ -2505,7 +2505,7 @@ mgcp = {
     translate.untangleAttributes(attrs,tags,mgcp);
 
     // Debug:
-    if (mgcp.configIn.OgrDebugDumptags == 'true')
+    if (mgcp.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
       translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
@@ -2557,19 +2557,19 @@ mgcp = {
 
     // If we are reading from an OGR source, drop all of the output tags with default values
     // This cleans up after the one2one rules since '0' can be a number or an enumerated attribute value
-    if (mgcp.configIn.ReaderDropDefaults == 'true')
+    if (mgcp.configIn.ReaderDropDefaults)
     {
       mgcp.dropDefaults(tags);
     }
 
     // Debug: Add the FCODE to the tags
-    if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+    if (mgcp.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
     // Override tag values if appropriate
     translate.overrideValues(tags,mgcp.toChange);
 
     // Debug:
-    if (mgcp.configIn.OgrDebugDumptags == 'true')
+    if (mgcp.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
@@ -2594,11 +2594,11 @@ mgcp = {
     if (mgcp.configOut == undefined)
     {
       mgcp.configOut = {};
-      mgcp.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      mgcp.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      mgcp.configOut.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      mgcp.configOut.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
       mgcp.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       mgcp.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      mgcp.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
+      mgcp.configOut.OgrThrowError = (hoot.Settings.get('ogr.throw.error') === 'true');
       mgcp.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
@@ -2620,7 +2620,7 @@ mgcp = {
     if (geometryType == 'Collection') return null;
 
     // Debug:
-    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+    if (mgcp.configOut.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // Set up the fcode translation rules
 
@@ -2776,7 +2776,7 @@ mgcp = {
     else // We DON'T have a feature
     {
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (mgcp.configOut.OgrThrowError == 'true')
+      if (mgcp.configOut.OgrThrowError)
       {
         if (! attrs.F_CODE)
         {
@@ -2805,7 +2805,7 @@ mgcp = {
 
       // Debug:
       // Dump out what attributes we have converted before they get wiped out
-      if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+      if (mgcp.configOut.OgrDebugDumptags) translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
       // We want to keep the hoot:id if present
       if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
@@ -2844,7 +2844,7 @@ mgcp = {
     } // End We DON'T have a feature
 
     // Debug:
-    if (mgcp.configOut.OgrDebugDumptags == 'true')
+    if (mgcp.configOut.OgrDebugDumptags)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {

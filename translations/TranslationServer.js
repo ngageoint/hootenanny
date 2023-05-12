@@ -13,26 +13,26 @@ var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
     hoot.Log.setLogLevel("warn");
-    hoot.Settings.set({"map.reader.add.child.refs.when.missing":"true"});
-    hoot.Settings.set({"ogr.add.uuid": "false"});
-    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
+    hoot.Settings.set({"map.reader.add.child.refs.when.missing":true});
+    hoot.Settings.set({"ogr.add.uuid": false});
+    hoot.Settings.set({"ogr.esri.fcsubtype":false});
     hoot.Settings.set({"ogr.note.extra": "attribute"});
-    hoot.Settings.set({"reader.add.source.datetime": "false"});
-    hoot.Settings.set({"writer.include.circular.error.tags": "false"});
-    hoot.Settings.set({"writer.thematic.structure":"false"});
+    hoot.Settings.set({"reader.add.source.datetime":false});
+    hoot.Settings.set({"writer.include.circular.error.tags":false});
+    hoot.Settings.set({"writer.thematic.structure":false});
 
     // LOTS of debug output on the console (journalctl -xe -u tomcat8)
-    // hoot.Settings.set({"ogr.debug.dumptags": "true"});
+    // hoot.Settings.set({"ogr.debug.dumptags": true});
 
 
     // Throw errors instead of returning partial translations/o2s_X features
-    hoot.Settings.set({'ogr.throw.error':'true'});
+    hoot.Settings.set({'ogr.throw.error':true});
 
     // Setting this here as a placeholder. The default is "true"
-    hoot.Settings.set({"reader.drop.defaults": "true"});
+    hoot.Settings.set({"reader.drop.defaults": true});
 
     //Tests should set hashseedzero to true for consistent results
-    if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
+    if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero":true});
 }
 
 // Setup the lists of schema

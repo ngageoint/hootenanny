@@ -43,10 +43,10 @@ tds40 = {
     tds40.rawSchema = tds40.schema.getDbSchema();
 
     // Add the Very ESRI specific FCSubtype attribute
-    if (hoot.Settings.get('ogr.esri.fcsubtype') == 'true') tds40.rawSchema = translate.addFCSubtype(tds40.rawSchema);
+    if ((hoot.Settings.get('ogr.esri.fcsubtype') === 'true')) tds40.rawSchema = translate.addFCSubtype(tds40.rawSchema);
 
     // Add the eLTDS attributes
-    if (hoot.Settings.get('ogr.tds.add.etds') == 'true') tds40.rawSchema = translate.addEtds(tds40.rawSchema);
+    if ((hoot.Settings.get('ogr.tds.add.etds') === 'true')) tds40.rawSchema = translate.addEtds(tds40.rawSchema);
 
     // Add empty "extra" feature layers if needed
     if (hoot.Settings.get('ogr.note.extra') == 'file') tds40.rawSchema = translate.addExtraFeature(tds40.rawSchema);
@@ -69,7 +69,7 @@ tds40 = {
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds40.rawSchema
-    if (hoot.Settings.get('writer.thematic.structure') == 'false')
+    if (!(hoot.Settings.get('writer.thematic.structure') === 'true'))
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       tds40.layerNameLookup = translate.makeLayerNameLookup(tds40.rawSchema);
@@ -600,7 +600,7 @@ tds40 = {
     delete attrs.FCSubtype;
 
     // Switch to keep all of the default values. Mainly for the schema switcher
-    if (tds40.configIn.ReaderDropDefaults == 'true')
+    if (tds40.configIn.ReaderDropDefaults)
     {
       tds40.dropDefaults(attrs);
     }
@@ -801,7 +801,7 @@ tds40 = {
     }
     else
     {
-      if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (tds40.configIn.OgrAddUuid) tags.uuid = createUuid();
     }
 
     if (tds40.osmPostRules == undefined)
@@ -2303,7 +2303,7 @@ tds40 = {
     }
     else
     {
-      if (tds40.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
+      if (tds40.configOut.OgrAddUuid) attrs.UFI = createUuid().replace('{','').replace('}','');
     }
 
     // Add Weather Restrictions to transportation features
@@ -2611,18 +2611,18 @@ tds40 = {
     if (tds40.configIn == undefined)
     {
       tds40.configIn = {};
-      tds40.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      tds40.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-      tds40.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      tds40.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      tds40.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+      tds40.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
       // Get any changes
       tds40.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Moved this so it gets checked for each call
-    tds40.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
+    tds40.configIn.ReaderDropDefaults = (hoot.Settings.get('reader.drop.defaults') === 'true');
 
     // Debug:
-    if (tds40.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (tds40.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
@@ -2635,13 +2635,13 @@ tds40 = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        if (tds40.configIn.OgrAddUuid) tags.uuid = createUuid();
       }
 
       if (! tags.source) tags.source = 'tdsv40:' + layerName.toLowerCase();
 
       // Debug:
-      if (tds40.configIn.OgrDebugDumptags == 'true')
+      if (tds40.configIn.OgrDebugDumptags)
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
@@ -2684,7 +2684,7 @@ tds40 = {
     translate.untangleAttributes(attrs,tags,tds40);
 
     // Debug:
-    if (tds40.configIn.OgrDebugDumptags == 'true')
+    if (tds40.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
       translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
@@ -2736,19 +2736,19 @@ tds40 = {
     tds40.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // If we are reading from an OGR source, drop all of the output tags with default values
-    if (tds40.configIn.ReaderDropDefaults == 'true')
+    if (tds40.configIn.ReaderDropDefaults)
     {
       tds40.dropDefaults(tags);
     }
 
     // Debug: Add the FCODE to the tags
-    if (tds40.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+    if (tds40.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
     // Override tag values if appropriate
     translate.overrideValues(tags,tds40.toChange);
 
     // Debug:
-    if (tds40.configIn.OgrDebugDumptags == 'true')
+    if (tds40.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
@@ -2775,13 +2775,14 @@ tds40 = {
     if (tds40.configOut == undefined)
     {
       tds40.configOut = {};
-      tds40.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      tds40.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds40.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
+      tds40.configOut.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      tds40.configOut.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
+      tds40.configOut.OgrEsriFcsubtype = (hoot.Settings.get('ogr.esri.fcsubtype') === 'true');
+      tds40.configOut.OgrThematicStructure = (hoot.Settings.get('writer.thematic.structure') === 'true');
+      tds40.configOut.OgrThrowError = (hoot.Settings.get('ogr.throw.error') === 'true');
+
       tds40.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       tds40.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      tds40.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
-      tds40.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       tds40.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
@@ -2797,7 +2798,7 @@ tds40 = {
 
     // Start processing here
     // Debug:
-    if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+    if (tds40.configOut.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // The Nuke Option: If we have a relation, drop the feature and carry on
     if (tags['building:part']) return null;
@@ -2866,7 +2867,7 @@ tds40 = {
     tds40.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
     // Debug
-    if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (tds40.configOut.OgrDebugDumptags) translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -2917,13 +2918,13 @@ tds40 = {
 
           // Now set the FCSubtype
           // NOTE: If we export to shapefile, GAIT _will_ complain about this
-          if (tds40.configOut.OgrEsriFcsubtype == 'true')
+          if (tds40.configOut.OgrEsriFcsubtype)
           {
             returnData[i]['attrs']['FCSUBTYPE'] = tds40.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
           }
 
           // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-          if (tds40.configOut.OgrThematicStructure == 'true')
+          if (tds40.configOut.OgrThematicStructure)
           {
             returnData[i]['tableName'] = tds40.rules.thematicGroupList[gFcode];
             tds40.validateThematicAttrs(gFcode, returnData[i]['attrs']);
@@ -2973,7 +2974,7 @@ tds40 = {
     else // We DON'T have a feature
     {
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (tds40.configOut.OgrThrowError == 'true')
+      if (tds40.configOut.OgrThrowError)
       {
         if (! attrs.F_CODE)
         {
@@ -3002,7 +3003,7 @@ tds40 = {
 
       // Debug:
       // Dump out what attributes we have converted before they get wiped out
-      if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+      if (tds40.configOut.OgrDebugDumptags) translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
       // We want to keep the hoot:id if present
       if (tags['hoot:id'])
@@ -3039,7 +3040,7 @@ tds40 = {
     } // End else We DON'T have a feature
 
     // Debug:
-    if (tds40.configOut.OgrDebugDumptags == 'true')
+    if (tds40.configOut.OgrDebugDumptags)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {

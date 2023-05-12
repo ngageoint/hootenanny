@@ -67,7 +67,7 @@ etds71_osm = {
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-        // if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+        // if ((hoot.Settings.get('ogr.debug.dumptags') === 'true'))
         // {
             // var kList = Object.keys(attrs).sort()
             // for (var i = 0, fLen = kList.length; i < fLen; i++) hoot.print('eTds In: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -154,7 +154,7 @@ etds71_osm = {
         }
 
         // Debug:
-        // if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+        // if ((hoot.Settings.get('ogr.debug.dumptags') === 'true'))
         // {
             // var kList = Object.keys(tags).sort()
             // for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');

@@ -416,12 +416,12 @@ function testError(input, callback) {
 describe('ElementMergeServer', function () {
 
     before(function() {
-        hoot.Settings.set({'writer.include.circular.error.tags': 'true'});
+        hoot.Settings.set({'writer.include.circular.error.tags':true});
         hoot.Settings.set({'map.writer.schema':'OSM'});
     });
 
     after(function() {
-        hoot.Settings.set({'writer.include.circular.error.tags': 'false'});
+        hoot.Settings.set({'writer.include.circular.error.tags':false});
     });
 
     it('responds with HTTP 404 if url not found', function() {

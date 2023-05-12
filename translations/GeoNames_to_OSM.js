@@ -935,13 +935,13 @@ function translateToOsm(attrs, layerName, geometryType)
     if (geonames.configIn == undefined)
     {
       geonames.configIn = {};
-      geonames.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      geonames.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
       // Get any changes
       geonames.toChange = hoot.Settings.get('schema.translation.override');
     }
 
-    if (geonames.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (geonames.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
 
     geonames.applyToOsmPreProcessing(attrs, layerName, geometryType);
@@ -964,7 +964,7 @@ function translateToOsm(attrs, layerName, geometryType)
     geonames.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // Debug:
-    if (geonames.configIn.OgrDebugDumptags == 'true')
+    if (geonames.configIn.OgrDebugDumptags)
     {
       // translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');

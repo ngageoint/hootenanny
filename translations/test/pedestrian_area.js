@@ -42,7 +42,6 @@ describe('Pedestrian Area / Plaza / Public Square', function () {
             var fcode = (schema == 'MGCP') ? 'FCODE' : 'F_CODE';
             assert.equal(tags[fcode], 'AL170', fcode + ' should equal');
 
-
             //Test translation from Schema back to OSM
             osm = server.handleInputs({osm: translated, method: 'POST', translation: schema, path: '/translateFrom'});
             xml = parser.parseFromString(osm);

@@ -235,7 +235,6 @@ dnc = {
   // validateAttrs - Clean up the supplied attr list by dropping anything that should not be part of the
   //                 feature. Also, set per feature defaults where appropriate.
   validateAttrs: function(layerName,geometryType,attrs,notUsed,transMap) {
-
     // Debug:
     // print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
 
@@ -1222,7 +1221,7 @@ dnc = {
     }
     else
     {
-      if (dnc.configOut.OgrAddUuid == 'true') attrs.OSM_UUID = createUuid().replace('{','').replace('}','');
+      if (dnc.configOut.OgrAddUuid) attrs.OSM_UUID = createUuid().replace('{','').replace('}','');
     }
 
     // Fix some of the default values
@@ -1312,16 +1311,16 @@ dnc = {
     if (dnc.configIn == undefined)
     {
       dnc.configIn = {};
-      dnc.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      dnc.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-      dnc.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      dnc.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      dnc.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+      dnc.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
       dnc.toChange = hoot.Settings.get('schema.translation.override');
     }
     // Debug:
-    if (dnc.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (dnc.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
@@ -1334,13 +1333,13 @@ dnc = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (dnc.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        if (dnc.configIn.OgrAddUuid) tags.uuid = createUuid();
       }
 
       if (! tags.source) tags.source = 'dnc:' + layerName.toLowerCase();
 
       // Debug:
-      if (dnc.configIn.OgrDebugDumptags == 'true')
+      if (dnc.configIn.OgrDebugDumptags)
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
@@ -1416,10 +1415,10 @@ dnc = {
     // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
     // Debug: Add the FCODE to the tags
-    if (dnc.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+    if (dnc.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
     // Debug:
-    if (dnc.configIn.OgrDebugDumptags == 'true')
+    if (dnc.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
@@ -1446,10 +1445,10 @@ dnc = {
     if (dnc.configOut == undefined)
     {
       dnc.configOut = {};
-      dnc.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      dnc.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      dnc.configOut.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      dnc.configOut.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
       dnc.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
-      dnc.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
+      dnc.configOut.OgrThrowError = (hoot.Settings.get('ogr.throw.error') === 'true');
       dnc.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
@@ -1472,7 +1471,7 @@ dnc = {
 
     // Start processing here
     // Debug:
-    if (dnc.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+    if (dnc.configOut.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // Set up the fcode translation rules. We need this due to clashes between the one2one and
     // the fcode one2one rules
@@ -1553,7 +1552,7 @@ dnc = {
     } // End clean notUsedTags
 
     // Debug
-    if (dnc.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (dnc.configOut.OgrDebugDumptags) translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -1643,7 +1642,7 @@ dnc = {
     else // We DON'T have a feature
     {
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (dnc.configOut.OgrThrowError == 'true')
+      if (dnc.configOut.OgrThrowError)
       {
         if (! attrs.F_CODE)
         {
@@ -1675,7 +1674,7 @@ dnc = {
 
       // Debug:
       // Dump out what attributes we have converted before they get wiped out
-      if (dnc.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+      if (dnc.configOut.OgrDebugDumptags) translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
       // We want to keep the hoot:id if present
       if (tags['hoot:id'])
@@ -1729,7 +1728,7 @@ dnc = {
     } // End Don't have a feature
 
     // Debug:
-    if (dnc.configOut.OgrDebugDumptags == 'true')
+    if (dnc.configOut.OgrDebugDumptags)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {

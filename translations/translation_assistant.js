@@ -6,7 +6,7 @@ if (typeof hoot !== 'undefined') {
     hoot.require('etds70_osm')
     hoot.require('emgcp_osm')
 
-    hoot.Settings.set({"writer.include.circular.error.tags": "false"});
+    hoot.Settings.set({"writer.include.circular.error.tags":false});
 }
 
 

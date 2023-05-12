@@ -565,11 +565,12 @@ enc311 = {
     if (enc311.configOut == undefined)
     {
       enc311.configOut = {};
-      enc311.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      enc311.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
+      enc311.configOut.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
+      enc311.configOut.OgrDebugDumpvalidate = (hoot.Settings.get('ogr.debug.dumpvalidate') === 'true');
+      enc311.configOut.OgrThrowError = (hoot.Settings.get('ogr.throw.error') === 'true');
+
       enc311.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
       enc311.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
-      enc311.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       enc311.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
@@ -579,7 +580,7 @@ enc311 = {
 
     // Start processing here
     // Debug:
-    if (enc311.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+    if (enc311.configOut.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // The Nuke Option: If we have a relation, drop the feature and carry on
     if (tags['building:part']) return null;
@@ -665,9 +666,9 @@ enc311 = {
 
     // one 2 one
     // NOTE: This deletes tags as they are used
-    // if (enc311.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not before: ');
+    // if (enc311.configOut.OgrDebugDumptags) translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not before: ');
     translate.applyOne2OneQuiet(notUsedTags, attrs, enc311.lookup,transMap);
-    // if (enc311.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not after: ');
+    // if (enc311.configOut.OgrDebugDumptags) translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not after: ');
 
     // Post Processing.
     // We send the original list of tags and the list of tags we haven't used yet.
@@ -702,7 +703,7 @@ enc311 = {
     {
       // We don't have a feature.
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (enc311.configOut.getOgrThrowError == 'true')
+      if (enc311.configOut.getOgrThrowError)
       {
         returnData.push({attrs:{'error':'No valid layer'}, tableName: ''});
         return returnData;
@@ -714,7 +715,7 @@ enc311 = {
 
       // Debug:
       // Dump out what attributes we have converted before they get wiped out
-      if (enc311.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+      if (enc311.configOut.OgrDebugDumptags) translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
       // We want to keep the hoot:id if present
       if (tags['hoot:id'])
@@ -750,7 +751,7 @@ enc311 = {
       returnData.push({'attrs': attrs, 'tableName': o2sLayerName});
 
       // Debug:
-      if (enc311.configOut.OgrDebugDumptags == 'true')
+      if (enc311.configOut.OgrDebugDumptags)
       {
         print('TableName : ' + returnData[0]['tableName'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[0]['attrs'],'',geometryType,elementType,'Out attrs: ');
@@ -763,7 +764,7 @@ enc311 = {
     // ##### If we get this far then we have a valid feature #####
 
     // Debug
-    // if (enc311.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used2: ');
+    // if (enc311.configOut.OgrDebugDumptags) translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used2: ');
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
     // with similar names and roughly the same attributes. Bleah!
@@ -822,7 +823,7 @@ enc311 = {
     } // End ReviewTags
 
     // Debug:
-    if (enc311.configOut.OgrDebugDumptags == 'true')
+    if (enc311.configOut.OgrDebugDumptags)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {

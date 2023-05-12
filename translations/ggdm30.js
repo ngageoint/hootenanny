@@ -45,7 +45,7 @@ ggdm30 = {
     ggdm30.rawSchema = ggdm30.schema.getDbSchema();
 
     // Add the Very ESRI specific FCSubtype attribute
-    if (hoot.Settings.get('ogr.esri.fcsubtype') == 'true') ggdm30.rawSchema = translate.addFCSubtype(ggdm30.rawSchema);
+    if ((hoot.Settings.get('ogr.esri.fcsubtype') === 'true')) ggdm30.rawSchema = translate.addFCSubtype(ggdm30.rawSchema);
 
     // Add empty "extra" feature layers if needed
     if (hoot.Settings.get('ogr.note.extra') == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
@@ -67,7 +67,7 @@ ggdm30 = {
 
     // Decide if we are going to use the Thematic structure or 1 FCODE / File
     // if we DON't want the new structure, just return the ggdm30.rawSchema
-    if (hoot.Settings.get('writer.thematic.structure') == 'false')
+    if (!(hoot.Settings.get('writer.thematic.structure') === 'true'))
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       ggdm30.layerNameLookup = translate.makeLayerNameLookup(ggdm30.rawSchema);
@@ -603,7 +603,7 @@ ggdm30 = {
     delete attrs.FCSUBTYPE;
 
     // Switch to keep all of the default values. Mainly for the schema switcher
-    if (ggdm30.configIn.ReaderDropDefaults == 'true')
+    if (ggdm30.configIn.ReaderDropDefaults)
     {
       ggdm30.dropDefaults(attrs);
     }
@@ -861,7 +861,7 @@ ggdm30 = {
     }
     else
     {
-      if (ggdm30.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (ggdm30.configIn.OgrAddUuid) tags.uuid = createUuid();
     }
 
     if (ggdm30.osmPostRules == undefined)
@@ -2350,7 +2350,7 @@ ggdm30 = {
     }
     else
     {
-      if (ggdm30.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
+      if (ggdm30.configOut.OgrAddUuid) attrs.UFI = createUuid().replace('{','').replace('}','');
     }
 
     // Add Weather Restrictions to transportation features
@@ -2704,19 +2704,19 @@ ggdm30 = {
     if (ggdm30.configIn == undefined)
     {
       ggdm30.configIn = {};
-      ggdm30.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      ggdm30.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-      ggdm30.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      ggdm30.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      ggdm30.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+      ggdm30.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
       // Get any changes to OSM tags
       ggdm30.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Moved this so it gets checked for each call
-    ggdm30.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
+    ggdm30.configIn.ReaderDropDefaults = (hoot.Settings.get('reader.drop.defaults') === 'true');
 
     // Debug:
-    if (ggdm30.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (ggdm30.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
@@ -2727,11 +2727,11 @@ ggdm30 = {
       delete tags.o2s_reason;
 
       // Add some metadata
-      if (!tags.uuid && ggdm30.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (!tags.uuid && ggdm30.configIn.OgrAddUuid) tags.uuid = createUuid();
       if (!tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
       // Debug:
-      if (ggdm30.configIn.OgrDebugDumptags == 'true')
+      if (ggdm30.configIn.OgrDebugDumptags)
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
@@ -2775,7 +2775,7 @@ ggdm30 = {
     ggdm30.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
     // If we are reading from an OGR source, drop all of the output tags with default values
-    if (ggdm30.configIn.ReaderDropDefaults == 'true')
+    if (ggdm30.configIn.ReaderDropDefaults)
     {
       ggdm30.dropDefaults(tags);
     }
@@ -2821,13 +2821,13 @@ ggdm30 = {
     ggdm30.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // Debug: Add the FCODE to the tags
-    if (ggdm30.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+    if (ggdm30.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
     // Override tag values if appropriate
     translate.overrideValues(tags,ggdm30.toChange);
 
     // Debug:
-    if (ggdm30.configIn.OgrDebugDumptags == 'true')
+    if (ggdm30.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
@@ -2861,15 +2861,15 @@ ggdm30 = {
     if (ggdm30.configOut == undefined)
     {
       ggdm30.configOut = {};
-      ggdm30.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      ggdm30.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      ggdm30.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
+      ggdm30.configOut.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      ggdm30.configOut.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
+      ggdm30.configOut.OgrEsriFcsubtype = (hoot.Settings.get('ogr.esri.fcsubtype') === 'true');
+      ggdm30.configOut.OgrThematicStructure = (hoot.Settings.get('writer.thematic.structure') === 'true');
+      ggdm30.configOut.OgrThrowError = (hoot.Settings.get('ogr.throw.error') === 'true');
+
       ggdm30.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       ggdm30.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      ggdm30.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
-      ggdm30.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       ggdm30.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
-      ggdm30.configOut.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2922,7 +2922,7 @@ ggdm30 = {
 
     // Start processing here
     // Debug:
-    if (ggdm30.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+    if (ggdm30.configOut.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // Override values if appropriate
     translate.overrideValues(tags,ggdm30.toChange);
@@ -2963,7 +2963,7 @@ ggdm30 = {
     ggdm30.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
     // Debug
-    if (ggdm30.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (ggdm30.configOut.OgrDebugDumptags) translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -3014,13 +3014,13 @@ ggdm30 = {
 
           // Now set the FCSubtype
           // NOTE: If we export to shapefile, GAIT _will_ complain about this
-          if (ggdm30.configOut.OgrEsriFcsubtype == 'true')
+          if (ggdm30.configOut.OgrEsriFcsubtype)
           {
             returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
           }
 
           // If we are using the Thematic structure, fill the rest of the unused attrs in the schema
-          if (ggdm30.configOut.OgrThematicStructure == 'true')
+          if (ggdm30.configOut.OgrThematicStructure)
           {
             returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
             ggdm30.validateThematicAttrs(gFcode, returnData[i]['attrs']);
@@ -3070,7 +3070,7 @@ ggdm30 = {
     else
     {
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (ggdm30.configOut.OgrThrowError == 'true')
+      if (ggdm30.configOut.OgrThrowError)
       {
         if (! attrs.F_CODE)
         {
@@ -3099,7 +3099,7 @@ ggdm30 = {
 
       // Debug:
       // Dump out what attributes we have converted before they get wiped out
-      if (ggdm30.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+      if (ggdm30.configOut.OgrDebugDumptags) translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
       // We want to keep the hoot:id if present
       if (tags['hoot:id'])
@@ -3136,7 +3136,7 @@ ggdm30 = {
     } // End We DON'T have a feature
 
     // Debug:
-    if (ggdm30.configOut.OgrDebugDumptags == 'true')
+    if (ggdm30.configOut.OgrDebugDumptags)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {

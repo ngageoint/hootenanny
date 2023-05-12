@@ -302,6 +302,38 @@ function testTranslated(schema,featureCode,tagList,geomList = ['Point','Line','A
     {
       // console.log(ogrJson);
       console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+
+    if (JSON.stringify(inputJson,Object.keys(inputJson).sort()) !== JSON.stringify(ogrJson,Object.keys(ogrJson).sort()))
+    {
+      console.log('');
+      console.log('\n  ## Not Same OGR Attributes');
+      for (var i in tagList)
+      {
+        if (!ogrJson[i])
+        {
+          console.log('  Input Attribute :' + i + ': not in output');
+        }
+        else
+        {
+          if (ogrJson[i] !== tagList[i])
+          {
+            console.log('  Attribute value for :' + i + ': different in output. :' + tagList[i] + ': vs ;' + ogrJson[i] + ':');
+          }
+        }
+      }
+      var keys = Object.keys(ogrJson);
+      for (var i in keys)
+      {
+        if (!tagList[keys[i]])
+        {
+          console.log('  Output tag :' + keys[i] + ': not in input');
+        }
+      }
+      console.log('');
+    }
+
+
+
     }
     else
     {
@@ -381,22 +413,6 @@ function testToOSM(schema,featureCode,tagList,geomList = ['Point','Line','Area']
       console.log('  ## No Ogr tags for ' + featureCode + ' ##');
     }
 
-    // Sanity Check
-    var backToOsm = ogrToOsm(toOgr,schema);
-    var secondJson = makeJson(backToOsm);
-    // console.log(secondJson);
-    console.log('OSM: ' + JSON.stringify(secondJson,Object.keys(secondJson).sort()));
-
-    if (JSON.stringify(osmJson,Object.keys(osmJson).sort()) !== JSON.stringify(secondJson,Object.keys(secondJson).sort()))
-    {
-      console.log('  ## Not Same OSM Tags: ' + ogrJson.F_CODE + ' vs ' + featureCode);
-    }
-
-    if (ogrJson.F_CODE !== featureCode)
-    {
-      console.log('  ## Not Same F_CODE: ' + ogrJson.F_CODE + ' vs ' + featureCode);
-    }
-
     console.log('-----');
   } // End geom
 }; // End testToOSM
@@ -446,11 +462,34 @@ function testOSM(schema,tagList,geomList = ['Point','Line','Area'])
     var backToOsm = ogrToOsm(toOgr,schema);
     var secondJson = makeJson(backToOsm);
     // console.log(secondJson);
+
     console.log('OSM: ' + JSON.stringify(secondJson,Object.keys(secondJson).sort()));
 
     if (JSON.stringify(inputJson,Object.keys(inputJson).sort()) !== JSON.stringify(secondJson,Object.keys(secondJson).sort()))
     {
       console.log('  ## Not Same OSM Tags');
+      for (var i in tagList)
+      {
+        if (!secondJson[i])
+        {
+          console.log('  Input tag :' + i + ': not in output');
+        }
+        else
+        {
+          if (secondJson[i] !== tagList[i])
+          {
+            console.log('  Tag value for :' + i + ': different in output. :' + tagList[i] + ': vs ;' + secondJson[i] + ':');
+          }
+        }
+      }
+      var keys = Object.keys(secondJson);
+      for (var i in keys)
+      {
+        if (!tagList[keys[i]])
+        {
+          console.log('  Output tag :' + keys[i] + ': not in input');
+        }
+      }
     }
 
     var backToOgr = osmToOgr(backToOsm,schema);

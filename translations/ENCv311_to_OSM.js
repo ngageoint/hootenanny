@@ -357,14 +357,14 @@ enc311 = {
     if (enc311.configIn == undefined)
     {
       enc311.configIn = {};
-      enc311.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      enc311.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
       // Get any changes
       enc311.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Debug:
-    if (enc311.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (enc311.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it.
     if (layerName.indexOf('o2s_') > -1)
@@ -376,7 +376,7 @@ enc311 = {
       if (! tags.source) tags.source = 'encv311:' + layerName.toLowerCase();
 
       // Debug:
-      if (enc311.configIn.OgrDebugDumptags == 'true')
+      if (enc311.configIn.OgrDebugDumptags)
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
@@ -453,7 +453,7 @@ enc311 = {
     enc311.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // Debug:
-    if (enc311.configIn.OgrDebugDumptags == 'true')
+    if (enc311.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');

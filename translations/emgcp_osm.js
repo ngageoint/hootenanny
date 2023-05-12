@@ -54,7 +54,7 @@ hoot.require('translate');
 hoot.Settings.set({"ogr.mgcp.extra":"note"});
 
 // Throw errors instead of returning partial translations/o2s_X features
-hoot.Settings.set({"ogr.throw.error":"true"});
+hoot.Settings.set({"ogr.throw.error":true});
 
 emgcp_osm = {
     // This function converts the OSM+ to TDS and then translated the TDS into "English"
@@ -81,7 +81,7 @@ emgcp_osm = {
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-//         if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+//         if ((hoot.Settings.get('ogr.debug.dumptags') === 'true'))
 //         {
 //             var kList = Object.keys(attrs).sort()
 //             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -179,7 +179,7 @@ emgcp_osm = {
         }
 
         // Debug:
-//         if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+//         if ((hoot.Settings.get('ogr.debug.dumptags') === 'true'))
 //         {
 //             var kList = Object.keys(tags).sort()
 //             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');

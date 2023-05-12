@@ -258,7 +258,7 @@ MassNh = {
         }
 
         tags.source = 'MassNh_GIS';
-        if (MassNh.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        if (MassNh.configIn.OgrAddUuid) tags.uuid = createUuid();
 
         // Medians
         if (attrs.MEDIANTYPE && attrs.MEDIANTYPE !== '0') tags.median = 'yes';
@@ -549,15 +549,15 @@ MassNh = {
         if (MassNh.configIn == undefined)
                 {
                     MassNh.configIn = {};
-                    MassNh.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-                    MassNh.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+                    MassNh.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
+                    MassNh.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
 
                     // Get any changes
                     MassNh.toChange = hoot.Settings.get("schema.translation.override");
                 }
 
         // Debug:
-        if (MassNh.configIn.OgrDebugDumptags == 'true')
+        if (MassNh.configIn.OgrDebugDumptags)
         {
             print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -599,7 +599,7 @@ MassNh = {
         translate.overrideValues(tags,MassNh.toChange);
 
         // Debug:
-        if (MassNh.configIn.OgrDebugDumptags == 'true')
+        if (MassNh.configIn.OgrDebugDumptags)
         {
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');

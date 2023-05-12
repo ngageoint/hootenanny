@@ -67,7 +67,7 @@ eggdm30_osm = {
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-//         if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+//         if (hoot.Settings.get('ogr.debug.dumptags'))
 //         {
 //             var kList = Object.keys(attrs).sort()
 //             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -153,7 +153,7 @@ eggdm30_osm = {
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-//         if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+//         if (hoot.Settings.get('ogr.debug.dumptags'))
 //         {
 //             var kList = Object.keys(tags).sort()
 //             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');

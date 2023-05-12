@@ -60,16 +60,16 @@ function getRawDbSchema()
 function initialize()
 {
   // Turn off the TDS structure so we just get the raw feature
-  hoot.Settings.set({'writer.thematic.structure':'false'});
+  hoot.Settings.set({'writer.thematic.structure':false});
 
   // Turn off the tds extra function
   hoot.Settings.set({'ogr.note.extra':'none'});
 
   // Turn off the ESRI FCSUBTYPE
-  hoot.Settings.set({'ogr.esri.fcsubtype':'false'});
+  hoot.Settings.set({'ogr.esri.fcsubtype':false});
 
   // Throw errors instead of returning partial translations/o2s_X features
-  hoot.Settings.set({'ogr.throw.error':'true'});
+  hoot.Settings.set({'ogr.throw.error':true});
 
   // Set the schema type for the export
   hoot.Settings.set({'map.writer.schema':'GGDMv30'});

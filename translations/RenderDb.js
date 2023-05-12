@@ -109,7 +109,7 @@ function initialize()
 function translateToOsm(attrs, layerName, geometryType)
 {
   // Debug
-  if (renderDb.config.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
+  if (renderDb.config.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
 
   // Translation overrides if set
   if (renderDb.config.toChange) attrs = translate.overrideValues(attrs, renderDb.config.toChange);
@@ -172,7 +172,7 @@ function translateToOsm(attrs, layerName, geometryType)
   // }
 
   // Debug:
-  if (renderDb.config.OgrDebugDumptags == 'true')
+  if (renderDb.config.OgrDebugDumptags)
   {
     translate.debugOutput(attrs,layerName,geometryType,'','Out tags: ');
     print('');
@@ -186,7 +186,7 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-  if (renderDb.config.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+  if (renderDb.config.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
   // Translation overrides if set
   if (renderDb.config.toChange) tags = translate.overrideValues(tags, renderDb.config.toChange);
@@ -296,7 +296,7 @@ function translateToOgr(tags, elementType, geometryType)
   } // End shp && tagLength
 
   // Debug:
-  if (renderDb.config.OgrDebugDumptags == 'true')
+  if (renderDb.config.OgrDebugDumptags)
   {
     translate.debugOutput(tags,'',geometryType,elementType,'Out attrs: ');
     print('');

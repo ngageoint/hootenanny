@@ -40,13 +40,13 @@ transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 hoot.Log.setLogLevel("warn");
 
 // Skip the TransportationGroundCrv type layers
-hoot.Settings.set({"writer.thematic.structure":"true"});
+hoot.Settings.set({"writer.thematic.structure":false});
 
 // LOTS of debug output
-// hoot.Settings.set({"ogr.debug.dumptags":"true"});
+// hoot.Settings.set({"ogr.debug.dumptags":true});
 
 // Set this to false to  keep  default/usless values
-hoot.Settings.set({"reader.drop.defaults":"true"});
+hoot.Settings.set({"reader.drop.defaults":true});
 
 // ####################################################################################
 
@@ -60,7 +60,16 @@ hoot.Settings.set({"reader.drop.defaults":"true"});
 
 
 console.log('Just the F_CODE');
-transTest.testTranslated('TDSv71','AL013');
+transTest.testTranslated('TDSv71','AL170');
+
+console.log('\nOSM to TDSv71');
+transTest.testOSM('TDSv71',{'highway':'pedestrian'},['Line','Area']);
+
+
+console.log('\nOSM to TDSv71 - Plaza');
+transTest.testOSM('TDSv71',{'landuse':'plaza'},['Line','Area']);
+
+process.exit();
 
 console.log('\nF_CODE with attributes');
 transTest.testTranslated('MGCP','AQ040',{'FUN':'6','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});

@@ -83,7 +83,7 @@ tds71 = {
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds71.rawSchema
-    if (hoot.Settings.get('writer.thematic.structure') == 'false')
+    if (!(hoot.Settings.get('writer.thematic.structure') === 'true'))
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       tds71.layerNameLookup = translate.makeLayerNameLookup(tds71.rawSchema);
@@ -120,7 +120,7 @@ tds71 = {
     // print('##########');
 
     // Until asked to change this, we are only supporting exporting to a "clean" structure with thematic layers.
-    if (hoot.Settings.get('ogr.clean.export') !== 'false')
+    if ((hoot.Settings.get('ogr.clean.export') === 'true'))
     {
       tds71.thematicSchema.forEach( function(item) {
           newColumns = [];
@@ -169,7 +169,7 @@ tds71 = {
     }
     else
     {
-      if (hoot.Settings.get('ogr.clean.export') !== 'false')
+      if ((hoot.Settings.get('ogr.clean.export') === 'true'))
       {
         // Just add O2S features
         tds71.thematicSchema = translate.addSingleO2sFeature(tds71.thematicSchema);
@@ -177,7 +177,7 @@ tds71 = {
       else
       {
         // Add O2S and OSMTAGS
-      tds71.thematicSchema = translate.addSingleO2sFeature(tds71.thematicSchema);
+        tds71.thematicSchema = translate.addSingleO2sFeature(tds71.thematicSchema);
       }
     }
 
@@ -575,7 +575,7 @@ tds71 = {
     if (!attrs.image_id || attrs.image_id == 'No Information') delete attrs.img_mosaic;
 
     // Switch to keep all of the default values. Mainly for the schema switcher
-    if (tds71.configIn.ReaderDropDefaults == 'true')
+    if (tds71.configIn.ReaderDropDefaults)
     {
       tds71.dropDefaults(attrs);
     }
@@ -2362,7 +2362,7 @@ tds71 = {
     // }
     // else
     // {
-    //   if (tds71.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
+    //   if (tds71.configOut.OgrAddUuid) attrs.UFI = createUuid().replace('{','').replace('}','');
     // }
 
     // Add Weather Restrictions to transportation features
@@ -2749,20 +2749,20 @@ tds71 = {
     if (tds71.configIn == undefined)
     {
       tds71.configIn = {};
-      tds71.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      tds71.configIn.OgrCompareOutput = hoot.Settings.get('ogr.compare.output')
-      tds71.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-      tds71.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      tds71.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      tds71.configIn.OgrCompareOutput = (hoot.Settings.get('ogr.compare.output') === 'true');
+      tds71.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+      tds71.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') ==='true');
 
       // Get any changes
       tds71.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Moved this so it gets checked for each call
-    tds71.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
+    tds71.configIn.ReaderDropDefaults = (hoot.Settings.get('reader.drop.defaults') === 'true');
 
     // Debug:
-    if (tds71.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (tds71.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it.
     if (~layerName.indexOf('o2s_'))
@@ -2773,11 +2773,11 @@ tds71 = {
       delete tags.o2s_reason;
 
       // Add some metadata
-      if (!tags.uuid && tds71.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (!tags.uuid && tds71.configIn.OgrAddUuid) tags.uuid = createUuid();
       if (!tags.source) tags.source = 'tdsv71:' + layerName.toLowerCase();
 
       // Debug:
-      if (tds71.configIn.OgrDebugDumptags == 'true')
+      if (tds71.configIn.OgrDebugDumptags)
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
@@ -2834,13 +2834,13 @@ tds71 = {
     }
     else
     {
-      if (tds71.configIn.OgrAddUuid == 'true') attrs[uuidField] = createUuid();
+      if (tds71.configIn.OgrAddUuid) attrs[uuidField] = createUuid();
     }
 
-    if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
+    if (tds71.configIn.OgrCompareOutput) translate.compareOutput(attrs,uuidField,layerName,'toOSM');
 
     // Debug:
-    // if (tds71.configIn.OgrDebugDumptags == 'true')
+    // if (tds71.configIn.OgrDebugDumptags)
     // {
     //   translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
     //   translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
@@ -2892,16 +2892,16 @@ tds71 = {
     tds71.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // If we are reading from an OGR source, drop all of the output tags with default values
-    if (tds71.configIn.ReaderDropDefaults == 'true')
+    if (tds71.configIn.ReaderDropDefaults)
     {
       tds71.dropDefaults(tags);
     }
 
     // Debug: Add the FCODE to the tags
-    if (tds71.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+    if (tds71.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
     // Debug:
-    if (tds71.configIn.OgrDebugDumptags == 'true')
+    if (tds71.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
@@ -2911,7 +2911,7 @@ tds71 = {
     // Override tag values if appropriate
     translate.overrideValues(tags,tds71.toChange);
 
-    if (tds71.configIn.OgrCompareOutput == 'true')
+    if (tds71.configIn.OgrCompareOutput)
     {
       var uuidField = 'uuid';
       if (!tags.uuid && tags['source:ref']) uuidField = 'source:ref'
@@ -2939,15 +2939,16 @@ tds71 = {
     if (tds71.configOut == undefined)
     {
       tds71.configOut = {};
-      tds71.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      tds71.configOut.OgrCleanExport = hoot.Settings.get('ogr.clean.export')
-      tds71.configOut.OgrCompareOutput = hoot.Settings.get('ogr.compare.output')
-      tds71.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds71.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
+      tds71.configOut.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      tds71.configOut.OgrCleanExport = (hoot.Settings.get('ogr.clean.export') === 'true');
+      tds71.configOut.OgrCompareOutput = (hoot.Settings.get('ogr.compare.output') === 'true');
+      tds71.configOut.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
+      tds71.configOut.OgrEsriFcsubtype = (hoot.Settings.get('ogr.esri.fcsubtype') === 'true');
+      tds71.configOut.OgrThematicStructure = (hoot.Settings.get('writer.thematic.structure') === 'true');
+      tds71.configOut.OgrThrowError = (hoot.Settings.get('ogr.throw.error') === 'true');
+
       tds71.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       tds71.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      tds71.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
-      tds71.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       tds71.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
@@ -2962,7 +2963,7 @@ tds71 = {
     }
 
       // Debug
-    if (tds71.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
+    if (tds71.configOut.OgrDebugDumptags) translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // The Nuke Option: If we have a relation, drop the feature and carry on
     if (tags['building:part']) return null;
@@ -2982,7 +2983,6 @@ tds71 = {
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
       tds71.fcodeLookupOut = translate.createBackwardsLookup(tds71.rules.fcodeOne2oneOut);
-
     }
 
     if (tds71.lookup == undefined)
@@ -3021,11 +3021,11 @@ tds71 = {
       }
       else
       {
-        if (tds71.configOut.OgrAddUuid == 'true') tags.uuid = createUuid().replace('{','').replace('}','');
+        if (tds71.configOut.OgrAddUuid) tags.uuid = createUuid().replace('{','').replace('}','');
       }
     }
 
-    if (tds71.configOut.OgrCompareOutput == 'true') translate.compareOutput(tags,uuidField,'inputOSM','toOgr');
+    if (tds71.configOut.OgrCompareOutput) translate.compareOutput(tags,uuidField,'inputOSM','toOgr');
 
     // Override values if appropriate
     translate.overrideValues(tags,tds71.toChange);
@@ -3085,6 +3085,7 @@ tds71 = {
       {
         // Make sure that we have a valid FCODE
         var gFcode = gType + returnData[i]['attrs']['F_CODE'];
+
         if (tds71.attrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
@@ -3113,7 +3114,7 @@ tds71 = {
           }
 
           // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-          if (tds71.configOut.OgrThematicStructure == 'true')
+          if (tds71.configOut.OgrThematicStructure)
           {
             returnData[i]['tableName'] = tds71.thematicGroupList[gFcode];
             tds71.validateThematicAttrs(gFcode, returnData[i]['attrs']);
@@ -3163,7 +3164,7 @@ tds71 = {
     else // We don't have a feature
     {
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (tds71.configOut.OgrThrowError == 'true')
+      if (tds71.configOut.OgrThrowError)
       {
         if (! attrs.F_CODE)
         {
@@ -3192,7 +3193,7 @@ tds71 = {
 
       // Debug:
       // Dump out what attributes we have converted before they get wiped out
-      if (tds71.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+      if (tds71.configOut.OgrDebugDumptags) translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
       // We want to keep the hoot:id if present
       if (tags['hoot:id'])
@@ -3201,7 +3202,7 @@ tds71 = {
         delete tags['hoot:id'];
       }
 
-      if (tds71.configOut.OgrCompareOutput == 'true') translate.compareOutput(tags,'uuid',tableName,'toOgr');
+      if (tds71.configOut.OgrCompareOutput) translate.compareOutput(tags,'uuid',tableName,'toOgr');
 
       // Convert all of the Tags to a string so we can jam it into an attribute
       // var str = JSON.stringify(tags);
@@ -3232,7 +3233,7 @@ tds71 = {
     } // End we don't have a feature
 
     // Debug:
-    if (tds71.configOut.OgrDebugDumptags == 'true')
+    if (tds71.configOut.OgrDebugDumptags)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
@@ -3243,7 +3244,7 @@ tds71 = {
     }
 
     // Debug:
-    if (tds71.configOut.OgrCompareOutput == 'true')
+    if (tds71.configOut.OgrCompareOutput)
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {

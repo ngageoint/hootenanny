@@ -62,10 +62,10 @@ function initialize()
   hoot.Settings.set({'ogr.mgcp.extra':'note'});
 
   // Throw errors instead of returning partial translations/o2s_X features
-  hoot.Settings.set({'ogr.throw.error':'true'});
+  hoot.Settings.set({'ogr.throw.error':true});
 
   // Turn off the ESRI FCSUBTYPE
-  hoot.Settings.set({'ogr.tds.add.fcsubtype':'false'});
+  hoot.Settings.set({'ogr.tds.add.fcsubtype':false});
 
   // Set the schema type for the export
   hoot.Settings.set({'map.writer.schema':'MGCP'});

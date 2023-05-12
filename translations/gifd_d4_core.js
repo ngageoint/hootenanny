@@ -226,7 +226,7 @@ gifd = {
     }
     else
     {
-      if (gifd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (gifd.configIn.OgrAddUuid) tags.uuid = createUuid();
     }
 
 
@@ -480,16 +480,16 @@ gifd = {
     if (gifd.configIn == undefined)
     {
       gifd.configIn = {};
-      gifd.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-      gifd.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-      gifd.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      gifd.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+      gifd.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+      gifd.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
       // Get any changes
       gifd.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Debug:
-    if (gifd.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+    if (gifd.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // Set up the fcode translation rules. We need this due to clashes between the one2one and
     // the fcode one2one rules
@@ -556,13 +556,13 @@ gifd = {
     for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
     // Debug: Add the FCODE to the tags
-    if (gifd.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+    if (gifd.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
     // Override tag values if appropriate
     translate.overrideValues(tags,gifd.toChange);
 
     // Debug:
-    if (gifd.configIn.OgrDebugDumptags == 'true')
+    if (gifd.configIn.OgrDebugDumptags)
     {
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
       print('');

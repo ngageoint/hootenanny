@@ -35,7 +35,7 @@ hoot.require('eggdm30_osm');
 function initialize()
 {
   // Turn off the TDS structure so we just get the raw feature
-  hoot.Settings.set({'writer.thematic.structure':'false'});
+  hoot.Settings.set({'writer.thematic.structure':false});
 }
 
 

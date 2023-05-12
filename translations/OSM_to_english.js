@@ -46,13 +46,13 @@ global.toEnglish = function(tags, geometryType)
   if (typeof translate === 'undefined') hoot.require('translate');
 
   // Turn off the TDS structure so we just get the raw feature
-  hoot.Settings.set({'ogr.tds.structure':'false'});
+  hoot.Settings.set({'ogr.tds.structure':false});
 
   // Turn on partial translations
-  hoot.Settings.set({'ogr.partial.translate':'true'});
+  hoot.Settings.set({'ogr.partial.translate':true});
 
   // Turn off the tds extra function
-  hoot.Settings.set({'ogr.tds.extra':'false'});
+  hoot.Settings.set({'ogr.tds.extra':false});
 
 
   return etds61.toEnglish(tags, '', geometryType);

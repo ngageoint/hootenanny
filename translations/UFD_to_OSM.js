@@ -3460,7 +3460,7 @@ ufd = {
     }
     else
     {
-      if (ufd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (ufd.configIn.OgrAddUuid) tags.uuid = createUuid();
     }
 
     // If we have a House of Worship type then tag it
@@ -3762,9 +3762,9 @@ function initialize()
   if (ufd.configIn == undefined)
   {
     ufd.configIn = {};
-    ufd.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
-    ufd.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
-    ufd.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+    ufd.configIn.OgrAddUuid = (hoot.Settings.get('ogr.add.uuid') === 'true');
+    ufd.configIn.OgrDebugAddfcode = (hoot.Settings.get('ogr.debug.addfcode') === 'true');
+    ufd.configIn.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
 
     // Get any changes
     ufd.toChange = hoot.Settings.get('schema.translation.override');
@@ -3797,7 +3797,7 @@ function translateToOsm(attrs, layerName, geometryType)
   tags = {};
 
   // Debug:
-  if (ufd.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+  if (ufd.configIn.OgrDebugDumptags) translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
   // pre processing
   ufd.applyToOsmPreProcessing(attrs, layerName, geometryType);
@@ -3845,10 +3845,10 @@ function translateToOsm(attrs, layerName, geometryType)
   ufd.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
   // Debug: Add the FCODE to the tags
-  if (ufd.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+  if (ufd.configIn.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
   // Debug:
-  if (ufd.configIn.OgrDebugDumptags == 'true')
+  if (ufd.configIn.OgrDebugDumptags)
   {
     translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
 
