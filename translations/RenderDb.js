@@ -97,7 +97,7 @@ function initialize()
 
     // Grab the config variables once so we don't have to keep calling into the core
     _global.renderDb.config = {};
-    _global.renderDb.config.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+    _global.renderDb.config.OgrDebugDumptags = (hoot.Settings.get('ogr.debug.dumptags') === 'true');
     _global.renderDb.config.outputFormat = hoot.Settings.get('ogr.output.format');
     _global.renderDb.config.toChange = hoot.Settings.get("schema.translation.override");
   } // End !_global
