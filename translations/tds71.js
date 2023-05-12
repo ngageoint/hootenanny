@@ -83,7 +83,7 @@ tds71 = {
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds71.rawSchema
-    if (!(hoot.Settings.get('writer.thematic.structure') === 'true'))
+    if ((hoot.Settings.get('writer.thematic.structure') === 'false'))
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       tds71.layerNameLookup = translate.makeLayerNameLookup(tds71.rawSchema);
@@ -111,7 +111,6 @@ tds71 = {
 
       return tds71.rawSchema;
     }
-
 
   if (tds71.thematicSchema == undefined) hoot.require('tds71_thematic_schema');
     // Debug:
