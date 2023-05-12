@@ -143,6 +143,8 @@ private:
 
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeMetadata(const Element& element);
+
+  QString _validateJsonString(const QString& value) const;
 };
 
 }

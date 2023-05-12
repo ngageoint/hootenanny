@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59093588103891" minlon="-104.8070473857991" maxlat="39.59441940337849" maxlon="-104.8037828099172"/>
+    <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942139571476162" lon="-104.8043781711758697"/>
+    <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5944194033784882" lon="-104.8041559931055815"/>
+    <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942459154902124" lon="-104.8039041912925882"/>
+    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5940359032546780" lon="-104.8041411812342432"/>
+    <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5938099111160895" lon="-104.8043722464273344"/>
+    <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5938121938686507" lon="-104.8041234069886087"/>
+    <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5935793527200275" lon="-104.8041352564856936"/>
+    <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5935816354801773" lon="-104.8043811335501374"/>
+    <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937642560490914" lon="-104.8050032321469587"/>
+    <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937665388031519" lon="-104.8049143609188434"/>
+    <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937026216609027" lon="-104.8049113985445473"/>
+    <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937003389047391" lon="-104.8048343768135453"/>
+    <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5934971733042431" lon="-104.8048403015620806"/>
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5934971733042431" lon="-104.8050061945212263"/>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-70"/>
+        <nd ref="-69"/>
+        <nd ref="-68"/>
+        <nd ref="-67"/>
+        <nd ref="-70"/>
+        <tag k="REF1" v="Cheddar's"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Cheddar's Casual Cafe"/>
+        <tag k="source" v="{survey, Bing 7/02/2013=1}"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-66"/>
+        <nd ref="-65"/>
+        <nd ref="-64"/>
+        <nd ref="-63"/>
+        <nd ref="-66"/>
+        <tag k="REF1" v="Biondi"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="[海とcafe] kashima"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-62"/>
+        <nd ref="-61"/>
+        <nd ref="-60"/>
+        <nd ref="-59"/>
+        <nd ref="-58"/>
+        <nd ref="-57"/>
+        <nd ref="-62"/>
+        <tag k="REF1" v="Freddy's"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Freddy's"/>
+        <tag k="bad:name" v="["/>
+    </way>
+</osm>
