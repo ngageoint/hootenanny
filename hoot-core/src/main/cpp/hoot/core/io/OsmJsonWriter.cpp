@@ -453,12 +453,13 @@ QString OsmJsonWriter::_validateJsonString(const QString &value) const
   {
     try
     {
+      //  Attempt to read and parse the JSON
       pt::read_json(ss, t);
       isJson = true;
     }
-    catch (const std::exception& e)
+    catch (const std::exception&)
     {
-      //  Do nothing here since isJson is already false
+      isJson = false;
     }
   }
   //  JSON data can be returned, otherwise it is book-ended with quotes
