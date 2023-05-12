@@ -1137,7 +1137,7 @@ tds71 = {
       if (tags.natural && (tags.natural == tags.terrain_surface))
       {
         delete tags.geological;  // The natural tag is the better one to use
-        delete tags.terrain_surface; // Implied value: natural=sand -> tarrain_surface=sand
+        delete tags.terrain_surface; // Implied value: natural=sand -> terrain_surface=sand
       }
 
       if (tags.terrain_surface && !tags.surface)
