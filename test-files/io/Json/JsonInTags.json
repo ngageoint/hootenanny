@@ -1,0 +1,19 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-14,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59349717330424,"lon":-104.8050061945212},
+{"type":"node","id":-13,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59349717330424,"lon":-104.8048403015621},
+{"type":"node","id":-12,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59370033890474,"lon":-104.8048343768135},
+{"type":"node","id":-11,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.5937026216609,"lon":-104.8049113985445},
+{"type":"node","id":-10,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59376653880315,"lon":-104.8049143609188},
+{"type":"node","id":-9,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59376425604909,"lon":-104.805003232147},
+{"type":"node","id":-8,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59358163548018,"lon":-104.8043811335501},
+{"type":"node","id":-7,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59357935272003,"lon":-104.8041352564857},
+{"type":"node","id":-6,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59381219386865,"lon":-104.8041234069886},
+{"type":"node","id":-5,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59380991111609,"lon":-104.8043722464273},
+{"type":"node","id":-4,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59403590325468,"lon":-104.8041411812342},
+{"type":"node","id":-3,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59424591549021,"lon":-104.8039041912926},
+{"type":"node","id":-2,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59441940337849,"lon":-104.8041559931056},
+{"type":"node","id":-1,"timestamp":"1970-01-01T00:00:00Z","version":1,"lat":39.59421395714762,"lon":-104.8043781711759},
+{"type":"way","id":-3,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-9,-10,-11,-12,-13,-14,-9],"tags":{"REF1":"Freddy's","bad:name":"[","building":"yes","name":"Freddy's"}},
+{"type":"way","id":-2,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-5,-6,-7,-8,-5],"tags":{"REF1":"Biondi","building":"yes","name":"[海とcafe] kashima"}},
+{"type":"way","id":-1,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-1,-2,-3,-4,-1],"tags":{"REF1":"Cheddar's","amenity":"restaurant","building":"yes","name":"Cheddar's Casual Cafe","source":"{survey, Bing 7/02/2013=1}"}}]
+}
