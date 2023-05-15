@@ -297,10 +297,19 @@ void ParallelBoundedApiReader::_process()
           QString error;
           if (_isQueryError(result, error))
           {
-            //  Log the error
-            LOG_DEBUG(error);
-            //  Split the job and retry
-            _splitJob(job);
+            if (error.contains("Cannot allocate memory"))
+            {
+              std::lock_guard<std::mutex> error_lock(_errorMutex);
+              LOG_ERROR("API Failure: " << error);
+              _fatalError = true;
+            }
+            else
+            {
+              //  Log the error
+              LOG_DEBUG(error);
+              //  Split the job and retry
+              _splitJob(job);
+            }
           }
           else
           {
