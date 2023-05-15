@@ -875,7 +875,7 @@ tds70 = {
         ['t.cable =="yes" && t["cable:type"] == "transmission"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
-        ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
+        ['t.terrain_surface','t.surface = t.terrain_surface; delete t.terrain_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
         ["t['generator:source']","t.power = 'generator'"],
@@ -1153,6 +1153,20 @@ tds70 = {
       {
         if (tags.natural == 'water') delete tags.natural;
         if (tags.water == 'river') delete tags.water;
+      }
+      break;
+
+    case 'DA010': // Soil Surface Region
+      if (tags.natural && (tags.natural == tags.terrain_surface))
+      {
+        delete tags.geological;  // The natural tag is the better one to use
+        delete tags.terrain_surface; // Implied value: natural=sand -> terrain_surface=sand
+      }
+
+      if (tags.terrain_surface && !tags.surface)
+      {
+        tags.surface = tags.terrain_surface;
+        delete tags.terrain_surface;
       }
       break;
 
@@ -1515,7 +1529,7 @@ tds70 = {
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
         ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
-        ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
+        ['t.natural == "desert" && t.surface','t.terrain_surface = t.surface; delete t.surface'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
@@ -2074,6 +2088,49 @@ tds70 = {
           break;
         }
       }
+    }
+
+    // Soil Surface Regions
+    if (!attrs.F_CODE)
+    {
+      // if (tags.surface)
+      // {
+      //   attrs.F_CODE = 'DA010'; // Soil Surface Region
+      //   if (!tags.material)
+      //   {
+      //     tags.material = tags.surface;
+      //     delete tags.surface;
+      //   }
+      // }
+
+      switch (tags.natural)
+      {
+        case 'mud':
+        case 'sand':
+        case 'bare_rock':
+        case 'rock':
+        case 'stone':
+        case 'scree':
+        case 'shingle':
+          attrs.F_CODE = 'DA010'; // Soil Surface Region
+          if (tags.surface)
+          {
+            tags.terrain_surface = tags.surface;
+            delete tags.surface;
+          }
+          else
+          {
+            // Set the TSM type
+            tags.terrain_surface = tags.natural;
+          }
+          break;
+      }
+    } // End ! F_CODE
+
+    // EE030 Desert is mapped to DA010 Soil Surface Area
+    if (tags.natural == 'desert')
+    {
+      if (!attrs.SWC) attrs.SWC = '1' // Normally Dry
     }
 
     // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly

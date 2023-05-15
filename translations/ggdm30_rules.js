@@ -4617,21 +4617,21 @@ ggdm30.rules = {
 
     // TSM - Terrain Surface Material
     // ['TSM','-999999',undefined,undefined], // No Information
-    ['TSM','1','desert_surface','asphalt'], // Asphalt
-    ['TSM','2','desert_surface','bedrock'], // Bedrock
-    ['TSM','3','desert_surface','boulders'], // Boulders
-    ['TSM','4','desert_surface','concrete'], // Concrete
-    ['TSM','5','desert_surface','evaporite'], // Evaporite
-    ['TSM','6','desert_surface','frozen_water'], // Frozen Water
-    ['TSM','7','desert_surface','gravel'], // Gravel
-    ['TSM','8','desert_surface','lava_flow'], // Lava Flow
-    ['TSM','9','desert_surface','loess'], // Loess
-    ['TSM','10','desert_surface','mud'], // Mud
-    ['TSM','11','desert_surface','paved'], // Paved
-    ['TSM','12','desert_surface','rock'], // Rock
-    ['TSM','13','desert_surface','sand'], // Sand
-    ['TSM','14','desert_surface','soil'], // Soil
-    ['TSM','999','desert_surface','other'], // Other
+    ['TSM','1','terrain_surface','asphalt'], // Asphalt
+    ['TSM','2','terrain_surface','bedrock'], // Bedrock
+    ['TSM','3','terrain_surface','boulders'], // Boulders
+    ['TSM','4','terrain_surface','concrete'], // Concrete
+    ['TSM','5','terrain_surface','evaporite'], // Evaporite
+    ['TSM','6','terrain_surface','frozen_water'], // Frozen Water
+    ['TSM','7','terrain_surface','gravel'], // Gravel
+    ['TSM','8','terrain_surface','lava_flow'], // Lava Flow
+    ['TSM','9','terrain_surface','loess'], // Loess
+    ['TSM','10','terrain_surface','mud'], // Mud
+    ['TSM','11','terrain_surface','paved'], // Paved
+    ['TSM','12','terrain_surface','rock'], // Rock
+    ['TSM','13','terrain_surface','sand'], // Sand
+    ['TSM','14','terrain_surface','soil'], // Soil
+    ['TSM','999','terrain_surface','other'], // Other
 
     // TSM2 - Terrain Surface Material [2]
     // TSM3 - Terrain Surface Material [3]
@@ -6436,6 +6436,7 @@ ggdm30.rules = {
     'BRF':'BC034_BRF',
     'BRF2':'BC034_BRF2',
     'COL':'BC040_COL',
+    'desert_surface':'terrain_surface',
     'DKC':'ZHDP_DKC',
     'DKC2':'ZHDP_DKC2',
     'DKC3':'ZHDP_DKC3',

@@ -927,7 +927,6 @@ mgcp = {
 
     case 'AK040': // Athletic Field, Sports Ground
     case 'BA050': // Beach
-    case 'DA010': // Soil Surface Region
     case 'DB070': // Cut
       if (tags.material && !tags.surface)
       {
@@ -1104,6 +1103,20 @@ mgcp = {
       {
         if (tags.natural == 'water') delete tags.natural;
         if (tags.water == 'river') delete tags.water;
+      }
+      break;
+
+    case 'DA010': // Soil Surface Region
+      if (tags.natural && (tags.natural == tags.material))
+      {
+        delete tags.geological;  // The natural tag is the better one to use
+        delete tags.material; // Implied value: natural=sand -> material=sand
+      }
+
+      if (tags.material && !tags.surface)
+      {
+        tags.surface = tags.material;
+        delete tags.material;
       }
       break;
 
@@ -1703,7 +1716,6 @@ mgcp = {
       delete tags.natural;
     }
 
-
     // Keep looking for an FCODE
     // This uses the fcodeLookup tables that are defined earlier
     // var fcodeLookup = translate.createLookup(fcodeList);
@@ -1761,51 +1773,36 @@ mgcp = {
     // Soil Surface Regions
     if (!attrs.F_CODE)
     {
-      if (tags.surface)
-      {
-        attrs.F_CODE = 'DA010'; // Soil Surface Region
-        if (!tags.material)
-        {
-          tags.material = tags.surface;
-          delete tags.surface;
-        }
-      }
+      // if (tags.surface)
+      // {
+      //   attrs.F_CODE = 'DA010'; // Soil Surface Region
+      //   if (!tags.material)
+      //   {
+      //     tags.material = tags.surface;
+      //     delete tags.surface;
+      //   }
+      // }
 
       switch (tags.natural)
       {
         case 'mud':
-          attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
-          break;
-
         case 'sand':
-          attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
-         break;
-
         case 'bare_rock':
-          attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
-          break;
-
         case 'rock':
-          attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
-          break;
-
         case 'stone':
-          attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
-          break;
-
         case 'scree':
-          attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
-          break;
-
         case 'shingle':
           attrs.F_CODE = 'DA010'; // Soil Surface Region
-          tags.material = tags.surface;
+          if (tags.surface)
+          {
+            tags.material = tags.surface;
+            delete tags.surface;
+          }
+          else
+          {
+            // Set the SMC type
+            tags.material = tags.natural;
+          }
           break;
       }
     } // End ! F_CODE
