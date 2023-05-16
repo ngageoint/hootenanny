@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
@@ -130,6 +130,10 @@ private:
    * Sets I/O options for conversions from non-OGR formats
    */
   void _handleNonOgrOutputTranslationOpts();
+  /**
+   * Sets I/O options for conversions to GeoJson format
+   */
+  void _handleGeoJsonOutputTranslationOpts();
 
   /**
    * Add option operations to the options if they aren't already set
