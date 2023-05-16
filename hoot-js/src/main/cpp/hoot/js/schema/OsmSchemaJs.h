@@ -76,6 +76,7 @@ private:
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * See description in rules/HootLib.js isSpecificallyConflatable method
