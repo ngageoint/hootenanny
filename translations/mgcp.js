@@ -555,6 +555,19 @@ mgcp = {
       delete attrs.SUC;
     }
 
+    // Aditional features AFA002 and AFA003 have different values for COD
+    if (attrs.F_CODE == 'FA002' || attrs.F_CODE == 'FA003')
+    {
+      if (attrs.COD == '1')
+      {
+        attrs.COD = '1001';
+      }
+      else if (attrs.COD == '2')
+      {
+        attrs.COD = '1000';
+      }
+    }
+
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup
@@ -2200,6 +2213,22 @@ mgcp = {
       case 'ED030': // Mangrove Swamp
         if (! attrs.TID) attrs.TID = '1001'; // Tidal
         break;
+
+      case 'FA002': //
+      case 'FA003': // Geopolitical Entity
+          // Why ????????
+          if (attrs.COD == '1001')
+          {
+            attrs.COD = '1';
+          }
+          else if (attrs.COD == '1000')
+          {
+            attrs.COD = '2';
+          }
+        }
+        break;
+
+
 
       case 'AH050': // Fortification
         if (tags['bunker_type'] == 'munitions')
