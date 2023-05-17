@@ -3032,10 +3032,34 @@ var schema = [
      {name:"Limits and Information Unknown",value:"2"}
     ]
    },
-   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""}
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"GEC",desc:"Geopolitical Entity Type",optional:"R",type:"enumeration",defValue:"7",
+    enumerations:[
+     {name:"Area of No Sovereignty",value:"5"},
+     {name:"Demilitarized Zone (DMZ)",value:"7"},
+     {name:"Zone of Occupation",value:"8"},
+     {name:"Leased Area",value:"9"},
+     {name:"Political Entity",value:"10"},
+     {name:"Dependent Political Entity",value:"11"},
+     {name:"Freely Associated State",value:"12"},
+     {name:"Independent Political Entity",value:"13"},
+     {name:"Semi-independent Political Entity",value:"14"},
+     {name:"Economic Region",value:"15"},
+     {name:"Territory",value:"16"},
+     {name:"Buffer Zone",value:"17"}
+    ]
+   },
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AFA003",fcode:"FA002",desc:"Geopolitical Entity",geom:"Area",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndA",
+ {name:"AFA003",fcode:"FA003",desc:"Administrative Division",geom:"Area",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndA",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"BAL",desc:"BGN Administrative Level",optional:"R",type:"enumeration",defValue:"1",
@@ -3048,22 +3072,22 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
-   {name:"THC",desc:"Thematic Classification",optional:"R",type:"enumeration",defValue:"1",
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"COD",desc:"Delineation Known",optional:"R",type:"enumeration",defValue:"1",
     enumerations:[
-     {name:"Aeronautical",value:"1"},
-     {name:"Vegetation",value:"2"},
-     {name:"Utilities",value:"3"},
-     {name:"Population",value:"4"},
-     {name:"Physiography",value:"5"},
-     {name:"Industry",value:"6"},
-     {name:"Ground Transportation",value:"7"},
-     {name:"Elevation",value:"8"},
-     {name:"Boundaries",value:"9"},
-     {name:"Waterbodies",value:"10"},
-     {name:"Maritime",value:"11"}
+     {name:"Limits and Information Known",value:"1"},
+     {name:"Limits and Information Unknown",value:"2"}
     ]
-   }
+   },
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
   ]
  },
  {name:"AFA015",fcode:"FA015",desc:"Firing Range",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A site designated for the purpose of discharging firearms or detonating munitions.",
@@ -5177,12 +5201,71 @@ var schema = [
     ]
    },
    {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"CFT",desc:"Boundary Determination Method",optional:"R",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"Unknown",value:"0"},
+     {name:"Elevation contour",value:"7"},
+     {name:"Drainage Limit",value:"8"},
+     {name:"Ridgeline",value:"10"},
+     {name:"Drainage Line",value:"11"},
+     {name:"Left Bank",value:"12"},
+     {name:"Right Bank",value:"13"},
+     {name:"Shoreline",value:"14"},
+     {name:"Lake Transec",value:"15"},
+     {name:"Meridian",value:"16"},
+     {name:"Median",value:"17"},
+     {name:"Parallel",value:"18"},
+     {name:"Straight Segmented",value:"19"},
+     {name:"Straight",value:"20"},
+     {name:"Anthropogeographic",value:"33"}
+    ]
+   },
    {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"LSP",desc:"Geopolitical Line Type",optional:"R",type:"enumeration",defValue:"1",
+    enumerations:[
+     {name:"Generic Administrative Boundary",value:"1"},
+     {name:"Provisional Administrative Line",value:"2"},
+     {name:"Armistice Line",value:"3"},
+     {name:"Line of Control",value:"4"},
+     {name:"Demarcation Line",value:"5"},
+     {name:"Line of Convenience",value:"6"},
+     {name:"Cease Fire Line",value:"7"},
+     {name:"Convention Line",value:"8"},
+     {name:"Claim Line",value:"9"},
+     {name:"Intercolonial Line",value:"10"},
+     {name:"Interentity Line",value:"11"},
+     {name:"Line of Adjacency",value:"12"},
+     {name:"Line of Withdrawal",value:"13"},
+     {name:"Military Disengagement Line",value:"14"},
+     {name:"Treaty Line",value:"15"},
+     {name:"UNCLOS Claim Boundary",value:"16"},
+     {name:"Generic International Boundary",value:"17"},
+     {name:"Other",value:"999"}
+    ]
+   },
+   {name:"NM3",desc:"Boundary First Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NM4",desc:"Boundary Second Name",optional:"R",type:"String",defValue:"UNK"},
    {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
    {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
    {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
    {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
-   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"},
+   {name:"USE_",desc:"Usage",optional:"R",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"Unknown",value:"0"},
+     {name:"Tribal",value:"7"},
+     {name:"City",value:"16"},
+     {name:"International",value:"23"},
+     {name:"Primary/1st Order",value:"26"},
+     {name:"Secondary/2nd Order",value:"30"},
+     {name:"Tertiary/3rd Order",value:"31"},
+     {name:"Insular",value:"32"},
+     {name:"Reserve/Reservation",value:"70"},
+     {name:"Forest Preserve",value:"141"},
+     {name:"Prohibited Area",value:"155"},
+     {name:"Other",value:"999"}
+    ]
+   }
   ]
  },
  {name:"LFA090",fcode:"FA090",desc:"Geophysical Prospecting Grid",geom:"Line",fdname:"MGCP",thematic:"IndL",definition:"A grid established for the collection of geophysical data within an area. ( The grid is typically composed of one or more series of observation points where each series is obtained along a single track and the grid is then assembled from multiple tracks. )",
@@ -7006,7 +7089,15 @@ var schema = [
      {name:"Tidal Water",value:"6"}
     ]
    },
-   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""}
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
   ]
  },
  {name:"PCA035",fcode:"CA035",desc:"Inland Water Elevation",geom:"Point",fcsubtype:"",fdname:"MGCP_Delta",thematic:"ElevP",
@@ -7393,6 +7484,21 @@ var schema = [
    {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
    {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
    {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"THC",desc:"Thematic Classification",optional:"R",type:"enumeration",defValue:"1",
+    enumerations:[
+     {name:"Aeronautical",value:"1"},
+     {name:"Vegetation",value:"2"},
+     {name:"Utilities",value:"3"},
+     {name:"Population",value:"4"},
+     {name:"Physiography",value:"5"},
+     {name:"Industry",value:"6"},
+     {name:"Ground Transportation",value:"7"},
+     {name:"Elevation",value:"8"},
+     {name:"Boundaries",value:"9"},
+     {name:"Waterbodies",value:"10"},
+     {name:"Maritime",value:"11"}
+    ]
+   },
    {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
   ]

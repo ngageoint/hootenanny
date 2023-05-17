@@ -118,6 +118,7 @@ mgcp.thematicSchema = [
    {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
    {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
    {name:"SRT",desc:"Source Type",optional:"R",type:"Integer",defValue:"0"},
+   {name:"THC",desc:"Thematic Classification",optional:"R",type:"Integer",defValue:"1"},
    {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",type:"String",defValue:"UNK",length:"36"}
   ]
@@ -1424,7 +1425,15 @@ mgcp.thematicSchema = [
    {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
    {name:"COD",desc:"Delineation Known",optional:"R",type:"Integer",defValue:"1"},
    {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
-   {name:"THC",desc:"Thematic Classification",optional:"R",type:"Integer",defValue:"1"}
+   {name:"GEC",desc:"Geopolitical Entity Type",optional:"R",type:"Integer",defValue:"7"},
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"Integer",defValue:"0"},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",type:"String",defValue:"UNK",length:"36"}
   ]
  },
  {name:"PolbndL",fcode:"",desc:"PolbndL",geom:"Line",fdname:"MGCP_Delta",
@@ -1432,14 +1441,17 @@ mgcp.thematicSchema = [
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"Integer",defValue:"1"},
    {name:"BST",desc:"Boundary Status",optional:"R",type:"Integer",defValue:"0"},
    {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"CFT",desc:"Boundary Determination Method",optional:"R",type:"Integer",defValue:"0"},
    {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"LSP",desc:"Geopolitical Line Type",optional:"R",type:"Integer",defValue:"1"},
    {name:"NM3",desc:"Boundary First Name",optional:"R",type:"String",defValue:"UNK"},
    {name:"NM4",desc:"Boundary Second Name",optional:"R",type:"String",defValue:"UNK"},
    {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
    {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
    {name:"SRT",desc:"Source Type",optional:"R",type:"Integer",defValue:"0"},
    {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
-   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",type:"String",defValue:"UNK",length:"36"}
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",type:"String",defValue:"UNK",length:"36"},
+   {name:"USE_",desc:"Usage",optional:"R",type:"Integer",defValue:"0"}
   ]
  },
  {name:"PowerA",fcode:"",desc:"PowerA",geom:"Area",fdname:"MGCP",

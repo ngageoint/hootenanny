@@ -192,6 +192,8 @@ mgcp.rules = {
     'TXT':'note', // Associated Text
     'UID':'uuid', // Universally Unique Identifier
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
+    'NM3':'name:three', // Name 3
+    'NM4':'name:four', // Name 4
     }, // End txtBiased
 
     // Txt  rules for importing TRD3
@@ -207,6 +209,7 @@ mgcp.rules = {
     // One2one rules for Number attributes
     numBiasedV4 : {
     'AOO':'angle',  // Angle of Orientation
+    'BEL':'ele:base', // Base Elevation
     'DMB':'undergrowth:density',  // Undergrowth Density
     'DMT':'canopy_cover',  // Canopy Cover
     'GAW':'gauge',  // Railway Gauge
@@ -218,7 +221,8 @@ mgcp.rules = {
     'SDO':'dune:orientation',  // Sand Dune Orientation
     'WD1':'width:minimum_traveled_way', // Route Minimum Travelled Way
     'WID':'width', // Width
-    'ZVA':'ele' // Aerodrome Elevation
+    'ZVA':'ele', // Aerodrome Elevation
+    'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
 
 
@@ -246,7 +250,6 @@ mgcp.rules = {
     'PFH':'height:predominant', // Predominant Feature Height
     'RBV':'waterway:bank1:cover', // Right Bank Vegetation Cover
     },
-
 
 
     // Common one2one rules. Used for both import and export
@@ -278,6 +281,14 @@ mgcp.rules = {
     ['BAC','0','building:density','unknown'],
     ['BAC','1','building:density','sparse'],
     ['BAC','2','building:density','dense'],
+
+    // BAL - BGN Administrative Level
+    ['BAL','1','raw:BAL','first-order'], // First-order
+    ['BAL','2','raw:BAL','second-order'], // Second-order
+    ['BAL','3','raw:BAL','third-order'], // Third-order
+    ['BAL','4','raw:BAL','fourth-order'], // Fourth-order
+    ['BAL','5','raw:BAL','undifferentiated'], // Undifferentiated
+    ['BAL','999','raw:BAL','other'], // Other
 
     // BOC - Bog Type
     // ['BOC','0',undefined,undefined], // Unknown
@@ -315,6 +326,14 @@ mgcp.rules = {
     ['BSC','26','bridge:structure','closed_spandrel_arch'],
     ['BSC','27','bridge:structure','cable_stayed'],
     ['BSC','999','bridge:structure','other'],
+
+    // BST - Boundary Status
+    ['BST','0','raw:BST','unknown'], // Unknown
+    ['BST','1','raw:BST','definite'], // Definite
+    ['BST','2','raw:BST','indefinite'], // Indefinite
+    ['BST','3','raw:BST','in_dispute'], // In Dispute
+    ['BST','4','raw:BST','no_defined_boundary'], // No Defined Boundary
+    ['BST','999','raw:BST','other'], // Other
 
     // CAA - Controlling Authority
     // ['CAA','0',undefined,undefined],
@@ -359,6 +378,23 @@ mgcp.rules = {
     ['CDA','0','covered','unknown'],
     ['CDA','1000','covered','no'],
     ['CDA','1001','covered','yes'],
+
+    // CFT - Boundary Determination Method
+    // ['CFT','0','raw:CFT','unknown'], // Unknown
+    ['CFT','7','raw:CFT','elevation_contour'], // Elevation contour
+    ['CFT','8','raw:CFT','drainage_limit'], // Drainage Limit
+    ['CFT','10','raw:CFT','ridgeline'], // Ridgeline
+    ['CFT','11','raw:CFT','drainage_line'], // Drainage Line
+    ['CFT','12','raw:CFT','left_bank'], // Left Bank
+    ['CFT','13','raw:CFT','right_bank'], // Right Bank
+    ['CFT','14','raw:CFT','shoreline'], // Shoreline
+    ['CFT','15','raw:CFT','lake_transec'], // Lake Transec
+    ['CFT','16','raw:CFT','meridian'], // Meridian
+    ['CFT','17','raw:CFT','median'], // Median
+    ['CFT','18','raw:CFT','parallel'], // Parallel
+    ['CFT','19','raw:CFT','straight_segmented'], // Straight Segmented
+    ['CFT','20','raw:CFT','straight'], // Straight
+    ['CFT','33','raw:CFT','anthropogeographic'], // Anthropogeographic
 
     // CNS - Controlled
     // ['CNS','0',undefined,undefined], // Unknown
@@ -412,6 +448,19 @@ mgcp.rules = {
     ['EET','4','trench','rampart'], // Rampart
     ['EET','5','trench','redoubt'], // Redoubt
     ['EET','999','trench','other'], // Other
+
+    // ELA - Elevation Accuracy Category
+    // ['ELA','0','raw:ELA','unknown'], // Unknown
+    ['ELA','1','raw:ELA','accurate'], // Accurate
+    ['ELA','2','raw:ELA','approximate'], // Approximate
+
+    // ESC - Elevation Surface Category
+    // ['ESC','0','raw:ESC','unknown'], // Unknown
+    ['ESC','1','raw:ESC','land'], // Land
+    ['ESC','2','raw:ESC','snow_field_and/or_ice-field'], // Snow Field and/or Ice-field
+    ['ESC','4','raw:ESC','vegetation'], // Vegetation
+    ['ESC','5','raw:ESC','inland_water'], // Inland Water
+    ['ESC','6','raw:ESC','tidal_water'], // Tidal Water
 
     // FAC - Solid Maritime Construction
     // ['FAC','0',undefined,undefined], // Unknown
@@ -572,6 +621,20 @@ mgcp.rules = {
     ['FUN','6','condition','functional'], //Fully Functional - default
     ['FUN','13','condition','damaged'],
 
+    // GEC - Geopolitical Entity Type
+    ['GEC','5','raw:GEC','area_of_no_sovereignty'], // Area of No Sovereignty
+    ['GEC','7','raw:GEC','demilitarized_zone_(dmz)'], // Demilitarized Zone (DMZ)
+    ['GEC','8','raw:GEC','zone_of_occupation'], // Zone of Occupation
+    ['GEC','9','raw:GEC','leased_area'], // Leased Area
+    ['GEC','10','raw:GEC','political_entity'], // Political Entity
+    ['GEC','11','raw:GEC','dependent_political_entity'], // Dependent Political Entity
+    ['GEC','12','raw:GEC','freely_associated_state'], // Freely Associated State
+    ['GEC','13','raw:GEC','independent_political_entity'], // Independent Political Entity
+    ['GEC','14','raw:GEC','semi-independent_political_entity'], // Semi-independent Political Entity
+    ['GEC','15','raw:GEC','economic_region'], // Economic Region
+    ['GEC','16','raw:GEC','territory'], // Territory
+    ['GEC','17','raw:GEC','buffer_zone'], // Buffer Zone
+
     // GNC - Water Gate Type
     // ['GNC','0',undefined,undefined], // Unknown
     ['GNC','0','flood_control:type','unknown'], // Unknown
@@ -597,6 +660,22 @@ mgcp.rules = {
     ['HCT','2','highway','secondary'], // Secondary
     ['HCT','3','highway','motorway'], // National Motorway
     ['HCT','4','highway','tertiary'], // Local
+
+    // HQC - Hypsography Portrayal Type
+    // ['HQC','0','raw:HQC','unknown'], // Unknown
+    ['HQC','1','raw:HQC','index_contour'], // Index Contour
+    ['HQC','2','raw:HQC','intermediate_contour'], // Intermediate Contour
+    ['HQC','3','raw:HQC','half_auxiliary_contour'], // Half Auxiliary Contour
+    ['HQC','5','raw:HQC','depression_index_contour'], // Depression Index Contour
+    ['HQC','6','raw:HQC','depression_intermediate_contour'], // Depression Intermediate Contour
+    ['HQC','8','raw:HQC','mound_index_contour'], // Mound Index Contour
+    ['HQC','9','raw:HQC','mound_intermediate_contour'], // Mound Intermediate Contour
+    ['HQC','14','raw:HQC','quarter_auxiliary_contour'], // Quarter Auxiliary Contour
+    ['HQC','19','raw:HQC','intermediate_carrying_contour'], // Intermediate Carrying Contour
+    ['HQC','20','raw:HQC','auxiliary_carrying_contour'], // Auxiliary Carrying Contour
+    ['HQC','21','raw:HQC','index_carrying_contour'], // Index Carrying Contour
+    ['HQC','22','raw:HQC','depression_auxiliary_contour'], // Depression Auxiliary Contour
+    ['HQC','999','raw:HQC','other'], // Other
 
     // HWT - House of Worship Type
     // ['HWT','0',undefined,undefined],
@@ -647,6 +726,26 @@ mgcp.rules = {
     ['LOC','44','location','surface'], // The default is on the surface
     ['LOC','45','location','overground'], // Above ground
     ['LOC','46','location','underwater'], // Above waterbody bottom
+
+    // LSP - Geopolitical Line Type
+    ['LSP','1','raw:LSP','generic_administrative_boundary'], // Generic Administrative Boundary
+    ['LSP','2','raw:LSP','provisional_administrative_line'], // Provisional Administrative Line
+    ['LSP','3','raw:LSP','armistice_line'], // Armistice Line
+    ['LSP','4','raw:LSP','line_of_control'], // Line of Control
+    ['LSP','5','raw:LSP','demarcation_line'], // Demarcation Line
+    ['LSP','6','raw:LSP','line_of_convenience'], // Line of Convenience
+    ['LSP','7','raw:LSP','cease_fire_line'], // Cease Fire Line
+    ['LSP','8','raw:LSP','convention_line'], // Convention Line
+    ['LSP','9','raw:LSP','claim_line'], // Claim Line
+    ['LSP','10','raw:LSP','intercolonial_line'], // Intercolonial Line
+    ['LSP','11','raw:LSP','interentity_line'], // Interentity Line
+    ['LSP','12','raw:LSP','line_of_adjacency'], // Line of Adjacency
+    ['LSP','13','raw:LSP','line_of_withdrawal'], // Line of Withdrawal
+    ['LSP','14','raw:LSP','military_disengagement_line'], // Military Disengagement Line
+    ['LSP','15','raw:LSP','treaty_line'], // Treaty Line
+    ['LSP','16','raw:LSP','unclos_claim_boundary'], // UNCLOS Claim Boundary
+    ['LSP','17','raw:LSP','generic_international_boundary'], // Generic International Boundary
+    ['LSP','999','raw:LSP','other'], // Other
 
     // MCC - Structural Material Type
     // ['MCC','0',undefined,undefined],
@@ -1140,12 +1239,39 @@ mgcp.rules = {
     ['SUC','4','man_made','rock_and_snow_fence'],
     ['SUC','999','protection:type','other'],
 
+    // SUY - Survey Point Type
+    // ['SUY','0','raw:SUY','unknown'], // Unknown
+    ['SUY','1','raw:SUY','astronomic_position'], // Astronomic Position
+    ['SUY','2','raw:SUY','benchmark'], // Benchmark
+    ['SUY','3','raw:SUY','cadastral_control_point'], // Cadastral Control Point
+    ['SUY','4','raw:SUY','camera_station'], // Camera Station
+    ['SUY','5','raw:SUY','geodetic_point'], // Geodetic Point
+    ['SUY','6','raw:SUY','gravity_point'], // Gravity Point
+    ['SUY','7','raw:SUY','magnetic_station'], // Magnetic Station
+    ['SUY','8','raw:SUY','theodolite_station'], // Theodolite Station
+    ['SUY','9','raw:SUY','tidal_benchmark'], // Tidal Benchmark
+    ['SUY','999','raw:SUY','other'], // Other
+
     // SWT - Natural Pool Type
     // ['SWT','0',undefined,undefined], // Unknown
     ['SWT','0','spring:type','unknown'], // Unknown
     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
     ['SWT','5','water','water-hole'], // Water-hole
     ['SWT','999','spring:type','other'], // Other
+
+    // THC - Thematic Classification
+    // ['THC','0','raw:THC','unknown'], // Unknown
+    ['THC','1','raw:THC','aeronautical'], // Aeronautical
+    ['THC','2','raw:THC','vegetation'], // Vegetation
+    ['THC','3','raw:THC','utilities'], // Utilities
+    ['THC','4','raw:THC','population'], // Population
+    ['THC','5','raw:THC','physiography'], // Physiography
+    ['THC','6','raw:THC','industry'], // Industry
+    ['THC','7','raw:THC','ground_transportation'], // Ground Transportation
+    ['THC','8','raw:THC','elevation'], // Elevation
+    ['THC','9','raw:THC','boundaries'], // Boundaries
+    ['THC','10','raw:THC','waterbodies'], // Waterbodies
+    ['THC','11','raw:THC','maritime'], // Maritime
 
     // TID - Tide Influenced
     // ['TID','0',undefined,undefined],
@@ -1214,6 +1340,20 @@ mgcp.rules = {
     ['TUC','26','transport:use','passenger'],
     ['TUC','45','transport:use','general'],
     ['TUC','999','transport:use','other'],
+
+    // USE_ - Usage
+    ['USE_','0','raw:USE_','unknown'], // Unknown
+    ['USE_','7','raw:USE_','tribal'], // Tribal
+    ['USE_','16','raw:USE_','city'], // City
+    ['USE_','23','raw:USE_','international'], // International
+    ['USE_','26','raw:USE_','primary/1st_order'], // Primary/1st Order
+    ['USE_','30','raw:USE_','secondary/2nd_order'], // Secondary/2nd Order
+    ['USE_','31','raw:USE_','tertiary/3rd_order'], // Tertiary/3rd Order
+    ['USE_','32','raw:USE_','insular'], // Insular
+    ['USE_','70','raw:USE_','reserve/reservation'], // Reserve/Reservation
+    ['USE_','141','raw:USE_','forest_preserve'], // Forest Preserve
+    ['USE_','155','raw:USE_','prohibited_area'], // Prohibited Area
+    ['USE_','999','raw:USE_','other'], // Other
 
     // VEG - Vegetation Characteristic
     // ['VEG','0',undefined,undefined], // Unknown

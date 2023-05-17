@@ -262,11 +262,10 @@ def addExtra(schema):
     schema['PCA030'] = {}
     schema['PCA030'] = {'name':'PCA030','fcode':'CA030','desc':'Spot Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PCA030']['columns'] = {}
-    schema['PCA030']['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
-    schema['PCA030']['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
-    schema['PCA030']['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
-    schema['PCA030']['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
     schema['PCA030']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
+    schema['PCA030']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['PCA030']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PCA030']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['PCA030']['columns']['ELA'] = {'name':'ELA','desc':'Elevation Accuracy Category','optional':'R','type':'enumeration','defValue':'0'}
     schema['PCA030']['columns']['ELA']['enum'] = [{'name':'Unknown','value':'0'}, {'name':'Accurate','value':'1'}, {'name':'Approximate','value':'2'}]
     schema['PCA030']['columns']['ESC'] = {'name':'ESC','desc':'Elevation Surface Category','optional':'R','type':'enumeration','defValue':'1'}
@@ -282,32 +281,67 @@ def addExtra(schema):
     schema['LFA000'] = {}
     schema['LFA000'] = {'name':'LFA000','fcode':'FA000','desc':'Administrative Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFA000']['columns'] = {}
+    schema['LFA000']['columns']['NM3'] = {'name':'NM3','desc':'Boundary First Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['LFA000']['columns']['NM4'] = {'name':'NM4','desc':'Boundary Second Name','optional':'R','type':'String','defValue':'UNK'}
     schema['LFA000']['columns']['BST'] = {'name':'BST','desc':'Boundary Status','optional':'R','type':'enumeration','defValue':'0'}
     schema['LFA000']['columns']['BST']['enum'] =[{'name':'Unknown','value':'0'}, {'name':'Definite','value':'1'},
      {'name':'Indefinite','value':'2'}, {'name':'In Dispute','value':'3'}, {'name':'No Defined Boundary','value':'4'},{'name':'Other','value':'999'}
      ]
+    schema['LFA000']['columns']['CFT'] = {'name':"CFT",'desc':"Boundary Determination Method",'optional':"R",'type':"enumeration",'defValue':"0"}
+    schema['LFA000']['columns']['CFT']['enum'] = [
+     {'name':"Unknown",'value':"0"}, {'name':"Elevation contour",'value':"7"}, {'name':"Drainage Limit",'value':"8"},
+     {'name':"Ridgeline",'value':"10"}, {'name':"Drainage Line",'value':"11"}, {'name':"Left Bank",'value':"12"},
+     {'name':"Right Bank",'value':"13"}, {'name':"Shoreline",'value':"14"}, {'name':"Lake Transec",'value':"15"},
+     {'name':"Meridian",'value':"16"}, {'name':"Median",'value':"17"}, {'name':"Parallel",'value':"18"},
+     {'name':"Straight Segmented",'value':"19"}, {'name':"Straight",'value':"20"}, {'name':"Anthropogeographic",'value':"33"}
+    ]
+    schema['LFA000']['columns']['LSP'] = {'name':"LSP",'desc':"Geopolitical Line Type",'optional':"R",'type':"enumeration",'defValue':"1"}
+    schema['LFA000']['columns']['LSP']['enum'] = [
+     {'name':"Generic Administrative Boundary",'value':"1"}, {'name':"Provisional Administrative Line",'value':"2"},
+     {'name':"Armistice Line",'value':"3"}, {'name':"Line of Control",'value':"4"}, {'name':"Demarcation Line",'value':"5"},
+     {'name':"Line of Convenience",'value':"6"}, {'name':"Cease Fire Line",'value':"7"}, {'name':"Convention Line",'value':"8"},
+     {'name':"Claim Line",'value':"9"}, {'name':"Intercolonial Line",'value':"10"}, {'name':"Interentity Line",'value':"11"},
+     {'name':"Line of Adjacency",'value':"12"}, {'name':"Line of Withdrawal",'value':"13"}, {'name':"Military Disengagement Line",'value':"14"},
+     {'name':"Treaty Line",'value':"15"}, {'name':"UNCLOS Claim Boundary",'value':"16"}, {'name':"Generic International Boundary",'value':"17"},
+     {'name':"Other",'value':"999"}
+    ]
+    schema['LFA000']['columns']['USE_'] = {'name':"USE_",'desc':"Usage",'optional':"R",'type':"enumeration",'defValue':"0"}
+    schema['LFA000']['columns']['USE_']['enum'] = [
+     {'name':"Unknown",'value':"0"}, {'name':"Tribal",'value':"7"}, {'name':"City",'value':"16"},
+     {'name':"International",'value':"23"}, {'name':"Primary/1st Order",'value':"26"}, {'name':"Secondary/2nd Order",'value':"30"},
+     {'name':"Tertiary/3rd Order",'value':"31"}, {'name':"Insular",'value':"32"}, {'name':"Reserve/Reservation",'value':"70"},
+     {'name':"Forest Preserve",'value':"141"}, {'name':"Prohibited Area",'value':"155"}, {'name':"Other",'value':"999"}
+    ]
 
     schema['AFA002'] = {}
     schema['AFA002'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
     schema['AFA002']['columns'] = {}
-    schema['AFA002']['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
-    schema['AFA002']['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
-    schema['AFA002']['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
-    schema['AFA002']['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
+    schema['AFA002']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['AFA002']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['AFA002']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['AFA002']['columns']['COD'] = {'name':'COD','desc':'Delineation Known','optional':'R','type':'enumeration','defValue':'1'}
     schema['AFA002']['columns']['COD']['enum'] = [{'name':'Limits and Information Known','value':'1'}, {'name':'Limits and Information Unknown','value':'2'} ]
+    schema['AFA002']['columns']['GEC'] = {'name':"GEC",'desc':"Geopolitical Entity Type",'optional':"R",'type':"enumeration",'defValue':"7"}
+    schema['AFA002']['columns']['GEC']['enum'] = [{'name':"Area of No Sovereignty",'value':"5"}, {'name':"Demilitarized Zone (DMZ)",'value':"7"},
+     {'name':"Zone of Occupation",'value':"8"}, {'name':"Leased Area",'value':"9"}, {'name':"Political Entity",'value':"10"},
+     {'name':"Dependent Political Entity",'value':"11"}, {'name':"Freely Associated State",'value':"12"}, {'name':"Independent Political Entity",'value':"13"},
+     {'name':"Semi-independent Political Entity",'value':"14"}, {'name':"Economic Region",'value':"15"}, {'name':"Territory",'value':"16"},
+     {'name':"Buffer Zone",'value':"17"}
+    ]
 
     schema['AFA003'] = {}
-    schema['AFA003'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA003'] = {'name':'AFA003','fcode':'FA003','desc':'Administrative Division','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
     schema['AFA003']['columns'] = {}
-    schema['AFA003']['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
-    schema['AFA003']['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
-    schema['AFA003']['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
+    schema['AFA003']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['AFA003']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['AFA003']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['AFA003']['columns']['BAL'] = {'name':'BAL','desc':'BGN Administrative Level','optional':'R','type':'enumeration','defValue':'1'}
     schema['AFA003']['columns']['BAL']['enum'] = [{'name':'First-order','value':'1'}, {'name':'Second-order','value':'2'},
      {'name':'Third-order','value':'3'}, {'name':'Fourth-order','value':'4'},
      {'name':'Undifferentiated','value':'5'}, {'name':'Other','value':'999'}
      ]
+    schema['AFA003']['columns']['COD'] = {'name':'COD','desc':'Delineation Known','optional':'R','type':'enumeration','defValue':'1'}
+    schema['AFA003']['columns']['COD']['enum'] = [{'name':'Limits and Information Known','value':'1'}, {'name':'Limits and Information Unknown','value':'2'} ]
 
     schema['LFA110'] = {}
     schema['LFA110'] = {'name':'LFA110','fcode':'FA110','desc':'International Date Line','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
@@ -343,8 +377,8 @@ def addExtra(schema):
     schema['PZD045']['columns']['ORD']['enum'] = [{'name':'First','value':'1'}, {'name':'Second','value':'2'},
      {'name':'Third','value':'3'}, {'name':'Fourth','value':'4'}, {'name':'Fifth','value':'5'}
      ]
-    schema['AFA003']['columns']['THC'] = {'name':'THC','desc':'Thematic Classification','optional':'R','type':'enumeration','defValue':'1'}
-    schema['AFA003']['columns']['THC']['enum'] = [{'name':'Aeronautical','value':'1'}, {'name':'Vegetation','value':'2'},
+    schema['PZD045']['columns']['THC'] = {'name':'THC','desc':'Thematic Classification','optional':'R','type':'enumeration','defValue':'1'}
+    schema['PZD045']['columns']['THC']['enum'] = [{'name':'Aeronautical','value':'1'}, {'name':'Vegetation','value':'2'},
      {'name':'Utilities','value':'3'}, {'name':'Population','value':'4'}, {'name':'Physiography','value':'5'},
      {'name':'Industry','value':'6'}, {'name':'Ground Transportation','value':'7'}, {'name':'Elevation','value':'8'},
      {'name':'Boundaries','value':'9'}, {'name':'Waterbodies','value':'10'}, {'name':'Maritime','value':'11'}
@@ -352,7 +386,7 @@ def addExtra(schema):
 
 
     # Add the common attributes to each feature
-    for i in ['LCA010','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045']:
+    for i in ['LCA010','PCA030','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045','AFA002','AFA003']:
         schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
         schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
         schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
