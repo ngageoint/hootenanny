@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 2022 2023 Maxar (http://www.maxar.com/)
  */
 
  ////
@@ -40,14 +40,9 @@ if (!_global.mgcp)
 mgcp.schema = {
 getDbSchema: function()
 {
-var full_FUN = [
- {name:"Unknown",value:"0"},
- {name:"Under Construction",value:"1"},
- {name:"Abandoned",value:"2"},
- {name:"Destroyed",value:"3"},
- {name:"Dismantled",value:"4"},
- {name:"Fully Functional",value:"6"},
- {name:"Damaged",value:"13"}
+var full_ACC = [
+ {name:"Accurate",value:"1"},
+ {name:"Approximate",value:"2"}
 ];
 
 var full_SRT = [
@@ -130,15 +125,20 @@ var full_SRT = [
  {name:"Other",value:"999"}
 ];
 
+var full_FUN = [
+ {name:"Unknown",value:"0"},
+ {name:"Under Construction",value:"1"},
+ {name:"Abandoned",value:"2"},
+ {name:"Destroyed",value:"3"},
+ {name:"Dismantled",value:"4"},
+ {name:"Fully Functional",value:"6"},
+ {name:"Damaged",value:"13"}
+];
+
 var schema = [
- {name:"AAA010",fcode:"AA010",desc:"Extraction Mine",geom:"Area",definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
+ {name:"AAA010",fcode:"AA010",desc:"Extraction Mine",geom:"Area",fdname:"MGCP",thematic:"ExtractA",definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -182,14 +182,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAA012",fcode:"AA012",desc:"Quarry",geom:"Area",definition:"An open-air excavation created by removal of stone by blasting or cutting.",
+ {name:"AAA012",fcode:"AA012",desc:"Quarry",geom:"Area",fdname:"MGCP",thematic:"ExtractA",definition:"An open-air excavation created by removal of stone by blasting or cutting.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -219,14 +214,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAA052",fcode:"AA052",desc:"Hydrocarbons Field",geom:"Area",definition:"An area where the presence of recoverable petroleum, oil, and/or natural gas has been identified. ( The field can exist regardless of current exploitation activities. )",
+ {name:"AAA052",fcode:"AA052",desc:"Hydrocarbons Field",geom:"Area",fdname:"MGCP",thematic:"PumpingA",definition:"An area where the presence of recoverable petroleum, oil, and/or natural gas has been identified. ( The field can exist regardless of current exploitation activities. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -239,14 +229,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAB000",fcode:"AB000",desc:"Disposal Site",geom:"Area",definition:"A site for the collection and/or deposition of refuse or discarded material.",
+ {name:"AAB000",fcode:"AB000",desc:"Disposal Site",geom:"Area",fdname:"MGCP",thematic:"DisposeA",definition:"A site for the collection and/or deposition of refuse or discarded material.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -271,14 +256,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAB010",fcode:"AB010",desc:"Recycling Site",geom:"Area",definition:"A site engaged in the wrecking, dismantling, storage, recycling, and/or disposal of discarded or scrap products. ( For example, a wrecking yard or a scrap yard. )",
+ {name:"AAB010",fcode:"AB010",desc:"Recycling Site",geom:"Area",fdname:"MGCP",thematic:"DisposeA",definition:"A site engaged in the wrecking, dismantling, storage, recycling, and/or disposal of discarded or scrap products. ( For example, a wrecking yard or a scrap yard. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -292,14 +272,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAC000",fcode:"AC000",desc:"Processing Facility",geom:"Area",definition:"A facility including one or more buildings used for processing materials. ( For example, a treatment plant. )",
+ {name:"AAC000",fcode:"AC000",desc:"Processing Facility",geom:"Area",fdname:"MGCP",thematic:"ProcessA",definition:"A facility including one or more buildings used for processing materials. ( For example, a treatment plant. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -360,14 +335,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAC030",fcode:"AC030",desc:"Settling Pond",geom:"Area",definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
+ {name:"AAC030",fcode:"AC030",desc:"Settling Pond",geom:"Area",fdname:"MGCP",thematic:"TreatA",definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -387,14 +357,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAD010",fcode:"AD010",desc:"Electric Power Station",geom:"Area",definition:"A facility including one or more buildings and equipment used for electric power generation. ( An electric power station consists of one or more power generating units, each consisting of the full set of equipment required to generate power and capable of independent operation. The power generating units are located on one or more contiguous or adjacent properties, are under the common control of the same entity and supply power through a common connection to the electric grid. Electric power stations most commonly are used to generate electricity for long distance transmission. )",
+ {name:"AAD010",fcode:"AD010",desc:"Electric Power Station",geom:"Area",fdname:"MGCP",thematic:"PowerA",definition:"A facility including one or more buildings and equipment used for electric power generation. ( An electric power station consists of one or more power generating units, each consisting of the full set of equipment required to generate power and capable of independent operation. The power generating units are located on one or more contiguous or adjacent properties, are under the common control of the same entity and supply power through a common connection to the electric grid. Electric power stations most commonly are used to generate electricity for long distance transmission. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -423,14 +388,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAD030",fcode:"AD030",desc:"Power Substation",geom:"Area",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
+ {name:"AAD030",fcode:"AD030",desc:"Power Substation",geom:"Area",fdname:"MGCP",thematic:"SubstatA",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -444,14 +404,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAD050",fcode:"AD050",desc:"Heating Facility",geom:"Area",definition:"A facility for the generation of thermal energy for heating purposes.",
+ {name:"AAD050",fcode:"AD050",desc:"Heating Facility",geom:"Area",fdname:"MGCP",thematic:"PowerA",definition:"A facility for the generation of thermal energy for heating purposes.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -465,14 +420,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAH050",fcode:"AH050",desc:"Fortification",geom:"Area",definition:"A structure constructed for the military defence of a site. ( For example, a bastion and a rampart. )",
+ {name:"AAH050",fcode:"AH050",desc:"Fortification",geom:"Area",fdname:"MGCP",thematic:"FortA",definition:"A structure constructed for the military defence of a site. ( For example, a bastion and a rampart. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -514,14 +464,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAI030",fcode:"AI030",desc:"Camp",geom:"Area",definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
+ {name:"AAI030",fcode:"AI030",desc:"Camp",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -534,14 +479,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAJ010",fcode:"AJ010",desc:"Circular Irrigation System",geom:"Area",definition:"An elevated irrigation system revolving around a central pivot point.",
+ {name:"AAJ010",fcode:"AJ010",desc:"Circular Irrigation System",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"An elevated irrigation system revolving around a central pivot point.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -551,14 +491,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAJ030",fcode:"AJ030",desc:"Holding Pen",geom:"Area",definition:"An enclosed tract on which livestock are temporarily kept. ( For example, a sheepfold, a holding paddock, a livestock pen, a feedlot, and/or a stock yard. The enclosure may be by, for example, a fence or a wall. )",
+ {name:"AAJ030",fcode:"AJ030",desc:"Holding Pen",geom:"Area",fdname:"MGCP",thematic:"TreatA",definition:"An enclosed tract on which livestock are temporarily kept. ( For example, a sheepfold, a holding paddock, a livestock pen, a feedlot, and/or a stock yard. The enclosure may be by, for example, a fence or a wall. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -568,14 +503,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAJ110",fcode:"AJ110",desc:"Greenhouse",geom:"Area",definition:"A building constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
+ {name:"AAJ110",fcode:"AJ110",desc:"Greenhouse",geom:"Area",fdname:"MGCP",thematic:"MiscpopA",definition:"A building constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -586,14 +516,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK030",fcode:"AK030",desc:"Amusement Park",geom:"Area",definition:"A predominantly man-made facility equipped with recreational devices.",
+ {name:"AAK030",fcode:"AK030",desc:"Amusement Park",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A predominantly man-made facility equipped with recreational devices.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -607,14 +532,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK040",fcode:"AK040",desc:"Sports Ground",geom:"Area",definition:"An open area where sporting events, exercises, and/or games occur. ( For example, an athletic field, a playing field, and/or a sports field. )",
+ {name:"AAK040",fcode:"AK040",desc:"Sports Ground",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"An open area where sporting events, exercises, and/or games occur. ( For example, an athletic field, a playing field, and/or a sports field. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -643,14 +563,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK060",fcode:"AK060",desc:"Camp-site",geom:"Area",definition:"A designated place for recreational camping.",
+ {name:"AAK060",fcode:"AK060",desc:"Camp-site",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A designated place for recreational camping.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -663,14 +578,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK090",fcode:"AK090",desc:"Fairground",geom:"Area",definition:"An area where permanent facilities exist to hold outdoor fairs, circuses or exhibitions.",
+ {name:"AAK090",fcode:"AK090",desc:"Fairground",geom:"Area",fdname:"MGCP",thematic:"SportA",definition:"An area where permanent facilities exist to hold outdoor fairs, circuses or exhibitions.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -683,14 +593,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK100",fcode:"AK100",desc:"Golf Course",geom:"Area",definition:"A tract of land on which golf is played.",
+ {name:"AAK100",fcode:"AK100",desc:"Golf Course",geom:"Area",fdname:"MGCP",thematic:"SportA",definition:"A tract of land on which golf is played.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -703,14 +608,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK120",fcode:"AK120",desc:"Park",geom:"Area",definition:"An area used for recreational or ornamental purposes.",
+ {name:"AAK120",fcode:"AK120",desc:"Park",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"An area used for recreational or ornamental purposes.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -723,14 +623,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK160",fcode:"AK160",desc:"Stadium",geom:"Area",definition:"An arena for holding and viewing events.",
+ {name:"AAK160",fcode:"AK160",desc:"Stadium",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"An arena for holding and viewing events.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CCT",desc:"Cover Closure Type",optional:"R",definition:"The extent and/or nature of the cover (for example: a roof) of a structure.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -756,14 +651,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK170",fcode:"AK170",desc:"Swimming Pool",geom:"Area",definition:"A man-made pool used for swimming outdoors.",
+ {name:"AAK170",fcode:"AK170",desc:"Swimming Pool",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A man-made pool used for swimming outdoors.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -773,14 +663,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK180",fcode:"AK180",desc:"Zoo",geom:"Area",definition:"A site where wild animals are kept for exhibition to the public, that may also support breeding and/or study.",
+ {name:"AAK180",fcode:"AK180",desc:"Zoo",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A site where wild animals are kept for exhibition to the public, that may also support breeding and/or study.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -793,14 +678,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAK190",fcode:"AK190",desc:"Recreational Pier",geom:"Area",definition:"A structure extending into the water used as a platform for recreational purposes, not intended as a berthing place for vessels. ( For example, a fishing pier or a promenade pier. )",
+ {name:"AAK190",fcode:"AK190",desc:"Recreational Pier",geom:"Area",fdname:"MGCP",thematic:"PierA",definition:"A structure extending into the water used as a platform for recreational purposes, not intended as a berthing place for vessels. ( For example, a fishing pier or a promenade pier. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -840,14 +720,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL010",fcode:"AL010",desc:"Facility",geom:"Area",definition:"An area that has been developed to perform a specific principal function, consisting of one or more vertical constructions (for example: structures or buildings), horizontal constructions (for example: pavements, roads, rail tracks, or bridges), and/or supporting utilities (for example: power lines, water supply, or sewerage), plus the underlying land. ( For example, an industrial plant consisting of building(s), shipping dock(s), storage area(s), power transformer(s), heating and/or cooling equipment, vehicle parking, roads, railroad tracks, and perimeter fences and gates. )",
+ {name:"AAL010",fcode:"AL010",desc:"Facility",geom:"Area",fdname:"MGCP",thematic:"MiscpopA",definition:"An area that has been developed to perform a specific principal function, consisting of one or more vertical constructions (for example: structures or buildings), horizontal constructions (for example: pavements, roads, rail tracks, or bridges), and/or supporting utilities (for example: power lines, water supply, or sewerage), plus the underlying land. ( For example, an industrial plant consisting of building(s), shipping dock(s), storage area(s), power transformer(s), heating and/or cooling equipment, vehicle parking, roads, railroad tracks, and perimeter fences and gates. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FFN",desc:"Feature Function",optional:"R",definition:"The purpose(s) of, or intended role(s) served by, the feature.",type:"enumeration",defValue:"0",
@@ -885,14 +760,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL012",fcode:"AL012",desc:"Archeological Site",geom:"Area",definition:"A site where remains of past civilizations or human activity have been discovered.",
+ {name:"AAL012",fcode:"AL012",desc:"Archeological Site",geom:"Area",fdname:"MGCP",thematic:"MiscpopA",definition:"A site where remains of past civilizations or human activity have been discovered.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -905,14 +775,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL015",fcode:"AL015",desc:"General Building",geom:"Area",definition:"A relatively permanent structure, roofed and usually walled and designed for some particular use.",
+ {name:"AAL015",fcode:"AL015",desc:"General Building",geom:"Area",fdname:"MGCP",thematic:"BuildA",definition:"A relatively permanent structure, roofed and usually walled and designed for some particular use.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FFN",desc:"Feature Function",optional:"R",definition:"The purpose(s) of, or intended role(s) served by, the feature.",type:"enumeration",defValue:"0",
@@ -1022,14 +887,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL019",fcode:"AL019",desc:"Shed",geom:"Area",definition:"A small building, generally of light construction, that usually has one or more open sides. ( Typically used for storage. )",
+ {name:"AAL019",fcode:"AL019",desc:"Shed",geom:"Area",fdname:"MGCP",thematic:"MiscpopA",definition:"A small building, generally of light construction, that usually has one or more open sides. ( Typically used for storage. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -1039,14 +899,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL020",fcode:"AL020",desc:"Built-Up Area",geom:"Area",definition:"A tract containing a concentration of buildings and/or other structures.",
+ {name:"AAL020",fcode:"AL020",desc:"Built-Up Area",geom:"Area",fdname:"MGCP",thematic:"BuiltupA",definition:"A tract containing a concentration of buildings and/or other structures.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"BAC",desc:"Built-up Area Density Category",optional:"R",definition:"A general evaluation of the density of a built-up area, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -1088,14 +943,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL030",fcode:"AL030",desc:"Cemetery",geom:"Area",definition:"A site and associated structures devoted to the burial of the dead.",
+ {name:"AAL030",fcode:"AL030",desc:"Cemetery",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A site and associated structures devoted to the burial of the dead.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -1118,14 +968,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL060",fcode:"AL060",desc:"Dragon's Teeth",geom:"Area",definition:"Upward-pointing obstacles laid in the ground to slow or stop the movement of vehicles. ( Typically constructed of regularly spaced concrete or metal shapes laid in single or multiple rows. )",
+ {name:"AAL060",fcode:"AL060",desc:"Dragon's Teeth",geom:"Area",fdname:"MGCP",thematic:"TransA",definition:"Upward-pointing obstacles laid in the ground to slow or stop the movement of vehicles. ( Typically constructed of regularly spaced concrete or metal shapes laid in single or multiple rows. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1140,14 +985,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"AAL105",fcode:"AL105",desc:"Settlement",geom:"Area",definition:"A continuously occupied concentration of tents or lightweight fixed structures (for example: huts) serving as residences. ( May also include supporting non-residential (for example: commercial) structures. )",
+ {name:"AAL105",fcode:"AL105",desc:"Settlement",geom:"Area",fdname:"MGCP",thematic:"MiscpopA",definition:"A continuously occupied concentration of tents or lightweight fixed structures (for example: huts) serving as residences. ( May also include supporting non-residential (for example: commercial) structures. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUC",desc:"Functional Use",optional:"R",definition:"The general categories of function or use that a facility, site, or region serves or may serve. ( May be so designated by legal means (for example: statute, zoning, or treaty) or be the unplanned consequence of economic forces. )",type:"enumeration",defValue:"0",
@@ -1170,14 +1010,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL140",fcode:"AL140",desc:"Particle Accelerator",geom:"Area",definition:"An apparatus for imparting high velocities to charged particles.",
+ {name:"AAL140",fcode:"AL140",desc:"Particle Accelerator",geom:"Area",fdname:"MGCP",thematic:"NuclearA",definition:"An apparatus for imparting high velocities to charged particles.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -1190,14 +1025,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL170",fcode:"AL170",desc:"Public Square",geom:"Area",definition:"An open site that serves as a public meeting location in a built-up area.",
+ {name:"AAL170",fcode:"AL170",desc:"Public Square",geom:"Area",fdname:"MGCP",thematic:"PlazaA",definition:"An open site that serves as a public meeting location in a built-up area.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -1210,14 +1040,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL200",fcode:"AL200",desc:"Ruins",geom:"Area",definition:"The deteriorated remains of an unspecified structure.",
+ {name:"AAL200",fcode:"AL200",desc:"Ruins",geom:"Area",fdname:"MGCP",thematic:"RuinsA",definition:"The deteriorated remains of an unspecified structure.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -1230,14 +1055,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAL208",fcode:"AL208",desc:"Shanty Town",geom:"Area",definition:"A section of a built-up area consisting chiefly of densely packed shacks and having few, if any, streets and no public facilities. ( Usually located on the outskirts of the built-up area. The shacks are generally crude, improvised, and made from salvaged materials. )",
+ {name:"AAL208",fcode:"AL208",desc:"Shanty Town",geom:"Area",fdname:"MGCP",thematic:"BuiltupA",definition:"A section of a built-up area consisting chiefly of densely packed shacks and having few, if any, streets and no public facilities. ( Usually located on the outskirts of the built-up area. The shacks are generally crude, improvised, and made from salvaged materials. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1251,14 +1071,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAM010",fcode:"AM010",desc:"Storage Depot",geom:"Area",definition:"A tract used for the storage of products and/or supplies.",
+ {name:"AAM010",fcode:"AM010",desc:"Storage Depot",geom:"Area",fdname:"MGCP",thematic:"StorageA",definition:"A tract used for the storage of products and/or supplies.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",definition:"The relationship between the feature and the underlying ground (terrain) or waterbody bottom.",type:"enumeration",defValue:"0",
@@ -1306,14 +1121,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAM020",fcode:"AM020",desc:"Grain Storage Structure",geom:"Area",definition:"An enclosed container, used for storing grain or fodder.",
+ {name:"AAM020",fcode:"AM020",desc:"Grain Storage Structure",geom:"Area",fdname:"MGCP",thematic:"AgristrA",definition:"An enclosed container, used for storing grain or fodder.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1326,14 +1136,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAM030",fcode:"AM030",desc:"Grain Elevator",geom:"Area",definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
+ {name:"AAM030",fcode:"AM030",desc:"Grain Elevator",geom:"Area",fdname:"MGCP",thematic:"AgristrA",definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1346,14 +1151,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAM040",fcode:"AM040",desc:"Mineral Pile",geom:"Area",definition:"A man-made heap of mining or quarrying products that does not contain waste materials. ( For example, a pile of coal or quarried stones. )",
+ {name:"AAM040",fcode:"AM040",desc:"Mineral Pile",geom:"Area",fdname:"MGCP",thematic:"StorageA",definition:"A man-made heap of mining or quarrying products that does not contain waste materials. ( For example, a pile of coal or quarried stones. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -1379,14 +1179,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAM060",fcode:"AM060",desc:"Surface Bunker",geom:"Area",definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance. ( Used, for example, for storage and/or aircraft protection. )",
+ {name:"AAM060",fcode:"AM060",desc:"Surface Bunker",geom:"Area",fdname:"MGCP",thematic:"StorageA",definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance. ( Used, for example, for storage and/or aircraft protection. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"PPO",desc:"Product",optional:"R",definition:"The principal product(s) resulting from a production, mining, or agricultural activity. ( If multiple products are specified then they are usually listed in descending order of importance. )",type:"enumeration",defValue:"0",
@@ -1409,14 +1204,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAM070",fcode:"AM070",desc:"Storage Tank",geom:"Area",definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
+ {name:"AAM070",fcode:"AM070",desc:"Storage Tank",geom:"Area",fdname:"MGCP",thematic:"StorageA",definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1463,14 +1253,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAN060",fcode:"AN060",desc:"Railway Yard",geom:"Area",definition:"A system of railway tracks and associated structures that are located within defined limits and that provide for loading, unloading, and/or assembling trains.",
+ {name:"AAN060",fcode:"AN060",desc:"Railway Yard",geom:"Area",fdname:"MGCP",thematic:"RryardA",definition:"A system of railway tracks and associated structures that are located within defined limits and that provide for loading, unloading, and/or assembling trains.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1484,14 +1269,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAN076",fcode:"AN076",desc:"Roundhouse",geom:"Area",definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives. ( The railway turntable may be either completely covered, partially covered or not covered, and partially or completely surrounded by the building. )",
+ {name:"AAN076",fcode:"AN076",desc:"Roundhouse",geom:"Area",fdname:"MGCP",thematic:"TransA",definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives. ( The railway turntable may be either completely covered, partially covered or not covered, and partially or completely surrounded by the building. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -1501,14 +1281,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAQ040",fcode:"AQ040",desc:"Bridge",geom:"Area",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road). ( A bridge consists of a set of two abutments and/or zero or more bridge piers joined by bridge spans. A bridge may serve, for example, as an overpass or a viaduct. In the context of a bridge, the scope of the term 'transportation route' includes the transportation of liquids or gases by means of either pipelines or aqueducts. )",
+ {name:"AAQ040",fcode:"AQ040",desc:"Bridge",geom:"Area",fdname:"MGCP",thematic:"BridgeA",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road). ( A bridge consists of a set of two abutments and/or zero or more bridge piers joined by bridge spans. A bridge may serve, for example, as an overpass or a viaduct. In the context of a bridge, the scope of the term 'transportation route' includes the transportation of liquids or gases by means of either pipelines or aqueducts. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"BOT",desc:"Bridge Opening Type",optional:"R",definition:"The type of structure or mechanism by which a bridge or bridge span is moved to allow passage of a vessel.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -1598,14 +1373,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAQ116",fcode:"AQ116",desc:"Pumping Station",geom:"Area",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
+ {name:"AAQ116",fcode:"AQ116",desc:"Pumping Station",geom:"Area",fdname:"MGCP",thematic:"PumpingA",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1628,14 +1398,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAQ125",fcode:"AQ125",desc:"Transportation Station",geom:"Area",definition:"A station that serves as a stopping place along a transportation route. ( For example, used for the transfer of passengers and/or freight. )",
+ {name:"AAQ125",fcode:"AQ125",desc:"Transportation Station",geom:"Area",fdname:"MGCP",thematic:"TransA",definition:"A station that serves as a stopping place along a transportation route. ( For example, used for the transfer of passengers and/or freight. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1674,14 +1439,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAQ130",fcode:"AQ130",desc:"Tunnel",geom:"Area",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway). ( Commonly used to pass through a hill or mountain, or under a river or road. May also provide underground passage in a mine. )",
+ {name:"AAQ130",fcode:"AQ130",desc:"Tunnel",geom:"Area",fdname:"MGCP",thematic:"TunnelA",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway). ( Commonly used to pass through a hill or mountain, or under a river or road. May also provide underground passage in a mine. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1711,14 +1471,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAQ135",fcode:"AQ135",desc:"Roadside Rest Area",geom:"Area",definition:"A roadside place usually having facilities for people and/or vehicles.",
+ {name:"AAQ135",fcode:"AQ135",desc:"Roadside Rest Area",geom:"Area",fdname:"MGCP",thematic:"TransA",definition:"A roadside place usually having facilities for people and/or vehicles.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1739,14 +1494,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAQ140",fcode:"AQ140",desc:"Vehicle Lot",geom:"Area",definition:"A tract used for storing and/or parking vehicles (for example: recreational vehicles) and/or vessels.",
+ {name:"AAQ140",fcode:"AQ140",desc:"Vehicle Lot",geom:"Area",fdname:"MGCP",thematic:"TransA",definition:"A tract used for storing and/or parking vehicles (for example: recreational vehicles) and/or vessels.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1764,14 +1514,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AAT050",fcode:"AT050",desc:"Communication Station",geom:"Area",definition:"A facility in which communication signals are processed and/or controlled. ( For example, a telephone switching station, a microwave repeater station, a satellite ground station, cellular telephone equipment, and a land-line telephone repeater station. )",
+ {name:"AAT050",fcode:"AT050",desc:"Communication Station",geom:"Area",fdname:"MGCP",thematic:"CommA",definition:"A facility in which communication signals are processed and/or controlled. ( For example, a telephone switching station, a microwave repeater station, a satellite ground station, cellular telephone equipment, and a land-line telephone repeater station. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1798,14 +1543,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABA030",fcode:"BA030",desc:"Island",geom:"Area",definition:"A land mass, other than a continent, surrounded by water.",
+ {name:"ABA030",fcode:"BA030",desc:"Island",geom:"Area",fdname:"MGCP",thematic:"CoastA",definition:"A land mass, other than a continent, surrounded by water.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -1818,14 +1558,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABA040",fcode:"BA040",desc:"Tidal Water",geom:"Area",definition:"Any water the level of which changes periodically due to tidal action.",
+ {name:"ABA040",fcode:"BA040",desc:"Tidal Water",geom:"Area",fdname:"MGCP",thematic:"CoastA",definition:"Any water the level of which changes periodically due to tidal action.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NA2",desc:"Touristic Name",optional:"R",length:"80",definition:"A touristic identifier or code that is used to denote a feature. ( Used in addition to a geographic name. )",type:"String",defValue:"UNK"},
@@ -1839,14 +1574,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABA050",fcode:"BA050",desc:"Beach",geom:"Area",definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate. ( A beach includes backshore and foreshore. )",
+ {name:"ABA050",fcode:"BA050",desc:"Beach",geom:"Area",fdname:"MGCP",thematic:"CoastA",definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate. ( A beach includes backshore and foreshore. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -1867,14 +1597,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABB005",fcode:"BB005",desc:"Harbour",geom:"Area",definition:"A natural or artificial improved body of water providing protection for vessels and generally anchorage and docking facilities. ( A harbour consists of both its port (see Feature: 'Port') and its waters (see Feature: 'Harbour Waters'). )",
+ {name:"ABB005",fcode:"BB005",desc:"Harbour",geom:"Area",fdname:"MGCP",thematic:"HarborA",definition:"A natural or artificial improved body of water providing protection for vessels and generally anchorage and docking facilities. ( A harbour consists of both its port (see Feature: 'Port') and its waters (see Feature: 'Harbour Waters'). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FHC",desc:"Harbour Facility Function",optional:"R",definition:"The primary function(s) of harbour facilities that are associated with a service or commercial operation of public interest.",type:"enumeration",defValue:"0",
@@ -1900,14 +1625,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABB041",fcode:"BB041",desc:"Breakwater",geom:"Area",definition:"A structure that protects a waterbody region (for example: a shore, a harbour, and/or an anchorage) from water waves by preventing them from reaching the protected region or reducing their magnitude.",
+ {name:"ABB041",fcode:"BB041",desc:"Breakwater",geom:"Area",fdname:"MGCP",thematic:"SeastrtA",definition:"A structure that protects a waterbody region (for example: a shore, a harbour, and/or an anchorage) from water waves by preventing them from reaching the protected region or reducing their magnitude.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -1956,14 +1676,9 @@ var schema = [
    }
   ]
  },
- {name:"ABB043",fcode:"BB043",desc:"Groin",geom:"Area",definition:"A low artificial wall-like structure of durable material extending from the land to seaward for a particular purpose, such as to prevent coast erosion.",
+ {name:"ABB043",fcode:"BB043",desc:"Groin",geom:"Area",fdname:"MGCP",thematic:"SeastrtA",definition:"A low artificial wall-like structure of durable material extending from the land to seaward for a particular purpose, such as to prevent coast erosion.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2012,14 +1727,9 @@ var schema = [
    }
   ]
  },
- {name:"ABB090",fcode:"BB090",desc:"Dry Dock",geom:"Area",definition:"An artificial basin fitted with a gate or caisson into which vessels can be floated and the water pumped out to expose the bottom of the vessel.",
+ {name:"ABB090",fcode:"BB090",desc:"Dry Dock",geom:"Area",fdname:"MGCP",thematic:"HarborA",definition:"An artificial basin fitted with a gate or caisson into which vessels can be floated and the water pumped out to expose the bottom of the vessel.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2056,14 +1766,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABB140",fcode:"BB140",desc:"Training Wall",geom:"Area",definition:"A wall, bank or jetty often submerged, built to direct or confine the flow of a river or tidal current or to promote scour actions.",
+ {name:"ABB140",fcode:"BB140",desc:"Training Wall",geom:"Area",fdname:"MGCP",thematic:"SeastrtA",definition:"A wall, bank or jetty often submerged, built to direct or confine the flow of a river or tidal current or to promote scour actions.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2100,14 +1805,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABB190",fcode:"BB190",desc:"Berthing Structure",geom:"Area",definition:"A structure primarily used as a berthing place for vessels. ( For example, a pier, a wharf, and a quay. Consideration should be given to using the more general Feature: 'Shoreline Construction' and a type-discriminating attribute. )",
+ {name:"ABB190",fcode:"BB190",desc:"Berthing Structure",geom:"Area",fdname:"MGCP",thematic:"PierA",definition:"A structure primarily used as a berthing place for vessels. ( For example, a pier, a wharf, and a quay. Consideration should be given to using the more general Feature: 'Shoreline Construction' and a type-discriminating attribute. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FAC",desc:"Solid Maritime Construction",optional:"R",definition:"An indication that a marine construction (for example: a pier, wharf, or quay) is solid, thereby blocking the free circulation of water underneath the construction. ( The construction may be of concrete, masonry, wood, and/or other building materials. Open pile construction is used where the benefits of protection from currents and waves is not required. )",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2171,14 +1871,9 @@ var schema = [
    }
   ]
  },
- {name:"ABB240",fcode:"BB240",desc:"Slipway",geom:"Area",definition:"The prepared and usually reinforced inclined surface on which keel- and bilge-blocks are laid for supporting a vessel under construction. ( Rails associated with a slipway are usually represented separately, for example as a marine railway. )",
+ {name:"ABB240",fcode:"BB240",desc:"Slipway",geom:"Area",fdname:"MGCP",thematic:"RampA",definition:"The prepared and usually reinforced inclined surface on which keel- and bilge-blocks are laid for supporting a vessel under construction. ( Rails associated with a slipway are usually represented separately, for example as a marine railway. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2201,14 +1896,9 @@ var schema = [
    }
   ]
  },
- {name:"ABD100",fcode:"BD100",desc:"Structural Pile",geom:"Area",definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
+ {name:"ABD100",fcode:"BD100",desc:"Structural Pile",geom:"Area",fdname:"MGCP",thematic:"DangerA",definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2218,14 +1908,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABD120",fcode:"BD120",desc:"Reef",geom:"Area",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
+ {name:"ABD120",fcode:"BD120",desc:"Reef",geom:"Area",fdname:"MGCP",thematic:"DangerA",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"COD",desc:"Delineation Known",optional:"R",definition:"An indication that the delineation (for example: limits and information) of a feature is known.",type:"enumeration",defValue:"1000",
     enumerations:[
@@ -2256,14 +1941,9 @@ var schema = [
    }
   ]
  },
- {name:"ABH010",fcode:"BH010",desc:"Aqueduct",geom:"Area",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
+ {name:"ABH010",fcode:"BH010",desc:"Aqueduct",geom:"Area",fdname:"MGCP",thematic:"AquedctA",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2292,14 +1972,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH015",fcode:"BH015",desc:"Bog",geom:"Area",definition:"A permanently wet area of land consisting of incompletely decayed organic material and mainly stagnant fresh water. ( It is generally too soft to bear the weight of any heavy body. A subtype of the more generalized Feature: 'Wetland'. )",
+ {name:"ABH015",fcode:"BH015",desc:"Bog",geom:"Area",fdname:"MGCP",thematic:"SwampA",definition:"A permanently wet area of land consisting of incompletely decayed organic material and mainly stagnant fresh water. ( It is generally too soft to bear the weight of any heavy body. A subtype of the more generalized Feature: 'Wetland'. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"BOC",desc:"Bog Type",optional:"R",definition:"The type of a bog or fen based on its morphology and/or dominant vegetation. ( A fen is similar to a bog but may have alkaline, neutral, or only slightly acid peaty soil whereas a bog is generally very acidic. In both cases the vegetation is usually dominated by peat mosses, ericaceous shrubs, and sedges. )",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -2320,14 +1995,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH020",fcode:"BH020",desc:"Canal",geom:"Area",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
+ {name:"ABH020",fcode:"BH020",desc:"Canal",geom:"Area",fdname:"MGCP",thematic:"WatrcrsA",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2364,14 +2034,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH030",fcode:"BH030",desc:"Ditch",geom:"Area",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
+ {name:"ABH030",fcode:"BH030",desc:"Ditch",geom:"Area",fdname:"MGCP",thematic:"WatrcrsA",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2400,14 +2065,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH040",fcode:"BH040",desc:"Water Treatment Bed",geom:"Area",definition:"A tract for the treatment of water that consists of a bed of material where water is aerated or filtered.",
+ {name:"ABH040",fcode:"BH040",desc:"Water Treatment Bed",geom:"Area",fdname:"MGCP",thematic:"TreatA",definition:"A tract for the treatment of water that consists of a bed of material where water is aerated or filtered.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2421,14 +2081,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH050",fcode:"BH050",desc:"Mariculture Site",geom:"Area",definition:"A site where marine organisms are cultivated for food and other products in either the open ocean, in an enclosed section of the ocean, or in tanks, ponds or raceways that are filled with seawater (for example: the farming of marine fish, prawns, or oysters in saltwater ponds).",
+ {name:"ABH050",fcode:"BH050",desc:"Mariculture Site",geom:"Area",fdname:"MGCP",thematic:"TreatA",definition:"A site where marine organisms are cultivated for food and other products in either the open ocean, in an enclosed section of the ocean, or in tanks, ponds or raceways that are filled with seawater (for example: the farming of marine fish, prawns, or oysters in saltwater ponds).",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2442,14 +2097,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH051",fcode:"BH051",desc:"Fish Farm Facility",geom:"Area",definition:"A facility involved in the breeding (hatching and associated activities) and cultivation (raising for release or harvesting) of fish in tanks or landlocked enclosures. ( Fish species raised on fish farms include, for example, salmon, catfish, tilapia, cod, carp, and trout. )",
+ {name:"ABH051",fcode:"BH051",desc:"Fish Farm Facility",geom:"Area",fdname:"MGCP",thematic:"TreatA",definition:"A facility involved in the breeding (hatching and associated activities) and cultivation (raising for release or harvesting) of fish in tanks or landlocked enclosures. ( Fish species raised on fish farms include, for example, salmon, catfish, tilapia, cod, carp, and trout. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2463,14 +2113,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH080",fcode:"BH080",desc:"Lake",geom:"Area",definition:"A large body of water entirely surrounded by land.",
+ {name:"ABH080",fcode:"BH080",desc:"Lake",geom:"Area",fdname:"MGCP",thematic:"LakeresA",definition:"A large body of water entirely surrounded by land.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HYP",desc:"Hydrologic Persistence",optional:"R",definition:"The degree of persistence of water in an inland water body (for example: a spring, a flowing stream, a lake or a pond). ( Inland water bodies may also include, for example, crevices, ditches, fountains, and water troughs. )",type:"enumeration",defValue:"0",
@@ -2499,14 +2144,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH090",fcode:"BH090",desc:"Land Subject to Inundation",geom:"Area",definition:"A tract periodically covered by flood water, excluding tidal waters.",
+ {name:"ABH090",fcode:"BH090",desc:"Land Subject to Inundation",geom:"Area",fdname:"MGCP",thematic:"InundA",definition:"A tract periodically covered by flood water, excluding tidal waters.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"AZC",desc:"Man-made",optional:"R",definition:"An indication that a feature is man-made.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -2530,14 +2170,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH120",fcode:"BH120",desc:"Rapids",geom:"Area",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
+ {name:"ABH120",fcode:"BH120",desc:"Rapids",geom:"Area",fdname:"MGCP",thematic:"RapidsA",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -2550,14 +2185,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH130",fcode:"BH130",desc:"Reservoir",geom:"Area",definition:"A substantial lake-like body of water impounded by a dam. ( May be used for flood control and/or as a source of water for irrigation, industrial processes, and/or human consumption. )",
+ {name:"ABH130",fcode:"BH130",desc:"Reservoir",geom:"Area",fdname:"MGCP",thematic:"LakeresA",definition:"A substantial lake-like body of water impounded by a dam. ( May be used for flood control and/or as a source of water for irrigation, industrial processes, and/or human consumption. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2579,14 +2209,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH135",fcode:"BH135",desc:"Rice Field",geom:"Area",definition:"A tract that is periodically covered with water and is used for growing rice.",
+ {name:"ABH135",fcode:"BH135",desc:"Rice Field",geom:"Area",fdname:"MGCP",thematic:"CropA",definition:"A tract that is periodically covered with water and is used for growing rice.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FFP",desc:"Farming Pattern",optional:"R",definition:"The general arrangement(s) and/or pattern(s) of farming fields.",type:"enumeration",defValue:"0",
@@ -2603,14 +2228,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH140",fcode:"BH140",desc:"River",geom:"Area",definition:"A natural flowing watercourse.",
+ {name:"ABH140",fcode:"BH140",desc:"River",geom:"Area",fdname:"MGCP",thematic:"WatrcrsA",definition:"A natural flowing watercourse.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2664,14 +2284,9 @@ var schema = [
    }
   ]
  },
- {name:"ABH150",fcode:"BH150",desc:"Salt Flat",geom:"Area",definition:"A flat area of natural surface salt deposits. ( May also be used to describe smaller areas; these are commonly termed salt pans. )",
+ {name:"ABH150",fcode:"BH150",desc:"Salt Flat",geom:"Area",fdname:"MGCP",thematic:"ExtractA",definition:"A flat area of natural surface salt deposits. ( May also be used to describe smaller areas; these are commonly termed salt pans. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -2684,14 +2299,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH155",fcode:"BH155",desc:"Salt Evaporator",geom:"Area",definition:"Shallow pools, normally man-made, used for the natural evaporation of water for the collection of salt.",
+ {name:"ABH155",fcode:"BH155",desc:"Salt Evaporator",geom:"Area",fdname:"MGCP",thematic:"ExtractA",definition:"Shallow pools, normally man-made, used for the natural evaporation of water for the collection of salt.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"AZC",desc:"Man-made",optional:"R",definition:"An indication that a feature is man-made.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -2708,14 +2318,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH160",fcode:"BH160",desc:"Sabkha",geom:"Area",definition:"A natural depression in arid or semi-arid regions whose bed is covered with salt encrusted clayey soil. ( Found especially in North Africa and Arabia. )",
+ {name:"ABH160",fcode:"BH160",desc:"Sabkha",geom:"Area",fdname:"MGCP",thematic:"Landfrm1A",definition:"A natural depression in arid or semi-arid regions whose bed is covered with salt encrusted clayey soil. ( Found especially in North Africa and Arabia. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -2728,14 +2333,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABH165",fcode:"BH165",desc:"Spillway",geom:"Area",definition:"A passage for surplus water to run over or around a dam.",
+ {name:"ABH165",fcode:"BH165",desc:"Spillway",geom:"Area",fdname:"MGCP",thematic:"DamA",definition:"A passage for surplus water to run over or around a dam.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2745,14 +2345,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABI020",fcode:"BI020",desc:"Dam",geom:"Area",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
+ {name:"ABI020",fcode:"BI020",desc:"Dam",geom:"Area",fdname:"MGCP",thematic:"DamA",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2810,14 +2405,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABI030",fcode:"BI030",desc:"Lock",geom:"Area",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
+ {name:"ABI030",fcode:"BI030",desc:"Lock",geom:"Area",fdname:"MGCP",thematic:"LockA",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -2831,14 +2421,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABJ020",fcode:"BJ020",desc:"Moraine",geom:"Area",definition:"An accumulation of soil and stone debris deposited by a glacier.",
+ {name:"ABJ020",fcode:"BJ020",desc:"Moraine",geom:"Area",fdname:"MGCP",thematic:"Landfrm2A",definition:"An accumulation of soil and stone debris deposited by a glacier.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2848,14 +2433,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABJ030",fcode:"BJ030",desc:"Glacier",geom:"Area",definition:"A large mass or river of ice formed by accumulation and compaction of snow on higher ground that is moving slowly down a slope or valley from above the snowline.",
+ {name:"ABJ030",fcode:"BJ030",desc:"Glacier",geom:"Area",fdname:"MGCP",thematic:"LandIceA",definition:"A large mass or river of ice formed by accumulation and compaction of snow on higher ground that is moving slowly down a slope or valley from above the snowline.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -2868,14 +2448,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABJ031",fcode:"BJ031",desc:"Crevasse",geom:"Area",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
+ {name:"ABJ031",fcode:"BJ031",desc:"Crevasse",geom:"Area",fdname:"MGCP",thematic:"LandfrmA",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2885,14 +2460,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABJ100",fcode:"BJ100",desc:"Snow Field and/or Ice-field",geom:"Area",definition:"A large area permanently covered by snow and/or ice. ( May cover land and/or water. )",
+ {name:"ABJ100",fcode:"BJ100",desc:"Snow Field and/or Ice-field",geom:"Area",fdname:"MGCP",thematic:"LandIceA",definition:"A large area permanently covered by snow and/or ice. ( May cover land and/or water. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -2905,14 +2475,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ABJ110",fcode:"BJ110",desc:"Tundra",geom:"Area",definition:"A vast, nearly level, treeless arctic region usually with a marshy surface and underlying permafrost.",
+ {name:"ABJ110",fcode:"BJ110",desc:"Tundra",geom:"Area",fdname:"MGCP",thematic:"TundraA",definition:"A vast, nearly level, treeless arctic region usually with a marshy surface and underlying permafrost.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2922,14 +2487,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADA010",fcode:"DA010",desc:"Soil Surface Region",geom:"Area",definition:"A region of the land that is homogeneous with respect to a soil characteristic.",
+ {name:"ADA010",fcode:"DA010",desc:"Soil Surface Region",geom:"Area",fdname:"MGCP",thematic:"GroundA",definition:"A region of the land that is homogeneous with respect to a soil characteristic.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2965,14 +2525,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADB061",fcode:"DB061",desc:"Crevice",geom:"Area",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock. ( May also describe a deep vertical opening in the terrain that appears after an earthquake. )",
+ {name:"ADB061",fcode:"DB061",desc:"Crevice",geom:"Area",fdname:"MGCP",thematic:"LandfrmA",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock. ( May also describe a deep vertical opening in the terrain that appears after an earthquake. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -2982,14 +2537,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADB090",fcode:"DB090",desc:"Embankment",geom:"Area",definition:"A man-made raised long mound of earth or other material.",
+ {name:"ADB090",fcode:"DB090",desc:"Embankment",geom:"Area",fdname:"MGCP",thematic:"EmbankA",definition:"A man-made raised long mound of earth or other material.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FIC",desc:"Embankment Type",optional:"R",definition:"The type of an embankment based on its use and/or relationship to the surrounding terrain.",type:"enumeration",defValue:"0",
@@ -3050,14 +2600,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADB115",fcode:"DB115",desc:"Geothermal Outlet",geom:"Area",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior. ( For example, a hot spring. )",
+ {name:"ADB115",fcode:"DB115",desc:"Geothermal Outlet",geom:"Area",fdname:"MGCP",thematic:"ThermalA",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior. ( For example, a hot spring. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3070,14 +2615,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADB160",fcode:"DB160",desc:"Rock Formation",geom:"Area",definition:"A significant outcropping of exposed bedrock.",
+ {name:"ADB160",fcode:"DB160",desc:"Rock Formation",geom:"Area",fdname:"MGCP",thematic:"Landfrm2A",definition:"A significant outcropping of exposed bedrock.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3098,14 +2638,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADB170",fcode:"DB170",desc:"Sand Dunes",geom:"Area",definition:"One or more mounds or ridges of sand usually formed by the wind.",
+ {name:"ADB170",fcode:"DB170",desc:"Sand Dunes",geom:"Area",fdname:"MGCP",thematic:"Landfrm1A",definition:"One or more mounds or ridges of sand usually formed by the wind.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3132,14 +2667,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ADB180",fcode:"DB180",desc:"Volcano",geom:"Area",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
+ {name:"ADB180",fcode:"DB180",desc:"Volcano",geom:"Area",fdname:"MGCP",thematic:"PhysA",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3163,14 +2693,9 @@ var schema = [
    }
   ]
  },
- {name:"ADB200",fcode:"DB200",desc:"Gully",geom:"Area",definition:"A deep ditch or channel cut into the terrain that results from erosion due to surface water runoff.",
+ {name:"ADB200",fcode:"DB200",desc:"Gully",geom:"Area",fdname:"MGCP",thematic:"LandfrmA",definition:"A deep ditch or channel cut into the terrain that results from erosion due to surface water runoff.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3183,14 +2708,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEA010",fcode:"EA010",desc:"Crop Land",geom:"Area",definition:"An area that has been tilled for the planting of crops.",
+ {name:"AEA010",fcode:"EA010",desc:"Crop Land",geom:"Area",fdname:"MGCP",thematic:"CropA",definition:"An area that has been tilled for the planting of crops.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CSP",desc:"Crop Species",optional:"R",definition:"The predominant species of a crop land.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3231,14 +2751,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEA040",fcode:"EA040",desc:"Orchard",geom:"Area",definition:"A tract covered by systematic plantings of trees that yield fruits (including nuts).",
+ {name:"AEA040",fcode:"EA040",desc:"Orchard",geom:"Area",fdname:"MGCP",thematic:"CropA",definition:"A tract covered by systematic plantings of trees that yield fruits (including nuts).",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CSP",desc:"Crop Species",optional:"R",definition:"The predominant species of a crop land.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3263,14 +2778,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEA050",fcode:"EA050",desc:"Vineyard",geom:"Area",definition:"A tract covered by the systematic planting of grape vines.",
+ {name:"AEA050",fcode:"EA050",desc:"Vineyard",geom:"Area",fdname:"MGCP",thematic:"CropA",definition:"A tract covered by the systematic planting of grape vines.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3283,14 +2793,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEA055",fcode:"EA055",desc:"Hop Field",geom:"Area",definition:"A tract covered by the systematic planting of hop vines.",
+ {name:"AEA055",fcode:"EA055",desc:"Hop Field",geom:"Area",fdname:"MGCP",thematic:"CropA",definition:"A tract covered by the systematic planting of hop vines.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -3300,14 +2805,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEB010",fcode:"EB010",desc:"Grassland",geom:"Area",definition:"A tract covered mainly by grasses that have little or no woody tissue. ( For example, pasture, meadow, and steppe. )",
+ {name:"AEB010",fcode:"EB010",desc:"Grassland",geom:"Area",fdname:"MGCP",thematic:"GrassA",definition:"A tract covered mainly by grasses that have little or no woody tissue. ( For example, pasture, meadow, and steppe. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3328,14 +2828,9 @@ var schema = [
    }
   ]
  },
- {name:"AEB020",fcode:"EB020",desc:"Thicket",geom:"Area",definition:"A tract covered mainly by low-growing, uncultured, woody plants that are thickly tangled together. ( For example, covered by brushwood and/or stunted trees. The predominant height may be up to 6-8 metres. )",
+ {name:"AEB020",fcode:"EB020",desc:"Thicket",geom:"Area",fdname:"MGCP",thematic:"GrassA",definition:"A tract covered mainly by low-growing, uncultured, woody plants that are thickly tangled together. ( For example, covered by brushwood and/or stunted trees. The predominant height may be up to 6-8 metres. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"DMB",desc:"Undergrowth Density",optional:"R",length:"100",units:"Percent",definition:"The fraction of land within a defined area that is covered by undergrowth (for example: scrub, brush, and/or bush).",type:"Real",defValue:"-32767.0"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -3346,14 +2841,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEC010",fcode:"EC010",desc:"Cane",geom:"Area",definition:"A tract covered mainly by large treelike grasses. ( For example, bamboo and sugarcane. )",
+ {name:"AEC010",fcode:"EC010",desc:"Cane",geom:"Area",fdname:"MGCP",thematic:"GrassA",definition:"A tract covered mainly by large treelike grasses. ( For example, bamboo and sugarcane. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -3363,14 +2853,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEC020",fcode:"EC020",desc:"Oasis",geom:"Area",definition:"A small, isolated, fertile or green area in a desert region usually having a spring or well.",
+ {name:"AEC020",fcode:"EC020",desc:"Oasis",geom:"Area",fdname:"MGCP",thematic:"OasisA",definition:"A small, isolated, fertile or green area in a desert region usually having a spring or well.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3383,14 +2868,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEC030",fcode:"EC030",desc:"Wood",geom:"Area",definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
+ {name:"AEC030",fcode:"EC030",desc:"Wood",geom:"Area",fdname:"MGCP",thematic:"TreesA",definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",length:"100",units:"Percent",definition:"The fraction of canopy cover within a defined area during the season of maximum foliage. ( The canopy is formed by the upper branches of the trees in a forest forming a more or less continuous layer. )",type:"Real",defValue:"-32767.0"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -3425,14 +2905,9 @@ var schema = [
    }
   ]
  },
- {name:"AEC040",fcode:"EC040",desc:"Cleared Way",geom:"Area",definition:"A man-made cleared strip through a vegetated region. ( May be designed to: provide access for a road, railroad, pipeline, power transmission line, or electrical signal line; demarcate a boundary; obtain survey line-of-sight; or to impede the progress of forest fires (a firebreak). )",
+ {name:"AEC040",fcode:"EC040",desc:"Cleared Way",geom:"Area",fdname:"MGCP",thematic:"FirebrkA",definition:"A man-made cleared strip through a vegetated region. ( May be designed to: provide access for a road, railroad, pipeline, power transmission line, or electrical signal line; demarcate a boundary; obtain survey line-of-sight; or to impede the progress of forest fires (a firebreak). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -3442,14 +2917,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AEC060",fcode:"EC060",desc:"Forest Clearing",geom:"Area",definition:"A site in a forest or wood(s) that has been cleared, often for slash and burn agriculture and/or as a result of clear-cutting logging. ( May also occur from natural causes such as a forest fire. )",
+ {name:"AEC060",fcode:"EC060",desc:"Forest Clearing",geom:"Area",fdname:"MGCP",thematic:"FirebrkA",definition:"A site in a forest or wood(s) that has been cleared, often for slash and burn agriculture and/or as a result of clear-cutting logging. ( May also occur from natural causes such as a forest fire. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -3459,14 +2929,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AED010",fcode:"ED010",desc:"Marsh",geom:"Area",definition:"A soft, poorly drained wetland that is characterized by the growth of only non-woody plants (for example: grasses) and often forms a transition region between a waterbody and land. ( It is subject to frequent or tidal inundations, but not considered to be continually under water. It lacks trees. A subtype of the more generalized Feature: 'Wetland'. )",
+ {name:"AED010",fcode:"ED010",desc:"Marsh",geom:"Area",fdname:"MGCP",thematic:"SwampA",definition:"A soft, poorly drained wetland that is characterized by the growth of only non-woody plants (for example: grasses) and often forms a transition region between a waterbody and land. ( It is subject to frequent or tidal inundations, but not considered to be continually under water. It lacks trees. A subtype of the more generalized Feature: 'Wetland'. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3486,14 +2951,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AED020",fcode:"ED020",desc:"Swamp",geom:"Area",definition:"A seasonally flooded, poorly drained wetland with more woody plants than a marsh and better drainage than a bog. ( It is covered with water all or most of the year, and accumulating dead vegetation does not rapidly decay. It can exist on flat-lying areas created by certain geomorphic environments. The vegetation mainly consists of hydrophytic trees and/or scrubs whose roots are adapted to wet conditions, with an open to very dense canopy closure. A subtype of the more generalized Feature: 'Wetland'. )",
+ {name:"AED020",fcode:"ED020",desc:"Swamp",geom:"Area",fdname:"MGCP",thematic:"SwampA",definition:"A seasonally flooded, poorly drained wetland with more woody plants than a marsh and better drainage than a bog. ( It is covered with water all or most of the year, and accumulating dead vegetation does not rapidly decay. It can exist on flat-lying areas created by certain geomorphic environments. The vegetation mainly consists of hydrophytic trees and/or scrubs whose roots are adapted to wet conditions, with an open to very dense canopy closure. A subtype of the more generalized Feature: 'Wetland'. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",length:"100",units:"Percent",definition:"The fraction of canopy cover within a defined area during the season of maximum foliage. ( The canopy is formed by the upper branches of the trees in a forest forming a more or less continuous layer. )",type:"Real",defValue:"-32767.0"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -3539,14 +2999,9 @@ var schema = [
    }
   ]
  },
- {name:"AED030",fcode:"ED030",desc:"Mangrove Swamp",geom:"Area",definition:"A dense thicket of mangrove that is subject to tidal inundation and forming a muddy swamp.",
+ {name:"AED030",fcode:"ED030",desc:"Mangrove Swamp",geom:"Area",fdname:"MGCP",thematic:"SwampA",definition:"A dense thicket of mangrove that is subject to tidal inundation and forming a muddy swamp.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",length:"100",units:"Percent",definition:"The fraction of canopy cover within a defined area during the season of maximum foliage. ( The canopy is formed by the upper branches of the trees in a forest forming a more or less continuous layer. )",type:"Real",defValue:"-32767.0"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -3567,14 +3022,53 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AFA015",fcode:"FA015",desc:"Firing Range",geom:"Area",definition:"A site designated for the purpose of discharging firearms or detonating munitions.",
+ {name:"AFA002",fcode:"FA002",desc:"Geopolitical Entity",geom:"Area",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndA",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"COD",desc:"Delineation Known",optional:"R",type:"enumeration",defValue:"1",
     enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
+     {name:"Limits and Information Known",value:"1"},
+     {name:"Limits and Information Unknown",value:"2"}
     ]
    },
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""}
+  ]
+ },
+ {name:"AFA003",fcode:"FA002",desc:"Geopolitical Entity",geom:"Area",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndA",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"BAL",desc:"BGN Administrative Level",optional:"R",type:"enumeration",defValue:"1",
+    enumerations:[
+     {name:"First-order",value:"1"},
+     {name:"Second-order",value:"2"},
+     {name:"Third-order",value:"3"},
+     {name:"Fourth-order",value:"4"},
+     {name:"Undifferentiated",value:"5"},
+     {name:"Other",value:"999"}
+    ]
+   },
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"THC",desc:"Thematic Classification",optional:"R",type:"enumeration",defValue:"1",
+    enumerations:[
+     {name:"Aeronautical",value:"1"},
+     {name:"Vegetation",value:"2"},
+     {name:"Utilities",value:"3"},
+     {name:"Population",value:"4"},
+     {name:"Physiography",value:"5"},
+     {name:"Industry",value:"6"},
+     {name:"Ground Transportation",value:"7"},
+     {name:"Elevation",value:"8"},
+     {name:"Boundaries",value:"9"},
+     {name:"Waterbodies",value:"10"},
+     {name:"Maritime",value:"11"}
+    ]
+   }
+  ]
+ },
+ {name:"AFA015",fcode:"FA015",desc:"Firing Range",geom:"Area",fdname:"MGCP",thematic:"LandmrkA",definition:"A site designated for the purpose of discharging firearms or detonating munitions.",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FRT",desc:"Weapons Range Type",optional:"R",definition:"The type of a weapons range based on its intended use(s).",type:"enumeration",defValue:"0",
@@ -3600,14 +3094,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AFA100",fcode:"FA100",desc:"Test Site",geom:"Area",definition:"A site for the testing of technical products and equipment.",
+ {name:"AFA100",fcode:"FA100",desc:"Test Site",geom:"Area",fdname:"MGCP",thematic:"TestA",definition:"A site for the testing of technical products and equipment.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -3620,14 +3109,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AGB005",fcode:"GB005",desc:"Land Aerodrome",geom:"Area",definition:"An aerodrome on land intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft.",
+ {name:"AGB005",fcode:"GB005",desc:"Land Aerodrome",geom:"Area",fdname:"MGCP",thematic:"AerofacA",definition:"An aerodrome on land intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CAA",desc:"Controlling Authority",optional:"R",definition:"The controlling authority responsible for a facility or site. ( Controlling authorities may be distinguished by organizational level (for example: national, sub-national, or military district) and/or type (for example: private or public). )",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -3666,14 +3150,9 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",units:"Metre",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"AGB015",fcode:"GB015",desc:"Apron",geom:"Area",definition:"A defined area, on a land aerodrome/heliport, intended to accommodate aircraft/helicopters for purposes of loading and unloading passengers, mail or cargo, and for fuelling, parking or maintenance.",
+ {name:"AGB015",fcode:"GB015",desc:"Apron",geom:"Area",fdname:"MGCP",thematic:"RunwayA",definition:"A defined area, on a land aerodrome/heliport, intended to accommodate aircraft/helicopters for purposes of loading and unloading passengers, mail or cargo, and for fuelling, parking or maintenance.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -3703,14 +3182,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AGB035",fcode:"GB035",desc:"Heliport",geom:"Area",definition:"An aerodrome intended to be used for the arrival, landing, takeoff or departure of vertical takeoff and landing aircraft/helicopters.",
+ {name:"AGB035",fcode:"GB035",desc:"Heliport",geom:"Area",fdname:"MGCP",thematic:"AerofacA",definition:"An aerodrome intended to be used for the arrival, landing, takeoff or departure of vertical takeoff and landing aircraft/helicopters.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CAA",desc:"Controlling Authority",optional:"R",definition:"The controlling authority responsible for a facility or site. ( Controlling authorities may be distinguished by organizational level (for example: national, sub-national, or military district) and/or type (for example: private or public). )",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -3734,14 +3208,9 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",units:"Metre",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"AGB045",fcode:"GB045",desc:"Stopway",geom:"Area",definition:"A defined rectangular area on the ground at the end of the take-off run available that has been prepared as a suitable area in which an aircraft can be stopped in the case of an abandoned take-off.",
+ {name:"AGB045",fcode:"GB045",desc:"Stopway",geom:"Area",fdname:"MGCP",thematic:"RunwayA",definition:"A defined rectangular area on the ground at the end of the take-off run available that has been prepared as a suitable area in which an aircraft can be stopped in the case of an abandoned take-off.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -3771,14 +3240,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AGB055",fcode:"GB055",desc:"Runway",geom:"Area",definition:"A defined rectangular area on a land aerodrome prepared for the landing and take-off of aircraft.",
+ {name:"AGB055",fcode:"GB055",desc:"Runway",geom:"Area",fdname:"MGCP",thematic:"RunwayA",definition:"A defined rectangular area on a land aerodrome prepared for the landing and take-off of aircraft.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",units:"Degree",definition:"The angular distance in the horizontal plane measured from true north (0 degrees) clockwise to the major axis of the feature. ( If the feature is square, the axis 0 up to 90 degrees is recorded. If the feature is circular, 360 degrees is recorded. )",type:"Real",defValue:"-32767.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -3819,14 +3283,9 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",units:"Metre",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"AGB065",fcode:"GB065",desc:"Water Aerodrome",geom:"Area",definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
+ {name:"AGB065",fcode:"GB065",desc:"Water Aerodrome",geom:"Area",fdname:"MGCP",thematic:"AerofacA",definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CAA",desc:"Controlling Authority",optional:"R",definition:"The controlling authority responsible for a facility or site. ( Controlling authorities may be distinguished by organizational level (for example: national, sub-national, or military district) and/or type (for example: private or public). )",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -3850,14 +3309,9 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",units:"Metre",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"AGB075",fcode:"GB075",desc:"Taxiway",geom:"Area",definition:"A defined path at an aerodrome established for the taxiing of aircraft and intended to provide a ground movement link between one part of the aerodrome and another.",
+ {name:"AGB075",fcode:"GB075",desc:"Taxiway",geom:"Area",fdname:"MGCP",thematic:"RunwayA",definition:"A defined path at an aerodrome established for the taxiing of aircraft and intended to provide a ground movement link between one part of the aerodrome and another.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -3887,14 +3341,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AGB230",fcode:"GB230",desc:"Aircraft Hangar",geom:"Area",definition:"A building for housing aircraft.",
+ {name:"AGB230",fcode:"GB230",desc:"Aircraft Hangar",geom:"Area",fdname:"MGCP",thematic:"AerofacA",definition:"A building for housing aircraft.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -3905,14 +3354,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"ASU001",fcode:"SU001",desc:"Military Installation",geom:"Area",definition:"An installation designed for military use. ( For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages. )",
+ {name:"ASU001",fcode:"SU001",desc:"Military Installation",geom:"Area",fdname:"MGCP",thematic:"MilA",definition:"An installation designed for military use. ( For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -3926,14 +3370,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"AZD020",fcode:"ZD020",desc:"Void Collection Area",geom:"Area",definition:"A data collection region lacking suitable source coverage and/or where data is not required.",
+ {name:"AZD020",fcode:"ZD020",desc:"Void Collection Area",geom:"Area",fdname:"MGCP",thematic:"VoidA",definition:"A data collection region lacking suitable source coverage and/or where data is not required.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -3943,14 +3382,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAF020",fcode:"AF020",desc:"Conveyor",geom:"Line",definition:"A mechanical device for conveying articles or materials during manufacture or processing using an endless moving belt or series of rollers.",
+ {name:"LAF020",fcode:"AF020",desc:"Conveyor",geom:"Line",fdname:"MGCP",thematic:"IndL",definition:"A mechanical device for conveying articles or materials during manufacture or processing using an endless moving belt or series of rollers.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -3963,14 +3397,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAH025",fcode:"AH025",desc:"Engineered Earthwork",geom:"Line",definition:"An excavation and/or embankment created by remolding the natural configuration of the terrain for the purpose of enhancing the defense of a site from armed attack. ( The earthwork may include ancillary elements (for example: a palisade) or reinforcements (for example: a concrete facing). )",
+ {name:"LAH025",fcode:"AH025",desc:"Engineered Earthwork",geom:"Line",fdname:"MGCP",thematic:"MilL",definition:"An excavation and/or embankment created by remolding the natural configuration of the terrain for the purpose of enhancing the defense of a site from armed attack. ( The earthwork may include ancillary elements (for example: a palisade) or reinforcements (for example: a concrete facing). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"EET",desc:"Engineered Earthwork Type",optional:"R",definition:"The type of an excavation and/or embankment created for the purpose of enhancing the defense of a site from armed attack.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3992,14 +3421,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAK130",fcode:"AK130",desc:"Racetrack",geom:"Line",definition:"A ground or tract marked out for racing. ( The track may be banked to facilitate high-speed racing, either by grading of the terrain or the use of structures. The bank angle may exceed 30 arc degrees and such structures can reach significant heights. )",
+ {name:"LAK130",fcode:"AK130",desc:"Racetrack",geom:"Line",fdname:"MGCP",thematic:"LandmrkL",definition:"A ground or tract marked out for racing. ( The track may be banked to facilitate high-speed racing, either by grading of the terrain or the use of structures. The bank angle may exceed 30 arc degrees and such structures can reach significant heights. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4028,14 +3452,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAK150",fcode:"AK150",desc:"Ski-jump",geom:"Line",definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
+ {name:"LAK150",fcode:"AK150",desc:"Ski-jump",geom:"Line",fdname:"MGCP",thematic:"LandmrkL",definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -4051,14 +3470,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAK190",fcode:"AK190",desc:"Recreational Pier",geom:"Line",definition:"A structure extending into the water used as a platform for recreational purposes, not intended as a berthing place for vessels. ( For example, a fishing pier or a promenade pier. )",
+ {name:"LAK190",fcode:"AK190",desc:"Recreational Pier",geom:"Line",fdname:"MGCP",thematic:"PierL",definition:"A structure extending into the water used as a platform for recreational purposes, not intended as a berthing place for vessels. ( For example, a fishing pier or a promenade pier. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4098,14 +3512,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAL060",fcode:"AL060",desc:"Dragon's Teeth",geom:"Line",definition:"Upward-pointing obstacles laid in the ground to slow or stop the movement of vehicles. ( Typically constructed of regularly spaced concrete or metal shapes laid in single or multiple rows. )",
+ {name:"LAL060",fcode:"AL060",desc:"Dragon's Teeth",geom:"Line",fdname:"MGCP",thematic:"TransL",definition:"Upward-pointing obstacles laid in the ground to slow or stop the movement of vehicles. ( Typically constructed of regularly spaced concrete or metal shapes laid in single or multiple rows. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4120,14 +3529,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAL070",fcode:"AL070",desc:"Fence",geom:"Line",definition:"A man-made barrier of relatively light structure used as an enclosure or boundary. ( Similar structures that are constructed of heavy materials (for example: stone, rock or masonry) are classified as walls. )",
+ {name:"LAL070",fcode:"AL070",desc:"Fence",geom:"Line",fdname:"MGCP",thematic:"BarrierL",definition:"A man-made barrier of relatively light structure used as an enclosure or boundary. ( Similar structures that are constructed of heavy materials (for example: stone, rock or masonry) are classified as walls. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -4137,14 +3541,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAL210",fcode:"AL210",desc:"Protection Shed",geom:"Line",definition:"A shelter built to protect a section of road or railway from slides of snow and/or rock. ( For example, a snow shed or a rock shed. )",
+ {name:"LAL210",fcode:"AL210",desc:"Protection Shed",geom:"Line",fdname:"MGCP",thematic:"ShedL",definition:"A shelter built to protect a section of road or railway from slides of snow and/or rock. ( For example, a snow shed or a rock shed. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -4155,14 +3554,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAL260",fcode:"AL260",desc:"Wall",geom:"Line",definition:"A solid man-made barrier of generally heavy material used as an enclosure, boundary, or for protection.",
+ {name:"LAL260",fcode:"AL260",desc:"Wall",geom:"Line",fdname:"MGCP",thematic:"BarrierL",definition:"A solid man-made barrier of generally heavy material used as an enclosure, boundary, or for protection.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"MCC",desc:"Structural Material Type",optional:"R",definition:"The primary type(s) of material composing a feature, exclusive of the surface. ( The basis for 'primary' may be, for example, compositional dominance or structural organization. )",type:"enumeration",defValue:"0",
@@ -4199,14 +3593,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAN010",fcode:"AN010",desc:"Railway",geom:"Line",definition:"One or more railway tracks comprising a network that is operated for the conveyance of passengers and/or goods.",
+ {name:"LAN010",fcode:"AN010",desc:"Railway",geom:"Line",fdname:"MGCP",thematic:"RailrdL",definition:"One or more railway tracks comprising a network that is operated for the conveyance of passengers and/or goods.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4283,14 +3672,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAN050",fcode:"AN050",desc:"Railway Sidetrack",geom:"Line",definition:"A stretch of railway track connected to a main railway and used for temporary storage, passing, loading, and/or unloading.",
+ {name:"LAN050",fcode:"AN050",desc:"Railway Sidetrack",geom:"Line",fdname:"MGCP",thematic:"RailrdL",definition:"A stretch of railway track connected to a main railway and used for temporary storage, passing, loading, and/or unloading.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4326,14 +3710,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAP010",fcode:"AP010",desc:"Cart Track",geom:"Line",definition:"An unimproved road. ( The surface is usually rough (for example: rutted) and minimally prepared (for example: packed earth or thinly covered with gravel). )",
+ {name:"LAP010",fcode:"AP010",desc:"Cart Track",geom:"Line",fdname:"MGCP",thematic:"TrackL",definition:"An unimproved road. ( The surface is usually rough (for example: rutted) and minimally prepared (for example: packed earth or thinly covered with gravel). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -4355,14 +3734,9 @@ var schema = [
    }
   ]
  },
- {name:"LAP030",fcode:"AP030",desc:"Road",geom:"Line",definition:"A route with a specially prepared surface that is intended for use by wheeled vehicles.",
+ {name:"LAP030",fcode:"AP030",desc:"Road",geom:"Line",fdname:"MGCP",thematic:"RoadL",definition:"A route with a specially prepared surface that is intended for use by wheeled vehicles.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CON",desc:"Route Width Constriction Type",optional:"R",definition:"The type of a route width constriction based on the nature of the surrounding area. ( For example, reduction in road width to less than 4 metres is considered to be a constriction. Width restrictions cause vehicles and people to travel through narrow passages creating choke points. )",type:"enumeration",defValue:"998",
     enumerations:[
@@ -4433,14 +3807,9 @@ var schema = [
    }
   ]
  },
- {name:"LAP050",fcode:"AP050",desc:"Trail",geom:"Line",definition:"A path worn by the passage of people or animals.",
+ {name:"LAP050",fcode:"AP050",desc:"Trail",geom:"Line",fdname:"MGCP",thematic:"TrailL",definition:"A path worn by the passage of people or animals.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -4460,14 +3829,9 @@ var schema = [
    }
   ]
  },
- {name:"LAQ040",fcode:"AQ040",desc:"Bridge",geom:"Line",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road). ( A bridge consists of a set of two abutments and/or zero or more bridge piers joined by bridge spans. A bridge may serve, for example, as an overpass or a viaduct. In the context of a bridge, the scope of the term 'transportation route' includes the transportation of liquids or gases by means of either pipelines or aqueducts. )",
+ {name:"LAQ040",fcode:"AQ040",desc:"Bridge",geom:"Line",fdname:"MGCP",thematic:"BridgeL",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road). ( A bridge consists of a set of two abutments and/or zero or more bridge piers joined by bridge spans. A bridge may serve, for example, as an overpass or a viaduct. In the context of a bridge, the scope of the term 'transportation route' includes the transportation of liquids or gases by means of either pipelines or aqueducts. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"BOT",desc:"Bridge Opening Type",optional:"R",definition:"The type of structure or mechanism by which a bridge or bridge span is moved to allow passage of a vessel.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -4559,14 +3923,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAQ063",fcode:"AQ063",desc:"Causeway Structure",geom:"Line",definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway). ( The causeway structure is often constructed from local fill supplemented by other materials (for example: rocks, boulders or gravel) and consists of a solid linear structure in the configuration of an embankment. Causeway structures are built just high enough to insure that the transportation route will remain passable during periods of flooding, tides and seasonal rainfall. Culverts may occur along the length of the causeway structure and individual sections of the causeway structure may be interrupted by bridges. )",
+ {name:"LAQ063",fcode:"AQ063",desc:"Causeway Structure",geom:"Line",fdname:"MGCP",thematic:"EmbankL",definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway). ( The causeway structure is often constructed from local fill supplemented by other materials (for example: rocks, boulders or gravel) and consists of a solid linear structure in the configuration of an embankment. Causeway structures are built just high enough to insure that the transportation route will remain passable during periods of flooding, tides and seasonal rainfall. Culverts may occur along the length of the causeway structure and individual sections of the causeway structure may be interrupted by bridges. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"MCC",desc:"Structural Material Type",optional:"R",definition:"The primary type(s) of material composing a feature, exclusive of the surface. ( The basis for 'primary' may be, for example, compositional dominance or structural organization. )",type:"enumeration",defValue:"0",
@@ -4630,14 +3989,9 @@ var schema = [
    }
   ]
  },
- {name:"LAQ070",fcode:"AQ070",desc:"Ferry Crossing",geom:"Line",definition:"A route where a ferry crosses from one shore to another.",
+ {name:"LAQ070",fcode:"AQ070",desc:"Ferry Crossing",geom:"Line",fdname:"MGCP",thematic:"FerryL",definition:"A route where a ferry crosses from one shore to another.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4667,14 +4021,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAQ075",fcode:"AQ075",desc:"Ice Route",geom:"Line",definition:"A route over a frozen watercourse. ( Usually marked and intended to support substantial vehicle traffic. Often designed as an alternate to a seasonally-closed ferry crossing (see Feature: 'Ferry Crossing'). )",
+ {name:"LAQ075",fcode:"AQ075",desc:"Ice Route",geom:"Line",fdname:"MGCP",thematic:"LandmrkL",definition:"A route over a frozen watercourse. ( Usually marked and intended to support substantial vehicle traffic. Often designed as an alternate to a seasonally-closed ferry crossing (see Feature: 'Ferry Crossing'). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -4687,14 +4036,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAQ113",fcode:"AQ113",desc:"Pipeline",geom:"Line",definition:"A connected set of pipes for conveying liquids, slurries, or gases. ( Usually for long distances and often located underground. )",
+ {name:"LAQ113",fcode:"AQ113",desc:"Pipeline",geom:"Line",fdname:"MGCP",thematic:"PipeL",definition:"A connected set of pipes for conveying liquids, slurries, or gases. ( Usually for long distances and often located underground. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4736,14 +4080,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAQ130",fcode:"AQ130",desc:"Tunnel",geom:"Line",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway). ( Commonly used to pass through a hill or mountain, or under a river or road. May also provide underground passage in a mine. )",
+ {name:"LAQ130",fcode:"AQ130",desc:"Tunnel",geom:"Line",fdname:"MGCP",thematic:"TunnelL",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway). ( Commonly used to pass through a hill or mountain, or under a river or road. May also provide underground passage in a mine. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4774,14 +4113,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LAT030",fcode:"AT030",desc:"Power Line",geom:"Line",definition:"A cable that transmits or distributes electrical power. ( Long distance power transmission lines are typically operated at high voltages (for example, 500 kilovolts) whereas local power distribution lines are typically operated at much lower voltages (usually less than one kilovolt). )",
+ {name:"LAT030",fcode:"AT030",desc:"Power Line",geom:"Line",fdname:"MGCP",thematic:"PowerL",definition:"A cable that transmits or distributes electrical power. ( Long distance power transmission lines are typically operated at high voltages (for example, 500 kilovolts) whereas local power distribution lines are typically operated at much lower voltages (usually less than one kilovolt). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4794,14 +4128,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAT041",fcode:"AT041",desc:"Cableway",geom:"Line",definition:"A transportation system consisting of load cables strung between pylons on which carrier units (for example: cars or buckets intended to transport people, material, and/or equipment) are suspended. ( For example, a ski-lift. )",
+ {name:"LAT041",fcode:"AT041",desc:"Cableway",geom:"Line",fdname:"MGCP",thematic:"PowerL",definition:"A transportation system consisting of load cables strung between pylons on which carrier units (for example: cars or buckets intended to transport people, material, and/or equipment) are suspended. ( For example, a ski-lift. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CAT",desc:"Cableway Type",optional:"R",definition:"The type of a cableway based on structure and/or function.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -4836,14 +4165,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LAT060",fcode:"AT060",desc:"Communication Line",geom:"Line",definition:"A cable that transmits communication signals. ( For example, a telephone line, a telegraph line, or a fibreoptic cable. )",
+ {name:"LAT060",fcode:"AT060",desc:"Communication Line",geom:"Line",fdname:"MGCP",thematic:"TeleL",definition:"A cable that transmits communication signals. ( For example, a telephone line, a telegraph line, or a fibreoptic cable. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -4855,14 +4179,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBA010",fcode:"BA010",desc:"Land Water Boundary",geom:"Line",definition:"The line where a land mass is in contact with a body of water and the tide state or river stage are unspecified. ( It may be in either the littoral or inland waters. In the littoral, consideration should be given to using the more specific high water or low water lines based on the nature of the source data collection. )",
+ {name:"LBA010",fcode:"BA010",desc:"Land Water Boundary",geom:"Line",fdname:"MGCP",thematic:"CoastL",definition:"The line where a land mass is in contact with a body of water and the tide state or river stage are unspecified. ( It may be in either the littoral or inland waters. In the littoral, consideration should be given to using the more specific high water or low water lines based on the nature of the source data collection. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -4884,14 +4203,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBB041",fcode:"BB041",desc:"Breakwater",geom:"Line",definition:"A structure that protects a waterbody region (for example: a shore, a harbour, and/or an anchorage) from water waves by preventing them from reaching the protected region or reducing their magnitude.",
+ {name:"LBB041",fcode:"BB041",desc:"Breakwater",geom:"Line",fdname:"MGCP",thematic:"SeastrtL",definition:"A structure that protects a waterbody region (for example: a shore, a harbour, and/or an anchorage) from water waves by preventing them from reaching the protected region or reducing their magnitude.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4941,14 +4255,9 @@ var schema = [
    }
   ]
  },
- {name:"LBB043",fcode:"BB043",desc:"Groin",geom:"Line",definition:"A low artificial wall-like structure of durable material extending from the land to seaward for a particular purpose, such as to prevent coast erosion.",
+ {name:"LBB043",fcode:"BB043",desc:"Groin",geom:"Line",fdname:"MGCP",thematic:"SeastrtL",definition:"A low artificial wall-like structure of durable material extending from the land to seaward for a particular purpose, such as to prevent coast erosion.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -4998,14 +4307,9 @@ var schema = [
    }
   ]
  },
- {name:"LBB140",fcode:"BB140",desc:"Training Wall",geom:"Line",definition:"A wall, bank or jetty often submerged, built to direct or confine the flow of a river or tidal current or to promote scour actions.",
+ {name:"LBB140",fcode:"BB140",desc:"Training Wall",geom:"Line",fdname:"MGCP",thematic:"SeastrtL",definition:"A wall, bank or jetty often submerged, built to direct or confine the flow of a river or tidal current or to promote scour actions.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5043,14 +4347,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBB190",fcode:"BB190",desc:"Berthing Structure",geom:"Line",definition:"A structure primarily used as a berthing place for vessels. ( For example, a pier, a wharf, and a quay. Consideration should be given to using the more general Feature: 'Shoreline Construction' and a type-discriminating attribute. )",
+ {name:"LBB190",fcode:"BB190",desc:"Berthing Structure",geom:"Line",fdname:"MGCP",thematic:"PierL",definition:"A structure primarily used as a berthing place for vessels. ( For example, a pier, a wharf, and a quay. Consideration should be given to using the more general Feature: 'Shoreline Construction' and a type-discriminating attribute. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FAC",desc:"Solid Maritime Construction",optional:"R",definition:"An indication that a marine construction (for example: a pier, wharf, or quay) is solid, thereby blocking the free circulation of water underneath the construction. ( The construction may be of concrete, masonry, wood, and/or other building materials. Open pile construction is used where the benefits of protection from currents and waves is not required. )",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5115,14 +4414,9 @@ var schema = [
    }
   ]
  },
- {name:"LBB230",fcode:"BB230",desc:"Seawall",geom:"Line",definition:"An embankment or wall for protection against waves or tidal action along a shore or water front.",
+ {name:"LBB230",fcode:"BB230",desc:"Seawall",geom:"Line",fdname:"MGCP",thematic:"SeastrtL",definition:"An embankment or wall for protection against waves or tidal action along a shore or water front.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5160,14 +4454,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBD120",fcode:"BD120",desc:"Reef",geom:"Line",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
+ {name:"LBD120",fcode:"BD120",desc:"Reef",geom:"Line",fdname:"MGCP",thematic:"DangerL",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"COD",desc:"Delineation Known",optional:"R",definition:"An indication that the delineation (for example: limits and information) of a feature is known.",type:"enumeration",defValue:"1000",
     enumerations:[
@@ -5198,14 +4487,9 @@ var schema = [
    }
   ]
  },
- {name:"LBH010",fcode:"BH010",desc:"Aqueduct",geom:"Line",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
+ {name:"LBH010",fcode:"BH010",desc:"Aqueduct",geom:"Line",fdname:"MGCP",thematic:"AquedctL",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5235,14 +4519,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBH020",fcode:"BH020",desc:"Canal",geom:"Line",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
+ {name:"LBH020",fcode:"BH020",desc:"Canal",geom:"Line",fdname:"MGCP",thematic:"WatrcrsL",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5280,14 +4559,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBH030",fcode:"BH030",desc:"Ditch",geom:"Line",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
+ {name:"LBH030",fcode:"BH030",desc:"Ditch",geom:"Line",fdname:"MGCP",thematic:"WatrcrsL",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5317,14 +4591,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBH060",fcode:"BH060",desc:"Flume",geom:"Line",definition:"An inclined channel for conveying water from a distance. ( For example, carries water to be utilized for power, transportation, and/or irrigation. )",
+ {name:"LBH060",fcode:"BH060",desc:"Flume",geom:"Line",fdname:"MGCP",thematic:"IndL",definition:"An inclined channel for conveying water from a distance. ( For example, carries water to be utilized for power, transportation, and/or irrigation. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5342,14 +4611,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBH070",fcode:"BH070",desc:"Ford",geom:"Line",definition:"A shallow place in a body of water used as a crossing.",
+ {name:"LBH070",fcode:"BH070",desc:"Ford",geom:"Line",fdname:"MGCP",thematic:"FordL",definition:"A shallow place in a body of water used as a crossing.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5369,14 +4633,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBH110",fcode:"BH110",desc:"Penstock",geom:"Line",definition:"A pipeline that is used by hydroelectric plants to transport water by gravity from a reservoir to the turbine(s).",
+ {name:"LBH110",fcode:"BH110",desc:"Penstock",geom:"Line",fdname:"MGCP",thematic:"MiscL",definition:"A pipeline that is used by hydroelectric plants to transport water by gravity from a reservoir to the turbine(s).",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",definition:"The relationship between the feature and the underlying ground (terrain) or waterbody bottom.",type:"enumeration",defValue:"0",
@@ -5394,14 +4653,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBH120",fcode:"BH120",desc:"Rapids",geom:"Line",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
+ {name:"LBH120",fcode:"BH120",desc:"Rapids",geom:"Line",fdname:"MGCP",thematic:"RapidsL",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5414,14 +4668,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBH140",fcode:"BH140",desc:"River",geom:"Line",definition:"A natural flowing watercourse.",
+ {name:"LBH140",fcode:"BH140",desc:"River",geom:"Line",fdname:"MGCP",thematic:"WatrcrsL",definition:"A natural flowing watercourse.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CDA",desc:"Covered Drain",optional:"R",definition:"An indication that a watercourse section is completely covered over and connects to uncovered watercourses at each end.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5476,14 +4725,9 @@ var schema = [
    }
   ]
  },
- {name:"LBH165",fcode:"BH165",desc:"Spillway",geom:"Line",definition:"A passage for surplus water to run over or around a dam.",
+ {name:"LBH165",fcode:"BH165",desc:"Spillway",geom:"Line",fdname:"MGCP",thematic:"DamL",definition:"A passage for surplus water to run over or around a dam.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5493,14 +4737,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBH180",fcode:"BH180",desc:"Waterfall",geom:"Line",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice). ( In place names, commonly shortened to 'fall' or 'falls', for example, 'Niagara Falls'. )",
+ {name:"LBH180",fcode:"BH180",desc:"Waterfall",geom:"Line",fdname:"MGCP",thematic:"RapidsL",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice). ( In place names, commonly shortened to 'fall' or 'falls', for example, 'Niagara Falls'. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5513,14 +4752,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LBI020",fcode:"BI020",desc:"Dam",geom:"Line",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
+ {name:"LBI020",fcode:"BI020",desc:"Dam",geom:"Line",fdname:"MGCP",thematic:"DamL",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5579,14 +4813,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBI030",fcode:"BI030",desc:"Lock",geom:"Line",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
+ {name:"LBI030",fcode:"BI030",desc:"Lock",geom:"Line",fdname:"MGCP",thematic:"LockL",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5601,14 +4830,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBI040",fcode:"BI040",desc:"Sluice Gate",geom:"Line",definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice). ( Sluice gates are normally installed in a superstructure and/or frame and most commonly slide vertically to open but on occasion may instead slide horizontally. When opened they allow water to flow under or beside the gate. Commonly sluice gates will be installed perpendicular to the orientation of the flow of water within a watercourse and will be constructed as wide as the watercourse they regulate. Sluice gates may also be installed along the margins of watercourses for the purpose of controlling or permitting the flow of water to or from that watercourse into adjacent watercourses. Sluice gates may be used to regulate both tidal or non-tidal waters. )",
+ {name:"LBI040",fcode:"BI040",desc:"Sluice Gate",geom:"Line",fdname:"MGCP",thematic:"LockL",definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice). ( Sluice gates are normally installed in a superstructure and/or frame and most commonly slide vertically to open but on occasion may instead slide horizontally. When opened they allow water to flow under or beside the gate. Commonly sluice gates will be installed perpendicular to the orientation of the flow of water within a watercourse and will be constructed as wide as the watercourse they regulate. Sluice gates may also be installed along the margins of watercourses for the purpose of controlling or permitting the flow of water to or from that watercourse into adjacent watercourses. Sluice gates may be used to regulate both tidal or non-tidal waters. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5620,14 +4844,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBI041",fcode:"BI041",desc:"Water Gate",geom:"Line",definition:"A barrier that may be swung, drawn, or lowered to block an entrance or passageway on a watercourse.",
+ {name:"LBI041",fcode:"BI041",desc:"Water Gate",geom:"Line",fdname:"MGCP",thematic:"MiscL",definition:"A barrier that may be swung, drawn, or lowered to block an entrance or passageway on a watercourse.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -5648,14 +4867,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBJ031",fcode:"BJ031",desc:"Crevasse",geom:"Line",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
+ {name:"LBJ031",fcode:"BJ031",desc:"Crevasse",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5666,14 +4880,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LBJ040",fcode:"BJ040",desc:"Ice Cliff",geom:"Line",definition:"The vertical face of a glacier or ice shelf.",
+ {name:"LBJ040",fcode:"BJ040",desc:"Ice Cliff",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"The vertical face of a glacier or ice shelf.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5686,14 +4895,47 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LDB010",fcode:"DB010",desc:"Steep Terrain Face",geom:"Line",definition:"A steep, vertical, or overhanging face of rock and/or soil. ( For example, an escarpment, a bluff, or a cliff. )",
+ {name:"LCA010",fcode:"CA010",desc:"Elevation Contour",geom:"Line",fcsubtype:"",fdname:"MGCP_Delta",thematic:"ContourL",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"ESC",desc:"Elevation Surface Category",optional:"R",type:"enumeration",defValue:"1",
     enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
+     {name:"Unknown",value:"0"},
+     {name:"Land",value:"1"},
+     {name:"Snow Field and/or Ice-field",value:"2"}
     ]
    },
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"HQC",desc:"Hypsography Portrayal Type",optional:"R",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"Unknown",value:"0"},
+     {name:"Index Contour",value:"1"},
+     {name:"Intermediate Contour",value:"2"},
+     {name:"Half Auxiliary Contour",value:"3"},
+     {name:"Depression Index Contour",value:"5"},
+     {name:"Depression Intermediate Contour",value:"6"},
+     {name:"Mound Index Contour",value:"8"},
+     {name:"Mound Intermediate Contour",value:"9"},
+     {name:"Quarter Auxiliary Contour",value:"14"},
+     {name:"Intermediate Carrying Contour",value:"19"},
+     {name:"Auxiliary Carrying Contour",value:"20"},
+     {name:"Index Carrying Contour",value:"21"},
+     {name:"Depression Auxiliary Contour",value:"22"},
+     {name:"Other",value:"999"}
+    ]
+   },
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"},
+   {name:"ZVH",desc:"Highest Elevation",optional:"R",type:"Real",defValue:"-999999.0"}
+  ]
+ },
+ {name:"LDB010",fcode:"DB010",desc:"Steep Terrain Face",geom:"Line",fdname:"MGCP",thematic:"BluffL",definition:"A steep, vertical, or overhanging face of rock and/or soil. ( For example, an escarpment, a bluff, or a cliff. )",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5706,14 +4948,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LDB061",fcode:"DB061",desc:"Crevice",geom:"Line",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock. ( May also describe a deep vertical opening in the terrain that appears after an earthquake. )",
+ {name:"LDB061",fcode:"DB061",desc:"Crevice",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock. ( May also describe a deep vertical opening in the terrain that appears after an earthquake. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5724,14 +4961,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LDB070",fcode:"DB070",desc:"Cut",geom:"Line",definition:"An excavation in the terrain to provide passage for a land or water transportation route (for example: a road, a railway, and/or a canal).",
+ {name:"LDB070",fcode:"DB070",desc:"Cut",geom:"Line",fdname:"MGCP",thematic:"EmbankL",definition:"An excavation in the terrain to provide passage for a land or water transportation route (for example: a road, a railway, and/or a canal).",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5766,14 +4998,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LDB071",fcode:"DB071",desc:"Cut Line",geom:"Line",definition:"The demarcation line between a cut and the surrounding land surface.",
+ {name:"LDB071",fcode:"DB071",desc:"Cut Line",geom:"Line",fdname:"MGCP",thematic:"EmbankL",definition:"The demarcation line between a cut and the surrounding land surface.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5783,14 +5010,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LDB090",fcode:"DB090",desc:"Embankment",geom:"Line",definition:"A man-made raised long mound of earth or other material.",
+ {name:"LDB090",fcode:"DB090",desc:"Embankment",geom:"Line",fdname:"MGCP",thematic:"EmbankL",definition:"A man-made raised long mound of earth or other material.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FIC",desc:"Embankment Type",optional:"R",definition:"The type of an embankment based on its use and/or relationship to the surrounding terrain.",type:"enumeration",defValue:"0",
@@ -5851,14 +5073,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LDB100",fcode:"DB100",desc:"Esker",geom:"Line",definition:"A long, narrow ridge of sand and gravel deposited by a glacial stream.",
+ {name:"LDB100",fcode:"DB100",desc:"Esker",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"A long, narrow ridge of sand and gravel deposited by a glacial stream.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5868,14 +5085,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LDB110",fcode:"DB110",desc:"Geologic Fault",geom:"Line",definition:"A fracture or zone of fractures in a rock formation, marked by the relative displacement on either side of the plane of the fracture. ( The intersection of a geologic fault with the ground surface is termed the 'fault trace' and is commonly plotted on maps to represent a fault. Since geologic faults do not usually consist of a single, clean fracture, the term 'fault zone' (or 'distributed fault') is often used when referring to the zone of complex deformation and numerous small fractures that is associated with the fault plane. )",
+ {name:"LDB110",fcode:"DB110",desc:"Geologic Fault",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"A fracture or zone of fractures in a rock formation, marked by the relative displacement on either side of the plane of the fracture. ( The intersection of a geologic fault with the ground surface is termed the 'fault trace' and is commonly plotted on maps to represent a fault. Since geologic faults do not usually consist of a single, clean fracture, the term 'fault zone' (or 'distributed fault') is often used when referring to the zone of complex deformation and numerous small fractures that is associated with the fault plane. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5889,14 +5101,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"LDB160",fcode:"DB160",desc:"Rock Formation",geom:"Line",definition:"A significant outcropping of exposed bedrock.",
+ {name:"LDB160",fcode:"DB160",desc:"Rock Formation",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"A significant outcropping of exposed bedrock.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5909,14 +5116,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LDB200",fcode:"DB200",desc:"Gully",geom:"Line",definition:"A deep ditch or channel cut into the terrain that results from erosion due to surface water runoff.",
+ {name:"LDB200",fcode:"DB200",desc:"Gully",geom:"Line",fdname:"MGCP",thematic:"LandfrmL",definition:"A deep ditch or channel cut into the terrain that results from erosion due to surface water runoff.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -5929,14 +5131,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LEA020",fcode:"EA020",desc:"Hedgerow",geom:"Line",definition:"A continuous growth of shrubs planted as a fence, a boundary, and/or a windbreak.",
+ {name:"LEA020",fcode:"EA020",desc:"Hedgerow",geom:"Line",fdname:"MGCP",thematic:"TreesL",definition:"A continuous growth of shrubs planted as a fence, a boundary, and/or a windbreak.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5946,14 +5143,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LEC030",fcode:"EC030",desc:"Wood",geom:"Line",definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
+ {name:"LEC030",fcode:"EC030",desc:"Wood",geom:"Line",fdname:"MGCP",thematic:"TreesL",definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5971,14 +5163,31 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LFA090",fcode:"FA090",desc:"Geophysical Prospecting Grid",geom:"Line",definition:"A grid established for the collection of geophysical data within an area. ( The grid is typically composed of one or more series of observation points where each series is obtained along a single track and the grid is then assembled from multiple tracks. )",
+ {name:"LFA000",fcode:"FA000",desc:"Administrative Boundary",geom:"Line",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndL",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"BST",desc:"Boundary Status",optional:"R",type:"enumeration",defValue:"0",
     enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
+     {name:"Unknown",value:"0"},
+     {name:"Definite",value:"1"},
+     {name:"Indefinite",value:"2"},
+     {name:"In Dispute",value:"3"},
+     {name:"No Defined Boundary",value:"4"},
+     {name:"Other",value:"999"}
     ]
    },
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
+  ]
+ },
+ {name:"LFA090",fcode:"FA090",desc:"Geophysical Prospecting Grid",geom:"Line",fdname:"MGCP",thematic:"IndL",definition:"A grid established for the collection of geophysical data within an area. ( The grid is typically composed of one or more series of observation points where each series is obtained along a single track and the grid is then assembled from multiple tracks. )",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -5988,14 +5197,35 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"LGB050",fcode:"GB050",desc:"Aircraft Revetment",geom:"Line",definition:"A barricade that protects an aircraft, equipment, and/or facility from hostile action.",
+ {name:"LFA110",fcode:"FA110",desc:"International Date Line",geom:"Line",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndL",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
+  ]
+ },
+ {name:"LFC021",fcode:"FC021",desc:"Maritime Limit Boundary",geom:"Line",fcsubtype:"",fdname:"MGCP_Delta",thematic:"PolbndL",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"NM3",desc:"Boundary First Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NM4",desc:"Boundary Second Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
+  ]
+ },
+ {name:"LGB050",fcode:"GB050",desc:"Aircraft Revetment",geom:"Line",fdname:"MGCP",thematic:"RunwayL",definition:"A barricade that protects an aircraft, equipment, and/or facility from hostile action.",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -6005,14 +5235,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAA010",fcode:"AA010",desc:"Extraction Mine",geom:"Point",definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
+ {name:"PAA010",fcode:"AA010",desc:"Extraction Mine",geom:"Point",fdname:"MGCP",thematic:"ExtractP",definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6056,14 +5281,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAA012",fcode:"AA012",desc:"Quarry",geom:"Point",definition:"An open-air excavation created by removal of stone by blasting or cutting.",
+ {name:"PAA012",fcode:"AA012",desc:"Quarry",geom:"Point",fdname:"MGCP",thematic:"ExtractP",definition:"An open-air excavation created by removal of stone by blasting or cutting.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6093,14 +5313,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAA040",fcode:"AA040",desc:"Rig",geom:"Point",definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
+ {name:"PAA040",fcode:"AA040",desc:"Rig",geom:"Point",fdname:"MGCP",thematic:"RigwellP",definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6125,14 +5340,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAA050",fcode:"AA050",desc:"Well",geom:"Point",definition:"An excavation drilled or dug into the ground (for example: the sea bed) for the extraction of liquids and/or gases.",
+ {name:"PAA050",fcode:"AA050",desc:"Well",geom:"Point",fdname:"MGCP",thematic:"WellsprP",definition:"An excavation drilled or dug into the ground (for example: the sea bed) for the extraction of liquids and/or gases.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6185,14 +5395,9 @@ var schema = [
    }
   ]
  },
- {name:"PAC000",fcode:"AC000",desc:"Processing Facility",geom:"Point",definition:"A facility including one or more buildings used for processing materials. ( For example, a treatment plant. )",
+ {name:"PAC000",fcode:"AC000",desc:"Processing Facility",geom:"Point",fdname:"MGCP",thematic:"ProcessP",definition:"A facility including one or more buildings used for processing materials. ( For example, a treatment plant. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6253,14 +5458,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAC020",fcode:"AC020",desc:"Catalytic Cracker",geom:"Point",definition:"A device in which the separation of petroleum is carried out in the presence of a catalyst.",
+ {name:"PAC020",fcode:"AC020",desc:"Catalytic Cracker",geom:"Point",fdname:"MGCP",thematic:"RigwellP",definition:"A device in which the separation of petroleum is carried out in the presence of a catalyst.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6273,14 +5473,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAC030",fcode:"AC030",desc:"Settling Pond",geom:"Point",definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
+ {name:"PAC030",fcode:"AC030",desc:"Settling Pond",geom:"Point",fdname:"MGCP",thematic:"TreatP",definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6300,14 +5495,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAD010",fcode:"AD010",desc:"Electric Power Station",geom:"Point",definition:"A facility including one or more buildings and equipment used for electric power generation. ( An electric power station consists of one or more power generating units, each consisting of the full set of equipment required to generate power and capable of independent operation. The power generating units are located on one or more contiguous or adjacent properties, are under the common control of the same entity and supply power through a common connection to the electric grid. Electric power stations most commonly are used to generate electricity for long distance transmission. )",
+ {name:"PAD010",fcode:"AD010",desc:"Electric Power Station",geom:"Point",fdname:"MGCP",thematic:"PowerP",definition:"A facility including one or more buildings and equipment used for electric power generation. ( An electric power station consists of one or more power generating units, each consisting of the full set of equipment required to generate power and capable of independent operation. The power generating units are located on one or more contiguous or adjacent properties, are under the common control of the same entity and supply power through a common connection to the electric grid. Electric power stations most commonly are used to generate electricity for long distance transmission. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6336,14 +5526,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAD020",fcode:"AD020",desc:"Solar Panel",geom:"Point",definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
+ {name:"PAD020",fcode:"AD020",desc:"Solar Panel",geom:"Point",fdname:"MGCP",thematic:"PowerP",definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6354,14 +5539,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAD030",fcode:"AD030",desc:"Power Substation",geom:"Point",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
+ {name:"PAD030",fcode:"AD030",desc:"Power Substation",geom:"Point",fdname:"MGCP",thematic:"SubstatP",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6375,14 +5555,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAD050",fcode:"AD050",desc:"Heating Facility",geom:"Point",definition:"A facility for the generation of thermal energy for heating purposes.",
+ {name:"PAD050",fcode:"AD050",desc:"Heating Facility",geom:"Point",fdname:"MGCP",thematic:"PowerP",definition:"A facility for the generation of thermal energy for heating purposes.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6396,14 +5571,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAF010",fcode:"AF010",desc:"Smokestack",geom:"Point",definition:"A vertical structure containing a passage or flue for discharging smoke and gases of combustion.",
+ {name:"PAF010",fcode:"AF010",desc:"Smokestack",geom:"Point",fdname:"MGCP",thematic:"ObstrP",definition:"A vertical structure containing a passage or flue for discharging smoke and gases of combustion.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6416,14 +5586,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAF040",fcode:"AF040",desc:"Crane",geom:"Point",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
+ {name:"PAF040",fcode:"AF040",desc:"Crane",geom:"Point",fdname:"MGCP",thematic:"ObstrP",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CRA",desc:"Crane Type",optional:"R",definition:"The type of a crane based on its design and/or method of operation.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6454,14 +5619,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAF070",fcode:"AF070",desc:"Flare Pipe",geom:"Point",definition:"An open-ended pipe at which waste gases are burned.",
+ {name:"PAF070",fcode:"AF070",desc:"Flare Pipe",geom:"Point",fdname:"MGCP",thematic:"ObstrP",definition:"An open-ended pipe at which waste gases are burned.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6474,14 +5634,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAH050",fcode:"AH050",desc:"Fortification",geom:"Point",definition:"A structure constructed for the military defence of a site. ( For example, a bastion and a rampart. )",
+ {name:"PAH050",fcode:"AH050",desc:"Fortification",geom:"Point",fdname:"MGCP",thematic:"FortP",definition:"A structure constructed for the military defence of a site. ( For example, a bastion and a rampart. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6523,14 +5678,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAH070",fcode:"AH070",desc:"Checkpoint",geom:"Point",definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
+ {name:"PAH070",fcode:"AH070",desc:"Checkpoint",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -6543,14 +5693,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAJ030",fcode:"AJ030",desc:"Holding Pen",geom:"Point",definition:"An enclosed tract on which livestock are temporarily kept. ( For example, a sheepfold, a holding paddock, a livestock pen, a feedlot, and/or a stock yard. The enclosure may be by, for example, a fence or a wall. )",
+ {name:"PAJ030",fcode:"AJ030",desc:"Holding Pen",geom:"Point",fdname:"MGCP",thematic:"TreatP",definition:"An enclosed tract on which livestock are temporarily kept. ( For example, a sheepfold, a holding paddock, a livestock pen, a feedlot, and/or a stock yard. The enclosure may be by, for example, a fence or a wall. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -6560,14 +5705,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAJ050",fcode:"AJ050",desc:"Windmill",geom:"Point",definition:"A system of vanes attached to a tower and driven by wind (excluding wind turbines).",
+ {name:"PAJ050",fcode:"AJ050",desc:"Windmill",geom:"Point",fdname:"MGCP",thematic:"ObstrP",definition:"A system of vanes attached to a tower and driven by wind (excluding wind turbines).",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6580,14 +5720,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAJ051",fcode:"AJ051",desc:"Wind Turbine",geom:"Point",definition:"A tower and associated equipment that generates electrical power from wind.",
+ {name:"PAJ051",fcode:"AJ051",desc:"Wind Turbine",geom:"Point",fdname:"MGCP",thematic:"UtilP",definition:"A tower and associated equipment that generates electrical power from wind.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6600,14 +5735,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAJ110",fcode:"AJ110",desc:"Greenhouse",geom:"Point",definition:"A building constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
+ {name:"PAJ110",fcode:"AJ110",desc:"Greenhouse",geom:"Point",fdname:"MGCP",thematic:"MiscpopP",definition:"A building constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6618,14 +5748,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAK040",fcode:"AK040",desc:"Sports Ground",geom:"Point",definition:"An open area where sporting events, exercises, and/or games occur. ( For example, an athletic field, a playing field, and/or a sports field. )",
+ {name:"PAK040",fcode:"AK040",desc:"Sports Ground",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"An open area where sporting events, exercises, and/or games occur. ( For example, an athletic field, a playing field, and/or a sports field. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -6654,14 +5779,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAK150",fcode:"AK150",desc:"Ski-jump",geom:"Point",definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
+ {name:"PAK150",fcode:"AK150",desc:"Ski-jump",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",units:"Degree",definition:"The angular distance in the horizontal plane measured from true north (0 degrees) clockwise to the major axis of the feature. ( If the feature is square, the axis 0 up to 90 degrees is recorded. If the feature is circular, 360 degrees is recorded. )",type:"Real",defValue:"-32767.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -6677,14 +5797,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAK160",fcode:"AK160",desc:"Stadium",geom:"Point",definition:"An arena for holding and viewing events.",
+ {name:"PAK160",fcode:"AK160",desc:"Stadium",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"An arena for holding and viewing events.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"CCT",desc:"Cover Closure Type",optional:"R",definition:"The extent and/or nature of the cover (for example: a roof) of a structure.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6710,14 +5825,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAK170",fcode:"AK170",desc:"Swimming Pool",geom:"Point",definition:"A man-made pool used for swimming outdoors.",
+ {name:"PAK170",fcode:"AK170",desc:"Swimming Pool",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"A man-made pool used for swimming outdoors.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -6727,14 +5837,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL012",fcode:"AL012",desc:"Archeological Site",geom:"Point",definition:"A site where remains of past civilizations or human activity have been discovered.",
+ {name:"PAL012",fcode:"AL012",desc:"Archeological Site",geom:"Point",fdname:"MGCP",thematic:"MiscpopP",definition:"A site where remains of past civilizations or human activity have been discovered.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -6747,14 +5852,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL015",fcode:"AL015",desc:"General Building",geom:"Point",definition:"A relatively permanent structure, roofed and usually walled and designed for some particular use.",
+ {name:"PAL015",fcode:"AL015",desc:"General Building",geom:"Point",fdname:"MGCP",thematic:"BuildP",definition:"A relatively permanent structure, roofed and usually walled and designed for some particular use.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FFN",desc:"Feature Function",optional:"R",definition:"The purpose(s) of, or intended role(s) served by, the feature.",type:"enumeration",defValue:"0",
@@ -6864,14 +5964,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL019",fcode:"AL019",desc:"Shed",geom:"Point",definition:"A small building, generally of light construction, that usually has one or more open sides. ( Typically used for storage. )",
+ {name:"PAL019",fcode:"AL019",desc:"Shed",geom:"Point",fdname:"MGCP",thematic:"MiscpopP",definition:"A small building, generally of light construction, that usually has one or more open sides. ( Typically used for storage. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -6881,14 +5976,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL020",fcode:"AL020",desc:"Built-Up Area",geom:"Point",definition:"A tract containing a concentration of buildings and/or other structures.",
+ {name:"PAL020",fcode:"AL020",desc:"Built-Up Area",geom:"Point",fdname:"MGCP",thematic:"BuiltupP",definition:"A tract containing a concentration of buildings and/or other structures.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"BAC",desc:"Built-up Area Density Category",optional:"R",definition:"A general evaluation of the density of a built-up area, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -6930,14 +6020,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL025",fcode:"AL025",desc:"Cairn",geom:"Point",definition:"A heap of stones piled up as a memorial or a landmark.",
+ {name:"PAL025",fcode:"AL025",desc:"Cairn",geom:"Point",fdname:"MGCP",thematic:"MarkersP",definition:"A heap of stones piled up as a memorial or a landmark.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -6950,14 +6035,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL030",fcode:"AL030",desc:"Cemetery",geom:"Point",definition:"A site and associated structures devoted to the burial of the dead.",
+ {name:"PAL030",fcode:"AL030",desc:"Cemetery",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"A site and associated structures devoted to the burial of the dead.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -6980,14 +6060,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL099",fcode:"AL099",desc:"Hut",geom:"Point",definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room. ( May be intended only as temporary (for example: by displaced persons) or seasonal (for example: during seasonal livestock movement) residence. May be crude (for example: quickly built from locally-available natural materials) or relatively modern in construction and austerely furnished (for example: a Norwegian 'hytte'). )",
+ {name:"PAL099",fcode:"AL099",desc:"Hut",geom:"Point",fdname:"MGCP",thematic:"MiscpopP",definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room. ( May be intended only as temporary (for example: by displaced persons) or seasonal (for example: during seasonal livestock movement) residence. May be crude (for example: quickly built from locally-available natural materials) or relatively modern in construction and austerely furnished (for example: a Norwegian 'hytte'). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -6997,14 +6072,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL105",fcode:"AL105",desc:"Settlement",geom:"Point",definition:"A continuously occupied concentration of tents or lightweight fixed structures (for example: huts) serving as residences. ( May also include supporting non-residential (for example: commercial) structures. )",
+ {name:"PAL105",fcode:"AL105",desc:"Settlement",geom:"Point",fdname:"MGCP",thematic:"MiscpopP",definition:"A continuously occupied concentration of tents or lightweight fixed structures (for example: huts) serving as residences. ( May also include supporting non-residential (for example: commercial) structures. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUC",desc:"Functional Use",optional:"R",definition:"The general categories of function or use that a facility, site, or region serves or may serve. ( May be so designated by legal means (for example: statute, zoning, or treaty) or be the unplanned consequence of economic forces. )",type:"enumeration",defValue:"0",
@@ -7027,14 +6097,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL130",fcode:"AL130",desc:"Memorial Monument",geom:"Point",definition:"A marker erected and/or maintained as a memorial to a person and/or event.",
+ {name:"PAL130",fcode:"AL130",desc:"Memorial Monument",geom:"Point",fdname:"MGCP",thematic:"LandmrkP",definition:"A marker erected and/or maintained as a memorial to a person and/or event.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -7059,14 +6124,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL210",fcode:"AL210",desc:"Protection Shed",geom:"Point",definition:"A shelter built to protect a section of road or railway from slides of snow and/or rock. ( For example, a snow shed or a rock shed. )",
+ {name:"PAL210",fcode:"AL210",desc:"Protection Shed",geom:"Point",fdname:"MGCP",thematic:"ShedP",definition:"A shelter built to protect a section of road or railway from slides of snow and/or rock. ( For example, a snow shed or a rock shed. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -7085,14 +6145,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL241",fcode:"AL241",desc:"Tower",geom:"Point",definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure. ( Usually of a square, circular, or rectangular cross-section. )",
+ {name:"PAL241",fcode:"AL241",desc:"Tower",geom:"Point",fdname:"MGCP",thematic:"TowerP",definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure. ( Usually of a square, circular, or rectangular cross-section. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7128,14 +6183,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAM020",fcode:"AM020",desc:"Grain Storage Structure",geom:"Point",definition:"An enclosed container, used for storing grain or fodder.",
+ {name:"PAM020",fcode:"AM020",desc:"Grain Storage Structure",geom:"Point",fdname:"MGCP",thematic:"AgristrP",definition:"An enclosed container, used for storing grain or fodder.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7148,14 +6198,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAM030",fcode:"AM030",desc:"Grain Elevator",geom:"Point",definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
+ {name:"PAM030",fcode:"AM030",desc:"Grain Elevator",geom:"Point",fdname:"MGCP",thematic:"AgristrP",definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7168,14 +6213,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAM040",fcode:"AM040",desc:"Mineral Pile",geom:"Point",definition:"A man-made heap of mining or quarrying products that does not contain waste materials. ( For example, a pile of coal or quarried stones. )",
+ {name:"PAM040",fcode:"AM040",desc:"Mineral Pile",geom:"Point",fdname:"MGCP",thematic:"StorageP",definition:"A man-made heap of mining or quarrying products that does not contain waste materials. ( For example, a pile of coal or quarried stones. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -7201,14 +6241,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAM060",fcode:"AM060",desc:"Surface Bunker",geom:"Point",definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance. ( Used, for example, for storage and/or aircraft protection. )",
+ {name:"PAM060",fcode:"AM060",desc:"Surface Bunker",geom:"Point",fdname:"MGCP",thematic:"StorageP",definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance. ( Used, for example, for storage and/or aircraft protection. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"PPO",desc:"Product",optional:"R",definition:"The principal product(s) resulting from a production, mining, or agricultural activity. ( If multiple products are specified then they are usually listed in descending order of importance. )",type:"enumeration",defValue:"0",
@@ -7231,14 +6266,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAM070",fcode:"AM070",desc:"Storage Tank",geom:"Point",definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
+ {name:"PAM070",fcode:"AM070",desc:"Storage Tank",geom:"Point",fdname:"MGCP",thematic:"StorageP",definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7285,14 +6315,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAN075",fcode:"AN075",desc:"Railway Turntable",geom:"Point",definition:"A rotating platform with railway tracks used for turning locomotives and/or railway carriages. ( May be enclosed within a structure. )",
+ {name:"PAN075",fcode:"AN075",desc:"Railway Turntable",geom:"Point",fdname:"MGCP",thematic:"RrturnP",definition:"A rotating platform with railway tracks used for turning locomotives and/or railway carriages. ( May be enclosed within a structure. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7303,14 +6328,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAN076",fcode:"AN076",desc:"Roundhouse",geom:"Point",definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives. ( The railway turntable may be either completely covered, partially covered or not covered, and partially or completely surrounded by the building. )",
+ {name:"PAN076",fcode:"AN076",desc:"Roundhouse",geom:"Point",fdname:"MGCP",thematic:"TransP",definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives. ( The railway turntable may be either completely covered, partially covered or not covered, and partially or completely surrounded by the building. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -7320,14 +6340,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAQ065",fcode:"AQ065",desc:"Culvert",geom:"Point",definition:"An enclosed channel for carrying a watercourse (for example: a stream, a sewer, or a drain) under a route (for example: a road, a railway, or an embankment). ( Usually the construction of the route is unaffected. )",
+ {name:"PAQ065",fcode:"AQ065",desc:"Culvert",geom:"Point",fdname:"MGCP",thematic:"TransP",definition:"An enclosed channel for carrying a watercourse (for example: a stream, a sewer, or a drain) under a route (for example: a road, a railway, or an embankment). ( Usually the construction of the route is unaffected. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",units:"Degree",definition:"The angular distance in the horizontal plane measured from true north (0 degrees) clockwise to the major axis of the feature. ( If the feature is square, the axis 0 up to 90 degrees is recorded. If the feature is circular, 360 degrees is recorded. )",type:"Real",defValue:"-32767.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
@@ -7339,14 +6354,9 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",units:"Metre",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane. ( The primary alignment of a feature is its established direction of flow or use (for example: a road, a power line right-of-way, a river, rapid, and/or a bridge). A feature-specific rule may apply. In the case of a bridge, the width is the distance perpendicular to the bridge centre-line and generally in the horizontal plane. In the case of a dam, the width is the distance perpendicular to (across the) the dam crest. If no such direction of flow or use exists then (1) if the feature is irregular in shape its width is taken perpendicular to the direction of its greatest horizontal dimension (see Attribute: 'Greatest Horizontal Extent'), else (2) if the feature is regular in shape then a shape-specific rule may apply: for a rectangular feature, the length of the shorter axis; for a round feature, the diameter. )",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ070",fcode:"AQ070",desc:"Ferry Crossing",geom:"Point",definition:"A route where a ferry crosses from one shore to another.",
+ {name:"PAQ070",fcode:"AQ070",desc:"Ferry Crossing",geom:"Point",fdname:"MGCP",thematic:"FerryP",definition:"A route where a ferry crosses from one shore to another.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7376,14 +6386,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAQ090",fcode:"AQ090",desc:"Entrance and/or Exit",geom:"Point",definition:"A location of entrance and/or exit. ( For example, a cave mouth or a doorway. )",
+ {name:"PAQ090",fcode:"AQ090",desc:"Entrance and/or Exit",geom:"Point",fdname:"MGCP",thematic:"TransP",definition:"A location of entrance and/or exit. ( For example, a cave mouth or a doorway. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7394,14 +6399,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAQ110",fcode:"AQ110",desc:"Mooring Mast",geom:"Point",definition:"A mast used to secure an airship.",
+ {name:"PAQ110",fcode:"AQ110",desc:"Mooring Mast",geom:"Point",fdname:"MGCP",thematic:"MiscaeroP",definition:"A mast used to secure an airship.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -7413,14 +6413,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAQ116",fcode:"AQ116",desc:"Pumping Station",geom:"Point",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
+ {name:"PAQ116",fcode:"AQ116",desc:"Pumping Station",geom:"Point",fdname:"MGCP",thematic:"PumpingP",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7443,14 +6438,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAQ125",fcode:"AQ125",desc:"Transportation Station",geom:"Point",definition:"A station that serves as a stopping place along a transportation route. ( For example, used for the transfer of passengers and/or freight. )",
+ {name:"PAQ125",fcode:"AQ125",desc:"Transportation Station",geom:"Point",fdname:"MGCP",thematic:"TransP",definition:"A station that serves as a stopping place along a transportation route. ( For example, used for the transfer of passengers and/or freight. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7489,14 +6479,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAT010",fcode:"AT010",desc:"Dish Aerial",geom:"Point",definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy. ( For example, used to transmit and/or receive electronic signals as at a satellite station or to capture electromagnetic energy as in radio astronomy. )",
+ {name:"PAT010",fcode:"AT010",desc:"Dish Aerial",geom:"Point",fdname:"MGCP",thematic:"CommP",definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy. ( For example, used to transmit and/or receive electronic signals as at a satellite station or to capture electromagnetic energy as in radio astronomy. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -7508,14 +6493,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAT042",fcode:"AT042",desc:"Pylon",geom:"Point",definition:"A pylon or pole used to support one or more cables.",
+ {name:"PAT042",fcode:"AT042",desc:"Pylon",geom:"Point",fdname:"MGCP",thematic:"UtilP",definition:"A pylon or pole used to support one or more cables.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CAB",desc:"Cable Type",optional:"R",definition:"The type of a cable based on its use.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -7549,14 +6529,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAT045",fcode:"AT045",desc:"Radar Station",geom:"Point",definition:"A facility utilizing radar to detect and analyze objects (for example: aircraft, artificial satellites, asteroids, and/or missiles) and/or environmental phenomena (for example: tornadoes). ( May include both a radar aerial as well as a structure housing radar equipment. )",
+ {name:"PAT045",fcode:"AT045",desc:"Radar Station",geom:"Point",fdname:"MGCP",thematic:"CommP",definition:"A facility utilizing radar to detect and analyze objects (for example: aircraft, artificial satellites, asteroids, and/or missiles) and/or environmental phenomena (for example: tornadoes). ( May include both a radar aerial as well as a structure housing radar equipment. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7581,14 +6556,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBA050",fcode:"BA050",desc:"Beach",geom:"Point",definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate. ( A beach includes backshore and foreshore. )",
+ {name:"PBA050",fcode:"BA050",desc:"Beach",geom:"Point",fdname:"MGCP",thematic:"CoastP",definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate. ( A beach includes backshore and foreshore. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -7609,14 +6579,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBB155",fcode:"BB155",desc:"Maritime Signal Station",geom:"Point",definition:"A place on shore from which signals are made to vessels at sea.",
+ {name:"PBB155",fcode:"BB155",desc:"Maritime Signal Station",geom:"Point",fdname:"MGCP",thematic:"HarborP",definition:"A place on shore from which signals are made to vessels at sea.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7657,14 +6622,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBD100",fcode:"BD100",desc:"Structural Pile",geom:"Point",definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
+ {name:"PBD100",fcode:"BD100",desc:"Structural Pile",geom:"Point",fdname:"MGCP",thematic:"DangerP",definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -7674,14 +6634,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBD110",fcode:"BD110",desc:"Offshore Platform",geom:"Point",definition:"An offshore structure with a flat surface raised above the sea, used as a working stage for conducting offshore operations. ( May be fixed or floating. )",
+ {name:"PBD110",fcode:"BD110",desc:"Offshore Platform",geom:"Point",fdname:"MGCP",thematic:"DangerP",definition:"An offshore structure with a flat surface raised above the sea, used as a working stage for conducting offshore operations. ( May be fixed or floating. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"AFA",desc:"Available Vessel Service",optional:"R",definition:"The type(s) of vessel service available at, or in the near vicinity of, a facility.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -7716,14 +6671,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBD130",fcode:"BD130",desc:"Hazardous Rock",geom:"Point",definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation. ( May be either dry, awash, or below the water surface. )",
+ {name:"PBD130",fcode:"BD130",desc:"Hazardous Rock",geom:"Point",fdname:"MGCP",thematic:"DangerP",definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation. ( May be either dry, awash, or below the water surface. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -7748,14 +6698,9 @@ var schema = [
    }
   ]
  },
- {name:"PBD180",fcode:"BD180",desc:"Wreck",geom:"Point",definition:"The ruined remains of a stranded or sunken vessel that has been rendered useless.",
+ {name:"PBD180",fcode:"BD180",desc:"Wreck",geom:"Point",fdname:"MGCP",thematic:"DangerP",definition:"The ruined remains of a stranded or sunken vessel that has been rendered useless.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -7765,14 +6710,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBH010",fcode:"BH010",desc:"Aqueduct",geom:"Point",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
+ {name:"PBH010",fcode:"BH010",desc:"Aqueduct",geom:"Point",fdname:"MGCP",thematic:"AquedctP",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"ATC",desc:"Aqueduct Type",optional:"R",definition:"The type of an aqueduct based on its structure.",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -7790,14 +6730,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBH070",fcode:"BH070",desc:"Ford",geom:"Point",definition:"A shallow place in a body of water used as a crossing.",
+ {name:"PBH070",fcode:"BH070",desc:"Ford",geom:"Point",fdname:"MGCP",thematic:"FordP",definition:"A shallow place in a body of water used as a crossing.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -7817,14 +6752,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBH120",fcode:"BH120",desc:"Rapids",geom:"Point",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
+ {name:"PBH120",fcode:"BH120",desc:"Rapids",geom:"Point",fdname:"MGCP",thematic:"RapidsP",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -7837,14 +6767,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBH145",fcode:"BH145",desc:"Vanishing Point",geom:"Point",definition:"The location at which a watercourse disappears into the terrain.",
+ {name:"PBH145",fcode:"BH145",desc:"Vanishing Point",geom:"Point",fdname:"MGCP",thematic:"RapidsP",definition:"The location at which a watercourse disappears into the terrain.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -7861,14 +6786,9 @@ var schema = [
    }
   ]
  },
- {name:"PBH170",fcode:"BH170",desc:"Natural Pool",geom:"Point",definition:"A naturally formed pool of water. ( It is usually fed by surface drainage from the surrounding region and/or water arising from an underground source (for example: a spring or a resurgence). )",
+ {name:"PBH170",fcode:"BH170",desc:"Natural Pool",geom:"Point",fdname:"MGCP",thematic:"WellsprP",definition:"A naturally formed pool of water. ( It is usually fed by surface drainage from the surrounding region and/or water arising from an underground source (for example: a spring or a resurgence). )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HYP",desc:"Hydrologic Persistence",optional:"R",definition:"The degree of persistence of water in an inland water body (for example: a spring, a flowing stream, a lake or a pond). ( Inland water bodies may also include, for example, crevices, ditches, fountains, and water troughs. )",type:"enumeration",defValue:"0",
@@ -7897,14 +6817,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBH180",fcode:"BH180",desc:"Waterfall",geom:"Point",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice). ( In place names, commonly shortened to 'fall' or 'falls', for example, 'Niagara Falls'. )",
+ {name:"PBH180",fcode:"BH180",desc:"Waterfall",geom:"Point",fdname:"MGCP",thematic:"RapidsP",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice). ( In place names, commonly shortened to 'fall' or 'falls', for example, 'Niagara Falls'. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -7917,14 +6832,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBI010",fcode:"BI010",desc:"Cistern",geom:"Point",definition:"A man-made container used for the collection and/or storage of water.",
+ {name:"PBI010",fcode:"BI010",desc:"Cistern",geom:"Point",fdname:"MGCP",thematic:"CisternP",definition:"A man-made container used for the collection and/or storage of water.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -7934,14 +6844,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBI020",fcode:"BI020",desc:"Dam",geom:"Point",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
+ {name:"PBI020",fcode:"BI020",desc:"Dam",geom:"Point",fdname:"MGCP",thematic:"DamP",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -7999,14 +6904,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBI030",fcode:"BI030",desc:"Lock",geom:"Point",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
+ {name:"PBI030",fcode:"BI030",desc:"Lock",geom:"Point",fdname:"MGCP",thematic:"LockP",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8020,14 +6920,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBI040",fcode:"BI040",desc:"Sluice Gate",geom:"Point",definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice). ( Sluice gates are normally installed in a superstructure and/or frame and most commonly slide vertically to open but on occasion may instead slide horizontally. When opened they allow water to flow under or beside the gate. Commonly sluice gates will be installed perpendicular to the orientation of the flow of water within a watercourse and will be constructed as wide as the watercourse they regulate. Sluice gates may also be installed along the margins of watercourses for the purpose of controlling or permitting the flow of water to or from that watercourse into adjacent watercourses. Sluice gates may be used to regulate both tidal or non-tidal waters. )",
+ {name:"PBI040",fcode:"BI040",desc:"Sluice Gate",geom:"Point",fdname:"MGCP",thematic:"LockP",definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice). ( Sluice gates are normally installed in a superstructure and/or frame and most commonly slide vertically to open but on occasion may instead slide horizontally. When opened they allow water to flow under or beside the gate. Commonly sluice gates will be installed perpendicular to the orientation of the flow of water within a watercourse and will be constructed as wide as the watercourse they regulate. Sluice gates may also be installed along the margins of watercourses for the purpose of controlling or permitting the flow of water to or from that watercourse into adjacent watercourses. Sluice gates may be used to regulate both tidal or non-tidal waters. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8038,14 +6933,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBI041",fcode:"BI041",desc:"Water Gate",geom:"Point",definition:"A barrier that may be swung, drawn, or lowered to block an entrance or passageway on a watercourse.",
+ {name:"PBI041",fcode:"BI041",desc:"Water Gate",geom:"Point",fdname:"MGCP",thematic:"MiscP",definition:"A barrier that may be swung, drawn, or lowered to block an entrance or passageway on a watercourse.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8065,14 +6955,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBI050",fcode:"BI050",desc:"Water Intake Tower",geom:"Point",definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
+ {name:"PBI050",fcode:"BI050",desc:"Water Intake Tower",geom:"Point",fdname:"MGCP",thematic:"MiscP",definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -8084,14 +6969,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PBJ060",fcode:"BJ060",desc:"Ice Peak",geom:"Point",definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
+ {name:"PBJ060",fcode:"BJ060",desc:"Ice Peak",geom:"Point",fdname:"MGCP",thematic:"LandfrmP",definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8104,14 +6984,47 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PDB029",fcode:"DB029",desc:"Cave Mouth",geom:"Point",definition:"The entrance to an interconnected series of subterranean chambers. ( Typically located in limestone, and often open to the Earth's surface either vertically or horizontally. )",
+ {name:"PCA030",fcode:"CA030",desc:"Spot Elevation",geom:"Point",fcsubtype:"",fdname:"MGCP_Delta",thematic:"ElevP",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"BEL",desc:"Base Elevation",optional:"R",type:"Real",defValue:"-999999.0"},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"ELA",desc:"Elevation Accuracy Category",optional:"R",type:"enumeration",defValue:"0",
     enumerations:[
+     {name:"Unknown",value:"0"},
      {name:"Accurate",value:"1"},
      {name:"Approximate",value:"2"}
     ]
    },
+   {name:"ESC",desc:"Elevation Surface Category",optional:"R",type:"enumeration",defValue:"1",
+    enumerations:[
+     {name:"Unknown",value:"0"},
+     {name:"Land",value:"1"},
+     {name:"Snow Field and/or Ice-field",value:"2"},
+     {name:"Vegetation",value:"4"},
+     {name:"Inland Water",value:"5"},
+     {name:"Tidal Water",value:"6"}
+    ]
+   },
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""}
+  ]
+ },
+ {name:"PCA035",fcode:"CA035",desc:"Inland Water Elevation",geom:"Point",fcsubtype:"",fdname:"MGCP_Delta",thematic:"ElevP",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"},
+   {name:"ZVH",desc:"Highest Elevation",optional:"R",type:"Real",defValue:"-999999.0"}
+  ]
+ },
+ {name:"PDB029",fcode:"DB029",desc:"Cave Mouth",geom:"Point",fdname:"MGCP",thematic:"MtnP",definition:"The entrance to an interconnected series of subterranean chambers. ( Typically located in limestone, and often open to the Earth's surface either vertically or horizontally. )",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8124,14 +7037,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PDB115",fcode:"DB115",desc:"Geothermal Outlet",geom:"Point",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior. ( For example, a hot spring. )",
+ {name:"PDB115",fcode:"DB115",desc:"Geothermal Outlet",geom:"Point",fdname:"MGCP",thematic:"ThermalP",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior. ( For example, a hot spring. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8144,14 +7052,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PDB150",fcode:"DB150",desc:"Mountain Pass",geom:"Point",definition:"A narrow route through a mountainous region or over a mountain range.",
+ {name:"PDB150",fcode:"DB150",desc:"Mountain Pass",geom:"Point",fdname:"MGCP",thematic:"MtnP",definition:"A narrow route through a mountainous region or over a mountain range.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8164,14 +7067,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PDB160",fcode:"DB160",desc:"Rock Formation",geom:"Point",definition:"A significant outcropping of exposed bedrock.",
+ {name:"PDB160",fcode:"DB160",desc:"Rock Formation",geom:"Point",fdname:"MGCP",thematic:"LandfrmP",definition:"A significant outcropping of exposed bedrock.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8192,14 +7090,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PDB180",fcode:"DB180",desc:"Volcano",geom:"Point",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
+ {name:"PDB180",fcode:"DB180",desc:"Volcano",geom:"Point",fdname:"MGCP",thematic:"ThermalP",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8223,14 +7116,9 @@ var schema = [
    }
   ]
  },
- {name:"PEC030",fcode:"EC030",desc:"Wood",geom:"Point",definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
+ {name:"PEC030",fcode:"EC030",desc:"Wood",geom:"Point",fdname:"MGCP",thematic:"TreesP",definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8243,14 +7131,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PGA034",fcode:"GA034",desc:"Aeronautical Radio Navigation Service",geom:"Point",definition:"A service providing aeronautical navigation guidance information or position data, intended for the benefit and safe operation of aircraft.",
+ {name:"PGA034",fcode:"GA034",desc:"Aeronautical Radio Navigation Service",geom:"Point",fdname:"MGCP",thematic:"MiscaeroP",definition:"A service providing aeronautical navigation guidance information or position data, intended for the benefit and safe operation of aircraft.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NST",desc:"Navigation System Type",optional:"R",definition:"The type(s) of equipment or system used in electronic navigation.",type:"enumeration",defValue:"0",
@@ -8290,14 +7173,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PGB030",fcode:"GB030",desc:"Helipad",geom:"Point",definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters. ( This prepared surface could either be located on land or on a platform over water. It may or may not be associated with an aerodrome. For example: a hospital helipad, and an offshore rig helipad. )",
+ {name:"PGB030",fcode:"GB030",desc:"Helipad",geom:"Point",fdname:"MGCP",thematic:"AerofacP",definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters. ( This prepared surface could either be located on land or on a platform over water. It may or may not be associated with an aerodrome. For example: a hospital helipad, and an offshore rig helipad. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8331,14 +7209,9 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",units:"Metre",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGB040",fcode:"GB040",desc:"Launch Pad",geom:"Point",definition:"A designated site or structure from which a rocket or missile is launched.",
+ {name:"PGB040",fcode:"GB040",desc:"Launch Pad",geom:"Point",fdname:"MGCP",thematic:"MiscaeroP",definition:"A designated site or structure from which a rocket or missile is launched.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8349,14 +7222,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PGB050",fcode:"GB050",desc:"Aircraft Revetment",geom:"Point",definition:"A barricade that protects an aircraft, equipment, and/or facility from hostile action.",
+ {name:"PGB050",fcode:"GB050",desc:"Aircraft Revetment",geom:"Point",fdname:"MGCP",thematic:"RunwayP",definition:"A barricade that protects an aircraft, equipment, and/or facility from hostile action.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"SDP",desc:"Source Description",optional:"R",length:"254",definition:"A description of the data set that was used to define the digital representation of the feature or data set. ( No restriction is placed on the length of the description. )",type:"String",defValue:"N_A"},
@@ -8366,14 +7234,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PGB065",fcode:"GB065",desc:"Water Aerodrome",geom:"Point",definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
+ {name:"PGB065",fcode:"GB065",desc:"Water Aerodrome",geom:"Point",fdname:"MGCP",thematic:"AerofacP",definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CAA",desc:"Controlling Authority",optional:"R",definition:"The controlling authority responsible for a facility or site. ( Controlling authorities may be distinguished by organizational level (for example: national, sub-national, or military district) and/or type (for example: private or public). )",type:"enumeration",defValue:"0",
     enumerations:[
      {name:"Unknown",value:"0"},
@@ -8397,14 +7260,9 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",units:"Metre",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGB220",fcode:"GB220",desc:"Aeronautical Obstacle",geom:"Point",definition:"Any object, or part thereof, or terrain which rises far enough above the surrounding surface or above a specified height to create a hazard to aircraft operations. ( Obstacle objects may be fixed (whether temporary or permanent) or mobile. )",
+ {name:"PGB220",fcode:"GB220",desc:"Aeronautical Obstacle",geom:"Point",fdname:"MGCP",thematic:"MiscaeroP",definition:"Any object, or part thereof, or terrain which rises far enough above the surrounding surface or above a specified height to create a hazard to aircraft operations. ( Obstacle objects may be fixed (whether temporary or permanent) or mobile. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",units:"Metre",definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )",type:"Real",defValue:"-32767.0"},
@@ -8416,14 +7274,9 @@ var schema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PGB230",fcode:"GB230",desc:"Aircraft Hangar",geom:"Point",definition:"A building for housing aircraft.",
+ {name:"PGB230",fcode:"GB230",desc:"Aircraft Hangar",geom:"Point",fdname:"MGCP",thematic:"AerofacP",definition:"A building for housing aircraft.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8434,14 +7287,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PGB485",fcode:"GB485",desc:"Approach Lighting System",geom:"Point",definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
+ {name:"PGB485",fcode:"GB485",desc:"Approach Lighting System",geom:"Point",fdname:"MGCP",thematic:"MiscaeroP",definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"LFA",desc:"Aeronautical Light Function",optional:"R",definition:"The type of lighting or lighting system that is used to support aeronautical navigation.",type:"enumeration",defValue:"0",
@@ -8463,14 +7311,9 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PSU001",fcode:"SU001",desc:"Military Installation",geom:"Point",definition:"An installation designed for military use. ( For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages. )",
+ {name:"PSU001",fcode:"SU001",desc:"Military Installation",geom:"Point",fdname:"MGCP",thematic:"MilP",definition:"An installation designed for military use. ( For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages. )",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
-    enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
-    ]
-   },
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"FUN",desc:"Condition of Facility",optional:"R",definition:"The state of planning, construction, repair, and/or maintenance of the structures and/or equipment comprising a facility and/or located at a site, as a whole.",type:"enumeration",defValue:"6",enumerations: full_FUN},
@@ -8484,14 +7327,40 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PZD040",fcode:"ZD040",desc:"Named Location",geom:"Point",definition:"A location that normally does not appear as a specific, characterized object but that has a name that is required to be displayed in association with that location. ( For example, the name of the Alps or the Sahara. )",
+ {name:"PZB050",fcode:"ZB050",desc:"Survey",geom:"Point",fcsubtype:"",fdname:"MGCP_Delta",thematic:"ElevP",
   columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"BEL",desc:"Base Elevation",optional:"R",type:"Real",defValue:"-999999.0"},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"SUY",desc:"Survey Point Type",optional:"R",type:"enumeration",defValue:"0",
     enumerations:[
-     {name:"Accurate",value:"1"},
-     {name:"Approximate",value:"2"}
+     {name:"Unknown",value:"0"},
+     {name:"Astronomic Position",value:"1"},
+     {name:"Benchmark",value:"2"},
+     {name:"Cadastral Control Point",value:"3"},
+     {name:"Camera Station",value:"4"},
+     {name:"Geodetic Point",value:"5"},
+     {name:"Gravity Point",value:"6"},
+     {name:"Magnetic Station",value:"7"},
+     {name:"Theodolite Station",value:"8"},
+     {name:"Tidal Benchmark",value:"9"},
+     {name:"Other",value:"999"}
     ]
    },
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
+  ]
+ },
+ {name:"PZD040",fcode:"ZD040",desc:"Named Location",geom:"Point",fdname:"MGCP_Delta",thematic:"AnnoP",definition:"A location that normally does not appear as a specific, characterized object but that has a name that is required to be displayed in association with that location. ( For example, the name of the Alps or the Sahara. )",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},
    {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
    {name:"NAM",desc:"Name",optional:"R",length:"80",definition:"A textual identifier or code that is used to denote a feature.",type:"String",defValue:"UNK"},
@@ -8502,6 +7371,30 @@ var schema = [
    {name:"SRT",desc:"Source Type",optional:"R",definition:"The type(s) of the data set(s) that were used to define the digital representation of the feature or data set. ( For example, based on a data product specification. )",type:"enumeration",defValue:"0",enumerations: full_SRT},
    {name:"TXT",desc:"Associated Text",optional:"R",length:"254",definition:"A narrative or other textual description associated with a feature or data set.",type:"String",defValue:"N_A"},
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",definition:"A unique identifier for each instance of MGCP Feature assigned by national system in accordance with ISO /IEC 9834-8  standard.The UUID shall be represented by a string of hexadecimal digits, using two hexadecimal digits for each octet of the binary form",type:"String",defValue:"UNK"}
+  ]
+ },
+ {name:"PZD045",fcode:"ZD045",desc:"Annotated Location",geom:"Point",fcsubtype:"",fdname:"MGCP_Delta",thematic:"AnnoP",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"1",enumerations: full_ACC},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"ORD",desc:"Relative Importance",optional:"R",type:"enumeration",defValue:"1",
+    enumerations:[
+     {name:"First",value:"1"},
+     {name:"Second",value:"2"},
+     {name:"Third",value:"3"},
+     {name:"Fourth",value:"4"},
+     {name:"Fifth",value:"5"}
+    ]
+   },
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"enumeration",defValue:"0",enumerations: full_SRT},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
   ]
  },
 ];

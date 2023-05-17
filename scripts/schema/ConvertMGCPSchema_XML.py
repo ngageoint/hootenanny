@@ -92,6 +92,68 @@ def printJavascript(schema):
 # End printJavascript
 
 
+# Modified printing function to print the Thematic Schema
+def printThematic(schema,spec):
+    print
+    print "var _global = (0, eval)('this');"
+    print 'if (!_global.%s)' % (spec)
+    print '{'
+    print ' _global.%s = {};' % (spec)
+    print '}'
+    print
+    print '%s.thematicSchema = [' % (spec)
+    num_feat = len(schema.keys()) # How many features in the schema?
+    for f in sorted(schema.keys()):
+        # Skip all of the 'Table' features and features without geometry
+        if schema[f]['geom'] == 'Table' or schema[f]['geom'] == 'None':
+            continue
+
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom']); # name = geom + FCODE
+        if 'fdname' in schema[f]:
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
+        if 'thematic' in schema[f]:
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+        if 'definition' in schema[f]:
+            pString += 'definition:"%s",' % (schema[f]['definition'])
+
+        print pString
+        print '  columns:['
+
+        num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
+        for k in sorted(schema[f]['columns'].keys()):
+            if schema[f]['columns'][k]['type'] == 'enumeration':
+                aType = 'Integer'
+            else:
+                aType = schema[f]['columns'][k]['type']
+
+            aString = '   {name:"%s",desc:"%s",optional:"%s",type:"%s",defValue:"%s"' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],aType,schema[f]['columns'][k]['defValue'])
+
+            if 'length' in schema[f]['columns'][k]:
+                aString += ',length:"%s"' % (schema[f]['columns'][k]['length'])
+
+            if 'definition' in schema[f]['columns'][k]:
+                aString += ',definition:"%s",' % (schema[f]['columns'][k]['definition'])
+
+            if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                aString += '}'
+            else:
+                aString += '},'
+                num_attrib -= 1
+            print aString
+        print '  ]'
+
+        if num_feat == 1: # Are we at the last feature? yes = no trailing comma
+            print ' }'
+        else:
+            print ' },'
+            num_feat -= 1
+    print '] // End of %s.thematicSchema' % (spec)
+    print
+    # print 'exports.getthematicSchema = %s.schema.getThematicSchema;' % (spec)
+    print
+# End printThematic
+
+
 # Go through the schema and pull out all of the attributes that are to be replaced with
 # functions
 def printFuncList(schema):
@@ -117,8 +179,6 @@ def printFuncList(schema):
         print
 # End printFuncList
 
-
-# Data & Lists
 
 # XML Functions
 # Text Node
@@ -182,9 +242,163 @@ def processInheritance(schema,inheritance):
 # End processInheritance
 
 
+# Add Additional features that are not specified in the TRD
+def addExtra(schema):
+    schema['LCA010'] = {}
+    schema['LCA010'] = {'name':'LCA010','fcode':'CA010','desc':'Elevation Contour','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ContourL'}
+    schema['LCA010']['columns'] = {}
+    schema['LCA010']['columns']['ZVH'] = {'name':'ZVH','desc':'Highest Elevation','type':'Real','optional':'R','defValue':'-999999.0'}
+    schema['LCA010']['columns']['ESC'] = {'name':'ESC','desc':'Elevation Surface Category','optional':'R','type':'enumeration','defValue':'1'}
+    schema['LCA010']['columns']['ESC']['enum'] = [{'name':'Unknown','value':'0'},{'name':'Land','value':'1'},{'name':'Snow Field and/or Ice-field','value':'2'}]
+    schema['LCA010']['columns']['HQC'] = {'name':'HQC','desc':'Hypsography Portrayal Type','optional':'R','type':'enumeration','defValue':'0'}
+    schema['LCA010']['columns']['HQC']['enum'] = [
+     {'name':'Unknown','value':'0'}, {'name':'Index Contour','value':'1'}, {'name':'Intermediate Contour','value':'2'},
+     {'name':'Half Auxiliary Contour','value':'3'}, {'name':'Depression Index Contour','value':'5'}, {'name':'Depression Intermediate Contour','value':'6'},
+     {'name':'Mound Index Contour','value':'8'}, {'name':'Mound Intermediate Contour','value':'9'}, {'name':'Quarter Auxiliary Contour','value':'14'},
+     {'name':'Intermediate Carrying Contour','value':'19'}, {'name':'Auxiliary Carrying Contour','value':'20'}, {'name':'Index Carrying Contour','value':'21'},
+     {'name':'Depression Auxiliary Contour','value':'22'}, {'name':'Other','value':'999'}
+    ]
+
+    schema['PCA030'] = {}
+    schema['PCA030'] = {'name':'PCA030','fcode':'CA030','desc':'Spot Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PCA030']['columns'] = {}
+    schema['PCA030']['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
+    schema['PCA030']['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
+    schema['PCA030']['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
+    schema['PCA030']['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
+    schema['PCA030']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
+    schema['PCA030']['columns']['ELA'] = {'name':'ELA','desc':'Elevation Accuracy Category','optional':'R','type':'enumeration','defValue':'0'}
+    schema['PCA030']['columns']['ELA']['enum'] = [{'name':'Unknown','value':'0'}, {'name':'Accurate','value':'1'}, {'name':'Approximate','value':'2'}]
+    schema['PCA030']['columns']['ESC'] = {'name':'ESC','desc':'Elevation Surface Category','optional':'R','type':'enumeration','defValue':'1'}
+    schema['PCA030']['columns']['ESC']['enum'] = [{'name':'Unknown','value':'0'}, {'name':'Land','value':'1'}, {'name':'Snow Field and/or Ice-field','value':'2'},
+     {'name':'Vegetation','value':'4'}, {'name':'Inland Water','value':'5'}, {'name':'Tidal Water','value':'6'}
+     ]
+
+    schema['PCA035'] = {}
+    schema['PCA035'] = {'name':'PCA035','fcode':'CA035','desc':'Inland Water Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PCA035']['columns'] = {}
+    schema['PCA035']['columns']['ZVH'] = {'name':'ZVH','desc':'Highest Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
+
+    schema['LFA000'] = {}
+    schema['LFA000'] = {'name':'LFA000','fcode':'FA000','desc':'Administrative Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFA000']['columns'] = {}
+    schema['LFA000']['columns']['BST'] = {'name':'BST','desc':'Boundary Status','optional':'R','type':'enumeration','defValue':'0'}
+    schema['LFA000']['columns']['BST']['enum'] =[{'name':'Unknown','value':'0'}, {'name':'Definite','value':'1'},
+     {'name':'Indefinite','value':'2'}, {'name':'In Dispute','value':'3'}, {'name':'No Defined Boundary','value':'4'},{'name':'Other','value':'999'}
+     ]
+
+    schema['AFA002'] = {}
+    schema['AFA002'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA002']['columns'] = {}
+    schema['AFA002']['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
+    schema['AFA002']['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
+    schema['AFA002']['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
+    schema['AFA002']['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
+    schema['AFA002']['columns']['COD'] = {'name':'COD','desc':'Delineation Known','optional':'R','type':'enumeration','defValue':'1'}
+    schema['AFA002']['columns']['COD']['enum'] = [{'name':'Limits and Information Known','value':'1'}, {'name':'Limits and Information Unknown','value':'2'} ]
+
+    schema['AFA003'] = {}
+    schema['AFA003'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA003']['columns'] = {}
+    schema['AFA003']['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
+    schema['AFA003']['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
+    schema['AFA003']['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
+    schema['AFA003']['columns']['BAL'] = {'name':'BAL','desc':'BGN Administrative Level','optional':'R','type':'enumeration','defValue':'1'}
+    schema['AFA003']['columns']['BAL']['enum'] = [{'name':'First-order','value':'1'}, {'name':'Second-order','value':'2'},
+     {'name':'Third-order','value':'3'}, {'name':'Fourth-order','value':'4'},
+     {'name':'Undifferentiated','value':'5'}, {'name':'Other','value':'999'}
+     ]
+
+    schema['LFA110'] = {}
+    schema['LFA110'] = {'name':'LFA110','fcode':'FA110','desc':'International Date Line','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFA110']['columns'] = {}
+
+    schema['LFC021'] = {}
+    schema['LFC021'] = {'name':'LFC021','fcode':'FC021','desc':'Maritime Limit Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFC021']['columns'] = {}
+    schema['LFC021']['columns']['NM3'] = {'name':'NM3','desc':'Boundary First Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['LFC021']['columns']['NM4'] = {'name':'NM4','desc':'Boundary Second Name','optional':'R','type':'String','defValue':'UNK'}
+
+    schema['PZB050'] = {}
+    schema['PZB050'] = {'name':'PZB050','fcode':'ZB050','desc':'Survey','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PZB050']['columns'] = {}
+    schema['PZB050']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
+    schema['PZB050']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['PZB050']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PZB050']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PZB050']['columns']['SUY'] = {'name':'SUY','desc':'Survey Point Type','optional':'R','type':'enumeration','defValue':'0'}
+    schema['PZB050']['columns']['SUY']['enum'] = [{'name':'Unknown','value':'0'}, {'name':'Astronomic Position','value':'1'},
+     {'name':'Benchmark','value':'2'}, {'name':'Cadastral Control Point','value':'3'}, {'name':'Camera Station','value':'4'},
+     {'name':'Geodetic Point','value':'5'}, {'name':'Gravity Point','value':'6'}, {'name':'Magnetic Station','value':'7'},
+     {'name':'Theodolite Station','value':'8'}, {'name':'Tidal Benchmark','value':'9'}, {'name':'Other','value':'999'}
+     ]
+
+    schema['PZD045'] = {}
+    schema['PZD045'] = {'name':'PZD045','fcode':'ZD045','desc':'Annotated Location','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'AnnoP'}
+    schema['PZD045']['columns'] = {}
+    schema['PZD045']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['PZD045']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PZD045']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PZD045']['columns']['ORD'] = {'name':'ORD','desc':'Relative Importance','optional':'R','type':'enumeration','defValue':'1'}
+    schema['PZD045']['columns']['ORD']['enum'] = [{'name':'First','value':'1'}, {'name':'Second','value':'2'},
+     {'name':'Third','value':'3'}, {'name':'Fourth','value':'4'}, {'name':'Fifth','value':'5'}
+     ]
+    schema['AFA003']['columns']['THC'] = {'name':'THC','desc':'Thematic Classification','optional':'R','type':'enumeration','defValue':'1'}
+    schema['AFA003']['columns']['THC']['enum'] = [{'name':'Aeronautical','value':'1'}, {'name':'Vegetation','value':'2'},
+     {'name':'Utilities','value':'3'}, {'name':'Population','value':'4'}, {'name':'Physiography','value':'5'},
+     {'name':'Industry','value':'6'}, {'name':'Ground Transportation','value':'7'}, {'name':'Elevation','value':'8'},
+     {'name':'Boundaries','value':'9'}, {'name':'Waterbodies','value':'10'}, {'name':'Maritime','value':'11'}
+     ]
+
+
+    # Add the common attributes to each feature
+    for i in ['LCA010','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045']:
+        schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
+        schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
+        schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
+
+        schema[i]['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
+        schema[i]['columns']['SDP'] = {'name':'SDP','desc':'Source Description','type':'String','optional':'R','defValue':'N_A'}
+        schema[i]['columns']['SDV'] = {'name':'SDV','desc':'Source Date and Time','type':'String','optional':'R','defValue':'N_A'}
+        schema[i]['columns']['SRT'] = {'name':'SRT','desc':'Source Type','type':'enumeration','optional':'R','defValue':'0','enum':[],'func':'full_SRT'}
+        schema[i]['columns']['SRT']['enum'] = [
+         {'name':'Unknown','value':'0'}, {'name':'ADRG','value':'1'}, {'name':'AAFIF','value':'2'},
+         {'name':'CHUM','value':'3'}, {'name':'City Graphic','value':'4'}, {'name':'Combat Chart','value':'5'},
+         {'name':'CADRG','value':'6'}, {'name':'CIB1','value':'7'}, {'name':'CIB5','value':'8'},
+         {'name':'DNC','value':'10'}, {'name':'DPF','value':'11'}, {'name':'DTOP 1','value':'16'},
+         {'name':'DTOP 2','value':'17'}, {'name':'DTOP 3','value':'18'}, {'name':'DTOP 4','value':'19'},
+         {'name':'DTOP 5','value':'20'}, {'name':'DVOF','value':'21'}, {'name':'FFD','value':'22'},
+         {'name':'Land Cover','value':'24'}, {'name':'GeoNames','value':'25'}, {'name':'GPS','value':'26'},
+         {'name':'ICM','value':'27'}, {'name':'NTM Imagery','value':'29'}, {'name':'Imagery','value':'30'},
+         {'name':'ITD','value':'31'}, {'name':'IVD','value':'32'}, {'name':'International Boundaries','value':'33'},
+         {'name':'JOG','value':'34'}, {'name':'LWD','value':'36'}, {'name':'MC&G','value':'37'},
+         {'name':'MSD 1','value':'38'}, {'name':'MSD 2','value':'39'}, {'name':'MSD 3','value':'40'},
+         {'name':'MSD 4','value':'41'}, {'name':'MSD 5','value':'42'}, {'name':'MIDB','value':'43'},
+         {'name':'Native Data','value':'44'}, {'name':'Native Map','value':'45'}, {'name':'Medical Facilities','value':'46'},
+         {'name':'NATE','value':'47'}, {'name':'Planning Graphic','value':'48'}, {'name':'SRTM','value':'50'},
+         {'name':'Site Map','value':'51'}, {'name':'TOD 0','value':'52'}, {'name':'TOD 1','value':'53'},
+         {'name':'TOD 2','value':'54'}, {'name':'TOD 3','value':'55'}, {'name':'TOD 4','value':'56'},
+         {'name':'TOD 5','value':'57'}, {'name':'UN Data','value':'59'}, {'name':'UVMap','value':'60'},
+         {'name':'VITD','value':'61'}, {'name':'VMap 0','value':'62'}, {'name':'VMap 1','value':'63'},
+         {'name':'VMap 2','value':'64'}, {'name':'WVS Plus','value':'65'}, {'name':'SPOT HRG Digital Terrain Model','value':'85'},
+         {'name':'Vector Data','value':'92'}, {'name':'1:25k Vector Data','value':'93'}, {'name':'1:50k Vector Data','value':'94'},
+         {'name':'1:100k Vector Data','value':'95'}, {'name':'Very High Resolution Commercial Monoscopic Imagery','value':'110'}, {'name':'Very High Resolution Commercial Stereoscopic Imagery','value':'111'},
+         {'name':'High Resolution Commercial Monoscopic Imagery','value':'112'}, {'name':'High Resolution Commercial Stereoscopic Imagery','value':'113'}, {'name':'Medium Resolution Commercial Monoscopic Imagery','value':'114'},
+         {'name':'Medium Resolution Commercial Stereoscopic Imagery','value':'115'}, {'name':'Low Resolution Commercial Monoscopic Imagery','value':'116'}, {'name':'Low Resolution Commercial Stereoscopic Imagery','value':'117'},
+         {'name':'Map 1:25k','value':'118'}, {'name':'Map 1:50k','value':'119'}, {'name':'Map 1:100k','value':'120'},
+         {'name':'Routing Data','value':'121'}, {'name':'Multiple','value':'996'}, {'name':'Unpopulated','value':'997'},
+         {'name':'Not Applicable','value':'998'}, {'name':'Other','value':'999'}
+        ]
+
+        schema[i]['columns']['TXT'] = {'name':'TXT','desc':'Associated Text','type':'String','optional':'R','defValue':'N_A'}
+        schema[i]['columns']['UID'] = {'name':'UID','desc':'MGCP Feature universally unique identifier','type':'String','optional':'R','length':'36','defValue':'UNK'}
+
+    return schema
+# End of addExtra
+
+
 # Read all of the features in an XML document
 def readFeatures(xmlDoc,funcList):
-
     itemList = xmlDoc.getElementsByTagName('gfc:FC_FeatureType')
 
     # Debug:
@@ -194,6 +408,56 @@ def readFeatures(xmlDoc,funcList):
     geoList = {'L':'Line', 'A':'Area', 'P':'Point','_':'None' }
     typeList = {'CodeList':'enumeration','CharacterString':'String','Real':'Real','Integer':'Integer',
                 'GM_Surface':'none', 'GM_Curve':'none','GM_Point':'none' }
+
+    thematicLookup = {'AGB005':'AerofacA','AGB035':'AerofacA','AGB065':'AerofacA','AGB230':'AerofacA','PGB030':'AerofacP',
+        'PGB065':'AerofacP','PGB230':'AerofacP','AAM020':'AgristrA','AAM030':'AgristrA','PAM020':'AgristrP','PAM030':'AgristrP',
+        'ABH010':'AquedctA','LBH010':'AquedctL','PBH010':'AquedctP','LAL070':'BarrierL','LAL260':'BarrierL','LDB010':'BluffL',
+        'AAQ040':'BridgeA','LAQ040':'BridgeL','AAL015':'BuildA','PAL015':'BuildP','AAL020':'BuiltupA','AAL208':'BuiltupA',
+        'PAL020':'BuiltupP','PBI010':'CisternP','ABA030':'CoastA','ABA040':'CoastA','ABA050':'CoastA','LBA010':'CoastL',
+        'PBA050':'CoastP','AAT050':'CommA','PAT010':'CommP','PAT045':'CommP','ABH135':'CropA','AEA010':'CropA','AEA040':'CropA',
+        'AEA050':'CropA','AEA055':'CropA','ABI020':'DamA','ABH165':'DamA','LBI020':'DamL','LBH165':'DamL','PBI020':'DamP',
+        'ABD100':'DangerA','ABD120':'DangerA','LBD120':'DangerL','PBD100':'DangerP','PBD110':'DangerP','PBD130':'DangerP',
+        'PBD180':'DangerP','AAB000':'DisposeA','AAB010':'DisposeA','ADB090':'EmbankA','LAQ063':'EmbankL','LDB070':'EmbankL',
+        'LDB090':'EmbankL','LDB071':'EmbankL','AAA010':'ExtractA','AAA012':'ExtractA','ABH155':'ExtractA','ABH150':'ExtractA',
+        'PAA010':'ExtractP','PAA012':'ExtractP','LAQ070':'FerryL','PAQ070':'FerryP','AEC040':'FirebrkA','AEC060':'FirebrkA',
+        'LBH070':'FordL','PBH070':'FordP','AAH050':'FortA','PAH050':'FortP','AEB010':'GrassA','AEB020':'GrassA','AEC010':'GrassA',
+        'ADA010':'GroundA','ABB005':'HarborA','ABB090':'HarborA','PBB155':'HarborP','LAF020':'IndL','LBH060':'IndL',
+        'LFA090':'IndL','ABH090':'InundA','ABH080':'LakeresA','ABH130':'LakeresA','ABH160':'Landfrm1A','ADB170':'Landfrm1A',
+        'ABJ020':'Landfrm2A','ADB160':'Landfrm2A','ADB200':'LandfrmA','ABJ031':'LandfrmA','ADB061':'LandfrmA','LBJ040':'LandfrmL',
+        'LDB110':'LandfrmL','LDB200':'LandfrmL','LBJ031':'LandfrmL','LDB061':'LandfrmL','LDB100':'LandfrmL','LDB160':'LandfrmL',
+        'PBJ060':'LandfrmP','PDB160':'LandfrmP','ABJ030':'LandIceA','ABJ100':'LandIceA','AAJ010':'LandmrkA','AAK030':'LandmrkA',
+        'AAK060':'LandmrkA','AAK120':'LandmrkA','AAK160':'LandmrkA','AAK180':'LandmrkA','AAL030':'LandmrkA','AAK040':'LandmrkA',
+        'AFA015':'LandmrkA','AAI030':'LandmrkA','AAK170':'LandmrkA','LAK130':'LandmrkL','LAQ075':'LandmrkL','LAK150':'LandmrkL',
+        'PAH070':'LandmrkP','PAK160':'LandmrkP','PAL030':'LandmrkP','PAL130':'LandmrkP','PAK040':'LandmrkP','PAK150':'LandmrkP',
+        'PAK170':'LandmrkP','ABI030':'LockA','LBI030':'LockL','LBI040':'LockL','PBI030':'LockP','PBI040':'LockP',
+        'PAL025':'MarkersP','ASU001':'MilA','LAH025':'MilL','PSU001':'MilP','PAQ110':'MiscaeroP','PGA034':'MiscaeroP',
+        'PGB485':'MiscaeroP','PGB040':'MiscaeroP','PGB220':'MiscaeroP','LBH110':'MiscL','LBI041':'MiscL','PBI041':'MiscP',
+        'PBI050':'MiscP','AAL012':'MiscpopA','AAL105':'MiscpopA','AAL010':'MiscpopA','AAL019':'MiscpopA','AAJ110':'MiscpopA',
+        'PAL012':'MiscpopP','PAL105':'MiscpopP','PAL099':'MiscpopP','PAJ110':'MiscpopP','PAL019':'MiscpopP','PDB029':'MtnP',
+        'PDB150':'MtnP','AAL140':'NuclearA','AEC020':'OasisA','PAF010':'ObstrP','PAF040':'ObstrP','PAF070':'ObstrP',
+        'PAJ050':'ObstrP','ADB180':'PhysA','AAK190':'PierA','ABB190':'PierA','LAK190':'PierL','LBB190':'PierL','LAQ113':'PipeL',
+        'AAL170':'PlazaA','AAD010':'PowerA','AAD050':'PowerA','LAT030':'PowerL','LAT041':'PowerL','PAD010':'PowerP',
+        'PAD020':'PowerP','PAD050':'PowerP','AAC000':'ProcessA','PAC000':'ProcessP','AAA052':'PumpingA','AAQ116':'PumpingA',
+        'PAQ116':'PumpingP','LAN010':'RailrdL','LAN050':'RailrdL','ABB240':'RampA','ABH120':'RapidsA','LBH120':'RapidsL',
+        'LBH180':'RapidsL','PBH120':'RapidsP','PBH145':'RapidsP','PBH180':'RapidsP','PAA040':'RigwellP','PAC020':'RigwellP',
+        'LAP030':'RoadL','PAN075':'RrturnP','AAN060':'RryardA','AAL200':'RuinsA','AGB015':'RunwayA','AGB045':'RunwayA',
+        'AGB055':'RunwayA','AGB075':'RunwayA','LGB050':'RunwayL','PGB050':'RunwayP','ABB041':'SeastrtA','ABB043':'SeastrtA',
+        'ABB140':'SeastrtA','LBB041':'SeastrtL','LBB043':'SeastrtL','LBB140':'SeastrtL','LBB230':'SeastrtL','LAL210':'ShedL',
+        'PAL210':'ShedP','AAK090':'SportA','AAK100':'SportA','AAM010':'StorageA','AAM040':'StorageA','AAM060':'StorageA',
+        'AAM070':'StorageA','PAM040':'StorageP','PAM060':'StorageP','PAM070':'StorageP','AAD030':'SubstatA','PAD030':'SubstatP',
+        'ABH015':'SwampA','AED010':'SwampA','AED020':'SwampA','AED030':'SwampA','LAT060':'TeleL','AFA100':'TestA',
+        'PZD040':'TextP','ADB115':'ThermalA','PDB115':'ThermalP','PDB180':'ThermalP','PAL241':'TowerP','LAP010':'TrackL',
+        'LAP050':'TrailL','AAQ125':'TransA','AAQ135':'TransA','AAQ140':'TransA','AAL060':'TransA','AAN076':'TransA',
+        'LAL060':'TransL','PAQ090':'TransP','PAQ125':'TransP','PAQ065':'TransP','PAN076':'TransP','AAC030':'TreatA',
+        'AAJ030':'TreatA','ABH040':'TreatA','ABH050':'TreatA','ABH051':'TreatA','PAC030':'TreatP','PAJ030':'TreatP',
+        'AEC030':'TreesA','LEA020':'TreesL','LEC030':'TreesL','PEC030':'TreesP','ABJ110':'TundraA','AAQ130':'TunnelA',
+        'LAQ130':'TunnelL','PAJ051':'UtilP','PAT042':'UtilP','AZD020':'VoidA','ABH020':'WatrcrsA','ABH030':'WatrcrsA',
+        'ABH140':'WatrcrsA','LBH020':'WatrcrsL','LBH030':'WatrcrsL','LBH140':'WatrcrsL','PAA050':'WellsprP',
+        'PBH170':'WellsprP','LZD040':'AnnoL','LZD045':'AnnoL','PZD045':'AnnoP','PZD040':'AnnoP','LCA010':'ContourL',
+        'PCA030':'ElevP','PCA035':'ElevP','PZB050':'ElevP','AFA002':'PolbndA','AFA003':'PolbndA','LFA000':'PolbndL',
+        'LFA110':'PolbndL','LFC021':'PolbndL'}
+
+    nonMGCPfd = {'LZD040','LZD045','PZD045','PZD040','LCA010','PCA030','PCA035','PZB050','AFA002','AFA003','LFA000','LFA110','LFC021'}
 
     # These attributes have non-standard defaults
     customDefVal = {'ACC':'1','TXT':'N_A','SDP':'N_A','CON':'998','FUN':'6','COD':'1000','NFI':'N_A','NFN':'N_A'}
@@ -210,9 +474,10 @@ def readFeatures(xmlDoc,funcList):
 
         fGeometry = geoList[rawfCode[0]]
         fCode = rawfCode[1:]
+
         # Debug:
-        #print 'Geometry: ', fGeometry
-        #print 'FCODE: ', fCode
+        # print 'Geometry: ', fGeometry
+        # print 'FCODE: ', fCode
 
         # Build a feature
         if rawfCode not in tSchema:
@@ -221,8 +486,17 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['fcode'] = fCode
             tSchema[rawfCode]['geom'] = fGeometry
             tSchema[rawfCode]['columns'] = {}
-            tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':"Feature Code",'type':'String','optional':'R','defValue':'','length':'5'}
+            tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
 
+            if rawfCode in thematicLookup:
+                tSchema[rawfCode]['thematic'] = thematicLookup[rawfCode]
+            # else:
+            #     print '### Missing',rawfCode,'from thematic lookup'
+
+            if rawfCode in nonMGCPfd:
+                tSchema[rawfCode]['fdname'] = 'MGCP_Delta'
+            else:
+                tSchema[rawfCode]['fdname'] = 'MGCP'
 
         for node in feature.childNodes:
             if not node.localName:
@@ -371,6 +645,7 @@ def readFeatures(xmlDoc,funcList):
                                                             'defValue':aDefVal,
                                                             'optional':'R'
                                                           }
+
                     if aName in funcList:
                         tSchema[rawfCode]['columns'][aName]['func'] = 'full_' + aName
 
@@ -398,6 +673,34 @@ def readFeatures(xmlDoc,funcList):
 # End of readFeatures
 
 
+# Convert a schema to Thematic schema
+def makeThematic(schema):
+    tSchema = {}
+    for feature in schema:
+        # Skip the parent feature
+        if feature == '_GMGCP':
+            continue
+
+        thematicName = schema[feature]['thematic']
+
+        # Build a feature
+        if thematicName not in tSchema:
+            tSchema[thematicName] = {}
+            tSchema[thematicName]['name'] = thematicName
+            tSchema[thematicName]['fcode'] = ''
+            tSchema[thematicName]['geom'] = schema[feature]['geom']
+            tSchema[thematicName]['desc'] = thematicName
+            tSchema[thematicName]['fdname'] = schema[feature]['fdname']
+            tSchema[thematicName]['columns'] = {}
+            # tSchema[thematicName]['columns']['FCODE'] = { 'name':'FCODE','desc':"Feature Code",'type':'String','optional':'R','defValue':'','length':'5'}
+
+        for attr in schema[feature]['columns']:
+            if attr not in tSchema[thematicName]['columns']:
+                tSchema[thematicName]['columns'][attr] = {}
+                tSchema[thematicName]['columns'][attr] = schema[feature]['columns'][attr]
+
+    return tSchema
+# End of makeThematic
 
 
 ###########
@@ -416,6 +719,7 @@ if __name__ == "__main__":
     parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
     parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
     parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
+    parser.add_argument('--thematic', help='Generate a Thematic Schame',action='store_true')
     parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
     parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
     parser.add_argument('xmlFile', help='The XML Schema file', action='store')
@@ -432,12 +736,14 @@ if __name__ == "__main__":
 
     # xmlDoc = minidom.parse(args.xmlFile)
     xmlDoc = minidom.parseString(content)
+    # print(xmlDoc.toprettyxml(indent = '  ',encoding = 'UTF-8'))
 
     schema = {}
+    thematicSchema = {}
 
     # The list of attributes to make into functions in the schema. Used for enumerated lists that get
     # repeated a lot.
-    funcList = ['SRT','FUN']
+    funcList = ['ACC','FUN','SRT']
 
     schema = readFeatures(xmlDoc,funcList)
 
@@ -447,53 +753,47 @@ if __name__ == "__main__":
 
     schema = processInheritance(schema,inheritance)
 
+    # Now add in "extra" features that are not specified in the TRD
+    schema = addExtra(schema)
+
+    # Now build a thematic schema
+    thematicSchema = makeThematic(schema)
 
     # Now dump the schema out
     if args.rules:
         printRules(schema)
-
     elif args.txtrules:
         printTxtRules(schema)
-
     elif args.numrules:
         printNumRules(schema)
-
     elif args.attrlist:
         printAttrList(schema)
-
     elif args.fcodelist:
         printFcodeList(schema)
-
     elif args.fcodeschema:  # List the FCODES in the internal OSM schema format
         printFcodeSchema(schema)
-
     elif args.fcodeattrlist:
         printFcodeAttrList(schema)
-
     elif args.toenglish:
         printCopyright()
         printToEnglish(schema,'MGCP TRD4','emgcp','FCODE')
-
     elif args.fromenglish:
         printCopyright()
         printFromEnglish(schema,'MGCP TRD4','emgcp_osm_rules')
-
     elif args.attributecsv:
         printAttributeCsv(schema)
-
     elif args.dumpenum:
         dumpEnumerations(schema,'enumMGCP')
-
     elif args.fieldvalues:
         printFieldValues(schema)
-
     else:
         printCopyright()
-        printJSHeader('mgcp')
-        printFuncList(schema)
-        printJavascript(schema)
-        printJSFooter('mgcp')
+        if args.thematic:
+            printThematic(thematicSchema,'mgcp')
+        else:
+            printJSHeader('mgcp')
+            convertTextEnumerations(schema)
+            printFuncList(schema)
+            printJavascript(schema)
+            printJSFooter('mgcp')
 # End
-
-
-
