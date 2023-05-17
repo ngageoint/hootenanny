@@ -2214,21 +2214,18 @@ mgcp = {
         if (! attrs.TID) attrs.TID = '1001'; // Tidal
         break;
 
-      case 'FA002': //
-      case 'FA003': // Geopolitical Entity
-          // Why ????????
-          if (attrs.COD == '1001')
-          {
-            attrs.COD = '1';
-          }
-          else if (attrs.COD == '1000')
-          {
-            attrs.COD = '2';
-          }
+      case 'FA002': // Geopolitical Entity
+      case 'FA003': // Administrative Division
+        // Why ????????
+        if (attrs.COD == '1001')
+        {
+          attrs.COD = '1';
+        }
+        else if (attrs.COD == '1000')
+        {
+          attrs.COD = '2';
         }
         break;
-
-
 
       case 'AH050': // Fortification
         if (tags['bunker_type'] == 'munitions')
