@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "JsonOsmSchemaLoader.h"
 
@@ -105,10 +105,8 @@ double JsonOsmSchemaLoader::_asDouble(const QVariant& v) const
   bool ok;
   double result = v.toDouble(&ok);
   if (!ok)
-  {
-    throw IllegalArgumentException(QString("Expected to receive a number, but got: %1 (%2)")
-                                    .arg(toString(v)).arg(v.typeName()));
-  }
+    throw IllegalArgumentException(QString("Expected to receive a number, but got: %1 (%2)").arg(toString(v)).arg(v.typeName()));
+
   return result;
 }
 
@@ -117,8 +115,7 @@ QString JsonOsmSchemaLoader::_asString(const QVariant& v) const
   if (v.type() == QVariant::String)
     return v.toString();
   else
-    throw IllegalArgumentException(QString("Expected to receive a string, but got: %1 (%2)")
-                                    .arg(toString(v)).arg(v.typeName()));
+    throw IllegalArgumentException(QString("Expected to receive a string, but got: %1 (%2)").arg(toString(v)).arg(v.typeName()));
 }
 
 QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
@@ -134,10 +131,7 @@ QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
       result.push_back(_asString(var));
   }
   else
-  {
-    throw IllegalArgumentException(QString("Expected to receive a list, but got: %1 (%2)")
-                                    .arg(toString(v)).arg(v.typeName()));
-  }
+    throw IllegalArgumentException(QString("Expected to receive a list, but got: %1 (%2)").arg(toString(v)).arg(v.typeName()));
 
   return result;
 }
