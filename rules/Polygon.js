@@ -48,7 +48,9 @@ exports.isMatchCandidate = function(map, e)
   {
     return false;
   }
-  return hoot.OsmSchema.isPolygon(map, e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
+  return hoot.OsmSchema.isPolygon(map, e) &&
+         !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType) &&
+         !hoot.OsmSchema.isHighway(map, e);
 };
 
 /**

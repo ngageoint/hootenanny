@@ -2819,6 +2819,10 @@ ggdm30 = {
       // translate.dumpOne2OneLookup(ggdm30.lookup);
     }
 
+    // Untangle GGDM attributes & OSM tags.
+    // NOTE: This could get wrapped with an ENV variable so it only gets called during import
+    translate.untangleAttributes(attrs,tags,ggdm30);
+
     // Cleanput the usless values
     ggdm30.cleanAttrs(attrs);
 

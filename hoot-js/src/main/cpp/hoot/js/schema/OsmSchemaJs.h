@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -76,6 +76,7 @@ private:
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * See description in rules/HootLib.js isSpecificallyConflatable method
