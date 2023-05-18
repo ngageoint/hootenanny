@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014 2023 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -39,80 +39,108 @@
 
 mgcp = {
   getDbSchema: function() {
+    mgcp.rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
 
-  mgcp.rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
+    // These have been moved to mgcp.rules as static lists
+    // FCODE to english layer name lookup that is used for O2S reasons
+    // var fcodeNameLookup = translate.makeFcodeNameLookup(mgcp.rawSchema);
+    // print("##########");
+    // print("fcodeNameLookup");
+    // print(JSON.stringify(fcodeNameLookup));
+    // print("##########");
 
-  // These have been moved to mgcp.rules as static lists
-  // Now build the FCODE/layername lookup table.
-  // NOTE: If we change the output to be ROAD_C instead of LAP030, we need to rebuild this using the function in translate.
-  // mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
+    // List of valid MGCP geometry + FCODEs
+    // var layerNameLookup = [];
+    // mgcp.rawSchema.forEach( function (item) {layerNameLookup.push(item.geom.charAt(0) + item.fcode);});
+    // print("##########");
+    // print("layerNameLookup");
+    // print(JSON.stringify(layerNameLookup));
+    // print("##########");
 
-  // Quick list generator
-  // mgcp.layerNameLookup = [];
-  // mgcp.rawSchema.forEach( function (item) {mgcp.layerNameLookup.push(item.geom.charAt(0) + item.fcode);});
-  // print('###');
-  // print(mgcp.layerNameLookup);
-  // print('###');
+      // Build the FCODE to attr lookup table. Note: This is <GLOBAL>
+      mgcp.attrLookup = {};
+      mgcp.attrLookup = translate.makeAttrLookup(mgcp.rawSchema);
 
-  // Yet Another lookup. FCODE and English name
-  // Used for O2S reasons
-  mgcp.fcodeNameLookup = translate.makeFcodeNameLookup(mgcp.rawSchema);
-  // print("mgcp.fcodeNameLookup");
-  // translate.dumpLookup(mgcp.fcodeNameLookup);
-  // print("##########");
+    // Decide if we are going to use the Thematic structure or 1 FCODE / Layer
+    // if we DON't want the thematic structure, just return the mgcp.rawSchema
+    if (hoot.Settings.get('writer.thematic.structure') == 'false')
+    {
+      // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
+      if (hoot.Settings.get('ogr.output.format') == 'shp')
+      {
+        // Add OSMTAGS1-4 and tag1-4 attributes
+        mgcp.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(mgcp.rawSchema));
+      }
+      else
+      {
+        // Just add tag1 && OSMTAGS
+        mgcp.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(mgcp.rawSchema));
+      }
 
-  // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
-  // if (config.getOgrOutputFormat() == 'shp')
-  if (hoot.Settings.get('ogr.output.format') == 'shp')
-  {
-    // Add OSMTAGS1-4 and tag1-4 attributes
-    mgcp.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(mgcp.rawSchema));
-  }
-  else
-  {
-    // Just add tag1 && OSMTAGS
-    mgcp.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(mgcp.rawSchema));
-  }
+      // Add empty Review layers
+      mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
-  // Add empty Review layers
-  mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
+      // Add empty "extra" feature layers if needed
+      if (hoot.Settings.get('ogr.note.extra') == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
-  // Add empty "extra" feature layers if needed
-  // if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
-  if (hoot.Settings.get('ogr.note.extra') == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+      // Debug
+      // translate.dumpSchema(mgcp.rawSchema);
+      // print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 
-  // This function dumps the schema to the screen for debugging
-  // translate.dumpSchema(mgcp.rawSchema);
-  // print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+      return mgcp.rawSchema;
+    } // End non-thematic
 
-  return mgcp.rawSchema;
+    // Thematic schema
+    if (mgcp.thematicSchema == undefined) hoot.require('mgcp_thematic_schema');
+
+    // This has been moved to mgcp.rules as a static list
+    // Lookup table for F_CODE to Thematic layer name
+    // var thematicGroupLookup = {}
+    // mgcp.rawSchema.forEach( function (item) {thematicGroupLookup['' + item.geom.charAt(0) + item.fcode] = item.thematic;});
+    // print("##########");
+    // print("mgcp.thematicGroupLookup");
+    // print(JSON.stringify(thematicGroupLookup));
+    // print("##########");
+
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
+    {
+      mgcp.thematicLookup = translate.makeThematicAttrLookup(translate.addTagFeatures(mgcp.thematicSchema));
+      mgcp.thematicSchema = translate.addO2sFeatures(mgcp.thematicSchema);
+    }
+    else
+    {
+      mgcp.thematicLookup = translate.makeThematicAttrLookup(translate.addSingleTagFeature(mgcp.thematicSchema));
+      mgcp.thematicSchema = translate.addSingleO2sFeature(mgcp.thematicSchema);
+    }
+    // Debug
+    // // print("##########");
+    // print("thematicLookup");
+    // print(JSON.stringify(mgcp.thematicLookup));
+    // print("##########");
+
+    // Add empty Review layers
+    mgcp.thematicSchema = translate.addReviewFeature(mgcp.thematicSchema);
+
+    // Add empty "extra" feature layers if needed
+    if (hoot.Settings.get('ogr.note.extra') == 'file') mgcp.thematicSchema = translate.addExtraFeature(mgcp.thematicSchema);
+
+    // Debug
+    // translate.dumpSchema(mgcp.thematicSchema);
+    // print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+
+    return mgcp.thematicSchema;
   }, // End of getDbSchema
 
 
-  // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-  //        feature
+  // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the feature
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
-    // No quick and easy way to do this. Each feature is stored as an object.
-    var feature = {};
-    for (var i=0, sLen = mgcp.rawSchema.length; i < sLen; i++)
-    {
-      if (mgcp.rawSchema[i].name == geometryType.toString().charAt(0) + attrs.FCODE)
-      {
-        feature = mgcp.rawSchema[i];
-        break;
-      }
-    }
+    var attrList = mgcp.attrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
 
-    // If we can't find a feature then print an error and return.
-    if (feature === {})
+    if (attrList == undefined)
     {
-      hoot.logError('Validate: Could not find feature: '+ attrs.FCODE + ' ' + geometryType);
-      return;
+      hoot.logDebug('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
+      return
     }
-
-    // Grab a list of all of the attribute names in the feature and validate the what we populated
-    var attrList = [];
-    feature['columns'].forEach( function (column) { attrList.push(column.name); });
 
     for (var val in attrs)
     {
@@ -132,6 +160,24 @@ mgcp = {
         continue;
       }
     } // End val in attrs
+
+    // No quick and easy way to do this. Each feature is stored as an object.
+    var feature = {};
+    for (var i=0, sLen = mgcp.rawSchema.length; i < sLen; i++)
+    {
+      if (mgcp.rawSchema[i].name == geometryType.toString().charAt(0) + attrs.FCODE)
+      {
+        feature = mgcp.rawSchema[i];
+        break;
+      }
+    }
+
+    // If we can't find a feature then print an error and return.
+    if (feature === {})
+    {
+      hoot.logError('Validate: Could not find feature: '+ attrs.FCODE + ' ' + geometryType);
+      return;
+    }
 
     // Now look through the attributes and values
     // Yet again, looping through the objects
@@ -205,6 +251,20 @@ mgcp = {
       }
     } // End enumerations
   }, // End validateAttrs
+
+
+  // validateThematicAttrs - Clean up the thematic layer attrs.  This sets all of the extra attrs to be "undefined"
+  validateThematicAttrs: function(gFcode, attrs) {
+    var mgcpAttrList = mgcp.thematicLookup[mgcp.rules.thematicGroupLookup[gFcode]];
+    var attrList = mgcp.attrLookup[gFcode];
+
+    for (var i = 0, len = mgcpAttrList.length; i < len; i++)
+    {
+      if (attrList.indexOf(mgcpAttrList[i]) == -1) attrs[mgcpAttrList[i]] = undefined;
+      //if (attrList.indexOf(mgcpAttrList[i]) == -1) attrs[mgcpAttrList[i]] = null;
+    }
+
+  }, // End validateThematicAttrs
 
 
   // Sort out if we need to return more than one feature
@@ -1731,7 +1791,6 @@ mgcp = {
 
     // Keep looking for an FCODE
     // This uses the fcodeLookup tables that are defined earlier
-    // var fcodeLookup = translate.createLookup(fcodeList);
     if (!attrs.F_CODE)
     {
       for (var col in tags)
@@ -2483,7 +2542,8 @@ mgcp = {
       // stomp on the other ones
       mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneInV3);
 
-      fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
+      // fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
+      fcodeCommon.one2one.forEach( function(item) { if (mgcp.rules.fcodeNameLookup[item[1]]) mgcp.rules.fcodeOne2oneV4.push(item); });
 
       mgcp.fcodeLookup = translate.createLookup(mgcp.rules.fcodeOne2oneV4);
 
@@ -2606,7 +2666,6 @@ mgcp = {
   // We get Tags and return Attrs and a tableName
   toOgr : function(tags, elementType, geometryType)
   {
-    var tableName = '';
     var returnData = []; // The array of features to return
     var transMap = {}; // A map of translated attributes
     attrs = {}; // This is the output <GLOBAL>
@@ -2621,8 +2680,9 @@ mgcp = {
       mgcp.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
       mgcp.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       mgcp.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      mgcp.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       mgcp.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
+      mgcp.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
+      mgcp.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2651,7 +2711,8 @@ mgcp = {
     {
       // Order is important:
       // Start with the TRD4 specific FCODES and then add the valid MGCP ones from the common list
-      fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
+      // fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
+      fcodeCommon.one2one.forEach( function(item) { if (mgcp.rules.fcodeNameLookup[item[1]]) mgcp.rules.fcodeOne2oneV4.push(item); });
 
       mgcp.fcodeLookup = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneV4);
 
@@ -2700,17 +2761,11 @@ mgcp = {
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
     mgcp.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
-    // Set the tablename: [P,A,L]<fcode>
-    // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
-    tableName = geometryType.toString().charAt(0) + attrs.F_CODE;
-
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to the o2s layer
-
-    // Change this back if we need to change the lookup table
-    // if (mgcp.rules.layerNameLookup[tableName])
-    if (mgcp.rules.layerNameLookup.includes(tableName))
+    // var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
+    if (mgcp.rules.layerNameLookup.includes(geometryType.toString().charAt(0) + attrs.F_CODE))
     {
       // Check if we need to return more than one feature
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2727,10 +2782,9 @@ mgcp = {
         // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
         // features to return
         var gFcode = gType + returnData[i]['attrs']['FCODE'];
+        gFcode = gFcode.toUpperCase();
 
-        // Change this back if we need to change the lookup table
-        // if (mgcp.rules.layerNameLookup[gFcode.toUpperCase()])
-        if (mgcp.rules.layerNameLookup.includes(gFcode.toUpperCase()))
+        if (mgcp.rules.layerNameLookup.includes(gFcode))
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
@@ -2757,15 +2811,25 @@ mgcp = {
               returnData[i]['attrs']['OSMTAGS'] = str;
             }
           }
-        // Change this back if we need to change the lookup table
-          // returnData[i]['tableName'] = mgcp.rules.layerNameLookup[gFcode.toUpperCase()];
-          returnData[i]['tableName'] = gFcode.toUpperCase();
+
+          // If we are using the Thematic structre, fill the rest of the unused attrs in the schema
+          if (mgcp.configOut.OgrThematicStructure == 'true')
+          {
+            returnData[i]['tableName'] = mgcp.rules.thematicGroupLookup[gFcode];
+            mgcp.validateThematicAttrs(gFcode, returnData[i]['attrs']);
+          }
+          else
+          {
+            // returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode];
+            returnData[i]['tableName'] = gFcode;
+          }
         }
         else
         {
           // Debug
           // print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
+          fLen = returnData.length;
         }
       } // End returnData loop
 
@@ -2821,7 +2885,7 @@ mgcp = {
       }
       else
       {
-        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' (' + mgcp.fcodeNameLookup[attrs.F_CODE] + ')';;
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' (' + mgcp.rules.fcodeNameLookup[attrs.F_CODE] + ')';;
       }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
