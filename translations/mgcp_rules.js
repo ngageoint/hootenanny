@@ -49,8 +49,8 @@ mgcp.rules = {
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
-    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
+    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
@@ -61,8 +61,8 @@ mgcp.rules = {
     ['F_CODE','BB041','man_made','breakwater'], // Breakwater - NFDD BB081
     ['F_CODE','BB043','man_made','groyne'], // Groin - NFDD BB081
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081
-    ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
@@ -70,6 +70,7 @@ mgcp.rules = {
     ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BI041','man_made','basin_gate'], // Water Gate - NFDD BI045
+    ['F_CODE','CA035','geological','water_elevation'], // Inland Water Elevation
     ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
     ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
     ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
