@@ -3283,7 +3283,7 @@
     <node visible="true" id="-1024" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025659999999931" lon="-77.0488229999999845"/>
     <node visible="true" id="-1023" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025669999999835" lon="-77.0468659999999659"/>
     <node visible="true" id="-1022" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259999999662" lon="-77.0466490000000022"/>
-    <way visible="true" id="-23028" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-23029" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-103065"/>
         <nd ref="-89357"/>
         <nd ref="-103093"/>
@@ -3291,7 +3291,7 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
     </way>
-    <way visible="true" id="-23023" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-23024" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15170"/>
         <nd ref="-93143"/>
         <nd ref="-93144"/>
@@ -3302,7 +3302,7 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
     </way>
-    <way visible="true" id="-23021" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-23022" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39433"/>
         <nd ref="-39434"/>
         <nd ref="-39435"/>
@@ -3354,7 +3354,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Independence Ave SW"/>
     </way>
-    <way visible="true" id="-23006" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-23007" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102957"/>
         <nd ref="-90831"/>
         <nd ref="-90832"/>
@@ -3373,7 +3373,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
     </way>
-    <way visible="true" id="-22953" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22954" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-70630"/>
         <nd ref="-70671"/>
         <nd ref="-70672"/>
@@ -3399,7 +3399,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
-    <way visible="true" id="-22942" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22943" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39104"/>
         <nd ref="-50187"/>
         <nd ref="-50186"/>
@@ -3418,7 +3418,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Raoul Wallenberg Pl SW"/>
     </way>
-    <way visible="true" id="-22937" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22938" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102649"/>
         <nd ref="-1040"/>
         <nd ref="-91864"/>
@@ -3428,7 +3428,7 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="25TH ST NW"/>
     </way>
-    <way visible="true" id="-22933" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22934" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-47446"/>
         <nd ref="-69404"/>
         <nd ref="-102649"/>
@@ -3438,7 +3438,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="25TH ST NW"/>
     </way>
-    <way visible="true" id="-22926" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22927" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27249"/>
         <nd ref="-91767"/>
         <nd ref="-91768"/>
@@ -3450,7 +3450,7 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="25TH ST NW"/>
     </way>
-    <way visible="true" id="-22902" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22903" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-92686"/>
         <nd ref="-89935"/>
         <nd ref="-89937"/>
@@ -3466,7 +3466,7 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="WEST BASIN DR SW"/>
     </way>
-    <way visible="true" id="-22900" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22901" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1772"/>
         <nd ref="-71113"/>
         <nd ref="-71114"/>
@@ -3512,7 +3512,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="WEST BASIN DR SW"/>
     </way>
-    <way visible="true" id="-22860" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22861" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1396"/>
         <nd ref="-27279"/>
         <nd ref="-27280"/>
@@ -3559,7 +3559,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Ohio Dr SW"/>
     </way>
-    <way visible="true" id="-22856" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22857" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-60538"/>
         <nd ref="-102357"/>
         <nd ref="-27299"/>
@@ -3573,7 +3573,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Arlington Memorial Brg"/>
     </way>
-    <way visible="true" id="-22843" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22844" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102392"/>
         <nd ref="-102282"/>
         <nd ref="-39512"/>
@@ -3581,7 +3581,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
     </way>
-    <way visible="true" id="-22818" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22819" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21282"/>
         <nd ref="-21283"/>
         <nd ref="-21284"/>
@@ -3601,7 +3601,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="26th St NW"/>
     </way>
-    <way visible="true" id="-22816" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22817" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21294"/>
         <nd ref="-21295"/>
         <nd ref="-21296"/>
@@ -3618,7 +3618,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="26th St NW"/>
     </way>
-    <way visible="true" id="-22812" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22813" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102189"/>
         <nd ref="-91364"/>
         <nd ref="-91363"/>
@@ -3650,7 +3650,7 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
     </way>
-    <way visible="true" id="-22809" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22810" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-70608"/>
         <nd ref="-70687"/>
         <nd ref="-70688"/>
@@ -5079,43 +5079,6 @@
         <tag k="name" v="24th St NW"/>
     </way>
     <way visible="true" id="-4995" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88992"/>
-        <nd ref="-38667"/>
-        <nd ref="-38668"/>
-        <nd ref="-27654"/>
-        <nd ref="-38669"/>
-        <nd ref="-38670"/>
-        <nd ref="-38671"/>
-        <nd ref="-38672"/>
-        <nd ref="-38673"/>
-        <nd ref="-38674"/>
-        <nd ref="-38675"/>
-        <nd ref="-15096"/>
-        <nd ref="-38676"/>
-        <nd ref="-38677"/>
-        <nd ref="-38678"/>
-        <nd ref="-38679"/>
-        <nd ref="-38680"/>
-        <nd ref="-38681"/>
-        <nd ref="-38682"/>
-        <nd ref="-38683"/>
-        <nd ref="-38684"/>
-        <nd ref="-38685"/>
-        <nd ref="-38686"/>
-        <nd ref="-38687"/>
-        <nd ref="-38688"/>
-        <nd ref="-38689"/>
-        <nd ref="-1226"/>
-        <nd ref="-38690"/>
-        <nd ref="-38691"/>
-        <nd ref="-38692"/>
-        <nd ref="-38693"/>
-        <nd ref="-38694"/>
-        <nd ref="-38695"/>
-        <nd ref="-38696"/>
-        <nd ref="-38697"/>
-        <nd ref="-38698"/>
-        <nd ref="-38699"/>
         <nd ref="-1022"/>
         <nd ref="-36948"/>
         <nd ref="-36949"/>
@@ -5427,6 +5390,43 @@
         <tag k="name" v="18th St NW"/>
     </way>
     <way visible="true" id="-4977" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88992"/>
+        <nd ref="-38667"/>
+        <nd ref="-38668"/>
+        <nd ref="-27654"/>
+        <nd ref="-38669"/>
+        <nd ref="-38670"/>
+        <nd ref="-38671"/>
+        <nd ref="-38672"/>
+        <nd ref="-38673"/>
+        <nd ref="-38674"/>
+        <nd ref="-38675"/>
+        <nd ref="-15096"/>
+        <nd ref="-38676"/>
+        <nd ref="-38677"/>
+        <nd ref="-38678"/>
+        <nd ref="-38679"/>
+        <nd ref="-38680"/>
+        <nd ref="-38681"/>
+        <nd ref="-38682"/>
+        <nd ref="-38683"/>
+        <nd ref="-38684"/>
+        <nd ref="-38685"/>
+        <nd ref="-38686"/>
+        <nd ref="-38687"/>
+        <nd ref="-38688"/>
+        <nd ref="-38689"/>
+        <nd ref="-1226"/>
+        <nd ref="-38690"/>
+        <nd ref="-38691"/>
+        <nd ref="-38692"/>
+        <nd ref="-38693"/>
+        <nd ref="-38694"/>
+        <nd ref="-38695"/>
+        <nd ref="-38696"/>
+        <nd ref="-38697"/>
+        <nd ref="-38698"/>
+        <nd ref="-38699"/>
         <nd ref="-1022"/>
         <nd ref="-1023"/>
         <nd ref="-1024"/>
