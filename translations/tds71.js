@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022 2023 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -3003,9 +3003,9 @@ tds71 = {
       tds71.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
       tds71.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       tds71.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
+      tds71.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
       tds71.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
       tds71.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
-      tds71.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon

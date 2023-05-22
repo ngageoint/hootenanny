@@ -49,8 +49,8 @@ mgcp.rules = {
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
-    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
+    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
@@ -61,8 +61,8 @@ mgcp.rules = {
     ['F_CODE','BB041','man_made','breakwater'], // Breakwater - NFDD BB081
     ['F_CODE','BB043','man_made','groyne'], // Groin - NFDD BB081
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081
-    ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
@@ -70,6 +70,7 @@ mgcp.rules = {
     ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BI041','man_made','basin_gate'], // Water Gate - NFDD BI045
+    ['F_CODE','CA035','geological','water_elevation'], // Inland Water Elevation
     ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
     ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
     ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
@@ -143,6 +144,7 @@ mgcp.rules = {
     ['F_CODE','BB190','man_made','pier'], // From OSM
     ['F_CODE','BB190','man_made','quay'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BH030','barrier','ditch'], // Ditch. Not great: Dry vs wet
     ['F_CODE','BH080','water','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
@@ -192,6 +194,8 @@ mgcp.rules = {
     'TXT':'note', // Associated Text
     'UID':'uuid', // Universally Unique Identifier
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
+    'NM3':'name:three', // Name 3
+    'NM4':'name:four', // Name 4
     }, // End txtBiased
 
     // Txt  rules for importing TRD3
@@ -207,6 +211,7 @@ mgcp.rules = {
     // One2one rules for Number attributes
     numBiasedV4 : {
     'AOO':'angle',  // Angle of Orientation
+    'BEL':'ele:base', // Base Elevation
     'DMB':'undergrowth:density',  // Undergrowth Density
     'DMT':'canopy_cover',  // Canopy Cover
     'GAW':'gauge',  // Railway Gauge
@@ -218,7 +223,8 @@ mgcp.rules = {
     'SDO':'dune:orientation',  // Sand Dune Orientation
     'WD1':'width:minimum_traveled_way', // Route Minimum Travelled Way
     'WID':'width', // Width
-    'ZVA':'ele' // Aerodrome Elevation
+    'ZVA':'ele', // Aerodrome Elevation
+    'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
 
 
@@ -246,7 +252,6 @@ mgcp.rules = {
     'PFH':'height:predominant', // Predominant Feature Height
     'RBV':'waterway:bank1:cover', // Right Bank Vegetation Cover
     },
-
 
 
     // Common one2one rules. Used for both import and export
@@ -278,6 +283,14 @@ mgcp.rules = {
     ['BAC','0','building:density','unknown'],
     ['BAC','1','building:density','sparse'],
     ['BAC','2','building:density','dense'],
+
+    // BAL - BGN Administrative Level
+    ['BAL','1','administrative_subdivision','first-order'], // First-order
+    ['BAL','2','administrative_subdivision','second-order'], // Second-order
+    ['BAL','3','administrative_subdivision','third-order'], // Third-order
+    ['BAL','4','administrative_subdivision','fourth-order'], // Fourth-order
+    ['BAL','5','administrative_subdivision','undifferentiated'], // Undifferentiated
+    ['BAL','999','administrative_subdivision','other'], // Other
 
     // BOC - Bog Type
     // ['BOC','0',undefined,undefined], // Unknown
@@ -315,6 +328,14 @@ mgcp.rules = {
     ['BSC','26','bridge:structure','closed_spandrel_arch'],
     ['BSC','27','bridge:structure','cable_stayed'],
     ['BSC','999','bridge:structure','other'],
+
+    // BST - Boundary Status
+    ['BST','0','boundary:status','unknown'], // Unknown
+    ['BST','1','boundary:status','definite'], // Definite
+    ['BST','2','boundary:status','indefinite'], // Indefinite
+    ['BST','3','boundary:status','in_dispute'], // In Dispute
+    ['BST','4','boundary:status','no_defined_boundary'], // No Defined Boundary
+    ['BST','999','boundary:status','other'], // Other
 
     // CAA - Controlling Authority
     // ['CAA','0',undefined,undefined],
@@ -359,6 +380,23 @@ mgcp.rules = {
     ['CDA','0','covered','unknown'],
     ['CDA','1000','covered','no'],
     ['CDA','1001','covered','yes'],
+
+    // CFT - Boundary Determination Method
+    // ['CFT','0','seamark:boundary:determination','unknown'], // Unknown
+    ['CFT','7','seamark:boundary:determination','elevation_contour'], // Elevation contour
+    ['CFT','8','seamark:boundary:determination','drainage_limit'], // Drainage Limit
+    ['CFT','10','seamark:boundary:determination','ridgeline'], // Ridgeline
+    ['CFT','11','seamark:boundary:determination','drainage_line'], // Drainage Line
+    ['CFT','12','seamark:boundary:determination','left_bank'], // Left Bank
+    ['CFT','13','seamark:boundary:determination','right_bank'], // Right Bank
+    ['CFT','14','seamark:boundary:determination','shoreline'], // Shoreline
+    ['CFT','15','seamark:boundary:determination','lake_transec'], // Lake Transec
+    ['CFT','16','seamark:boundary:determination','meridian'], // Meridian
+    ['CFT','17','seamark:boundary:determination','median'], // Median
+    ['CFT','18','seamark:boundary:determination','parallel'], // Parallel
+    ['CFT','19','seamark:boundary:determination','straight_segmented'], // Straight Segmented
+    ['CFT','20','seamark:boundary:determination','straight'], // Straight
+    ['CFT','33','seamark:boundary:determination','anthropogeographic'], // Anthropogeographic
 
     // CNS - Controlled
     // ['CNS','0',undefined,undefined], // Unknown
@@ -412,6 +450,19 @@ mgcp.rules = {
     ['EET','4','trench','rampart'], // Rampart
     ['EET','5','trench','redoubt'], // Redoubt
     ['EET','999','trench','other'], // Other
+
+    // ELA - Elevation Accuracy Category
+    // ['ELA','0','source:accuracy:vertical:category','unknown'], // Unknown
+    ['ELA','1','source:accuracy:vertical:category','accurate'], // Accurate
+    ['ELA','2','source:accuracy:vertical:category','approximate'], // Approximate
+
+    // ESC - Elevation Surface Category
+    // ['ESC','0','source:accuracy:vertical:category','unknown'], // Unknown
+    ['ESC','1','source:accuracy:vertical:category','land'], // Land
+    ['ESC','2','source:accuracy:vertical:category','snow_field_and/or_ice-field'], // Snow Field and/or Ice-field
+    ['ESC','4','source:accuracy:vertical:category','vegetation'], // Vegetation
+    ['ESC','5','source:accuracy:vertical:category','inland_water'], // Inland Water
+    ['ESC','6','source:accuracy:vertical:category','tidal_water'], // Tidal Water
 
     // FAC - Solid Maritime Construction
     // ['FAC','0',undefined,undefined], // Unknown
@@ -572,6 +623,20 @@ mgcp.rules = {
     ['FUN','6','condition','functional'], //Fully Functional - default
     ['FUN','13','condition','damaged'],
 
+    // GEC - Geopolitical Entity Type
+    ['GEC','5','geopolitical_entity','area_of_no_sovereignty'], // Area of No Sovereignty
+    ['GEC','7','geopolitical_entity','demilitarized_zone_(dmz)'], // Demilitarized Zone (DMZ)
+    ['GEC','8','geopolitical_entity','zone_of_occupation'], // Zone of Occupation
+    ['GEC','9','geopolitical_entity','leased_area'], // Leased Area
+    ['GEC','10','geopolitical_entity','political_entity'], // Political Entity
+    ['GEC','11','geopolitical_entity','dependent_political_entity'], // Dependent Political Entity
+    ['GEC','12','geopolitical_entity','freely_associated_state'], // Freely Associated State
+    ['GEC','13','geopolitical_entity','independent_political_entity'], // Independent Political Entity
+    ['GEC','14','geopolitical_entity','semi-independent_political_entity'], // Semi-independent Political Entity
+    ['GEC','15','geopolitical_entity','economic_region'], // Economic Region
+    ['GEC','16','geopolitical_entity','territory'], // Territory
+    ['GEC','17','geopolitical_entity','buffer_zone'], // Buffer Zone
+
     // GNC - Water Gate Type
     // ['GNC','0',undefined,undefined], // Unknown
     ['GNC','0','flood_control:type','unknown'], // Unknown
@@ -597,6 +662,22 @@ mgcp.rules = {
     ['HCT','2','highway','secondary'], // Secondary
     ['HCT','3','highway','motorway'], // National Motorway
     ['HCT','4','highway','tertiary'], // Local
+
+    // HQC - Hypsography Portrayal Type
+    // ['HQC','0','contour:type','unknown'], // Unknown
+    ['HQC','1','contour:type','index_contour'], // Index Contour
+    ['HQC','2','contour:type','intermediate_contour'], // Intermediate Contour
+    ['HQC','3','contour:type','half_auxiliary_contour'], // Half Auxiliary Contour
+    ['HQC','5','contour:type','depression_index_contour'], // Depression Index Contour
+    ['HQC','6','contour:type','depression_intermediate_contour'], // Depression Intermediate Contour
+    ['HQC','8','contour:type','mound_index_contour'], // Mound Index Contour
+    ['HQC','9','contour:type','mound_intermediate_contour'], // Mound Intermediate Contour
+    ['HQC','14','contour:type','quarter_auxiliary_contour'], // Quarter Auxiliary Contour
+    ['HQC','19','contour:type','intermediate_carrying_contour'], // Intermediate Carrying Contour
+    ['HQC','20','contour:type','auxiliary_carrying_contour'], // Auxiliary Carrying Contour
+    ['HQC','21','contour:type','index_carrying_contour'], // Index Carrying Contour
+    ['HQC','22','contour:type','depression_auxiliary_contour'], // Depression Auxiliary Contour
+    ['HQC','999','contour:type','other'], // Other
 
     // HWT - House of Worship Type
     // ['HWT','0',undefined,undefined],
@@ -647,6 +728,26 @@ mgcp.rules = {
     ['LOC','44','location','surface'], // The default is on the surface
     ['LOC','45','location','overground'], // Above ground
     ['LOC','46','location','underwater'], // Above waterbody bottom
+
+    // LSP - Geopolitical Line Type
+    ['LSP','1','geopolitical_line','administrative'], // Generic Administrative Boundary
+    ['LSP','2','geopolitical_line','provisional_administrative'], // Provisional Administrative Line
+    ['LSP','3','geopolitical_line','armistice'], // Armistice Line
+    ['LSP','4','geopolitical_line','line_of_control'], // Line of Control
+    ['LSP','5','geopolitical_line','demarcation'], // Demarcation Line
+    ['LSP','6','geopolitical_line','line_of_convenience'], // Line of Convenience
+    ['LSP','7','geopolitical_line','cease_fire'], // Cease Fire Line
+    ['LSP','8','geopolitical_line','convention'], // Convention Line
+    ['LSP','9','geopolitical_line','claim'], // Claim Line
+    ['LSP','10','geopolitical_line','intercolonial'], // Intercolonial Line
+    ['LSP','11','geopolitical_line','interentity'], // Interentity Line
+    ['LSP','12','geopolitical_line','line_of_adjacency'], // Line of Adjacency
+    ['LSP','13','geopolitical_line','line_of_withdrawal'], // Line of Withdrawal
+    ['LSP','14','geopolitical_line','military_disengagement'], // Military Disengagement Line
+    ['LSP','15','geopolitical_line','treaty'], // Treaty Line
+    ['LSP','16','geopolitical_line','unclos_claim_boundary'], // UNCLOS Claim Boundary
+    ['LSP','17','geopolitical_line','international_boundary'], // Generic International Boundary
+    ['LSP','999','geopolitical_line','other'], // Other
 
     // MCC - Structural Material Type
     // ['MCC','0',undefined,undefined],
@@ -1140,12 +1241,39 @@ mgcp.rules = {
     ['SUC','4','man_made','rock_and_snow_fence'],
     ['SUC','999','protection:type','other'],
 
+    // SUY - Survey Point Type
+    // ['SUY','0','survey_point:type','unknown'], // Unknown
+    ['SUY','1','survey_point:type','astronomic_position'], // Astronomic Position
+    ['SUY','2','survey_point:type','benchmark'], // Benchmark
+    ['SUY','3','survey_point:type','cadastral_control_point'], // Cadastral Control Point
+    ['SUY','4','survey_point:type','camera_station'], // Camera Station
+    ['SUY','5','survey_point:type','geodetic_point'], // Geodetic Point
+    ['SUY','6','survey_point:type','gravity_point'], // Gravity Point
+    ['SUY','7','survey_point:type','magnetic_station'], // Magnetic Station
+    ['SUY','8','survey_point:type','theodolite_station'], // Theodolite Station
+    ['SUY','9','survey_point:type','tidal_benchmark'], // Tidal Benchmark
+    ['SUY','999','survey_point:type','other'], // Other
+
     // SWT - Natural Pool Type
     // ['SWT','0',undefined,undefined], // Unknown
     ['SWT','0','spring:type','unknown'], // Unknown
     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
     ['SWT','5','water','water-hole'], // Water-hole
     ['SWT','999','spring:type','other'], // Other
+
+    // THC - Thematic Classification
+    // ['THC','0','thematic_classification','unknown'], // Unknown
+    ['THC','1','thematic_classification','aeronautical'], // Aeronautical
+    ['THC','2','thematic_classification','vegetation'], // Vegetation
+    ['THC','3','thematic_classification','utilities'], // Utilities
+    ['THC','4','thematic_classification','population'], // Population
+    ['THC','5','thematic_classification','physiography'], // Physiography
+    ['THC','6','thematic_classification','industry'], // Industry
+    ['THC','7','thematic_classification','ground_transportation'], // Ground Transportation
+    ['THC','8','thematic_classification','elevation'], // Elevation
+    ['THC','9','thematic_classification','boundaries'], // Boundaries
+    ['THC','10','thematic_classification','waterbodies'], // Waterbodies
+    ['THC','11','thematic_classification','maritime'], // Maritime
 
     // TID - Tide Influenced
     // ['TID','0',undefined,undefined],
@@ -1214,6 +1342,20 @@ mgcp.rules = {
     ['TUC','26','transport:use','passenger'],
     ['TUC','45','transport:use','general'],
     ['TUC','999','transport:use','other'],
+
+    // USE_ - Usage
+    // ['USE_','0','use','unknown'], // Unknown
+    ['USE_','7','use','tribal'], // Tribal
+    ['USE_','16','use','city'], // City
+    ['USE_','23','use','international'], // International
+    ['USE_','26','use','primary/1st_order'], // Primary/1st Order
+    ['USE_','30','use','secondary/2nd_order'], // Secondary/2nd Order
+    ['USE_','31','use','tertiary/3rd_order'], // Tertiary/3rd Order
+    ['USE_','32','use','insular'], // Insular
+    ['USE_','70','use','reserve/reservation'], // Reserve/Reservation
+    ['USE_','141','use','forest_preserve'], // Forest Preserve
+    ['USE_','155','use','prohibited_area'], // Prohibited Area
+    ['USE_','999','use','other'], // Other
 
     // VEG - Vegetation Characteristic
     // ['VEG','0',undefined,undefined], // Unknown
@@ -2356,12 +2498,21 @@ mgcp.rules = {
     intList : ['LTN','NOS'],
     // ##### End of intList#####
 
-    // fCodeList - This is a list of all of the valid MGCP F_CODES in TRD4.5.1
-    fcodeList : ["AA010","AA012","AA040","AA050","AA052","AB000","AB010","AC000","AC020","AC030","AD010","AD020","AD030","AD050","AF010","AF020","AF040","AF070","AH025","AH050","AH070","AI030","AJ010","AJ030","AJ050","AJ051","AJ110","AK030","AK040","AK060","AK090","AK100","AK120","AK130","AK150","AK160","AK170","AK180","AK190","AL010","AL012","AL015","AL019","AL020","AL025","AL030","AL060","AL070","AL099","AL105","AL130","AL140","AL170","AL200","AL208","AL210","AL241","AL260","AM010","AM020","AM030","AM040","AM060","AM070","AN010","AN050","AN060","AN075","AN076","AP010","AP030","AP050","AQ040","AQ063","AQ065","AQ070","AQ075","AQ090","AQ110","AQ113","AQ116","AQ125","AQ130","AQ135","AQ140","AT010","AT030","AT041","AT042","AT045","AT050","AT060","BA010","BA030","BA040","BA050","BB005","BB041","BB043","BB090","BB140","BB155","BB190","BB230","BB240","BD100","BD110","BD120","BD130","BD180","BH010","BH015","BH020","BH030","BH040","BH050","BH051","BH060","BH070","BH080","BH090","BH110","BH120","BH130","BH135","BH140","BH145","BH150","BH155","BH160","BH165","BH170","BH180","BI010","BI020","BI030","BI040","BI041","BI050","BJ020","BJ030","BJ031","BJ040","BJ060","BJ100","BJ110","DA010","DB010","DB029","DB061","DB070","DB071","DB090","DB100","DB110","DB115","DB150","DB160","DB170","DB180","DB200","EA010","EA020","EA040","EA050","EA055","EB010","EB020","EC010","EC020","EC030","EC040","EC060","ED010","ED020","ED030","FA015","FA090","FA100","GA034","GB005","GB015","GB030","GB035","GB040","GB045","GB050","GB055","GB065","GB075","GB220","GB230","GB485","SU001","ZD020","ZD040"],
 
-    // layerNameLookup - List of all of the possibl;e geometry & F_CODES.
-    // AKA the list of layer names
-    // NOTE: This is just a list.  If the layer names change then this goes back to being an object
-    layerNameLookup : ["AAA010","AAA012","AAA052","AAB000","AAB010","AAC000","AAC030","AAD010","AAD030","AAD050","AAH050","AAI030","AAJ010","AAJ030","AAJ110","AAK030","AAK040","AAK060","AAK090","AAK100","AAK120","AAK160","AAK170","AAK180","AAK190","AAL010","AAL012","AAL015","AAL019","AAL020","AAL030","AAL060","AAL105","AAL140","AAL170","AAL200","AAL208","AAM010","AAM020","AAM030","AAM040","AAM060","AAM070","AAN060","AAN076","AAQ040","AAQ116","AAQ125","AAQ130","AAQ135","AAQ140","AAT050","ABA030","ABA040","ABA050","ABB005","ABB041","ABB043","ABB090","ABB140","ABB190","ABB240","ABD100","ABD120","ABH010","ABH015","ABH020","ABH030","ABH040","ABH050","ABH051","ABH080","ABH090","ABH120","ABH130","ABH135","ABH140","ABH150","ABH155","ABH160","ABH165","ABI020","ABI030","ABJ020","ABJ030","ABJ031","ABJ100","ABJ110","ADA010","ADB061","ADB090","ADB115","ADB160","ADB170","ADB180","ADB200","AEA010","AEA040","AEA050","AEA055","AEB010","AEB020","AEC010","AEC020","AEC030","AEC040","AEC060","AED010","AED020","AED030","AFA015","AFA100","AGB005","AGB015","AGB035","AGB045","AGB055","AGB065","AGB075","AGB230","ASU001","AZD020","LAF020","LAH025","LAK130","LAK150","LAK190","LAL060","LAL070","LAL210","LAL260","LAN010","LAN050","LAP010","LAP030","LAP050","LAQ040","LAQ063","LAQ070","LAQ075","LAQ113","LAQ130","LAT030","LAT041","LAT060","LBA010","LBB041","LBB043","LBB140","LBB190","LBB230","LBD120","LBH010","LBH020","LBH030","LBH060","LBH070","LBH110","LBH120","LBH140","LBH165","LBH180","LBI020","LBI030","LBI040","LBI041","LBJ031","LBJ040","LDB010","LDB061","LDB070","LDB071","LDB090","LDB100","LDB110","LDB160","LDB200","LEA020","LEC030","LFA090","LGB050","PAA010","PAA012","PAA040","PAA050","PAC000","PAC020","PAC030","PAD010","PAD020","PAD030","PAD050","PAF010","PAF040","PAF070","PAH050","PAH070","PAJ030","PAJ050","PAJ051","PAJ110","PAK040","PAK150","PAK160","PAK170","PAL012","PAL015","PAL019","PAL020","PAL025","PAL030","PAL099","PAL105","PAL130","PAL210","PAL241","PAM020","PAM030","PAM040","PAM060","PAM070","PAN075","PAN076","PAQ065","PAQ070","PAQ090","PAQ110","PAQ116","PAQ125","PAT010","PAT042","PAT045","PBA050","PBB155","PBD100","PBD110","PBD130","PBD180","PBH010","PBH070","PBH120","PBH145","PBH170","PBH180","PBI010","PBI020","PBI030","PBI040","PBI041","PBI050","PBJ060","PDB029","PDB115","PDB150","PDB160","PDB180","PEC030","PGA034","PGB030","PGB040","PGB050","PGB065","PGB220","PGB230","PGB485","PSU001","PZD040"],
+    // Static lookup tables.  If the schema changes, rebuild these in getDbSchema()
+
+    // List of all of the valid MGCP FCODEs and their engilsh name
+    fcodeNameLookup : {"AA010":"Extraction Mine","AA012":"Quarry","AA052":"Hydrocarbons Field","AB000":"Disposal Site","AB010":"Recycling Site","AC000":"Processing Facility","AC030":"Settling Pond","AD010":"Electric Power Station","AD030":"Power Substation","AD050":"Heating Facility","AH050":"Fortification","AI030":"Camp","AJ010":"Circular Irrigation System","AJ030":"Holding Pen","AJ110":"Greenhouse","AK030":"Amusement Park","AK040":"Sports Ground","AK060":"Camp-site","AK090":"Fairground","AK100":"Golf Course","AK120":"Park","AK160":"Stadium","AK170":"Swimming Pool","AK180":"Zoo","AK190":"Recreational Pier","AL010":"Facility","AL012":"Archeological Site","AL015":"General Building","AL019":"Shed","AL020":"Built-Up Area","AL030":"Cemetery","AL060":"Dragon's Teeth","AL105":"Settlement","AL140":"Particle Accelerator","AL170":"Public Square","AL200":"Ruins","AL208":"Shanty Town","AM010":"Storage Depot","AM020":"Grain Storage Structure","AM030":"Grain Elevator","AM040":"Mineral Pile","AM060":"Surface Bunker","AM070":"Storage Tank","AN060":"Railway Yard","AN076":"Roundhouse","AQ040":"Bridge","AQ116":"Pumping Station","AQ125":"Transportation Station","AQ130":"Tunnel","AQ135":"Roadside Rest Area","AQ140":"Vehicle Lot","AT050":"Communication Station","BA030":"Island","BA040":"Tidal Water","BA050":"Beach","BB005":"Harbour","BB041":"Breakwater","BB043":"Groin","BB090":"Dry Dock","BB140":"Training Wall","BB190":"Berthing Structure","BB240":"Slipway","BD100":"Structural Pile","BD120":"Reef","BH010":"Aqueduct","BH015":"Bog","BH020":"Canal","BH030":"Ditch","BH040":"Water Treatment Bed","BH050":"Mariculture Site","BH051":"Fish Farm Facility","BH080":"Lake","BH090":"Land Subject to Inundation","BH120":"Rapids","BH130":"Reservoir","BH135":"Rice Field","BH140":"River","BH150":"Salt Flat","BH155":"Salt Evaporator","BH160":"Sabkha","BH165":"Spillway","BI020":"Dam","BI030":"Lock","BJ020":"Moraine","BJ030":"Glacier","BJ031":"Crevasse","BJ100":"Snow Field and/or Ice-field","BJ110":"Tundra","DA010":"Soil Surface Region","DB061":"Crevice","DB090":"Embankment","DB115":"Geothermal Outlet","DB160":"Rock Formation","DB170":"Sand Dunes","DB180":"Volcano","DB200":"Gully","EA010":"Crop Land","EA040":"Orchard","EA050":"Vineyard","EA055":"Hop Field","EB010":"Grassland","EB020":"Thicket","EC010":"Cane","EC020":"Oasis","EC030":"Wood","EC040":"Cleared Way","EC060":"Forest Clearing","ED010":"Marsh","ED020":"Swamp","ED030":"Mangrove Swamp","FA002":"Geopolitical Entity","FA003":"Administrative Division","FA015":"Firing Range","FA100":"Test Site","GB005":"Land Aerodrome","GB015":"Apron","GB035":"Heliport","GB045":"Stopway","GB055":"Runway","GB065":"Water Aerodrome","GB075":"Taxiway","GB230":"Aircraft Hangar","SU001":"Military Installation","ZD020":"Void Collection Area","AF020":"Conveyor","AH025":"Engineered Earthwork","AK130":"Racetrack","AK150":"Ski-jump","AL070":"Fence","AL210":"Protection Shed","AL260":"Wall","AN010":"Railway","AN050":"Railway Sidetrack","AP010":"Cart Track","AP030":"Road","AP050":"Trail","AQ063":"Causeway Structure","AQ070":"Ferry Crossing","AQ075":"Ice Route","AQ113":"Pipeline","AT030":"Power Line","AT041":"Cableway","AT060":"Communication Line","BA010":"Land Water Boundary","BB230":"Seawall","BH060":"Flume","BH070":"Ford","BH110":"Penstock","BH180":"Waterfall","BI040":"Sluice Gate","BI041":"Water Gate","BJ040":"Ice Cliff","CA010":"Elevation Contour","DB010":"Steep Terrain Face","DB070":"Cut","DB071":"Cut Line","DB100":"Esker","DB110":"Geologic Fault","EA020":"Hedgerow","FA000":"Administrative Boundary","FA090":"Geophysical Prospecting Grid","FA110":"International Date Line","FC021":"Maritime Limit Boundary","GB050":"Aircraft Revetment","AA040":"Rig","AA050":"Well","AC020":"Catalytic Cracker","AD020":"Solar Panel","AF010":"Smokestack","AF040":"Crane","AF070":"Flare Pipe","AH070":"Checkpoint","AJ050":"Windmill","AJ051":"Wind Turbine","AL025":"Cairn","AL099":"Hut","AL130":"Memorial Monument","AL241":"Tower","AN075":"Railway Turntable","AQ065":"Culvert","AQ090":"Entrance and/or Exit","AQ110":"Mooring Mast","AT010":"Dish Aerial","AT042":"Pylon","AT045":"Radar Station","BB155":"Maritime Signal Station","BD110":"Offshore Platform","BD130":"Hazardous Rock","BD180":"Wreck","BH145":"Vanishing Point","BH170":"Natural Pool","BI010":"Cistern","BI050":"Water Intake Tower","BJ060":"Ice Peak","CA030":"Spot Elevation","CA035":"Inland Water Elevation","DB029":"Cave Mouth","DB150":"Mountain Pass","GA034":"Aeronautical Radio Navigation Service","GB030":"Helipad","GB040":"Launch Pad","GB220":"Aeronautical Obstacle","GB485":"Approach Lighting System","ZB050":"Survey","ZD040":"Named Location","ZD045":"Annotated Location"},
+
+    // layerNameLookup - List of all of the valid geometry & F_CODES.
+    layerNameLookup : ["AAA010","AAA012","AAA052","AAB000","AAB010","AAC000","AAC030","AAD010","AAD030","AAD050","AAH050","AAI030","AAJ010","AAJ030","AAJ110","AAK030","AAK040","AAK060","AAK090","AAK100","AAK120","AAK160","AAK170","AAK180","AAK190","AAL010","AAL012","AAL015","AAL019","AAL020","AAL030","AAL060","AAL105","AAL140","AAL170","AAL200","AAL208","AAM010","AAM020","AAM030","AAM040","AAM060","AAM070","AAN060","AAN076","AAQ040","AAQ116","AAQ125","AAQ130","AAQ135","AAQ140","AAT050","ABA030","ABA040","ABA050","ABB005","ABB041","ABB043","ABB090","ABB140","ABB190","ABB240","ABD100","ABD120","ABH010","ABH015","ABH020","ABH030","ABH040","ABH050","ABH051","ABH080","ABH090","ABH120","ABH130","ABH135","ABH140","ABH150","ABH155","ABH160","ABH165","ABI020","ABI030","ABJ020","ABJ030","ABJ031","ABJ100","ABJ110","ADA010","ADB061","ADB090","ADB115","ADB160","ADB170","ADB180","ADB200","AEA010","AEA040","AEA050","AEA055","AEB010","AEB020","AEC010","AEC020","AEC030","AEC040","AEC060","AED010","AED020","AED030","AFA002","AFA003","AFA015","AFA100","AGB005","AGB015","AGB035","AGB045","AGB055","AGB065","AGB075","AGB230","ASU001","AZD020","LAF020","LAH025","LAK130","LAK150","LAK190","LAL060","LAL070","LAL210","LAL260","LAN010","LAN050","LAP010","LAP030","LAP050","LAQ040","LAQ063","LAQ070","LAQ075","LAQ113","LAQ130","LAT030","LAT041","LAT060","LBA010","LBB041","LBB043","LBB140","LBB190","LBB230","LBD120","LBH010","LBH020","LBH030","LBH060","LBH070","LBH110","LBH120","LBH140","LBH165","LBH180","LBI020","LBI030","LBI040","LBI041","LBJ031","LBJ040","LCA010","LDB010","LDB061","LDB070","LDB071","LDB090","LDB100","LDB110","LDB160","LDB200","LEA020","LEC030","LFA000","LFA090","LFA110","LFC021","LGB050","PAA010","PAA012","PAA040","PAA050","PAC000","PAC020","PAC030","PAD010","PAD020","PAD030","PAD050","PAF010","PAF040","PAF070","PAH050","PAH070","PAJ030","PAJ050","PAJ051","PAJ110","PAK040","PAK150","PAK160","PAK170","PAL012","PAL015","PAL019","PAL020","PAL025","PAL030","PAL099","PAL105","PAL130","PAL210","PAL241","PAM020","PAM030","PAM040","PAM060","PAM070","PAN075","PAN076","PAQ065","PAQ070","PAQ090","PAQ110","PAQ116","PAQ125","PAT010","PAT042","PAT045","PBA050","PBB155","PBD100","PBD110","PBD130","PBD180","PBH010","PBH070","PBH120","PBH145","PBH170","PBH180","PBI010","PBI020","PBI030","PBI040","PBI041","PBI050","PBJ060","PCA030","PCA035","PDB029","PDB115","PDB150","PDB160","PDB180","PEC030","PGA034","PGB030","PGB040","PGB050","PGB065","PGB220","PGB230","PGB485","PSU001","PZB050","PZD040","PZD045"],
+
+    // Mapping between geometry + FCODE and the Thematic layer name
+    thematicGroupLookup : {"AAA010":"ExtractA","AAA012":"ExtractA","AAA052":"PumpingA","AAB000":"DisposeA","AAB010":"DisposeA","AAC000":"ProcessA","AAC030":"TreatA","AAD010":"PowerA","AAD030":"SubstatA","AAD050":"PowerA","AAH050":"FortA","AAI030":"LandmrkA","AAJ010":"LandmrkA","AAJ030":"TreatA","AAJ110":"MiscpopA","AAK030":"LandmrkA","AAK040":"LandmrkA","AAK060":"LandmrkA","AAK090":"SportA","AAK100":"SportA","AAK120":"LandmrkA","AAK160":"LandmrkA","AAK170":"LandmrkA","AAK180":"LandmrkA","AAK190":"PierA","AAL010":"MiscpopA","AAL012":"MiscpopA","AAL015":"BuildA","AAL019":"MiscpopA","AAL020":"BuiltupA","AAL030":"LandmrkA","AAL060":"TransA","AAL105":"MiscpopA","AAL140":"NuclearA","AAL170":"PlazaA","AAL200":"RuinsA","AAL208":"BuiltupA","AAM010":"StorageA","AAM020":"AgristrA","AAM030":"AgristrA","AAM040":"StorageA","AAM060":"StorageA","AAM070":"StorageA","AAN060":"RryardA","AAN076":"TransA","AAQ040":"BridgeA","AAQ116":"PumpingA","AAQ125":"TransA","AAQ130":"TunnelA","AAQ135":"TransA","AAQ140":"TransA","AAT050":"CommA","ABA030":"CoastA","ABA040":"CoastA","ABA050":"CoastA","ABB005":"HarborA","ABB041":"SeastrtA","ABB043":"SeastrtA","ABB090":"HarborA","ABB140":"SeastrtA","ABB190":"PierA","ABB240":"RampA","ABD100":"DangerA","ABD120":"DangerA","ABH010":"AquedctA","ABH015":"SwampA","ABH020":"WatrcrsA","ABH030":"WatrcrsA","ABH040":"TreatA","ABH050":"TreatA","ABH051":"TreatA","ABH080":"LakeresA","ABH090":"InundA","ABH120":"RapidsA","ABH130":"LakeresA","ABH135":"CropA","ABH140":"WatrcrsA","ABH150":"ExtractA","ABH155":"ExtractA","ABH160":"Landfrm1A","ABH165":"DamA","ABI020":"DamA","ABI030":"LockA","ABJ020":"Landfrm2A","ABJ030":"LandIceA","ABJ031":"LandfrmA","ABJ100":"LandIceA","ABJ110":"TundraA","ADA010":"GroundA","ADB061":"LandfrmA","ADB090":"EmbankA","ADB115":"ThermalA","ADB160":"Landfrm2A","ADB170":"Landfrm1A","ADB180":"PhysA","ADB200":"LandfrmA","AEA010":"CropA","AEA040":"CropA","AEA050":"CropA","AEA055":"CropA","AEB010":"GrassA","AEB020":"GrassA","AEC010":"GrassA","AEC020":"OasisA","AEC030":"TreesA","AEC040":"FirebrkA","AEC060":"FirebrkA","AED010":"SwampA","AED020":"SwampA","AED030":"SwampA","AFA002":"PolbndA","AFA003":"PolbndA","AFA015":"LandmrkA","AFA100":"TestA","AGB005":"AerofacA","AGB015":"RunwayA","AGB035":"AerofacA","AGB045":"RunwayA","AGB055":"RunwayA","AGB065":"AerofacA","AGB075":"RunwayA","AGB230":"AerofacA","ASU001":"MilA","AZD020":"VoidA","LAF020":"IndL","LAH025":"MilL","LAK130":"LandmrkL","LAK150":"LandmrkL","LAK190":"PierL","LAL060":"TransL","LAL070":"BarrierL","LAL210":"ShedL","LAL260":"BarrierL","LAN010":"RailrdL","LAN050":"RailrdL","LAP010":"TrackL","LAP030":"RoadL","LAP050":"TrailL","LAQ040":"BridgeL","LAQ063":"EmbankL","LAQ070":"FerryL","LAQ075":"LandmrkL","LAQ113":"PipeL","LAQ130":"TunnelL","LAT030":"PowerL","LAT041":"PowerL","LAT060":"TeleL","LBA010":"CoastL","LBB041":"SeastrtL","LBB043":"SeastrtL","LBB140":"SeastrtL","LBB190":"PierL","LBB230":"SeastrtL","LBD120":"DangerL","LBH010":"AquedctL","LBH020":"WatrcrsL","LBH030":"WatrcrsL","LBH060":"IndL","LBH070":"FordL","LBH110":"MiscL","LBH120":"RapidsL","LBH140":"WatrcrsL","LBH165":"DamL","LBH180":"RapidsL","LBI020":"DamL","LBI030":"LockL","LBI040":"LockL","LBI041":"MiscL","LBJ031":"LandfrmL","LBJ040":"LandfrmL","LCA010":"ContourL","LDB010":"BluffL","LDB061":"LandfrmL","LDB070":"EmbankL","LDB071":"EmbankL","LDB090":"EmbankL","LDB100":"LandfrmL","LDB110":"LandfrmL","LDB160":"LandfrmL","LDB200":"LandfrmL","LEA020":"TreesL","LEC030":"TreesL","LFA000":"PolbndL","LFA090":"IndL","LFA110":"PolbndL","LFC021":"PolbndL","LGB050":"RunwayL","PAA010":"ExtractP","PAA012":"ExtractP","PAA040":"RigwellP","PAA050":"WellsprP","PAC000":"ProcessP","PAC020":"RigwellP","PAC030":"TreatP","PAD010":"PowerP","PAD020":"PowerP","PAD030":"SubstatP","PAD050":"PowerP","PAF010":"ObstrP","PAF040":"ObstrP","PAF070":"ObstrP","PAH050":"FortP","PAH070":"LandmrkP","PAJ030":"TreatP","PAJ050":"ObstrP","PAJ051":"UtilP","PAJ110":"MiscpopP","PAK040":"LandmrkP","PAK150":"LandmrkP","PAK160":"LandmrkP","PAK170":"LandmrkP","PAL012":"MiscpopP","PAL015":"BuildP","PAL019":"MiscpopP","PAL020":"BuiltupP","PAL025":"MarkersP","PAL030":"LandmrkP","PAL099":"MiscpopP","PAL105":"MiscpopP","PAL130":"LandmrkP","PAL210":"ShedP","PAL241":"TowerP","PAM020":"AgristrP","PAM030":"AgristrP","PAM040":"StorageP","PAM060":"StorageP","PAM070":"StorageP","PAN075":"RrturnP","PAN076":"TransP","PAQ065":"TransP","PAQ070":"FerryP","PAQ090":"TransP","PAQ110":"MiscaeroP","PAQ116":"PumpingP","PAQ125":"TransP","PAT010":"CommP","PAT042":"UtilP","PAT045":"CommP","PBA050":"CoastP","PBB155":"HarborP","PBD100":"DangerP","PBD110":"DangerP","PBD130":"DangerP","PBD180":"DangerP","PBH010":"AquedctP","PBH070":"FordP","PBH120":"RapidsP","PBH145":"RapidsP","PBH170":"WellsprP","PBH180":"RapidsP","PBI010":"CisternP","PBI020":"DamP","PBI030":"LockP","PBI040":"LockP","PBI041":"MiscP","PBI050":"MiscP","PBJ060":"LandfrmP","PCA030":"ElevP","PCA035":"ElevP","PDB029":"MtnP","PDB115":"ThermalP","PDB150":"MtnP","PDB160":"LandfrmP","PDB180":"ThermalP","PEC030":"TreesP","PGA034":"MiscaeroP","PGB030":"AerofacP","PGB040":"MiscaeroP","PGB050":"RunwayP","PGB065":"AerofacP","PGB220":"MiscaeroP","PGB230":"AerofacP","PGB485":"MiscaeroP","PSU001":"MilP","PZB050":"ElevP","PZD040":"AnnoP","PZD045":"AnnoP"},
+
+
+    // fCodeList - This is a list of all of the valid MGCP F_CODES in TRD4.6
+    // fcodeList : ["AA010","AA012","AA040","AA050","AA052","AB000","AB010","AC000","AC020","AC030","AD010","AD020","AD030","AD050","AF010","AF020","AF040","AF070","AH025","AH050","AH070","AI030","AJ010","AJ030","AJ050","AJ051","AJ110","AK030","AK040","AK060","AK090","AK100","AK120","AK130","AK150","AK160","AK170","AK180","AK190","AL010","AL012","AL015","AL019","AL020","AL025","AL030","AL060","AL070","AL099","AL105","AL130","AL140","AL170","AL200","AL208","AL210","AL241","AL260","AM010","AM020","AM030","AM040","AM060","AM070","AN010","AN050","AN060","AN075","AN076","AP010","AP030","AP050","AQ040","AQ063","AQ065","AQ070","AQ075","AQ090","AQ110","AQ113","AQ116","AQ125","AQ130","AQ135","AQ140","AT010","AT030","AT041","AT042","AT045","AT050","AT060","BA010","BA030","BA040","BA050","BB005","BB041","BB043","BB090","BB140","BB155","BB190","BB230","BB240","BD100","BD110","BD120","BD130","BD180","BH010","BH015","BH020","BH030","BH040","BH050","BH051","BH060","BH070","BH080","BH090","BH110","BH120","BH130","BH135","BH140","BH145","BH150","BH155","BH160","BH165","BH170","BH180","BI010","BI020","BI030","BI040","BI041","BI050","BJ020","BJ030","BJ031","BJ040","BJ060","BJ100","BJ110","DA010","DB010","DB029","DB061","DB070","DB071","DB090","DB100","DB110","DB115","DB150","DB160","DB170","DB180","DB200","EA010","EA020","EA040","EA050","EA055","EB010","EB020","EC010","EC020","EC030","EC040","EC060","ED010","ED020","ED030","FA015","FA090","FA100","GA034","GB005","GB015","GB030","GB035","GB040","GB045","GB050","GB055","GB065","GB075","GB220","GB230","GB485","SU001","ZD020","ZD040"],
+
 
 } // End of mgcp.rules

@@ -39,7 +39,7 @@ hoot diff -C Testing.conf $outputDir/tds61.osm $inputFile || diff $outputDir/tds
 
 echo
 echo "### MGCP ###"
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_MGCP $inputFile $outputDir/mgcp.shp
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_MGCP -D writer.thematic.structure=false $inputFile $outputDir/mgcp.shp
 hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS_MGCP $outputDir/mgcp/PAL099.shp $outputDir/mgcp/o2s_*.shp $outputDir/mgcp/AEA040.shp $outputDir/mgcp/LBH140.shp $outputDir/mgcp.osm
 
 hoot diff -C Testing.conf $outputDir/mgcp.osm $inputFile || diff $outputDir/mgcp.osm $inputFile
