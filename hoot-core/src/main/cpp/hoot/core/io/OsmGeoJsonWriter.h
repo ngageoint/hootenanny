@@ -190,9 +190,9 @@ protected:
    * @param geometry Used in case of no translation information
    * @return Layer name appropriate for this element
    */
-  QString _getLayerName(const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
+  QString _getLayerName(const ConstElementPtr& e, const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
                         const std::shared_ptr<geos::geom::Geometry>& geometry) const;
-  QString _getLayerName(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  QString _getLayerName(const ConstElementPtr& e, const std::shared_ptr<geos::geom::Geometry>& geometry) const;
   /**
    * @brief _getThematicUnknown Returns unknown layername based on geometry for thematic files
    * @param geometry Geometry to check type
