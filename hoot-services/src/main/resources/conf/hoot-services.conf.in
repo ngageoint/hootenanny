@@ -85,20 +85,20 @@ translationServerThreadCount=0
 translationServerScript=/translations/TranslationServer.js
 
 # Ingest size threshold
-ingestSizeThreshold=4000000000
+ingestSizeThreshold=200000000
 
 # Conflate size threshold
-conflateSizeThreshold=4000000000
+conflateSizeThreshold=200000000
 
 # Export size threshold
-exportSizeThreshold=4000000000
+exportSizeThreshold=400000000
 
 # HTTP remote request timeout (10 min)
 httpTimeout=600000
 
 # Label we assign for the rails and overpass pull data
-grailRailsLabel=NOME
-grailOverpassLabel=OSM
+grailRailsLabel=Reference
+grailOverpassLabel=Secondary
 
 # Apply changeset options
 changesetApplyDebug=false
