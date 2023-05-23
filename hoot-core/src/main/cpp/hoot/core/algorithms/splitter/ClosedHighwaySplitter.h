@@ -54,7 +54,7 @@ public:
 
   ClosedHighwaySplitter() = default;
   ClosedHighwaySplitter(const std::shared_ptr<OsmMap>& map) : _map(map) { }
-  ~ClosedHighwaySplitter() = default;
+  ~ClosedHighwaySplitter() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
