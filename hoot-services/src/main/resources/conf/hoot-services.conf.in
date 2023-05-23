@@ -85,20 +85,20 @@ translationServerThreadCount=0
 translationServerScript=/translations/TranslationServer.js
 
 # Ingest size threshold
-ingestSizeThreshold=200000000
+ingestSizeThreshold=4000000000
 
 # Conflate size threshold
-conflateSizeThreshold=200000000
+conflateSizeThreshold=4000000000
 
 # Export size threshold
-exportSizeThreshold=400000000
+exportSizeThreshold=4000000000
 
 # HTTP remote request timeout (10 min)
 httpTimeout=600000
 
 # Label we assign for the rails and overpass pull data
-grailRailsLabel=Reference
-grailOverpassLabel=Secondary
+grailRailsLabel=NOME
+grailOverpassLabel=OSM
 
 # Apply changeset options
 changesetApplyDebug=false
@@ -113,6 +113,10 @@ grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.overpassql
 # Overpass sync polling interval and timeout
 overpassSyncTimeout=300000
 overpassSyncInterval=30000
+
+# Overpass query maxsize and timeout
+overpassQueryMaxsize=536870912
+overpassQueryTimeout=180
 
 # Differential changeset two-step
 diffChangesetTwoStep=false
