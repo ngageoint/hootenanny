@@ -850,9 +850,9 @@ QString OsmGeoJsonWriter::_getLayerName(const ConstElementPtr& e, const std::sha
   {
     ConstRelationPtr r = std::static_pointer_cast<const Relation>(e);
     if (r->getType() == MetadataTags::RelationReview())
-      return "Review";
+      return _useThematicLayers ? "Review" : "REVIEW";
     else if (r->getType() == MetadataTags::RelationRestriction())
-      return "Restriction";
+      return _useThematicLayers ? "Restriction" : "RESTRICTION";
   }
   //  Unknown feature types get slightly different unknown layer names for thematic
   if (_useThematicLayers)
