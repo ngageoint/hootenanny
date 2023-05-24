@@ -497,12 +497,32 @@ void OsmGeoJsonWriter::_writePointGeometry(const geos::geom::Geometry* geometry)
 
 void OsmGeoJsonWriter::_writeLineStringGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeGeometry(geometry, GeometryTypeId::GEOS_LINESTRING);
+  GeometryTypeId type = geometry->getGeometryTypeId();
+  switch (type)
+  {
+  default:
+  case GEOS_LINESTRING:
+    _writeGeometry(geometry, type);
+    break;
+  case GEOS_MULTILINESTRING:
+    _writeMultiGeometry(geometry, type);
+    break;
+  }
 }
 
 void OsmGeoJsonWriter::_writePolygonGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeGeometry(geometry, GeometryTypeId::GEOS_POLYGON);
+  GeometryTypeId type = geometry->getGeometryTypeId();
+  switch (type)
+  {
+  default:
+  case GEOS_POLYGON:
+    _writeGeometry(geometry, type);
+    break;
+  case GEOS_MULTIPOLYGON:
+    _writeMultiGeometry(geometry, type);
+    break;
+  }
 }
 
 void OsmGeoJsonWriter::_writeGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type)
