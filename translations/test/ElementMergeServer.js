@@ -92,12 +92,12 @@ var buildingsInput =
          <tag k='name' v='building 1' />\
          <tag k='hoot:merge:target' v='yes'/>\
        </way>\
-       <way id='-222332' action='modify' visible='true'>\
-         <nd ref='-222264' />\
-         <nd ref='-222262' />\
-         <nd ref='-222260' />\
-         <nd ref='-222258' />\
-         <nd ref='-222264' />\
+       <way id='222332' action='modify' visible='true'>\
+         <nd ref='222264' />\
+         <nd ref='222262' />\
+         <nd ref='222260' />\
+         <nd ref='222258' />\
+         <nd ref='222264' />\
          <tag k='building' v='yes' />\
          <tag k='name' v='building 2' />\
        </way>\
