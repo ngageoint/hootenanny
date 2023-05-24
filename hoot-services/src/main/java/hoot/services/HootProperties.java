@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services;
 
@@ -142,6 +142,9 @@ public final class HootProperties {
 
     public static final String OVERPASS_SYNC_TIMEOUT;
     public static final String OVERPASS_SYNC_INTERVAL;
+
+    public static final String OVERPASS_QUERY_MAXSIZE;
+    public static final String OVERPASS_QUERY_TIMEOUT;
 
     public static final String GRAIL_RAILS_LABEL;
     public static final String GRAIL_OVERPASS_LABEL;
@@ -336,6 +339,10 @@ public final class HootProperties {
         // to propagate to Overpass
         OVERPASS_SYNC_TIMEOUT = getProperty("overpassSyncTimeout");
         OVERPASS_SYNC_INTERVAL = getProperty("overpassSyncInterval");
+
+        // The maxsize (memory) and timeout for overpass queries sent by hoot-services
+        OVERPASS_QUERY_MAXSIZE = getProperty("overpassQueryMaxsize");
+        OVERPASS_QUERY_TIMEOUT = getProperty("overpassQueryTimeout");
 
         DIFFERENTIAL_CHANGESET_TWOSTEP = Boolean.valueOf(getProperty("diffChangesetTwoStep"));
 

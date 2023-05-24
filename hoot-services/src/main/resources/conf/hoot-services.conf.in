@@ -114,6 +114,10 @@ grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.overpassql
 overpassSyncTimeout=300000
 overpassSyncInterval=30000
 
+# Overpass query maxsize and timeout
+overpassQueryMaxsize=536870912
+overpassQueryTimeout=180
+
 # Differential changeset two-step
 diffChangesetTwoStep=false
 

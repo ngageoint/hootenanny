@@ -33,6 +33,8 @@ import static hoot.services.HootProperties.GRAIL_OVERPASS_LABEL;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.OVERPASS_QUERY_MAXSIZE;
+import static hoot.services.HootProperties.OVERPASS_QUERY_TIMEOUT;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
@@ -818,7 +820,10 @@ public class GrailResource {
         }
 
         // first line that lists columns which are counts for each feature type
-        overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
+        overpassQuery = overpassQuery.replace("[out:json]",
+                String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s]",
+                OVERPASS_QUERY_MAXSIZE, OVERPASS_QUERY_TIMEOUT)
+                );
 
         // overpass query can have multiple "out *" lines so need to replace all
         overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
