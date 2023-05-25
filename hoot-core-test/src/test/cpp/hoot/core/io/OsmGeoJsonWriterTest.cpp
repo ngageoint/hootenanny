@@ -48,6 +48,7 @@ class OsmGeoJsonWriterTest : public HootTestFixture
   CPPUNIT_TEST(runSplitFcodeBostonRoadBuildingTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonHootTest);
+  CPPUNIT_TEST(runCroppingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -213,6 +214,30 @@ public:
     Settings s;
     s.set(ConfigOptions::getJsonPrettyPrintKey(), true);
     runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
+  }
+
+  void runCroppingTest()
+  {
+    //  The Boston data splits out into 32 different FCODE files
+    QStringList multi_files({
+            "ROAD_C",
+            "BUILDING_S"
+          });
+    for (int i = 0; i < multi_files.size(); ++i)
+      multi_files[i] = QString("CroppingTest/%1.geojson").arg(multi_files[i]);
+    //  Set global settings
+    conf().set(ConfigOptions::getWriterThematicStructureKey(), false);
+    conf().set(ConfigOptions::getOgrAddUuidKey(), false);
+    //  Set local settings
+    Settings s;
+    s.set(ConfigOptions::getOgrAddUuidKey(), false);
+    s.set(ConfigOptions::getGeojsonWriteSplitFileStructureKey(), true);
+    s.set(ConfigOptions::getWriterThematicStructureKey(), false);
+    s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/GGDMv30.js");
+    s.set(ConfigOptions::getWriterSortTagsByKeyKey(), true);
+    s.set(ConfigOptions::getWriterCropFeaturesCrossingBoundsKey(), true);
+    s.set(ConfigOptions::getBoundsKey(), "-76.6197293502900010,39.2858283149899989,-76.6146064976200023,39.2868360346200021");
+    runTest(_inputPath + "CroppingTest.osm", "CroppingTest.geojson", &s, multi_files);
   }
 
   void runTest(const QString& input, const QString& output, Settings* settings = nullptr, const QStringList& multiOutput = QStringList())
