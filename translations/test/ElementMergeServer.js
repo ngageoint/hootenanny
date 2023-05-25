@@ -78,6 +78,31 @@ var areasInput =
        </relation>\
        </osm>";
 
+var buildingsPositiveIntoNegativeId =
+    "<?xml version='1.0' encoding='UTF-8'?>\
+    <osm version='0.6' generator='JOSM'>\
+        <way id='222330' action='modify' visible='true'>\
+            <nd ref='222258' />\
+            <nd ref='222256' />\
+            <nd ref='222254' />\
+            <nd ref='222252' />\
+            <nd ref='222264' />\
+            <nd ref='222258' />\
+            <tag k='building' v='yes' />\
+            <tag k='name' v='building 1' />\
+        </way>\
+        <way id='-222332' action='modify' visible='true'>\
+        <nd ref='-222264' />\
+            <nd ref='-222262' />\
+            <nd ref='-222260' />\
+            <nd ref='-222258' />\
+            <nd ref='-222264' />\
+            <tag k='building' v='yes' />\
+            <tag k='name' v='building 2' />\
+            <tag k='hoot:merge:target' v='yes'/>\
+        </way>\
+    </osm>";
+
 var buildingsInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
      <osm version='0.6' generator='JOSM'>\
@@ -486,6 +511,17 @@ describe('ElementMergeServer', function () {
             assert.equal(tags["name"], "building 1");
             assert.equal(tags["alt_name"], "building 2");
             assert.equal(tags["building"], "yes");
+        });
+    });
+
+    it('merges a positive id into a negative id and re-uses positive ids', function(done) {
+        testMergeXml(buildingsPositiveIntoNegativeId, function(tags) {
+            assert.equal(tags["hoot:merge:target"], undefined, "hoot:merge:target should not be present");
+            assert.equal(tags["hoot:status"], "3", "hoot:status should be 3");
+            assert.equal(tags["name"], "building 2");
+            assert.equal(tags["alt_name"], "building 1");
+            assert.equal(tags["building"], "yes");
+            done();
         });
     });
 
