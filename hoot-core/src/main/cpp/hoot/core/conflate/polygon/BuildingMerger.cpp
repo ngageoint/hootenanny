@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMerger.h"
 
@@ -39,8 +39,8 @@
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -308,8 +308,7 @@ ElementId BuildingMerger::_getIdOfMoreComplexBuilding(const ElementPtr& building
   if (building1.get())
   {
     LOG_VART(building1);
-    nodeCount1 =
-      (int)FilteredVisitor::getStat(std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building1);
+    nodeCount1 = (int)FilteredVisitor::getStat(std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building1);
   }
   LOG_VART(nodeCount1);
 
@@ -317,8 +316,7 @@ ElementId BuildingMerger::_getIdOfMoreComplexBuilding(const ElementPtr& building
   if (building2.get())
   {
     LOG_VART(building2);
-    nodeCount2 =
-      (int)FilteredVisitor::getStat(std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building2);
+    nodeCount2 = (int)FilteredVisitor::getStat(std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building2);
   }
   LOG_VART(nodeCount2);
 
@@ -690,7 +688,7 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
   }
 }
 
-void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
+ElementId BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
 {
   LOG_INFO("Merging buildings...");
 
@@ -716,6 +714,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
 
   int buildingsMerged = 0;
   BuildingCriterion buildingCrit;
+  std::vector<std::pair<ElementId, ElementId>> replacedElements;
   //  Copy the way map so the original can be modified
   const WayMap ways = map->getWays();
   for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -728,7 +727,6 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
       pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId>> replacedElements;
       merger.apply(map, replacedElements);
       buildingsMerged++;
     }
@@ -745,13 +743,23 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
       pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId>> replacedElements;
       merger.apply(map, replacedElements);
       buildingsMerged++;
     }
   }
 
   LOG_INFO("Merged " << buildingsMerged << " buildings.");
+
+  //  Check if the merge target wasn't changed
+  if (map->containsElement(mergeTargetId))
+    return mergeTargetId;
+  //  Find the correct object that was merged
+  for (const auto& p : replacedElements)
+  {
+    if (p.first == mergeTargetId && map->containsElement(p.second))
+      return p.second;
+  }
+  return mergeTargetId;
 }
 
 QString BuildingMerger::toString() const

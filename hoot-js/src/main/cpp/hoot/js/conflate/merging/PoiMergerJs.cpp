@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "PoiMergerJs.h"
 
@@ -41,7 +41,7 @@ using namespace v8;
 namespace hoot
 {
 
-void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
+ElementId PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
 {
   LOG_INFO("Merging POIs...");
 
@@ -68,6 +68,7 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
   //
   // ...then pass those pairs one at a time through the merger, since it only merges pairs
   int poisMerged = 0;
+  std::vector<std::pair<ElementId, ElementId>> replacedNodes;
   //  Make a copy of the node map so that the iterators work while merging
   const NodeMap nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
@@ -81,7 +82,6 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
       matches.emplace(mergeTargetId, node->getElementId());
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector<std::pair<ElementId, ElementId>> replacedNodes;
       merger.apply(map, replacedNodes);
       LOG_VART(replacedNodes.size());
 
@@ -89,6 +89,17 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
     }
   }
   LOG_INFO("Merged " << poisMerged << " POIs.");
+
+  //  Check if the merge target wasn't changed
+  if (map->containsElement(mergeTargetId))
+    return mergeTargetId;
+  //  Find the correct object that was merged
+  for (const auto& p : replacedNodes)
+  {
+    if (p.first == mergeTargetId && map->containsElement(p.second))
+      return p.second;
+  }
+  return mergeTargetId;
 }
 
 }

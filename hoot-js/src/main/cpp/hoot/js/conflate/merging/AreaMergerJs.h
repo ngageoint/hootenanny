@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef AREAMERGERJS_H
@@ -32,8 +32,8 @@
 #include <hoot/core/elements/OsmMap.h>
 
 #include <hoot/js/HootJsStable.h>
-#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
+#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {
@@ -57,7 +57,7 @@ public:
    * @param mergeTargetId the ID of the area which all other areas should be merged into
    * @param current the context this method should run under
    */
-  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
+  static ElementId merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
 };
 
 }

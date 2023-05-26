@@ -147,26 +147,24 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
   }
 
   // We're using a mix of generic conflation scripts and custom built classes to merge features
-  // here, depending on the feature type.
+  // here, depending on the feature type, let the merger determine the merge target ID.
   switch (mergeType)
   {
   case MergeType::Building:
-    BuildingMerger::merge(map, mergeTargetId);
+    mergeTargetId = BuildingMerger::merge(map, mergeTargetId);
     break;
   case MergeType::PoiToPolygon:
-    // POI/Poly always merges into the polygon and there's only one of them, so we let the
-    // routine determine the merge target ID.
     mergeTargetId = PoiPolygonMerger::mergeOnePoiAndOnePolygon(map);
     break;
   case MergeType::Poi:
-    PoiMergerJs::merge(map, mergeTargetId, current);
+    mergeTargetId = PoiMergerJs::merge(map, mergeTargetId, current);
     break;
   case MergeType::Area:
-    AreaMergerJs::merge(map, mergeTargetId, current);
+    mergeTargetId = AreaMergerJs::merge(map, mergeTargetId, current);
     break;
   case MergeType::Railway:
     MapProjector::projectToPlanar(map);
-    RailwayMergerJs::merge(map, mergeTargetId, current);
+    mergeTargetId = RailwayMergerJs::merge(map, mergeTargetId, current);
     SuperfluousNodeRemover::removeNodes(map);
     MapProjector::projectToWgs84(map);
     break;
