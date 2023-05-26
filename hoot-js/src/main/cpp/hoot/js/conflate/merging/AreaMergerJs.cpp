@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "AreaMergerJs.h"
 
@@ -41,7 +41,7 @@ using namespace v8;
 namespace hoot
 {
 
-void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
+ElementId AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
 {
   LOG_INFO("Merging areas...");
 
@@ -63,6 +63,7 @@ void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate*
   int areasMerged = 0;
 
   NonBuildingAreaCriterion nonBuildingAreaCrit;
+  std::vector<std::pair<ElementId, ElementId>> replacedElements;
   //  Make a copy of the way map so that the mergers can modify the original
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -78,9 +79,8 @@ void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate*
       matches.emplace(mergeTargetId, ElementId::way(way->getId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector<std::pair<ElementId, ElementId>> replacedWays;
-      merger.apply(map, replacedWays);
-      LOG_VART(replacedWays.size());
+      merger.apply(map, replacedElements);
+      LOG_VART(replacedElements.size());
 
       areasMerged++;
     }
@@ -100,15 +100,25 @@ void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate*
       matches.emplace(mergeTargetId, ElementId::relation(relation->getId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector<std::pair<ElementId, ElementId>> replacedRelations;
-      merger.apply(map, replacedRelations);
-      LOG_VART(replacedRelations.size());
+      merger.apply(map, replacedElements);
+      LOG_VART(replacedElements.size());
 
       areasMerged++;
     }
   }
 
   LOG_INFO("Merged " << areasMerged << " areas.");
+
+  //  Check if the merge target wasn't changed
+  if (map->containsElement(mergeTargetId))
+    return mergeTargetId;
+  //  Find the correct object that was merged
+  for (const auto& p : replacedElements)
+  {
+    if (p.first == mergeTargetId && map->containsElement(p.second))
+      return p.second;
+  }
+  return mergeTargetId;
 }
 
 }

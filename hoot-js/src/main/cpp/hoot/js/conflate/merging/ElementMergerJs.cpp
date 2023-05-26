@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 #include "ElementMergerJs.h"
 
@@ -77,8 +77,7 @@ void ElementMergerJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Maybe<bool> success = exports->Set(context, toV8("merge"),
-                                 FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
+  Maybe<bool> success = exports->Set(context, toV8("merge"), FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
   (void) success; // unused variable
 }
 
@@ -93,8 +92,7 @@ void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
   {
     if (args.Length() != 1)
     {
-      args.GetReturnValue().Set(
-        current->ThrowException(HootExceptionJs::create(IllegalArgumentException("Expected one argument passed to 'merge'."))));
+      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException("Expected one argument passed to 'merge'."))));
       return;
     }
 
@@ -149,26 +147,24 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
   }
 
   // We're using a mix of generic conflation scripts and custom built classes to merge features
-  // here, depending on the feature type.
+  // here, depending on the feature type, let the merger determine the merge target ID.
   switch (mergeType)
   {
   case MergeType::Building:
-    BuildingMerger::merge(map, mergeTargetId);
+    mergeTargetId = BuildingMerger::merge(map, mergeTargetId);
     break;
   case MergeType::PoiToPolygon:
-    // POI/Poly always merges into the polygon and there's only one of them, so we let the
-    // routine determine the merge target ID.
     mergeTargetId = PoiPolygonMerger::mergeOnePoiAndOnePolygon(map);
     break;
   case MergeType::Poi:
-    PoiMergerJs::merge(map, mergeTargetId, current);
+    mergeTargetId = PoiMergerJs::merge(map, mergeTargetId, current);
     break;
   case MergeType::Area:
-    AreaMergerJs::merge(map, mergeTargetId, current);
+    mergeTargetId = AreaMergerJs::merge(map, mergeTargetId, current);
     break;
   case MergeType::Railway:
     MapProjector::projectToPlanar(map);
-    RailwayMergerJs::merge(map, mergeTargetId, current);
+    mergeTargetId = RailwayMergerJs::merge(map, mergeTargetId, current);
     SuperfluousNodeRemover::removeNodes(map);
     MapProjector::projectToWgs84(map);
     break;
@@ -179,11 +175,13 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
   // By convention, we're setting the status of any element that gets merged with something to
   // conflated, even if its yet to be reviewed against something else.
   ElementPtr mergedElement = map->getElement(mergeTargetId);
-  assert(mergedElement);
-  mergedElement->setStatus(Status(Status::Conflated));
-  mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
-  mergedElement->getTags().remove(MetadataTags::HootMergeTarget());
-  LOG_VART(mergedElement);
+  if (mergedElement)
+  {
+    mergedElement->setStatus(Status(Status::Conflated));
+    mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
+    mergedElement->getTags().remove(MetadataTags::HootMergeTarget());
+    LOG_VART(mergedElement);
+  }
 }
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
@@ -210,10 +208,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
           std::make_shared<StatusCriterion>(Status::Conflated)),
         std::make_shared<ElementCountVisitor>(), map);
     if (numStatus1Elements != 1)
-    {
-      throw IllegalArgumentException(
-        "Input map must have at exactly one feature with status=1 or status=3.");
-    }
+      throw IllegalArgumentException("Input map must have at exactly one feature with status=1 or status=3.");
 
     // Return the ref or already conflated feature's ID as the target ID.
     ConstElementPtr status1Element = MapUtils::getFirstElementWithStatus(map, Status::Unknown1);
@@ -232,10 +227,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
       std::make_shared<ElementCountVisitor>(), map);
   LOG_VART(numMergeTargets);
   if (numMergeTargets != 1)
-  {
-    throw IllegalArgumentException(
-      QString("Input map must have exactly one feature marked with a %1 tag.").arg(MetadataTags::HootMergeTarget()));
-  }
+    throw IllegalArgumentException(QString("Input map must have exactly one feature marked with a %1 tag.").arg(MetadataTags::HootMergeTarget()));
 
   const long numNonMergeTargets =
     (long)FilteredVisitor::getStat(
@@ -244,10 +236,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
       std::make_shared<ElementCountVisitor>(), map);
   LOG_VART(numMergeTargets);
   if (numNonMergeTargets < 1)
-  {
-    throw IllegalArgumentException(
-      QString("Input map must have at least one feature not marked with a %1 tag.").arg(MetadataTags::HootMergeTarget()));
-  }
+    throw IllegalArgumentException(QString("Input map must have at least one feature not marked with a %1 tag.").arg(MetadataTags::HootMergeTarget()));
 
   TagKeyCriterion mergeTagCrit(MetadataTags::HootMergeTarget());
   UniqueElementIdVisitor idSetVis;
