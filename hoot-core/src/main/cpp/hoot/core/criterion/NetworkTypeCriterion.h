@@ -39,14 +39,14 @@ namespace hoot
  * Identifies features that can be treated as "network" with linear and connectedness attributes.
  * This is primarily used by IntersectionSplitter to determine which features are splittable.
  */
-class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl
+class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "NetworkTypeCriterion"; }
 
   NetworkTypeCriterion() = default;
-  NetworkTypeCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  NetworkTypeCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~NetworkTypeCriterion() override = default;
 
   /**

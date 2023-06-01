@@ -40,7 +40,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
 
 BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map)
-  : ConstOsmMapConsumerImpl(map)
+  : ConstOsmMapConsumerBase(map)
 {
 }
 

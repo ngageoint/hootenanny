@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Identifies polygon features
  */
-class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
+class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 

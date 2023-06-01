@@ -72,7 +72,7 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
 
 void FilteredVisitor::setOsmMap(const OsmMap* map)
 {
-  ConstOsmMapConsumerImpl::setOsmMap(map);
+  ConstOsmMapConsumerBase::setOsmMap(map);
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
   if (c != nullptr)
     c->setOsmMap(map);

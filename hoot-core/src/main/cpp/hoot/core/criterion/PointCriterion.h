@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Identifies point features
  */
-class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
+class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 

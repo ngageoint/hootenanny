@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Identifies way nodes and relation members
  */
-class ChildElementCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
+class ChildElementCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "ChildElementCriterion"; }
 
   ChildElementCriterion() = default;
-  ChildElementCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  ChildElementCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~ChildElementCriterion() override = default;
 
   /**

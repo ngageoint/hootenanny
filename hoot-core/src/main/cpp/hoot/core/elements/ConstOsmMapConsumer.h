@@ -33,6 +33,7 @@
 namespace hoot
 {
 
+/** Polymorphic base class used for collections and casting */
 class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
@@ -48,12 +49,13 @@ public:
   }
 };
 
-class ConstOsmMapConsumerImpl : public ConstOsmMapConsumer
+/** Base class that implements ConstOsmMapConsumer used to derive consumer class implementations */
+class ConstOsmMapConsumerBase : public ConstOsmMapConsumer
 {
 public:
-  ConstOsmMapConsumerImpl() = default;
-  ConstOsmMapConsumerImpl(const ConstOsmMapPtr& map) : _map(map) { }
-  ~ConstOsmMapConsumerImpl() override = default;
+  ConstOsmMapConsumerBase() = default;
+  ConstOsmMapConsumerBase(const ConstOsmMapPtr& map) : _map(map) { }
+  ~ConstOsmMapConsumerBase() override = default;
 
   virtual void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 

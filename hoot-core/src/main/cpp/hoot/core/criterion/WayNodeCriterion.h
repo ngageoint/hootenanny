@@ -35,14 +35,14 @@
 namespace hoot
 {
 
-class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl
+class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "WayNodeCriterion"; }
 
   WayNodeCriterion() = default;
-  WayNodeCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  WayNodeCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~WayNodeCriterion() override = default;
 
   /**

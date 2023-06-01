@@ -41,7 +41,7 @@ namespace hoot
  * A filter that will remove elements that are not conflatable by Hootenanny. These are elements
  * for which we have no matchers defined.
  */
-class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl, public Configurable
+class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumerBase, public Configurable
 {
 public:
 

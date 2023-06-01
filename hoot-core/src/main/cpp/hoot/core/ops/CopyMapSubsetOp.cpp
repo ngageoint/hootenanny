@@ -116,14 +116,14 @@ CopyMapSubsetOp::CopyMapSubsetOp()
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids)
-  : ConstOsmMapConsumerImpl(from),
+  : ConstOsmMapConsumerBase(from),
     _eids(eids),
     _copyChildren(true)
 {
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds)
-  : ConstOsmMapConsumerImpl(from),
+  : ConstOsmMapConsumerBase(from),
     _copyChildren(true)
 {
   for (auto way_id : wayIds)
@@ -134,14 +134,14 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>&
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid)
-  : ConstOsmMapConsumerImpl(from),
+  : ConstOsmMapConsumerBase(from),
     _copyChildren(true)
 {
   _eids.insert(eid);
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2)
-  : ConstOsmMapConsumerImpl(from),
+  : ConstOsmMapConsumerBase(from),
     _copyChildren(true)
 {
   _eids.insert(eid1);
@@ -149,7 +149,7 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, Ele
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit)
-  : ConstOsmMapConsumerImpl(from),
+  : ConstOsmMapConsumerBase(from),
     _copyChildren(true)
 {
   addCriterion(crit);

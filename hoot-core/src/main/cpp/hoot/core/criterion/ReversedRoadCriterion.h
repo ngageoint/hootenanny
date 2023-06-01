@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Identifies reversed roads
  */
-class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl
+class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "ReversedRoadCriterion"; }
 
   ReversedRoadCriterion() = default;
-  ReversedRoadCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  ReversedRoadCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~ReversedRoadCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;

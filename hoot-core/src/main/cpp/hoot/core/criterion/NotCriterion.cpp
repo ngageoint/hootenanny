@@ -63,7 +63,7 @@ void NotCriterion::setConfiguration(const Settings& conf)
 
 void NotCriterion::setOsmMap(const OsmMap* map)
 {
-  ConstOsmMapConsumerImpl::setOsmMap(map);
+  ConstOsmMapConsumerBase::setOsmMap(map);
   std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(_child);
   if (mapConsumer)
     mapConsumer->setOsmMap(map);

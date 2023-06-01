@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Abstract class for identifying relations based on the geometry types of their children
  */
-class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl, public Configurable
+class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase, public Configurable
 {
 public:
 

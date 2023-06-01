@@ -41,14 +41,14 @@ namespace hoot
  * Should be able to accomplish the same thing with a not building and is area chain but
  * couldn't. See comments in train-area/RemoveIrrelevants.js in the regression tests.
  */
-class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl
+class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion() = default;
-  NonBuildingAreaCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  NonBuildingAreaCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~NonBuildingAreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;

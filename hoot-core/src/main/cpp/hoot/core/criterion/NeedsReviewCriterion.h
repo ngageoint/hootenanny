@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Determines if a feature requires manual review
  */
-class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
+class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
-  NeedsReviewCriterion(const ConstOsmMapPtr& map) : ConstOsmMapConsumerImpl(map) { }
+  NeedsReviewCriterion(const ConstOsmMapPtr& map) : ConstOsmMapConsumerBase(map) { }
   ~NeedsReviewCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;

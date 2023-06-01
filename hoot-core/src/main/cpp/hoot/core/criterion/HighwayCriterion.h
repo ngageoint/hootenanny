@@ -38,7 +38,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove road matches.
  */
-class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
+class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 

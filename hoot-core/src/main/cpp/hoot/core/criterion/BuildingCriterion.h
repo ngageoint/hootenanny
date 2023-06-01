@@ -38,7 +38,7 @@ namespace hoot
 /**
  * A criterion to identify buildings
  */
-class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
+class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 

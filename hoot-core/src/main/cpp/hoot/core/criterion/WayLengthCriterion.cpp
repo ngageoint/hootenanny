@@ -44,7 +44,7 @@ WayLengthCriterion::WayLengthCriterion()
 
 WayLengthCriterion::WayLengthCriterion(const double comparisonLength, const NumericComparisonType& numericComparisonType,
                                        ConstOsmMapPtr map)
-  : ConstOsmMapConsumerImpl(map),
+  : ConstOsmMapConsumerBase(map),
     _comparisonLength(comparisonLength),
     _numericComparisonType(numericComparisonType)
 {

@@ -62,7 +62,7 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
 
 void ChainCriterion::setOsmMap(const OsmMap* map)
 {
-  ConstOsmMapConsumerImpl::setOsmMap(map);
+  ConstOsmMapConsumerBase::setOsmMap(map);
   for (const auto& crit : _criteria)
   {
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);

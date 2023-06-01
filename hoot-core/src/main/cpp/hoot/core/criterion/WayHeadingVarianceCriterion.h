@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
+class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 

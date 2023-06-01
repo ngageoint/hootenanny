@@ -39,7 +39,7 @@ namespace hoot
  * This is primarily useful for debugging when trying to find out whether hoot can conflate or
  * which conflator it will use for a particular feature.
  */
-class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumerImpl
+class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumerBase
 {
 
 public:

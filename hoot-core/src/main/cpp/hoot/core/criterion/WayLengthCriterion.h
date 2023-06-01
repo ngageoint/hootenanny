@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
+class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 

@@ -45,7 +45,7 @@ class Schema;
  * @brief The SchemaTranslatedTagCountVisitor class counts tags that can be translated with the
  * configured schema.
  */
-class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumerImpl, public SingleStatistic
+class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumerBase, public SingleStatistic
 {
 public:
 

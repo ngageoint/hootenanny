@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Finds instances where way members across different relations are connected
  */
-class ConnectedRelationMemberFinder : public ConstOsmMapConsumerImpl
+class ConnectedRelationMemberFinder : public ConstOsmMapConsumerBase
 {
 public:
 

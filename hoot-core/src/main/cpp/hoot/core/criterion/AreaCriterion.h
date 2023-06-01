@@ -38,14 +38,14 @@ namespace hoot
 /**
  * A criterion that identifies areas
  */
-class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
+class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "AreaCriterion"; }
 
   AreaCriterion() = default;
-  AreaCriterion(const ConstOsmMapPtr& map) : ConstOsmMapConsumerImpl(map) { }
+  AreaCriterion(const ConstOsmMapPtr& map) : ConstOsmMapConsumerBase(map) { }
   ~AreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;

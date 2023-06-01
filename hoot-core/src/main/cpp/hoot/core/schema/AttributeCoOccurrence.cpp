@@ -87,7 +87,7 @@ private:
 /**
  * Traverses the OsmMap and build a hashmap of Attribute Co-Occurrence values.
  */
-class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumerImpl
+class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumerBase
 {
 public:
 

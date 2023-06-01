@@ -38,14 +38,14 @@ namespace hoot
 /**
  * @brief The DisconnectedWayCriterion class identifies ways that are disconnected from other ways.
  */
-class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
+class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "DisconnectedWayCriterion"; }
 
   DisconnectedWayCriterion() = default;
-  DisconnectedWayCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  DisconnectedWayCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~DisconnectedWayCriterion() override = default;
 
   /**

@@ -31,8 +31,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
+/** Polymorphic base class used for collections and casting */
 class OsmMapConsumer
 {
 public:
@@ -43,6 +43,7 @@ public:
   virtual void setOsmMap(OsmMap* map) = 0;
 };
 
+/** Base class that implements OsmMapConsumer used to derive consumer class implementations */
 class OsmMapConsumerImpl : public OsmMapConsumer
 {
 public:

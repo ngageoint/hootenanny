@@ -41,7 +41,7 @@ RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion()
 }
 
 RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map)
-  : ConstOsmMapConsumerImpl(map),
+  : ConstOsmMapConsumerBase(map),
     _allowMixedChildren(false)
 {
 }

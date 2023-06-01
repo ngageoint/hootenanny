@@ -48,7 +48,7 @@ namespace hoot
  *
  * @todo genericize this to use GeometricRelationShip?
  */
-class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumerImpl, public Configurable
+class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumerBase, public Configurable
 {
 public:
 

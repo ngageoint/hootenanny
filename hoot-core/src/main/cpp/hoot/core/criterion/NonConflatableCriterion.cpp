@@ -44,7 +44,7 @@ NonConflatableCriterion::NonConflatableCriterion()
 }
 
 NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map)
-  : ConstOsmMapConsumerImpl(map),
+  : ConstOsmMapConsumerBase(map),
     _ignoreChildren(false),
     _geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
     _ignoreGenericConflators(false)

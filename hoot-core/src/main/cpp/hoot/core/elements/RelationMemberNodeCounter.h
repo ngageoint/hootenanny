@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Counts total nodes contained by all members in a relation
  */
-class RelationMemberNodeCounter : public ConstOsmMapConsumerImpl
+class RelationMemberNodeCounter : public ConstOsmMapConsumerBase
 {
 public:
 

@@ -42,14 +42,14 @@ namespace hoot
  * For ways: return true if the way has no child nodes or parent relations
  * For relations: return true if the relation has no parent relations or members
  */
-class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
+class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "UselessElementCriterion"; }
 
   UselessElementCriterion() = default;
-  UselessElementCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
+  UselessElementCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~UselessElementCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;

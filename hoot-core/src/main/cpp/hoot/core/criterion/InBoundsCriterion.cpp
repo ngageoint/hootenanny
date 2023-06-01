@@ -72,7 +72,7 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
-  ConstOsmMapConsumerImpl::setOsmMap(map);
+  ConstOsmMapConsumerBase::setOsmMap(map);
   _elementConverter = std::make_shared<ElementToGeometryConverter>(_map);
   _wayNodeCrit = std::make_shared<WayNodeCriterion>(_map);
 }

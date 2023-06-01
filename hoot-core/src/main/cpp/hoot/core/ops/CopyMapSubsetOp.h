@@ -41,7 +41,7 @@ namespace hoot
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
  */
-class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumerImpl,
+class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumerBase,
   public ElementCriterionConsumer, public Configurable
 {
 public:

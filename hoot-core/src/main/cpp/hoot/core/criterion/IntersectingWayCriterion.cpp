@@ -38,7 +38,7 @@ const QString IntersectingWayCriterion::EMPTY_SOURCE_IDS_ERROR_MESSAGE = "No way
 HOOT_FACTORY_REGISTER(ElementCriterion, IntersectingWayCriterion)
 
 IntersectingWayCriterion::IntersectingWayCriterion(const QSet<long>& sourceWayIds, ConstOsmMapPtr map)
-  : ConstOsmMapConsumerImpl(map),
+  : ConstOsmMapConsumerBase(map),
     _sourceWayIds(sourceWayIds)
 {
   if (_sourceWayIds.empty())
