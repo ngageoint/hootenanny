@@ -28,7 +28,7 @@
 #define JSFUNCTIONVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 #include <hoot/js/util/JsFunctionConsumer.h>
@@ -40,8 +40,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove matches.
  */
-class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public JsFunctionConsumer
+class JsFunctionVisitor : public ConstElementVisitor, public OsmMapConsumer, public JsFunctionConsumer
 {
 public:
 
@@ -54,8 +53,6 @@ public:
   { _func.Reset(isolate, func); }
 
   void setOsmMap(OsmMap* map) override { _map = map; }
-
-  void setOsmMap(const OsmMap*) override { }
 
   void visit(const ConstElementPtr& e) override;
 
