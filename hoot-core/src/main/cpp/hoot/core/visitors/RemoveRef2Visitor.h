@@ -44,8 +44,7 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
-  public ElementCriterionConsumer
+class RemoveRef2Visitor : public ElementVisitor, public OsmMapConsumer, public ElementCriterionConsumer
 {
 
 public:
@@ -62,7 +61,6 @@ public:
   void addCriterion(const ElementCriterionPtr& e) override;
 
   void setOsmMap(OsmMap* map) override;
-  void setOsmMap(const OsmMap* /*map*/) override { assert(false); }
 
   /**
    * @see ElementVisitor

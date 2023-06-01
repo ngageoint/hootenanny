@@ -38,20 +38,15 @@ namespace hoot
 /**
  * Base class to ease ConstOsmMapConsumer usage.
  */
-class ElementConstOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class ElementConstOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "ElementConstOsmMapVisitor"; }
 
-  ElementConstOsmMapVisitor() : _map(nullptr) { }
+  ElementConstOsmMapVisitor() = default;
   virtual ~ElementConstOsmMapVisitor() = default;
 
-  void setOsmMap(const OsmMap* map) override { _map = map; }
-
-protected:
-
-  const OsmMap* _map;
 };
 
 }

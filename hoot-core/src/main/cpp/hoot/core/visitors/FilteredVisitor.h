@@ -37,8 +37,7 @@
 namespace hoot
 {
 
-class FilteredVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public ElementCriterionConsumer, public ElementVisitorConsumer
+class FilteredVisitor : public ConstElementVisitor, public ConstOsmMapConsumerImpl, public ElementCriterionConsumer, public ElementVisitorConsumer
 {
 
 public:
@@ -66,7 +65,6 @@ public:
 
   void addVisitor(const ElementVisitorPtr& v) override;
 
-  void setOsmMap(OsmMap* map) override;
   void setOsmMap(const OsmMap* map) override;
 
   /**
@@ -84,7 +82,6 @@ private:
 
   const ElementCriterion* _criterion;
   ElementVisitor* _visitor;
-  const OsmMap* _map;
 };
 
 }

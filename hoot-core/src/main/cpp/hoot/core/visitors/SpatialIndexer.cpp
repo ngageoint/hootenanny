@@ -59,7 +59,7 @@ SpatialIndexer::SpatialIndexer(std::shared_ptr<HilbertRTree>& index, deque<Eleme
     _index(index),
     _indexToEid(indexToEid)
 {
-  _map = pMap.get();
+  _map = pMap;
 
   std::shared_ptr<ChainCriterion> chainCrit = std::dynamic_pointer_cast<ChainCriterion>(_criterion);
   if (chainCrit)

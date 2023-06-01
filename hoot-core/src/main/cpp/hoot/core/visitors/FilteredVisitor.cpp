@@ -46,24 +46,20 @@ FilteredVisitor::FilteredVisitor()
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor)
   : _criterion(&criterion),
-    _visitor(&visitor),
-    _map(nullptr)
+    _visitor(&visitor)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor)
   : _criterion(criterion.get()),
-    _visitor(visitor.get()),
-    _map(nullptr)
+    _visitor(visitor.get())
 {
 }
 
 void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
 {
   if (_criterion)
-  {
     throw IllegalArgumentException("FilteredVisitor only takes one criterion.");
-  }
   _criterion = e.get();
 }
 
@@ -74,20 +70,12 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
   _visitor = v.get();
 }
 
-void FilteredVisitor::setOsmMap(OsmMap* map)
-{
-  ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
-  if (c != nullptr)
-    c->setOsmMap(map);
-  _map = map;
-}
-
 void FilteredVisitor::setOsmMap(const OsmMap* map)
 {
+  ConstOsmMapConsumerImpl::setOsmMap(map);
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
   if (c != nullptr)
     c->setOsmMap(map);
-  _map = map;
 }
 
 void FilteredVisitor::visit(const ConstElementPtr& e)
