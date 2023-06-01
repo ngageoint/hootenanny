@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationMemberCriterion)
 
-RelationMemberCriterion::RelationMemberCriterion(ConstOsmMapPtr map)
-  : _map(map)
-{
-}
-
 bool RelationMemberCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_map)

@@ -41,14 +41,14 @@ namespace hoot
  * Should be able to accomplish the same thing with a not building and is area chain but
  * couldn't. See comments in train-area/RemoveIrrelevants.js in the regression tests.
  */
-class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion() = default;
-  NonBuildingAreaCriterion(ConstOsmMapPtr map) : _map(map) { }
+  NonBuildingAreaCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
   ~NonBuildingAreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
@@ -56,17 +56,12 @@ public:
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override
   { return "Identifies features that are areas but not buildings"; }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

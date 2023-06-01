@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGCRITERION_H
 #define BUILDINGCRITERION_H
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * A criterion to identify buildings
  */
-class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
@@ -56,8 +56,6 @@ public:
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   bool supportsSpecificConflation() const override { return true; }
   QStringList getChildCriteria() const override;
 
@@ -66,9 +64,6 @@ public:
   QString getName() const override { return className(); }
   QString toString() const override { return className(); }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

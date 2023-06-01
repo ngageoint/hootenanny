@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Counts total nodes contained by all members in a relation
  */
-class RelationMemberNodeCounter : public ConstOsmMapConsumer
+class RelationMemberNodeCounter : public ConstOsmMapConsumerImpl
 {
 public:
 
@@ -53,14 +53,6 @@ public:
    */
   int numNodes(const ConstRelationPtr& relation) const;
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

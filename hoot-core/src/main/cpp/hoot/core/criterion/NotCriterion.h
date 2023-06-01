@@ -36,8 +36,7 @@
 namespace hoot
 {
 
-class NotCriterion : public ElementCriterion, public ElementCriterionConsumer, public Configurable,
-  public ConstOsmMapConsumer
+class NotCriterion : public ElementCriterion, public ElementCriterionConsumer, public Configurable, public ConstOsmMapConsumerImpl
 {
 public:
 

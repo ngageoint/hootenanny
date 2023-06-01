@@ -40,7 +40,7 @@ namespace hoot
  * Is satisfied if all of its children criteria are satisfied.
  */
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
-  public Configurable, public ConstOsmMapConsumer
+  public Configurable, public ConstOsmMapConsumerImpl
 {
 public:
 

@@ -39,7 +39,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, StandalonePoiCriterion)
 
 StandalonePoiCriterion::StandalonePoiCriterion(ConstOsmMapPtr map)
-  : _map(map)
+  : ConstOsmMapConsumerImpl(map)
 {
   _createCrit();
 }
@@ -56,7 +56,7 @@ void StandalonePoiCriterion::_createCrit()
 
 void StandalonePoiCriterion::setOsmMap(const OsmMap* map)
 {
-  _map = map->shared_from_this();
+  ConstOsmMapConsumerImpl::setOsmMap(map);
   _createCrit();
 }
 

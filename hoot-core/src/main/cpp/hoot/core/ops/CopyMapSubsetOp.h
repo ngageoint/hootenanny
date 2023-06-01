@@ -41,7 +41,7 @@ namespace hoot
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
  */
-class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
+class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumerImpl,
   public ElementCriterionConsumer, public Configurable
 {
 public:
@@ -97,11 +97,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _from = map->shared_from_this(); }
-
-  /**
    * @see ElementCriterionConsumer
    */
   void addCriterion(const ElementCriterionPtr& crit) override;
@@ -127,7 +122,6 @@ public:
 private:
 
   std::set<ElementId> _eids;
-  ConstOsmMapPtr _from;
   // determines whether child elements are copied (way nodes and relation members)
   bool _copyChildren;
   std::set<ElementId> _eidsCopied;

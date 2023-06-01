@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Identifies relation members
  */
-class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "RelationMemberCriterion"; }
 
   RelationMemberCriterion() = default;
-  RelationMemberCriterion(ConstOsmMapPtr map);
+  RelationMemberCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
   ~RelationMemberCriterion() override = default;
 
   /**
@@ -59,11 +59,6 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

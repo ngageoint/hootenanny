@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAYCRITERION_H
 #define HIGHWAYCRITERION_H
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove road matches.
  */
-class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
@@ -51,8 +51,6 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<HighwayCriterion>(_map); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   GeometryType getGeometryType() const override { return GeometryType::Line; }
   bool supportsSpecificConflation() const override { return true; }
   QStringList getChildCriteria() const override;
@@ -64,7 +62,6 @@ public:
 
 private:
 
-  ConstOsmMapPtr _map;
   // Determines whether we count relations with a highway tag as highways. The main reason we'd want
   // to for conflate is to handle untagged roads in a tagged highway relation. *However*, its still
   // not clear if that situation is valid OSM data. Therefore, have added this switch to allow us

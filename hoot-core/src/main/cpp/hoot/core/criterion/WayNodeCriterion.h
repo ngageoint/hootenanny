@@ -35,14 +35,14 @@
 namespace hoot
 {
 
-class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "WayNodeCriterion"; }
 
   WayNodeCriterion() = default;
-  WayNodeCriterion(ConstOsmMapPtr map);
+  WayNodeCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
   ~WayNodeCriterion() override = default;
 
   /**
@@ -57,8 +57,6 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<WayNodeCriterion>(_map); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   GeometryType getGeometryType() const override { return GeometryType::Point; }
 
   QString getName() const override { return className(); }
@@ -68,7 +66,6 @@ public:
 
 protected:
 
-  ConstOsmMapPtr _map;
   ElementCriterionPtr _parentCriterion;
 };
 

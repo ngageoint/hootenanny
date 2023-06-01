@@ -41,7 +41,7 @@ RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion()
 }
 
 RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map)
-  : _map(map),
+  : ConstOsmMapConsumerImpl(map),
     _allowMixedChildren(false)
 {
 }
@@ -55,11 +55,6 @@ void RelationWithMembersOfTypeCriterion::_initCrit() const
     if (consumer.get())
       consumer->setOsmMap(_map.get());
   }
-}
-
-void RelationWithMembersOfTypeCriterion::setOsmMap(const OsmMap* map)
-{
-  _map = map->shared_from_this();
 }
 
 void RelationWithMembersOfTypeCriterion::setConfiguration(const Settings& conf)

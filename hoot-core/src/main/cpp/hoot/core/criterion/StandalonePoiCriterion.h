@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-class StandalonePoiCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class StandalonePoiCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
@@ -60,7 +60,6 @@ public:
 
 private:
 
-  ConstOsmMapPtr _map;
   ElementCriterionPtr _crit;
 
   void _createCrit();

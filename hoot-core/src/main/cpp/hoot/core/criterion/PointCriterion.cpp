@@ -36,14 +36,14 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, PointCriterion)
 
 PointCriterion::PointCriterion(ConstOsmMapPtr map)
-  : _map(map)
+  : ConstOsmMapConsumerImpl(map)
 {
   _wayNodeCrit.setOsmMap(map.get());
 }
 
 void PointCriterion::setOsmMap(const OsmMap* map)
 {
-  _map = map->shared_from_this();
+  ConstOsmMapConsumerImpl::setOsmMap(map);
   _wayNodeCrit.setOsmMap(map);
 }
 

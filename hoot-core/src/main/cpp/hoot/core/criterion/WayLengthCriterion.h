@@ -36,16 +36,14 @@
 namespace hoot
 {
 
-class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "WayLengthCriterion"; }
 
   WayLengthCriterion();
-  WayLengthCriterion(
-    const double comparisonLength, const NumericComparisonType& numericComparisonType,
-    ConstOsmMapPtr map);
+  WayLengthCriterion(const double comparisonLength, const NumericComparisonType& numericComparisonType, ConstOsmMapPtr map);
   ~WayLengthCriterion() override = default;
 
   /**
@@ -64,14 +62,11 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
 private:
 
   double _comparisonLength;
   NumericComparisonType _numericComparisonType;
 
-  ConstOsmMapPtr _map;
 };
 
 }

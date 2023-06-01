@@ -46,9 +46,9 @@ WayHeadingVarianceCriterion::WayHeadingVarianceCriterion()
 WayHeadingVarianceCriterion::WayHeadingVarianceCriterion(const Degrees comparisonVariance,
                                                          const NumericComparisonType& numericComparisonType,
                                                          ConstOsmMapPtr map)
-  : _comparisonVariance(comparisonVariance),
-    _numericComparisonType(numericComparisonType),
-    _map(map)
+  : ConstOsmMapConsumerImpl(map),
+    _comparisonVariance(comparisonVariance),
+    _numericComparisonType(numericComparisonType)
 {
 }
 

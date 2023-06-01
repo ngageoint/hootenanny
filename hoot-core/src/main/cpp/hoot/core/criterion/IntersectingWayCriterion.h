@@ -44,15 +44,14 @@ namespace hoot
  * time, though, as each intersecting way would have to be checked against the crit. OR maybe we
  * make use of FindIntersectionsOp for that purpose instead...
  */
-class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer,
-  public Configurable
+class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl, public Configurable
 {
 public:
 
   static QString className() { return "IntersectingWayCriterion"; }
 
   IntersectingWayCriterion() = default;
-  IntersectingWayCriterion(ConstOsmMapPtr map);
+  IntersectingWayCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
   IntersectingWayCriterion(const QSet<long>& sourceWayIds, ConstOsmMapPtr map);
   ~IntersectingWayCriterion() override = default;
 
@@ -72,11 +71,6 @@ public:
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-  /**
    * @see Configurable
    */
   void setConfiguration(const Settings& conf) override;
@@ -91,8 +85,6 @@ private:
 
   // the IDs for the ways to look for other intersecting ways with
   mutable QSet<long> _sourceWayIds;
-
-  ConstOsmMapPtr _map;
 
   static const QString EMPTY_SOURCE_IDS_ERROR_MESSAGE;
 };

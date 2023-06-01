@@ -44,7 +44,7 @@ HighwayCriterion::HighwayCriterion(const bool includeRelations)
 }
 
 HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations)
-  : _map(map),
+  : ConstOsmMapConsumerImpl(map),
     _includeRelations(includeRelations)
 {
 }

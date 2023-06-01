@@ -38,7 +38,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
 PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map)
-  : _map(map)
+  : ConstOsmMapConsumerImpl(map)
 {
   // Set this to allow any on poly child member to satisfy the crit.
   _relationCrit.setAllowMixedChildren(true);
@@ -47,7 +47,7 @@ PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map)
 
 void PolygonCriterion::setOsmMap(const OsmMap* map)
 {
-  _map = map->shared_from_this();
+  ConstOsmMapConsumerImpl::setOsmMap(map);
   _relationCrit.setOsmMap(map);
 }
 

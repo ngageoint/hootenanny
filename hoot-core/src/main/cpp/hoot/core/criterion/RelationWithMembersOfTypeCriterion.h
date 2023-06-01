@@ -40,8 +40,7 @@ namespace hoot
 /**
  * Abstract class for identifying relations based on the geometry types of their children
  */
-class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion,
-  public ConstOsmMapConsumer, public Configurable
+class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerImpl, public Configurable
 {
 public:
 
@@ -55,15 +54,9 @@ public:
 
   virtual QString getCriterion() const = 0;
 
-  void setOsmMap(const OsmMap* map) override;
-
   void setConfiguration(const Settings& conf) override;
 
   void setAllowMixedChildren(bool allow) { _allowMixedChildren = allow; }
-
-protected:
-
-  ConstOsmMapPtr _map;
 
 private:
 

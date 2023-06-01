@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "BuildingCriterion.h"
 
@@ -40,7 +40,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
 
 BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map)
-  : _map(map)
+  : ConstOsmMapConsumerImpl(map)
 {
 }
 
@@ -79,8 +79,7 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(OsmSchema::getInstance().hasCategory(e->getTags(), MetadataTags::Building()));
 
   // if it is a building
-  if ((e->getElementType() != ElementType::Node) &&
-      (OsmSchema::getInstance().hasCategory(e->getTags(), MetadataTags::Building()) == true))
+  if ((e->getElementType() != ElementType::Node) && (OsmSchema::getInstance().hasCategory(e->getTags(), MetadataTags::Building()) == true))
   {
     // If a map was set, then we assume the parent is to be checked as well. This is a little
     // messy but reflects how the logic worked before moving OsmSchema feature type method logic

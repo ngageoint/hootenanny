@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IN_BOUNDS_CRITERION_H
@@ -48,8 +48,7 @@ namespace hoot
  *
  * @todo genericize this to use GeometricRelationShip?
  */
-class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer,
-  public Configurable
+class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumerImpl, public Configurable
 {
 public:
 
@@ -94,8 +93,6 @@ public:
 
 private:
 
-  // This map must be in the same coord sys as the bounds.
-  ConstOsmMapPtr _map;
   std::shared_ptr<ElementToGeometryConverter> _elementConverter;
   std::shared_ptr<WayNodeCriterion> _wayNodeCrit;
   // If false, the element can cross the bounds and still be considered within bounds.

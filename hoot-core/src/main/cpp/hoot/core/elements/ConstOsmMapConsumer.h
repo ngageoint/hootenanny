@@ -28,6 +28,7 @@
 #define CONSTOSMMAPCONSUMER_H
 
 // Hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
@@ -47,6 +48,19 @@ public:
   {
     setOsmMap((const OsmMap*)map);
   }
+};
+
+class ConstOsmMapConsumerImpl : public ConstOsmMapConsumer
+{
+public:
+  ConstOsmMapConsumerImpl() = default;
+  ConstOsmMapConsumerImpl(const ConstOsmMapPtr& map) : _map(map) { }
+  ~ConstOsmMapConsumerImpl() override = default;
+
+  virtual void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
+protected:
+  ConstOsmMapPtr _map;
 };
 
 }

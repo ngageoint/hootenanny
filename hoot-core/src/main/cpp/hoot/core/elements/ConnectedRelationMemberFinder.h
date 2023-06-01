@@ -38,9 +38,8 @@ namespace hoot
 /**
  * Finds instances where way members across different relations are connected
  */
-class ConnectedRelationMemberFinder : public ConstOsmMapConsumer
+class ConnectedRelationMemberFinder : public ConstOsmMapConsumerImpl
 {
-
 public:
 
   ConnectedRelationMemberFinder() = default;
@@ -55,14 +54,6 @@ public:
    */
   bool haveConnectedWayMembers(const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

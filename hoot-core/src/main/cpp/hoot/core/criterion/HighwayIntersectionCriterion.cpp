@@ -40,11 +40,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayIntersectionCriterion)
 
-HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
-{
-  setOsmMap(map.get());
-}
-
 bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Node)
@@ -66,11 +61,6 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // three or more ways meeting at a node is an intersection
   return (hwids.size() >= 3);
-}
-
-void HighwayIntersectionCriterion::setOsmMap(const OsmMap *map)
-{
-  _map = map->shared_from_this();
 }
 
 }

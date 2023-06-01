@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Identifies point features
  */
-class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
@@ -64,8 +64,6 @@ public:
   QString getDescription() const override { return "Identifies point features"; }
 
 private:
-
-  ConstOsmMapPtr _map;
 
   WayNodeCriterion _wayNodeCrit;
 };

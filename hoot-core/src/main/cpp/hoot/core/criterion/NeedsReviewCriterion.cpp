@@ -36,11 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
-NeedsReviewCriterion::NeedsReviewCriterion(const ConstOsmMapPtr& map)
-  : _map(map)
-{
-}
-
 bool NeedsReviewCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return ReviewMarker::isNeedsReview(_map, e);

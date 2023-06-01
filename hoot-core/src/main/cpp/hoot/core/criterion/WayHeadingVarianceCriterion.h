@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
@@ -74,8 +74,6 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   void setNumHistogramBins(const int numBins);
   void setSampleDistance(const Meters distance);
   void setHeadingDelta(const Degrees delta);
@@ -87,7 +85,6 @@ private:
   Degrees _comparisonVariance;
   NumericComparisonType _numericComparisonType;
 
-  ConstOsmMapPtr _map;
 };
 
 }

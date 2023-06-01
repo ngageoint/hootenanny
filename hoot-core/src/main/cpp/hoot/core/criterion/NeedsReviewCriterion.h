@@ -38,29 +38,24 @@ namespace hoot
 /**
  * Determines if a feature requires manual review
  */
-class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
-  NeedsReviewCriterion(const ConstOsmMapPtr& map);
+  NeedsReviewCriterion(const ConstOsmMapPtr& map) : ConstOsmMapConsumerImpl(map) { }
   ~NeedsReviewCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<NeedsReviewCriterion>(_map); }
-
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   QString getDescription() const override { return "Identifies features that need to be reviewed"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

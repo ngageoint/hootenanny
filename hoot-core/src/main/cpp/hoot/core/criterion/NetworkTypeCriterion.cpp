@@ -36,11 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NetworkTypeCriterion)
 
-NetworkTypeCriterion::NetworkTypeCriterion(ConstOsmMapPtr map)
-  : _map(map)
-{
-}
-
 bool NetworkTypeCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   if (element->getElementType() != ElementType::Way)

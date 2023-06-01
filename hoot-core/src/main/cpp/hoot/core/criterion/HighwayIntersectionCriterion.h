@@ -41,30 +41,25 @@ namespace hoot
  *
  * This class assumes that IntersectionSplitter was applied to the map before being called.
  */
-class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl
 {
 public:
 
   static QString className() { return "HighwayIntersectionCriterion"; }
 
   HighwayIntersectionCriterion() = default;
-  explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
+  explicit HighwayIntersectionCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerImpl(map) { }
   ~HighwayIntersectionCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<HighwayIntersectionCriterion>(_map); }
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  void setOsmMap(const OsmMap* map) override;
-
   QString getDescription() const override { return "Identifies highway intersections"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

@@ -41,8 +41,7 @@ namespace hoot
  * A filter that will remove elements that are not conflatable by Hootenanny. These are elements
  * for which we have no matchers defined.
  */
-class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumer,
-  public Configurable
+class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumerImpl, public Configurable
 {
 public:
 
@@ -57,8 +56,6 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   QString getDescription() const override { return "Identifies features that are not conflatable"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
@@ -70,8 +67,6 @@ public:
   void setIgnoreChildren(bool ignore) { _ignoreChildren = ignore; }
 
 private:
-
-  ConstOsmMapPtr _map;
 
   bool _ignoreChildren;
 

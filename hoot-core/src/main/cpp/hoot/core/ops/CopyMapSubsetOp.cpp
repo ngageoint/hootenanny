@@ -116,14 +116,14 @@ CopyMapSubsetOp::CopyMapSubsetOp()
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids)
-  : _eids(eids),
-    _from(from),
+  : ConstOsmMapConsumerImpl(from),
+    _eids(eids),
     _copyChildren(true)
 {
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds)
-  : _from(from),
+  : ConstOsmMapConsumerImpl(from),
     _copyChildren(true)
 {
   for (auto way_id : wayIds)
@@ -134,14 +134,14 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>&
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid)
-  : _from(from),
+  : ConstOsmMapConsumerImpl(from),
     _copyChildren(true)
 {
   _eids.insert(eid);
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2)
-  : _from(from),
+  : ConstOsmMapConsumerImpl(from),
     _copyChildren(true)
 {
   _eids.insert(eid1);
@@ -149,7 +149,7 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, Ele
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit)
-  : _from(from),
+  : ConstOsmMapConsumerImpl(from),
     _copyChildren(true)
 {
   addCriterion(crit);
@@ -164,38 +164,38 @@ void CopyMapSubsetOp::setConfiguration(const Settings& conf)
       criterionClassNames, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate()));
 }
 
-void CopyMapSubsetOp::apply(OsmMapPtr& map)
+void CopyMapSubsetOp::apply(OsmMapPtr& to_map)
 {
-  if (!_from)
+  if (!_map)
     throw IllegalArgumentException("No source map set on CopyMapSubsetOp.");
 
-  map->setProjection(_from->getProjection());
+  to_map->setProjection(_map->getProjection());
   LOG_VART(_copyChildren);
-  AddAllVisitor v(_from, map, _copyChildren);
+  AddAllVisitor v(_map, to_map, _copyChildren);
 
   LOG_VART(_eids.size());
   for (const auto& eid : _eids)
   {
-    if (_from->containsElement(eid) == false)
+    if (_map->containsElement(eid) == false)
       throw IllegalArgumentException("Unable to find element: " + hoot::toString(eid));
-    _from->getElement(eid)->visitRo(*_from, v, _copyChildren);
+    _map->getElement(eid)->visitRo(*_map, v, _copyChildren);
   }
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
   //  Copy the cached rubbersheet if it exists.
-  map->setCachedRubberSheet(_from->getCachedRubberSheet());
+  to_map->setCachedRubberSheet(_map->getCachedRubberSheet());
 }
 
 void CopyMapSubsetOp::addCriterion(const ElementCriterionPtr& crit)
 {
-  if (!_from)
+  if (!_map)
     throw IllegalArgumentException("No source map set on CopyMapSubsetOp.");
   LOG_VART(crit);
 
   std::shared_ptr<UniqueElementIdVisitor> getIdVis = std::make_shared<UniqueElementIdVisitor>();
   FilteredVisitor idVis(crit, getIdVis);
-  _from->visitRo(idVis);
+  _map->visitRo(idVis);
   _eids = getIdVis->getElementSet();
   LOG_VART(_eids.size());
 }
