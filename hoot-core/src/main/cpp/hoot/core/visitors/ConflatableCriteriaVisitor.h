@@ -39,7 +39,7 @@ namespace hoot
  * This is primarily useful for debugging when trying to find out whether hoot can conflate or
  * which conflator it will use for a particular feature.
  */
-class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumerImpl
 {
 
 public:
@@ -59,11 +59,6 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }
