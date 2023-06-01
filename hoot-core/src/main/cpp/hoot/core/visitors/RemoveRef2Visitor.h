@@ -44,7 +44,7 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor : public ElementVisitor, public OsmMapConsumerImpl, public ElementCriterionConsumer
+class RemoveRef2Visitor : public ElementVisitor, public OsmMapConsumerBase, public ElementCriterionConsumer
 {
 public:
 

@@ -45,7 +45,7 @@ namespace hoot
  * nodes appears to be in the conflation routines somewhere and should eventually be found and
  * fixed.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumerImpl, public ConflateInfoCacheConsumer
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumerBase, public ConflateInfoCacheConsumer
 {
 public:
 

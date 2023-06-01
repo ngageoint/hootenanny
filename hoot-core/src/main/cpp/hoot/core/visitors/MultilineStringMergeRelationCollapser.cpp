@@ -52,7 +52,7 @@ MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser()
 
 void MultilineStringMergeRelationCollapser::setOsmMap(OsmMap* map)
 {
-  OsmMapConsumerImpl::setOsmMap(map);
+  OsmMapConsumerBase::setOsmMap(map);
   _relationMerger.setOsmMap(map);
 }
 

@@ -79,7 +79,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 
 void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 {
-  OsmMapConsumerImpl::setOsmMap(map);
+  OsmMapConsumerBase::setOsmMap(map);
   _startElementCount = _map->getElementCount();
 
   for (const auto& crit : _criteria)

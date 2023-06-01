@@ -44,7 +44,7 @@ namespace hoot
  * to either mark elements with missing children as needing review or add a custom tag to the
  * elements.
  */
-class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumerImpl, public Configurable
+class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumerBase, public Configurable
 {
 public:
 

@@ -44,12 +44,12 @@ public:
 };
 
 /** Base class that implements OsmMapConsumer used to derive consumer class implementations */
-class OsmMapConsumerImpl : public OsmMapConsumer
+class OsmMapConsumerBase : public OsmMapConsumer
 {
 public:
 
-  OsmMapConsumerImpl() = default;
-  ~OsmMapConsumerImpl() override = default;
+  OsmMapConsumerBase() = default;
+  ~OsmMapConsumerBase() override = default;
 
   void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 

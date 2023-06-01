@@ -41,7 +41,7 @@ namespace hoot
  *
  * @todo This class has some redundancy with RecursiveElementRemover.
  */
-class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumerImpl, public Configurable
+class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumerBase, public Configurable
 {
 public:
 

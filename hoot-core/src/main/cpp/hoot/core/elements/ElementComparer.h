@@ -44,7 +44,7 @@ namespace hoot
  * The node distance comparison tolerance threshold is controlled via the
  * node.comparison.coordinate.sensitivity configuration option.
  */
-class ElementComparer : public OsmMapConsumerImpl
+class ElementComparer : public OsmMapConsumerBase
 {
 
 public:

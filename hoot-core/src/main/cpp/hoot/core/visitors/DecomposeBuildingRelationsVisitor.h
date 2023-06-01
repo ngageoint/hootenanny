@@ -43,7 +43,7 @@ class Relation;
  *
  * http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings
  */
-class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public OsmMapConsumerImpl
+class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public OsmMapConsumerBase
 {
 public:
 

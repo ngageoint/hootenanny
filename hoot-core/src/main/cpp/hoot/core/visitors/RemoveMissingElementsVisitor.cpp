@@ -43,7 +43,7 @@ RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(const Log::WarningLev
 
 void RemoveMissingElementsVisitor::setOsmMap(OsmMap* map)
 {
-  OsmMapConsumerImpl::setOsmMap(map);
+  OsmMapConsumerBase::setOsmMap(map);
   _v->setOsmMap(map);
 }
 

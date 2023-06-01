@@ -40,7 +40,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove matches.
  */
-class JsFunctionVisitor : public ConstElementVisitor, public OsmMapConsumerImpl, public JsFunctionConsumer
+class JsFunctionVisitor : public ConstElementVisitor, public OsmMapConsumerBase, public JsFunctionConsumer
 {
 public:
 

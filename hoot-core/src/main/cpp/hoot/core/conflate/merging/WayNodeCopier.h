@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Performs way node copying from one way to another
  */
-class WayNodeCopier : public OsmMapConsumerImpl, public ElementCriterionConsumer, public Configurable
+class WayNodeCopier : public OsmMapConsumerBase, public ElementCriterionConsumer, public Configurable
 {
 public:
 

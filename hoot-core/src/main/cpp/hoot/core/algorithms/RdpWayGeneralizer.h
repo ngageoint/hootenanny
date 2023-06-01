@@ -68,7 +68,7 @@ class Way;
  * would have to have been generated for the points kept in the reduction, while deleting the old
  * ones.  That isn't desirable from a runtime performance standpoint.
  */
-class RdpWayGeneralizer : public OsmMapConsumerImpl
+class RdpWayGeneralizer : public OsmMapConsumerBase
 {
 
 public:

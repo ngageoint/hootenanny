@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumerImpl
+class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumerBase
 {
 public:
 

@@ -42,7 +42,7 @@ namespace hoot
  * similar members with different element IDs between reference and secondary layers, the
  * comparisons ignore element IDs and look at the member elements directly.
  */
-class RelationMerger : public OsmMapConsumerImpl
+class RelationMerger : public OsmMapConsumerBase
 {
 public:
 

@@ -55,7 +55,7 @@ namespace hoot
  * minimal feature types to be operated on. Alternatively, use of this class could be made automatic
  * and moved to LinearSnapMerger to be called directly from there.
  */
-class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVisitor, public OsmMapConsumerImpl, public Configurable
+class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVisitor, public OsmMapConsumerBase, public Configurable
 {
 public:
 
