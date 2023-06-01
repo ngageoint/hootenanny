@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef DISCONNECTED_WAY_CRITERION_H
 #define DISCONNECTED_WAY_CRITERION_H

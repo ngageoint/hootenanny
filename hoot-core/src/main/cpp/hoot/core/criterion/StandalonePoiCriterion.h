@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef STANDALONE_POI_CRITERION_H
 #define STANDALONE_POI_CRITERION_H

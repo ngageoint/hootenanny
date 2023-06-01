@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_HEADING_VARIANCE_CRITERION_H
 #define WAY_HEADING_VARIANCE_CRITERION_H
