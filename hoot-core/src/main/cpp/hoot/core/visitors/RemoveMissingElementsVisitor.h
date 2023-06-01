@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Removes non-existent element references from relations or ways
  */
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumerImpl
 {
 public:
 
@@ -48,9 +48,7 @@ public:
                                const int maxReport = Log::getWarnMessageLimit());
   ~RemoveMissingElementsVisitor() override = default;
 
-  void setOsmMap(OsmMap* map) override { _v->setOsmMap(map);}
-  void setOsmMap(const OsmMap* /*map*/) const
-  { throw NotImplementedException("Set Map with const is not supported"); }
+  void setOsmMap(OsmMap* map) override;
 
   /**
    * @see ElementVisitor

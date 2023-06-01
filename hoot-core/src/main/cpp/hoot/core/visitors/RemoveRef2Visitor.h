@@ -44,9 +44,8 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor : public ElementVisitor, public OsmMapConsumer, public ElementCriterionConsumer
+class RemoveRef2Visitor : public ElementVisitor, public OsmMapConsumerImpl, public ElementCriterionConsumer
 {
-
 public:
 
   using Ref1ToEid = QMap<QString, ElementId>;
@@ -81,7 +80,6 @@ protected:
 
 private:
 
-  OsmMap* _map;
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;
   static std::mutex _mutex;

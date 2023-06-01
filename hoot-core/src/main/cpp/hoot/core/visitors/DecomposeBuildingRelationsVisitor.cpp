@@ -108,7 +108,7 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
   }
 
   // remove the building relation
-  RecursiveElementRemover(r->getElementId()).apply(_map->shared_from_this());
+  RecursiveElementRemover(r->getElementId()).apply(_map);
 }
 
 }

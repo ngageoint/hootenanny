@@ -41,8 +41,7 @@ namespace hoot
  *
  * @todo This class has some redundancy with RecursiveElementRemover.
  */
-class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
-  public Configurable
+class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumerImpl, public Configurable
 {
 public:
 
@@ -62,7 +61,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   void setOsmMap(OsmMap* map) override;
-  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
@@ -82,8 +80,6 @@ public:
   void setRecursiveRemoveRefsFromParents(bool remove) { _recursiveRemoveRefsFromParents = remove; }
 
 private:
-
-  OsmMap* _map;
 
   bool _recursive;
   bool _recursiveRemoveRefsFromParents;

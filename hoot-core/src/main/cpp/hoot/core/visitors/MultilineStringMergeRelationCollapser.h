@@ -55,8 +55,7 @@ namespace hoot
  * minimal feature types to be operated on. Alternatively, use of this class could be made automatic
  * and moved to LinearSnapMerger to be called directly from there.
  */
-class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVisitor,
-  public OsmMapConsumer, public Configurable
+class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVisitor, public OsmMapConsumerImpl, public Configurable
 {
 public:
 
@@ -99,8 +98,6 @@ public:
   void setTypes(const QStringList& types);
 
 private:
-
-  OsmMapPtr _map;
 
   // a list of type keys to be removed from the parent relation and copied to its members
   QStringList _typeKeys;

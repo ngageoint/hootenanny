@@ -50,7 +50,7 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   const set<long>& wids = n2w->getWaysByNode(id);
   // create the criterion if needed
   if (!_criterion)
-    _criterion = createCriterion(_map->shared_from_this());
+    _criterion = createCriterion(_map);
   // find all ways that are of the criterion type
   set<long> hwids;
   for (auto way_id : wids)
@@ -70,7 +70,7 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 //    _map->getNode(id)->setTag(MetadataTags::HootIntersectionWayCount(), QString::number(hwids.size()));
     _map->getNode(id)->setTag("IntersectionWayCount", QString::number(hwids.size()));
 
-    vector<Radians> angles = NodeMatcher::calculateAngles(_map, id, hwids, 10);
+    vector<Radians> angles = NodeMatcher::calculateAngles(_map.get(), id, hwids, 10);
     vector<double> v;
     for (auto angle : angles)
       v.push_back(toDegrees(angle)+180);

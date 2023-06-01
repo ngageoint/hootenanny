@@ -42,7 +42,7 @@ namespace hoot
  * similar members with different element IDs between reference and secondary layers, the
  * comparisons ignore element IDs and look at the member elements directly.
  */
-class RelationMerger : public OsmMapConsumer
+class RelationMerger : public OsmMapConsumerImpl
 {
 public:
 
@@ -61,17 +61,10 @@ public:
    */
   void merge(const ElementId& elementId1, const ElementId& elementId2);
 
-  /**
-   * @see OsmMapConsumer
-   */
-  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
-
   void setMergeTags(bool merge) { _mergeTags = merge; }
   void setDeleteRelation2(bool deleteRelation) { _deleteRelation2 = deleteRelation; }
 
 private:
-
-  OsmMapPtr _map;
 
   // determines whether tags of the two relations are merged
   bool _mergeTags;

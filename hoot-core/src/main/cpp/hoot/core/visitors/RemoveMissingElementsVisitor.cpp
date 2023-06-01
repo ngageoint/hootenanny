@@ -41,6 +41,13 @@ RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(const Log::WarningLev
   _v = std::make_shared<ReportMissingElementsVisitor>(true, logLevel, maxReport);
 }
 
+void RemoveMissingElementsVisitor::setOsmMap(OsmMap* map)
+{
+  OsmMapConsumerImpl::setOsmMap(map);
+  _v->setOsmMap(map);
+}
+
+
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)
 {
   _v->visit(e);

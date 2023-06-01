@@ -28,12 +28,10 @@
 #define CONSTOSMMAPCONSUMER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
 {
-class OsmMap;
 
 class ConstOsmMapConsumer : public OsmMapConsumer
 {

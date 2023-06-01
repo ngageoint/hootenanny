@@ -40,19 +40,17 @@ namespace hoot
 /**
  * A criterion that will either keep or remove matches.
  */
-class JsFunctionVisitor : public ConstElementVisitor, public OsmMapConsumer, public JsFunctionConsumer
+class JsFunctionVisitor : public ConstElementVisitor, public OsmMapConsumerImpl, public JsFunctionConsumer
 {
 public:
 
   static QString className() { return "JsFunctionVisitor"; }
 
-  JsFunctionVisitor();
+  JsFunctionVisitor() = default;
   ~JsFunctionVisitor() override = default;
 
   void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }
-
-  void setOsmMap(OsmMap* map) override { _map = map; }
 
   void visit(const ConstElementPtr& e) override;
 
@@ -63,7 +61,7 @@ public:
 private:
 
   v8::Persistent<v8::Function> _func;
-  OsmMap* _map;
+
 };
 
 }

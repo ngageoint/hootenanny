@@ -44,8 +44,7 @@ namespace hoot
  * to either mark elements with missing children as needing review or add a custom tag to the
  * elements.
  */
-class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-  public Configurable
+class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumerImpl, public Configurable
 {
 public:
 
@@ -59,8 +58,6 @@ public:
    * @see ElementVisitor
    */
   void visit(const ConstElementPtr& e) override;
-
-  void setOsmMap(OsmMap* map) override { _map = map; }
 
   /**
    * @see Configurable
@@ -90,8 +87,6 @@ public:
   void setRelationKvp(QString kvp) { _relationKvp = kvp; }
 
 private:
-
-  OsmMap* _map;
 
   Log::WarningLevel _logLevel;
 

@@ -43,7 +43,7 @@ class Relation;
  *
  * http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings
  */
-class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public OsmMapConsumer
+class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public OsmMapConsumerImpl
 {
 public:
 
@@ -59,9 +59,6 @@ public:
    */
   void visit(const ConstElementPtr& e) override;
 
-  void setOsmMap(OsmMap* map) override { _map = map; }
-  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
-
   QString getInitStatusMessage() const override { return "Decomposing complex buildings..."; }
   QString getCompletedStatusMessage() const override
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
@@ -73,7 +70,6 @@ public:
 
 private:
 
-  OsmMap* _map;
   std::vector<long> _ids;
 
   void _decomposeBuilding(const std::shared_ptr<Relation>& r);

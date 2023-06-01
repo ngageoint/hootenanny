@@ -68,7 +68,7 @@ class Way;
  * would have to have been generated for the points kept in the reduction, while deleting the old
  * ones.  That isn't desirable from a runtime performance standpoint.
  */
-class RdpWayGeneralizer : public OsmMapConsumer
+class RdpWayGeneralizer : public OsmMapConsumerImpl
 {
 
 public:
@@ -92,8 +92,6 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
-
 private:
 
   friend class RdpWayGeneralizerTest;
@@ -106,8 +104,6 @@ private:
   // this shouldn't be an option and shared nodes should never be removed, but leaving it optional
   // for now in case there is a use case where they should be removed.
   bool _removeNodesSharedByWays;
-
-  OsmMapPtr _map;
 
   /*
     Generates a set of points that make up a generalized set of the input points

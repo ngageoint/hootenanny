@@ -27,6 +27,8 @@
 #ifndef OSMMAPCONSUMER_H
 #define OSMMAPCONSUMER_H
 
+#include <hoot/core/elements/OsmMap.h>
+
 namespace hoot
 {
 class OsmMap;
@@ -39,6 +41,21 @@ public:
   virtual ~OsmMapConsumer() = default;
 
   virtual void setOsmMap(OsmMap* map) = 0;
+};
+
+class OsmMapConsumerImpl : public OsmMapConsumer
+{
+public:
+
+  OsmMapConsumerImpl() = default;
+  ~OsmMapConsumerImpl() override = default;
+
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
+
+protected:
+
+  OsmMapPtr _map;
+
 };
 
 }

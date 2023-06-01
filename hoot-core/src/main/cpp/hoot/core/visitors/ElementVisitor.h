@@ -70,8 +70,7 @@ namespace hoot
  * and require them to be implemented in children. If we ever have multiple inheritance issues via
  * inheritance from the OperationStatus, we can change it to be a proper interface.
  */
-class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatus
+class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria, public OperationStatus
 {
 public:
 

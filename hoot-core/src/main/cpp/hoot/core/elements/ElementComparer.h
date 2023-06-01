@@ -44,7 +44,7 @@ namespace hoot
  * The node distance comparison tolerance threshold is controlled via the
  * node.comparison.coordinate.sensitivity configuration option.
  */
-class ElementComparer : public OsmMapConsumer
+class ElementComparer : public OsmMapConsumerImpl
 {
 
 public:
@@ -67,14 +67,6 @@ public:
   bool isSame(ElementPtr e1, ElementPtr e2) const;
 
   /**
-   * @see OsmMapConsumer
-   *
-   * This only needs to be set if _ignoreElementId = true. The reason a const map isn't used here
-   * is for the same reason isSame doesn't take in const elements.
-   */
-  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
-
-  /**
    * Wrapper around ElementHashVisitor::toHashString
    */
   QString toHashString(const ConstElementPtr& e) const;
@@ -89,8 +81,6 @@ private:
   bool _ignoreElementId;
   // allows for ignoring element versions during comparison
   bool _ignoreVersion;
-  // a map is needed when comparing child elements if ignoring element IDs
-  OsmMapPtr _map;
 
   void _setHash(ElementPtr element) const;
   bool _haveSameHash(ElementPtr re, ElementPtr e) const;

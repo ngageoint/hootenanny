@@ -74,7 +74,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
     LOG_TRACE("Compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
-  if (_ignoreElementId && !_map.get())
+  if (_ignoreElementId && !_map)
     throw IllegalArgumentException("If ignoring element IDs in ElementComparer a map must be passed in.");
 
   LOG_VART(e1->getElementId());

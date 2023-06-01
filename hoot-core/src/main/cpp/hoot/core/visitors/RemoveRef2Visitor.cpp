@@ -161,7 +161,7 @@ bool RemoveRef2Visitor::_hasRef2Tag(ElementPtr e) const
 
 void RemoveRef2Visitor::setOsmMap(OsmMap* map)
 {
-  _map = map;
+  OsmMapConsumerImpl::setOsmMap(map);
   // traverse the map and create a REF1 to ElementId map.
   Ref1ToEidVisitor v;
   _map->visitRo(v);

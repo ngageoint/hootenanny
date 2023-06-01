@@ -52,8 +52,8 @@ MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser()
 
 void MultilineStringMergeRelationCollapser::setOsmMap(OsmMap* map)
 {
-  _map = map->shared_from_this();
-  _relationMerger.setOsmMap(_map.get());
+  OsmMapConsumerImpl::setOsmMap(map);
+  _relationMerger.setOsmMap(map);
 }
 
 void MultilineStringMergeRelationCollapser::setTypes(const QStringList& types)

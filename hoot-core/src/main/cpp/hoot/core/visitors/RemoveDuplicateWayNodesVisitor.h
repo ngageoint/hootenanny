@@ -45,8 +45,7 @@ namespace hoot
  * nodes appears to be in the conflation routines somewhere and should eventually be found and
  * fixed.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumer,
-  public ConflateInfoCacheConsumer
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumerImpl, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -60,12 +59,7 @@ public:
    */
   void visit(const ElementPtr& e) override;
 
-  /**
-   * @see OsmMapConsumer
-   */
-  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
-
-  /**
+ /**
    * Removes duplicates nodes from a way
    *
    * @param way the way to remove duplicate nodes from
@@ -89,8 +83,6 @@ public:
   { _conflateInfoCache = cache; }
 
 private:
-
-  OsmMapPtr _map;
 
   // Existence of this cache tells us that elements must be individually checked to see that they
   // are conflatable given the current configuration before modifying them.
