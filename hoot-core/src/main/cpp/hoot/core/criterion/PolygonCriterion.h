@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef POLYGON_CRITERION_H
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Identifies polygon features
  */
-class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
@@ -67,7 +67,6 @@ public:
 
 private:
 
-  ConstOsmMapPtr _map;
   RelationWithPolygonMembersCriterion _relationCrit;
 };
 

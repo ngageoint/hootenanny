@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORK_TYPE_CRITERION_H
 #define NETWORK_TYPE_CRITERION_H
@@ -39,14 +39,14 @@ namespace hoot
  * Identifies features that can be treated as "network" with linear and connectedness attributes.
  * This is primarily used by IntersectionSplitter to determine which features are splittable.
  */
-class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "NetworkTypeCriterion"; }
 
   NetworkTypeCriterion() = default;
-  NetworkTypeCriterion(ConstOsmMapPtr map);
+  NetworkTypeCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~NetworkTypeCriterion() override = default;
 
   /**
@@ -64,19 +64,11 @@ public:
    */
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override { return "Identifies network features"; }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

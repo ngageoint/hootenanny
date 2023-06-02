@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef FINDINTERSECTIONSVISITOR_H
 #define FINDINTERSECTIONSVISITOR_H
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumer
+class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumerBase
 {
 public:
 
@@ -52,9 +52,6 @@ public:
    * @see ElementVisitor
    */
   void visit(const ConstElementPtr& e) override;
-
-  void setOsmMap(OsmMap* map) override { _map = map; }
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   std::vector<long>& getIntersections() { return _ids; }
 
@@ -70,7 +67,6 @@ public:
 
 private:
 
-  OsmMap* _map;
   std::vector<long> _ids;
   ElementCriterionPtr _criterion;
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "JsFunctionVisitor.h"
 
@@ -40,11 +40,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, JsFunctionVisitor)
-
-JsFunctionVisitor::JsFunctionVisitor()
-  : _map(nullptr)
-{
-}
 
 void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {

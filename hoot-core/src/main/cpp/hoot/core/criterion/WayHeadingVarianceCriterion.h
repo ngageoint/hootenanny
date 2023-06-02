@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_HEADING_VARIANCE_CRITERION_H
 #define WAY_HEADING_VARIANCE_CRITERION_H
@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
@@ -74,8 +74,6 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   void setNumHistogramBins(const int numBins);
   void setSampleDistance(const Meters distance);
   void setHeadingDelta(const Degrees delta);
@@ -87,7 +85,6 @@ private:
   Degrees _comparisonVariance;
   NumericComparisonType _numericComparisonType;
 
-  ConstOsmMapPtr _map;
 };
 
 }

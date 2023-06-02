@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEREF2VISITOR_H
 #define REMOVEREF2VISITOR_H
@@ -44,10 +44,8 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
-  public ElementCriterionConsumer
+class RemoveRef2Visitor : public ElementVisitor, public OsmMapConsumerBase, public ElementCriterionConsumer
 {
-
 public:
 
   using Ref1ToEid = QMap<QString, ElementId>;
@@ -62,7 +60,6 @@ public:
   void addCriterion(const ElementCriterionPtr& e) override;
 
   void setOsmMap(OsmMap* map) override;
-  void setOsmMap(const OsmMap* /*map*/) override { assert(false); }
 
   /**
    * @see ElementVisitor
@@ -83,7 +80,6 @@ protected:
 
 private:
 
-  OsmMap* _map;
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;
   static std::mutex _mutex;

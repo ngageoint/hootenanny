@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "ReversedRoadCriterion.h"
 
@@ -34,11 +34,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
-
-ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map)
-  : _map(map)
-{
-}
 
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {

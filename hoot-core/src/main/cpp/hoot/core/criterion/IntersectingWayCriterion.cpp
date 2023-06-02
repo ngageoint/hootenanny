@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #include "IntersectingWayCriterion.h"
 
@@ -37,14 +37,9 @@ const QString IntersectingWayCriterion::EMPTY_SOURCE_IDS_ERROR_MESSAGE = "No way
 
 HOOT_FACTORY_REGISTER(ElementCriterion, IntersectingWayCriterion)
 
-IntersectingWayCriterion::IntersectingWayCriterion(ConstOsmMapPtr map)
-  : _map(map)
-{
-}
-
 IntersectingWayCriterion::IntersectingWayCriterion(const QSet<long>& sourceWayIds, ConstOsmMapPtr map)
-  : _sourceWayIds(sourceWayIds),
-    _map(map)
+  : ConstOsmMapConsumerBase(map),
+    _sourceWayIds(sourceWayIds)
 {
   if (_sourceWayIds.empty())
     throw IllegalArgumentException(EMPTY_SOURCE_IDS_ERROR_MESSAGE);

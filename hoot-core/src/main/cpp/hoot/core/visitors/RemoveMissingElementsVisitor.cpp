@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveMissingElementsVisitor.h"
@@ -40,6 +40,13 @@ RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(const Log::WarningLev
 {
   _v = std::make_shared<ReportMissingElementsVisitor>(true, logLevel, maxReport);
 }
+
+void RemoveMissingElementsVisitor::setOsmMap(OsmMap* map)
+{
+  OsmMapConsumerBase::setOsmMap(map);
+  _v->setOsmMap(map);
+}
+
 
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)
 {

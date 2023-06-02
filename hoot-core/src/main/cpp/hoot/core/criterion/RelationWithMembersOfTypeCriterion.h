@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_WITH_MEMBERS_OF_TYPE_CRITERION_H
@@ -40,8 +40,7 @@ namespace hoot
 /**
  * Abstract class for identifying relations based on the geometry types of their children
  */
-class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion,
-  public ConstOsmMapConsumer, public Configurable
+class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase, public Configurable
 {
 public:
 
@@ -55,15 +54,9 @@ public:
 
   virtual QString getCriterion() const = 0;
 
-  void setOsmMap(const OsmMap* map) override;
-
   void setConfiguration(const Settings& conf) override;
 
   void setAllowMixedChildren(bool allow) { _allowMixedChildren = allow; }
-
-protected:
-
-  ConstOsmMapPtr _map;
 
 private:
 

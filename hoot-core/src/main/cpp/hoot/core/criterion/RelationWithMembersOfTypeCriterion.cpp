@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithMembersOfTypeCriterion.h"
@@ -41,7 +41,7 @@ RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion()
 }
 
 RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map)
-  : _map(map),
+  : ConstOsmMapConsumerBase(map),
     _allowMixedChildren(false)
 {
 }
@@ -55,11 +55,6 @@ void RelationWithMembersOfTypeCriterion::_initCrit() const
     if (consumer.get())
       consumer->setOsmMap(_map.get());
   }
-}
-
-void RelationWithMembersOfTypeCriterion::setOsmMap(const OsmMap* map)
-{
-  _map = map->shared_from_this();
 }
 
 void RelationWithMembersOfTypeCriterion::setConfiguration(const Settings& conf)

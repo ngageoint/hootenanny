@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
@@ -70,8 +70,7 @@ namespace hoot
  * and require them to be implemented in children. If we ever have multiple inheritance issues via
  * inheritance from the OperationStatus, we can change it to be a proper interface.
  */
-class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatus
+class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria, public OperationStatus
 {
 public:
 

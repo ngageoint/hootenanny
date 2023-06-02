@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "HighwayIntersectionCriterion.h"
 
@@ -39,11 +39,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayIntersectionCriterion)
-
-HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
-{
-  setOsmMap(map.get());
-}
 
 bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
@@ -66,11 +61,6 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // three or more ways meeting at a node is an intersection
   return (hwids.size() >= 3);
-}
-
-void HighwayIntersectionCriterion::setOsmMap(const OsmMap *map)
-{
-  _map = map->shared_from_this();
 }
 
 }

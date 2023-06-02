@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_MEMBER_CRITERION_H
 #define RELATION_MEMBER_CRITERION_H
@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Identifies relation members
  */
-class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "RelationMemberCriterion"; }
 
   RelationMemberCriterion() = default;
-  RelationMemberCriterion(ConstOsmMapPtr map);
+  RelationMemberCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~RelationMemberCriterion() override = default;
 
   /**
@@ -59,11 +59,6 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

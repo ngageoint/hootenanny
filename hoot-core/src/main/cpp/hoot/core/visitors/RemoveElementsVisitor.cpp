@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "RemoveElementsVisitor.h"
 
@@ -79,7 +79,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 
 void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 {
-  _map = map;
+  OsmMapConsumerBase::setOsmMap(map);
   _startElementCount = _map->getElementCount();
 
   for (const auto& crit : _criteria)
@@ -105,8 +105,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     if (_recursive)
     {
       LOG_TRACE("Removing element: " << e->getElementId() << " recursively...");
-      RecursiveElementRemover(e->getElementId(), _recursiveRemoveRefsFromParents)
-        .apply(_map->shared_from_this());
+      RecursiveElementRemover(e->getElementId(), _recursiveRemoveRefsFromParents).apply(_map);
     }
     else
     {
@@ -115,7 +114,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
       // solved the problem and didn't have any negative impact on the rest of the code...could
       // still be worth looking into, though.
       LOG_TRACE("Removing element: " << e->getElementId() << " non-recursively...");
-      RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
+      RemoveElementByEid::removeElement(_map, e->getElementId());
     }
     _numAffected++;
   }

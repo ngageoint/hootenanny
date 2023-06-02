@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #include "NetworkTypeCriterion.h"
 
@@ -35,11 +35,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NetworkTypeCriterion)
-
-NetworkTypeCriterion::NetworkTypeCriterion(ConstOsmMapPtr map)
-  : _map(map)
-{
-}
 
 bool NetworkTypeCriterion::isSatisfied(const ConstElementPtr& element) const
 {

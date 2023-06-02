@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_MEMBER_NODE_COUNTER_H
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Counts total nodes contained by all members in a relation
  */
-class RelationMemberNodeCounter : public ConstOsmMapConsumer
+class RelationMemberNodeCounter : public ConstOsmMapConsumerBase
 {
 public:
 
@@ -53,14 +53,6 @@ public:
    */
   int numNodes(const ConstRelationPtr& relation) const;
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

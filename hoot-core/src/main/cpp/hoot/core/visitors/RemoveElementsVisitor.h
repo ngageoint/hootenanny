@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEELEMENTSVISITOR_H
 #define REMOVEELEMENTSVISITOR_H
@@ -41,8 +41,7 @@ namespace hoot
  *
  * @todo This class has some redundancy with RecursiveElementRemover.
  */
-class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
-  public Configurable
+class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumerBase, public Configurable
 {
 public:
 
@@ -62,7 +61,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   void setOsmMap(OsmMap* map) override;
-  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
@@ -82,8 +80,6 @@ public:
   void setRecursiveRemoveRefsFromParents(bool remove) { _recursiveRemoveRefsFromParents = remove; }
 
 private:
-
-  OsmMap* _map;
 
   bool _recursive;
   bool _recursiveRemoveRefsFromParents;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_LENGTH_CRITERION_H
 #define WAY_LENGTH_CRITERION_H
@@ -36,16 +36,14 @@
 namespace hoot
 {
 
-class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "WayLengthCriterion"; }
 
   WayLengthCriterion();
-  WayLengthCriterion(
-    const double comparisonLength, const NumericComparisonType& numericComparisonType,
-    ConstOsmMapPtr map);
+  WayLengthCriterion(const double comparisonLength, const NumericComparisonType& numericComparisonType, ConstOsmMapPtr map);
   ~WayLengthCriterion() override = default;
 
   /**
@@ -64,14 +62,11 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
 private:
 
   double _comparisonLength;
   NumericComparisonType _numericComparisonType;
 
-  ConstOsmMapPtr _map;
 };
 
 }

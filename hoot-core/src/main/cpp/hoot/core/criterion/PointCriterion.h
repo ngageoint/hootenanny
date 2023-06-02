@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef POINT_CRITERION_H
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Identifies point features
  */
-class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
@@ -64,8 +64,6 @@ public:
   QString getDescription() const override { return "Identifies point features"; }
 
 private:
-
-  ConstOsmMapPtr _map;
 
   WayNodeCriterion _wayNodeCrit;
 };

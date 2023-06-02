@@ -87,7 +87,7 @@ private:
 /**
  * Traverses the OsmMap and build a hashmap of Attribute Co-Occurrence values.
  */
-class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumerBase
 {
 public:
 
@@ -97,8 +97,6 @@ public:
   {
   }
   ~CoOccurrenceVisitor() override = default;
-
-  void setOsmMap(const OsmMap* map) override { _map = map; }
 
   QString getDescription() const override { return ""; }
   QString getName() const override { return ""; }
@@ -190,7 +188,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   RefToEidVisitor::RefToEid _refSet;
   AttributeCoOccurrence::CoOccurrenceHash& _coOccurrence;
 

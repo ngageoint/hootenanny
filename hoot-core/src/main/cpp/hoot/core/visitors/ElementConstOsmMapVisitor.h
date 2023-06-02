@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCONSTOSMMAPVISITOR_H
 #define ELEMENTCONSTOSMMAPVISITOR_H
@@ -38,20 +38,15 @@ namespace hoot
 /**
  * Base class to ease ConstOsmMapConsumer usage.
  */
-class ElementConstOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class ElementConstOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "ElementConstOsmMapVisitor"; }
 
-  ElementConstOsmMapVisitor() : _map(nullptr) { }
+  ElementConstOsmMapVisitor() = default;
   virtual ~ElementConstOsmMapVisitor() = default;
 
-  void setOsmMap(const OsmMap* map) override { _map = map; }
-
-protected:
-
-  const OsmMap* _map;
 };
 
 }

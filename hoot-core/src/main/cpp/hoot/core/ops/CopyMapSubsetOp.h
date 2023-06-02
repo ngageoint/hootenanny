@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef COPYMAPSUBSETOP_H
 #define COPYMAPSUBSETOP_H
@@ -41,7 +41,7 @@ namespace hoot
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
  */
-class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
+class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumerBase,
   public ElementCriterionConsumer, public Configurable
 {
 public:
@@ -97,11 +97,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _from = map->shared_from_this(); }
-
-  /**
    * @see ElementCriterionConsumer
    */
   void addCriterion(const ElementCriterionPtr& crit) override;
@@ -127,7 +122,6 @@ public:
 private:
 
   std::set<ElementId> _eids;
-  ConstOsmMapPtr _from;
   // determines whether child elements are copied (way nodes and relation members)
   bool _copyChildren;
   std::set<ElementId> _eidsCopied;

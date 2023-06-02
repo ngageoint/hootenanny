@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 #include "WayNodeCriterion.h"
 
@@ -36,11 +36,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayNodeCriterion)
-
-WayNodeCriterion::WayNodeCriterion(ConstOsmMapPtr map)
-  : _map(map)
-{
-}
 
 bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {

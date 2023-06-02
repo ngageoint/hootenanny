@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "RemoveRef2Visitor.h"
 
@@ -161,7 +161,7 @@ bool RemoveRef2Visitor::_hasRef2Tag(ElementPtr e) const
 
 void RemoveRef2Visitor::setOsmMap(OsmMap* map)
 {
-  _map = map;
+  OsmMapConsumerBase::setOsmMap(map);
   // traverse the map and create a REF1 to ElementId map.
   Ref1ToEidVisitor v;
   _map->visitRo(v);

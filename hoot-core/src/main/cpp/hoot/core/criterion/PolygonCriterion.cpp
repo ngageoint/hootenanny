@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "PolygonCriterion.h"
@@ -38,7 +38,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
 PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map)
-  : _map(map)
+  : ConstOsmMapConsumerBase(map)
 {
   // Set this to allow any on poly child member to satisfy the crit.
   _relationCrit.setAllowMixedChildren(true);
@@ -47,7 +47,7 @@ PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map)
 
 void PolygonCriterion::setOsmMap(const OsmMap* map)
 {
-  _map = map->shared_from_this();
+  ConstOsmMapConsumerBase::setOsmMap(map);
   _relationCrit.setOsmMap(map);
 }
 

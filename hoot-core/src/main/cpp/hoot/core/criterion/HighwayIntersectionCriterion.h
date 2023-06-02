@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAYINTERSECTIONCRITERION_H
 #define HIGHWAYINTERSECTIONCRITERION_H
@@ -41,30 +41,25 @@ namespace hoot
  *
  * This class assumes that IntersectionSplitter was applied to the map before being called.
  */
-class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "HighwayIntersectionCriterion"; }
 
   HighwayIntersectionCriterion() = default;
-  explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
+  explicit HighwayIntersectionCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~HighwayIntersectionCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<HighwayIntersectionCriterion>(_map); }
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  void setOsmMap(const OsmMap* map) override;
-
   QString getDescription() const override { return "Identifies highway intersections"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }
