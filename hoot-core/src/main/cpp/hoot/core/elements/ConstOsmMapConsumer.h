@@ -57,7 +57,7 @@ public:
   ConstOsmMapConsumerBase(const ConstOsmMapPtr& map) : _map(map) { }
   ~ConstOsmMapConsumerBase() override = default;
 
-  virtual void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
 protected:
   ConstOsmMapPtr _map;

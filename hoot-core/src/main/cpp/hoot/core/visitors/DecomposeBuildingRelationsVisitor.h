@@ -72,7 +72,7 @@ private:
 
   std::vector<long> _ids;
 
-  void _decomposeBuilding(const std::shared_ptr<Relation>& r);
+  void _decomposeBuilding(const std::shared_ptr<Relation>& r) const;
 };
 
 }
