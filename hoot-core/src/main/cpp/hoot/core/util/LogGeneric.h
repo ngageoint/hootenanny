@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef LOGGENERIC_H
 #define LOGGENERIC_H
@@ -37,6 +37,12 @@
     ss_ << message; \
     hoot::Log::getInstance().log((level), ss_.str(), __FILE__, __PRETTY_FUNCTION__, __LINE__); \
   }}
+
+#define LOG(message) {\
+    std::stringstream ss_; \
+    ss_ << message; \
+    hoot::Log::getInstance().log(ss_.str()); \
+  }
 
 #define LOG_TRACE(str) { LOG_LEVEL(hoot::Log::Trace, str) }
 #define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }
