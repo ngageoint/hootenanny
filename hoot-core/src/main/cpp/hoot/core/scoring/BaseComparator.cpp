@@ -92,7 +92,10 @@ double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& ima
     image1Sum += image1Data[i];
     image2Sum += image2Data[i];
   }
-  return errorSum / (image1Sum + image2Sum);
+  if (image1Sum + image2Sum > 0.0f)
+    return errorSum / (image1Sum + image2Sum);
+  else
+    return 1.0f;
 }
 
 void BaseComparator::_calculateRingColor(double v, double, QRgb& c) const
@@ -172,7 +175,7 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
         }
       }
     }
-  }
+ }
 
   QImage qImage(_width, _height, QImage::Format_ARGB32);
   QRgb rgb = 0;

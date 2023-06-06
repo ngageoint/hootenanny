@@ -919,6 +919,15 @@ a feature contains more than one tag key from this list, only one of the values 
 this list is empty, no circular error will be parsed from input features and a the value defined by
 `circular.error.default.value` will be used for all features.
 
+=== compare.include.all.elements
+
+* Data Type: bool
+* Default Value: `false`
+
+The `hoot compare` command saster scoring options use the `HighwayCriterion` to filter elements to
+render for comparison. Setting this option to `true` will not filter any elements, all elements will
+be rendered and the final render will be compared. Good for comparing building rasters.
+
 === config.options.file
 
 * Data Type: string

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RASTERCOMPARATOR_H
@@ -60,6 +60,7 @@ private:
 
   cv::Mat _render1, _render2;
   Meters _wayLengthSum;
+  bool _ignoreFilter;
 
   void _dumpImage(cv::Mat& image) const;
   void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& result) const;

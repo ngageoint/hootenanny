@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "RasterComparator.h"
@@ -79,7 +79,9 @@ private:
 };
 
 RasterComparator::RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
-  : BaseComparator(map1, map2)
+  : BaseComparator(map1, map2),
+    _wayLengthSum(0.0),
+    _ignoreFilter(ConfigOptions().getCompareIncludeAllElements())
 {
 }
 
@@ -158,9 +160,14 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
   QMatrix m = GeometryPainter::createMatrix(pt.viewport(), _projectedBounds);
 
   PaintVisitor pv(map, pt, m);
-  HighwayCriterion crit(map);
-  FilteredVisitor v(crit, pv);
-  map->visitRo(v);
+  if (!_ignoreFilter)
+  {
+    HighwayCriterion crit(map);
+    FilteredVisitor v(crit, pv);
+    map->visitRo(v);
+  }
+  else
+    map->visitRo(pv);
 
   cv::Mat in(cvSize(_width, _height), CV_32FC1);
   image = cv::Mat(cvSize(_width, _height), CV_32FC1);

@@ -149,8 +149,7 @@ private:
   int _gic;
   int _gim;
 
-  void _compareMaps(const QString& in1, const QString& in2, const QString& out,
-                    const ElementCriterionPtr& filteringCrit)
+  void _compareMaps(const QString& in1, const QString& in2, const QString& out, const ElementCriterionPtr& filteringCrit)
   {
     QString msg = "Comparing maps ..." + FileUtils::toLogFormat(in1, 25);
     if (!in2.isEmpty())
@@ -205,8 +204,8 @@ private:
     {
       const int overall = (_aim + _gim + _rasterScore) / numScores;
       const int overallConf = (_aic + _gic) / numScores;
-      cout << "Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf
-           << " to " << overall + overallConf << ")" << endl;
+      LOG("Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf
+           << " to " << overall + overallConf << ")");
     }
     else  // This actually can't happen due to an earlier check, but sonar still complains about it.
       throw IllegalArgumentException("No scoring method selected.");
@@ -274,8 +273,8 @@ private:
       _aic /= 2;
       _aim /= 2;
     }
-    cout << "Attribute Score: " << _aim << " +/-" << _aic << " (" << _aim - _aic << " to "
-         << _aim + _aic << ")" << endl;
+    LOG("Attribute Score: " << _aim << " +/-" << _aic << " (" << _aim - _aic << " to "
+        << _aim + _aic << ")");
   }
 
   void _calculateRasterScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
@@ -287,12 +286,12 @@ private:
       double rMean2 = 0.0;
       MapCompareUtils::getRasterComparisonRawScores(map2, outMap, rMean2);
       LOG_STATUS(""); // Clear out the line after the progress logging with this.
-      cout << "Raster Score 1: " << MapCompareUtils::convertRawScoreToFinalScore(rMean) << endl;
-      cout << "Raster Score 2: " << MapCompareUtils::convertRawScoreToFinalScore(rMean2) << endl;
+      LOG("Raster Score 1: " << MapCompareUtils::convertRawScoreToFinalScore(rMean));
+      LOG("Raster Score 2: " << MapCompareUtils::convertRawScoreToFinalScore(rMean2));
       rMean = (rMean + rMean2) / 2.0;
     }
     _rasterScore = MapCompareUtils::convertRawScoreToFinalScore(rMean);
-    cout << "Raster Score: " << _rasterScore << endl;
+    LOG("Raster Score: " << _rasterScore);
   }
 
   void _calculateGraphScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
@@ -307,10 +306,10 @@ private:
       MapCompareUtils::getGraphComparisonRawScores(map2, outMap, gMean2, gConfidence2);
       _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
       _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
-      cout << "Graph Score 1: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")" << endl;
+      LOG("Graph Score 1: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
       _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence2);
       _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean2);
-      cout << "Graph Score 2: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")" << endl;
+      LOG("Graph Score 2: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
 
       gConfidence = (gConfidence + gConfidence2) / 2.0;
       gMean = (gMean + gMean2) / 2.0;
@@ -318,7 +317,7 @@ private:
     _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
     _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
 
-    cout << "Graph Score: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")" << endl;
+    LOG("Graph Score: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
   }
 };
 
