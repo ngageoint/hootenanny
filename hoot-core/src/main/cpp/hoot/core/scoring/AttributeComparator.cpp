@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "AttributeComparator.h"
@@ -149,6 +149,10 @@ double AttributeComparator::compareMaps()
     " attribute comparison iterations.");
 
   OsmSchema::getInstance().setIsACost(oldIsACost);
+
+  //  If the confidence interval is never changed set it to zero
+  if (_ci == -1)
+    _ci = 0.0;
 
   return _mean;
 }

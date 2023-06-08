@@ -128,7 +128,15 @@ public:
     LOG_VARD(criteriaClassNames);
     LOG_VARD(uut);
 
-    _compareMaps(base1, base2, uut, _getCrit(criteriaClassNames));
+    try
+    {
+      _compareMaps(base1, base2, uut, _getCrit(criteriaClassNames));
+    }
+    catch (const HootException& e)
+    {
+      LOG_ERROR("Comparison Error: " << e.getWhat());
+      return -1;
+    }
 
     LOG_STATUS("Maps compared in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
@@ -175,17 +183,13 @@ private:
     }
     OsmMapPtr outMap = _loadMap(out, filteringCrit);
 
-    int numScores = 3;
+    int numScores = 0;
 
-    if (!_disableAttributeScoring)
-      _calculateAttributeScore(map1, map2, outMap, 600);
-    else
-      numScores--;
+    if (!_disableAttributeScoring && _calculateAttributeScore(map1, map2, outMap, 600))
+      numScores++;
 
-    if (!_disableRasterScoring)
-      _calculateRasterScore(map1, map2, outMap);
-    else
-      numScores--;
+    if (!_disableRasterScoring && _calculateRasterScore(map1, map2, outMap))
+      numScores++;
 
     if (!_disableGraphScoring)
     {
@@ -195,10 +199,9 @@ private:
       OsmMapPtr filteredMap2;
       if (map2)
         filteredMap2 = _filterToLinearOnly(map2);
-      _calculateGraphScore(filteredMap1, filteredMap2, outMap);
+      if (_calculateGraphScore(filteredMap1, filteredMap2, outMap))
+        numScores++;
     }
-    else
-      numScores--;
 
     if (numScores > 0)
     {
@@ -207,8 +210,10 @@ private:
       LOG("Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf
            << " to " << overall + overallConf << ")");
     }
-    else  // This actually can't happen due to an earlier check, but sonar still complains about it.
-      throw IllegalArgumentException("No scoring method selected.");
+    else
+    {
+      LOG("Overall: Unable to score data.  Either remove --disable-* options or include -D " << ConfigOptions::getCompareIncludeAllElementsKey() << "=true")
+    }
   }
 
   ElementCriterionPtr _getCrit(const QStringList& names) const
@@ -250,8 +255,11 @@ private:
     return map;
   }
 
-  OsmMapPtr _filterToLinearOnly(const ConstOsmMapPtr& map) const
+  OsmMapPtr _filterToLinearOnly(const OsmMapPtr& map) const
   {
+    //  Include all elements and not just the linear elements
+    if (ConfigOptions().getCompareIncludeAllElements())
+      return map;
     LOG_STATUS("Filtering input map to linear features only...");
     OsmMapPtr filteredMap = std::make_shared<OsmMap>();
     CopyMapSubsetOp op(map, std::make_shared<LinearCriterion>());
@@ -261,63 +269,90 @@ private:
     return filteredMap;
   }
 
-  void _calculateAttributeScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap, const int numIterations)
+  bool _calculateAttributeScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap, const int numIterations)
   {
-    MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, _aim, _aic, numIterations);
-    if (map2 != nullptr)
+    try
     {
-      int aic2, aim2;
-      MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, numIterations);
-      _aic += aic2;
-      _aim += aim2;
-      _aic /= 2;
-      _aim /= 2;
+      MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, _aim, _aic, numIterations);
+      if (map2 != nullptr)
+      {
+        int aic2, aim2;
+        MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, numIterations);
+        _aic += aic2;
+        _aim += aim2;
+        _aic /= 2;
+        _aim /= 2;
+      }
+      LOG("Attribute Score: " << _aim << " +/-" << _aic << " (" << _aim - _aic << " to "
+          << _aim + _aic << ")");
     }
-    LOG("Attribute Score: " << _aim << " +/-" << _aic << " (" << _aim - _aic << " to "
-        << _aim + _aic << ")");
+    catch (const HootException& e)
+    {
+      LOG("Attribute Score: (Error - " << e.what() << ")");
+      return false;
+    }
+    return true;
   }
 
-  void _calculateRasterScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
+  bool _calculateRasterScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
   {
-    double rMean = 0.0;
-    MapCompareUtils::getRasterComparisonRawScores(map1, outMap, rMean);
-    if (map2 != nullptr)
+    try
     {
-      double rMean2 = 0.0;
-      MapCompareUtils::getRasterComparisonRawScores(map2, outMap, rMean2);
-      LOG_STATUS(""); // Clear out the line after the progress logging with this.
-      LOG("Raster Score 1: " << MapCompareUtils::convertRawScoreToFinalScore(rMean));
-      LOG("Raster Score 2: " << MapCompareUtils::convertRawScoreToFinalScore(rMean2));
-      rMean = (rMean + rMean2) / 2.0;
+      double rMean = 0.0;
+      MapCompareUtils::getRasterComparisonRawScores(map1, outMap, rMean);
+      if (map2 != nullptr)
+      {
+        double rMean2 = 0.0;
+        MapCompareUtils::getRasterComparisonRawScores(map2, outMap, rMean2);
+        LOG_STATUS(""); // Clear out the line after the progress logging with this.
+        LOG("Raster Score 1: " << MapCompareUtils::convertRawScoreToFinalScore(rMean));
+        LOG("Raster Score 2: " << MapCompareUtils::convertRawScoreToFinalScore(rMean2));
+        rMean = (rMean + rMean2) / 2.0;
+      }
+      _rasterScore = MapCompareUtils::convertRawScoreToFinalScore(rMean);
+      LOG("Raster Score: " << _rasterScore);
     }
-    _rasterScore = MapCompareUtils::convertRawScoreToFinalScore(rMean);
-    LOG("Raster Score: " << _rasterScore);
+    catch (const HootException& e)
+    {
+      LOG("Raster Score: (Error - " << e.what() << ")");
+      return false;
+    }
+    return true;
   }
 
-  void _calculateGraphScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
+  bool _calculateGraphScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
   {
-    double gMean = 0.0;
-    double gConfidence = 0.0;
-    MapCompareUtils::getGraphComparisonRawScores(map1, outMap, gMean, gConfidence);
-    if (map2 != nullptr)
+    try
     {
-      double gMean2 = 0.0;
-      double gConfidence2 = 0.0;
-      MapCompareUtils::getGraphComparisonRawScores(map2, outMap, gMean2, gConfidence2);
+      double gMean = 0.0;
+      double gConfidence = 0.0;
+      MapCompareUtils::getGraphComparisonRawScores(map1, outMap, gMean, gConfidence);
+      if (map2 != nullptr)
+      {
+        double gMean2 = 0.0;
+        double gConfidence2 = 0.0;
+        MapCompareUtils::getGraphComparisonRawScores(map2, outMap, gMean2, gConfidence2);
+        _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
+        _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
+        LOG("Graph Score 1: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
+        _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence2);
+        _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean2);
+        LOG("Graph Score 2: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
+
+        gConfidence = (gConfidence + gConfidence2) / 2.0;
+        gMean = (gMean + gMean2) / 2.0;
+      }
       _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
       _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
-      LOG("Graph Score 1: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
-      _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence2);
-      _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean2);
-      LOG("Graph Score 2: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
 
-      gConfidence = (gConfidence + gConfidence2) / 2.0;
-      gMean = (gMean + gMean2) / 2.0;
+      LOG("Graph Score: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
     }
-    _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
-    _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
-
-    LOG("Graph Score: " << _gim << " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")");
+    catch (const HootException& e)
+    {
+      LOG("Graph Score: (Error - " << e.what() << ")");
+      return false;
+    }
+    return true;
   }
 };
 
