@@ -200,7 +200,7 @@ describe("Node Export Server", function() {
           schema: 'TDSv70',
           format: 'json'
         }
-        var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
+        var command = server.buildCommand(apiParams, null, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
         expect(command.indexOf('-C test.conf') !== -1).to.equal(true)
       });
       it("Override config does NOT get included if specified for a data source", function(){
@@ -209,7 +209,7 @@ describe("Node Export Server", function() {
           schema: 'TDSv70',
           format: 'json'
         }
-        var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
+        var command = server.buildCommand(apiParams, null, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
         expect(command.indexOf('-C test.conf') !== -1).to.equal(false)
       });
       it("Override config does NOT get included if undefined data source", function(){
@@ -217,7 +217,7 @@ describe("Node Export Server", function() {
           schema: 'TDSv70',
           format: 'json'
         }
-        var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
+        var command = server.buildCommand(apiParams, null, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
         expect(command.indexOf('-C test.conf') !== -1).to.equal(false)
       });
     })
