@@ -65,6 +65,8 @@ public:
 
     for (const auto& way : ways)
       GeometryPainter::drawWay(_pt, _map.get(), way.get(), _m);
+
+    _numAffected = static_cast<long>(ways.size());
   }
 
   QString getDescription() const override { return ""; }
@@ -168,6 +170,9 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
   }
   else
     map->visitRo(pv);
+
+  if (pv.getNumFeaturesAffected() < 1)
+    throw EmptyMapInputException();
 
   cv::Mat in(cvSize(_width, _height), CV_32FC1);
   image = cv::Mat(cvSize(_width, _height), CV_32FC1);
