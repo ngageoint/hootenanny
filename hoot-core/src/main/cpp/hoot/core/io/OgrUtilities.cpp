@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "OgrUtilities.h"
 
@@ -116,18 +116,27 @@ QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly) const
   return formats;
 }
 
-OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly) const
+OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
 {
+  //  Check the already found drivers first
+  auto d = _drivers_found.find(url);
+  if (d != _drivers_found.end())
+    return d->second;
+  //  Iterate all drivers to find the correct one
   for (const auto& driver : _drivers)
   {
     if (((driver._is_ext && url.endsWith(driver._indicator)) ||
         (!driver._is_ext && url.startsWith(driver._indicator))) && (readonly || driver._is_rw))
+    {
+      _drivers_found[url] = driver;
       return driver;
+    }
   }
+  _drivers_found[url] = OgrDriverInfo();
   return OgrDriverInfo();
 }
 
-bool OgrUtilities::isReasonableUrl(const QString& url) const
+bool OgrUtilities::isReasonableUrl(const QString& url)
 {
   QString relative_url = url;
   //  /vsi* files should have the "/vsi*/" portion of the URL removed before checking the file type
@@ -139,7 +148,7 @@ bool OgrUtilities::isReasonableUrl(const QString& url) const
   return getDriverInfo(relative_url, true)._driverName != nullptr;
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) const
+std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
   OgrDriverInfo driverInfo = getDriverInfo(url, false);
@@ -161,7 +170,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) 
   return result;
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly) const
+std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
@@ -199,7 +208,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   return result;
 }
 
-QStringList OgrUtilities::getValidFilesInContainer(const QString& url) const
+QStringList OgrUtilities::getValidFilesInContainer(const QString& url)
 {
   QString path = url;
   QStringList files;

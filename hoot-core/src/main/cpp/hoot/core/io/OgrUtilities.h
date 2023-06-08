@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
@@ -81,14 +81,14 @@ public:
    * Returns true if this is likely a data source OGR can open. This will just do a quick check
    * and doesn't verify that the source exists or is a proper format.
    */
-  bool isReasonableUrl(const QString& url) const;
+  bool isReasonableUrl(const QString& url);
 
   /**
    * @brief createDataSource - Create an OGR datasource from the url to write to
    * @param url - Location of the datasource to create, pathname or API URL
    * @return pointer to the datasource created
    */
-  std::shared_ptr<GDALDataset> createDataSource(const QString& url) const;
+  std::shared_ptr<GDALDataset> createDataSource(const QString& url);
 
   /**
    * @brief openDataSource - Open an OGR datasource from the url
@@ -96,7 +96,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return pointer to the datasource opened
    */
-  std::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly) const;
+  std::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
 
   /**
    * @brief getDriverInfo - Select the GDAL driver to use to open/create the datasource
@@ -104,7 +104,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return OGR driver information based on the URL and read-only flag
    */
-  OgrDriverInfo getDriverInfo(const QString& url, bool readonly) const;
+  OgrDriverInfo getDriverInfo(const QString& url, bool readonly);
 
   /**
    * Returns a collection of supported OGR formats
@@ -122,11 +122,12 @@ public:
    * @param url URL of the container file, may or may not be prefixed by /vsizip/, etc.
    * @return list of valid files or empty list if not a container
    */
-  QStringList getValidFilesInContainer(const QString& url) const;
+  QStringList getValidFilesInContainer(const QString& url);
 
 private:
 
   std::vector<OgrDriverInfo> _drivers;
+  std::map<QString, OgrDriverInfo> _drivers_found;
 
   /** Use getInstance() instead of the constructor */
   OgrUtilities();
