@@ -29,8 +29,7 @@
 #define SHAPEFILEWRITER_H
 
 // hoot
-#include <hoot/core/io/OsmMapWriter.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/OgrMultifileWriter.h>
 
 namespace hoot
 {
@@ -39,59 +38,26 @@ namespace hoot
  * ShapefileWriter writes an OsmMap to Shapefile file format, and is capable of custom handling of
  * columns. It is not capable of using translations. For that, use OgrWriter.
  */
-class ShapefileWriter : public OsmMapWriter, public Configurable
+class ShapefileWriter : public OgrMultifileWriter
 {
 public:
 
   static QString className() { return "ShapefileWriter"; }
 
-  ShapefileWriter();
+  ShapefileWriter() = default;
   ~ShapefileWriter() override = default;
 
-  /**
-   * Set the configuration for this object.
-   */
-  void setConfiguration(const Settings& conf) override;
-
-  bool isSupported(const QString& url) const override { return url.endsWith(".shp", Qt::CaseInsensitive); }
-  void open(const QString& url) override;
-  /**
-   * Will write out up to three files:
-   * path + "Points.shp"
-   * path + "Lines.shp"
-   * path + "Polygons.shp"
-   */
-  void write(const ConstOsmMapPtr& map) override;
   QString supportedFormats() const override { return ".shp"; }
+  bool isSupported(const QString& url) const override { return url.endsWith(".shp", Qt::CaseInsensitive); }
 
-  /**
-   * @deprecated Use open and write instead.
-   */
-  void write(const ConstOsmMapPtr& map, const QString& path);
-  void writeLines(const ConstOsmMapPtr& map, const QString& path);
-  void writePoints(const ConstOsmMapPtr& map, const QString& path);
-  void writePolygons(const ConstOsmMapPtr& map, const QString& path);
+protected:
 
-  QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
+  void _removeMultifile(const QString& path) const override;
+  const char* _getDriverName() const override { return "ESRI Shapefile"; };
+  QString _getFileExtension() const override { return ".shp"; }
 
-  void setColumns(QStringList columns) { _columns = columns; }
-
-private:
-
-  QStringList _columns;
-  bool _includeCircularError;
-  QDir _outputDir;
-  int _circularErrorIndex;
-
-  void _removeShapefile(const QString& path) const;
-
-  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation, OGRLayer* poLayer,
-                             const QStringList& columns, const QStringList& shpColumns) const;
-  void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
-                        const QStringList& columns, const QStringList &shpColumns) const;
 };
 
 }
-
 
 #endif // SHAPEFILEWRITER_H

@@ -565,9 +565,9 @@ bool OgrReader::isSupported(const QString& url) const
 
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
-  LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath));
+  LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath, true));
   LOG_VART(IoUtils::isSupportedOgrFormat(url, true));
-  return OgrUtilities::getInstance().isReasonableUrl(justPath) || IoUtils::isSupportedOgrFormat(url, true);
+  return OgrUtilities::getInstance().isReasonableUrl(justPath, true) || IoUtils::isSupportedOgrFormat(url, true);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)

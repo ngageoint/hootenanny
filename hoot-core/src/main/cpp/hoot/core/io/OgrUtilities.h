@@ -81,7 +81,7 @@ public:
    * Returns true if this is likely a data source OGR can open. This will just do a quick check
    * and doesn't verify that the source exists or is a proper format.
    */
-  bool isReasonableUrl(const QString& url);
+  bool isReasonableUrl(const QString& url, bool isRead);
 
   /**
    * @brief createDataSource - Create an OGR datasource from the url to write to

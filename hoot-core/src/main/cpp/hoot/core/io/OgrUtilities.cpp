@@ -136,7 +136,7 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
   return OgrDriverInfo();
 }
 
-bool OgrUtilities::isReasonableUrl(const QString& url)
+bool OgrUtilities::isReasonableUrl(const QString& url, bool isRead)
 {
   QString relative_url = url;
   //  /vsi* files should have the "/vsi*/" portion of the URL removed before checking the file type
@@ -145,7 +145,7 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
   if (relative_url.endsWith("/"))
     relative_url = relative_url.left(relative_url.size() - 1);
   //  Check if there is a valid driver for this file type
-  return getDriverInfo(relative_url, true)._driverName != nullptr;
+  return getDriverInfo(relative_url, isRead)._driverName != nullptr;
 }
 
 std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
@@ -251,7 +251,7 @@ QStringList OgrUtilities::getValidFilesInContainer(const QString& url)
     {
       //  Check if the file found is a reasonable filename and store it
       QString file = path + "/" + file_list[i];
-      if (isReasonableUrl(file))
+      if (isReasonableUrl(file, true))
         files.append(file);
     }
     //  Destroy the GDAL memory buffer
