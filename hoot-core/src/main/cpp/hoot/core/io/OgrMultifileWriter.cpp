@@ -40,7 +40,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
@@ -94,8 +93,8 @@ OgrMultifileWriter::OgrMultifileWriter()
 
 QStringList OgrMultifileWriter::getColumns(ConstOsmMapPtr map, ElementType type) const
 {
-  if (!_columns.empty())
-    return _columns;
+  if (!_baseColumns.empty())
+    return _baseColumns;
   else
   {
     QStringList result;
@@ -132,59 +131,101 @@ void OgrMultifileWriter::setConfiguration(const Settings& conf)
 
 void OgrMultifileWriter::write(const ConstOsmMapPtr& map)
 {
-  writeLines(map, _outputDir.absoluteFilePath("Lines" + _getFileExtension()));
-  writePoints(map, _outputDir.absoluteFilePath("Points" + _getFileExtension()));
-  writePolygons(map, _outputDir.absoluteFilePath("Polygons" + _getFileExtension()));
+  QString ext = _getFileExtension();
+  writeLines(map, _outputDir.absoluteFilePath("Lines" + ext));
+  writePoints(map, _outputDir.absoluteFilePath("Points" + ext));
+  writePolygons(map, _outputDir.absoluteFilePath("Polygons" + ext));
 }
 
-void OgrMultifileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
+void OgrMultifileWriter::write(const ConstOsmMapPtr& map, const QString& path)
+{
+  QString ext = _getFileExtension();
+   QString tempPath = path;
+   if (tempPath.endsWith(ext, Qt::CaseInsensitive))
+     tempPath.remove(tempPath.size() - 4, tempPath.size());
+   writeLines(map, tempPath + "Lines" + ext);
+   writePoints(map, tempPath + "Points" + ext);
+   writePolygons(map, tempPath + "Polygons" + ext);
+}
+
+void OgrMultifileWriter::_setupDataset(const ConstOsmMapPtr& map, const QString& path, OGRwkbGeometryType geometry_type, ElementType element_type)
 {
   GDALAllRegister();
 
   _removeMultifile(path);
 
-  const char* pszDriverName = "ESRI Shapefile";
-  GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if (poDriver == nullptr)
+  const char* pszDriverName = _getDriverName();
+  _driver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
+  if (_driver == nullptr)
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
 
-  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
-  if (poDS == nullptr)
+  _dataset = _driver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
+  if (_dataset == nullptr)
     throw HootException(QString("Data source creation failed. %1").arg(path));
 
-  OGRLayer* poLayer;
-
-  OgrOptions options;
-  options["ENCODING"] = "UTF-8";
-
+  OgrOptions options = _getOptions();
   QString layerName;
   layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toLatin1(),
-                              map->getProjection().get(), wkbLineString,
+  _layer = _dataset->CreateLayer(layerName.toLatin1(),
+                              map->getProjection().get(), geometry_type,
                               options.getCrypticOptions());
-  if (poLayer == nullptr)
+  if (_layer == nullptr)
     throw HootException(QString("Layer creation failed. %1").arg(path));
 
-  QStringList shpColumns;
-  QStringList columns = getColumns(map, ElementType::Way);
+  _usedColumns = getColumns(map, element_type);
 
-  for (int i = 0; i < columns.size(); i++)
+  for (int i = 0; i < _usedColumns.size(); i++)
   {
-    OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
+    OGRFieldDefn oField(_usedColumns[i].toLatin1(), OFTString);
     oField.SetWidth(64);
-    if (poLayer->CreateField(&oField) != OGRERR_NONE)
-      throw HootException(QString("Error creating field (%1).").arg(columns[i]));
+    if (_layer->CreateField(&oField) != OGRERR_NONE)
+      throw HootException(QString("Error creating field (%1).").arg(_usedColumns[i]));
 
-    shpColumns.append(poLayer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
+    _ogrColumns.append(_layer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
   }
 
   if (_includeCircularError)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if (poLayer->CreateField(&oField) != OGRERR_NONE)
+    if (_layer->CreateField(&oField) != OGRERR_NONE)
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
-    _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
+    _circularErrorIndex = _layer->GetLayerDefn()->GetFieldCount() - 1;
   }
+}
+
+OGRFeature* OgrMultifileWriter::_createFeature(const Tags& tags, double circular_error) const
+{
+  OGRFeature* poFeature = OGRFeature::CreateFeature(_layer->GetLayerDefn());
+  // set all the column values.
+  for (int i = 0; i < _usedColumns.size(); i++)
+  {
+    if (tags.contains(_usedColumns[i]))
+    {
+      QByteArray c = _ogrColumns[i].toLatin1();
+      QByteArray v = tags[_usedColumns[i]].toUtf8();
+      poFeature->SetField(c.constData(), v.constData());
+    }
+  }
+  //  Include circular error if requested
+  if (_includeCircularError)
+    poFeature->SetField(_circularErrorIndex, circular_error);
+  //  Return the result
+  return poFeature;
+}
+
+void OgrMultifileWriter::_cleanupDataset()
+{
+  GDALClose(_dataset);
+  _driver = nullptr;
+  _dataset = nullptr;
+  _layer = nullptr;
+  _usedColumns.clear();
+  _ogrColumns.clear();
+}
+
+void OgrMultifileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
+{
+  _setupDataset(map, path, wkbLineString, ElementType::Way);
 
   const WayMap& ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -193,90 +234,41 @@ void OgrMultifileWriter::writeLines(const ConstOsmMapPtr& map, const QString& pa
 
     if (AreaCriterion().isSatisfied(way) == false)
     {
-      OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
-      // set all the column values.
-      for (int i = 0; i < columns.size(); i++)
-      {
-        if (way->getTags().contains(columns[i]))
-        {
-          QByteArray c = shpColumns[i].toLatin1();
-          QByteArray v = way->getTags()[columns[i]].toUtf8();
-          poFeature->SetField(c.constData(), v.constData());
-        }
-      }
-
-      if (_includeCircularError)
-        poFeature->SetField(_circularErrorIndex, way->getCircularError());
+      OGRFeature* poFeature = _createFeature(way->getTags(), way->getCircularError());
 
       // convert the geometry.
       std::string wkt = ElementToGeometryConverter(map).convertToLineString(way)->toString();
       const char* t = wkt.data();
       OGRGeometry* geom;
-      if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
-        throw HootException(QString("Error parsing WKT (%1)").arg(QString::fromStdString(wkt)));
+
+      if (OGRGeometryFactory::createFromWkt(&t, _layer->GetSpatialRef(), &geom) != OGRERR_NONE)
+      {
+        LOG_ERROR("Error parsing WKT (" << wkt << ")");
+        OGRFeature::DestroyFeature(poFeature);
+        return;
+      }
 
       if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
-        throw HootException(QString("Error setting geometry"));
+      {
+        LOG_ERROR("Error setting geometry " << way->getElementId());
+        OGRFeature::DestroyFeature(poFeature);
+        return;
+      }
 
-      if (poLayer->CreateFeature(poFeature) != OGRERR_NONE)
-        throw HootException(QString("Error creating feature"));
+      if (_layer->CreateFeature(poFeature) != OGRERR_NONE)
+      {
+        LOG_ERROR("Error creating feature " << way->getElementId());
+      }
 
       OGRFeature::DestroyFeature(poFeature);
     }
   }
-
-  GDALClose(poDS);
+  _cleanupDataset();
 }
 
 void OgrMultifileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path)
 {
-  GDALAllRegister();
-
-  _removeMultifile(path);
-
-  const char* pszDriverName = "ESRI Shapefile";
-  GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if (poDriver == nullptr)
-    throw HootException(QString("%1 driver not available.").arg(pszDriverName));
-
-  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
-  if (poDS == nullptr)
-    throw HootException(QString("Data source creation failed. %1").arg(path));
-
-  OgrOptions options;
-  options["ENCODING"] = "UTF-8";
-
-  OGRLayer* poLayer;
-
-  QString layerName;
-  layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toLatin1(), map->getProjection().get(),
-                              wkbPoint, options.getCrypticOptions());
-  if (poLayer == nullptr)
-    throw HootException(QString("Layer creation failed. %1").arg(path));
-
-  QStringList shpColumns;
-  QStringList columns = getColumns(map, ElementType::Node);
-
-  for (int i = 0; i < columns.size(); i++)
-  {
-    OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
-
-    oField.SetWidth(64);
-
-    if (poLayer->CreateField(&oField) != OGRERR_NONE)
-      throw HootException(QString("Error creating field (%1).").arg(columns[i]));
-
-    shpColumns.append(poLayer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
-  }
-
-  if (_includeCircularError)
-  {
-    OGRFieldDefn oField("error_circ", OFTReal);
-    if (poLayer->CreateField(&oField) != OGRERR_NONE)
-      throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
-    _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
-  }
+  _setupDataset(map, path, wkbPoint, ElementType::Node);
 
   const NodeMap& nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
@@ -285,84 +277,33 @@ void OgrMultifileWriter::writePoints(const ConstOsmMapPtr& map, const QString& p
 
     if (node->getTags().getNonDebugCount() > 0)
     {
-      OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
-      // set all the column values.
-      for (int i = 0; i < columns.size(); i++)
-      {
-        if (node->getTags().contains(columns[i]))
-        {
-          QByteArray c = shpColumns[i].toLatin1();
-          QByteArray v = node->getTags()[columns[i]].toUtf8();
-          poFeature->SetField(c.constData(), v.constData());
-        }
-      }
-      if (_includeCircularError)
-        poFeature->SetField(_circularErrorIndex, node->getCircularError());
+      OGRFeature* poFeature = _createFeature(node->getTags(), node->getCircularError());
 
       // convert the geometry.
       std::shared_ptr<OGRGeometry> geom = std::make_shared<OGRPoint>(node->getX(), node->getY());
 
       if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
-        throw HootException(QString("Error setting geometry"));
+      {
+        LOG_ERROR("Error setting geometry: " << node->getElementId());
+        OGRFeature::DestroyFeature(poFeature);
+        return;
+      }
 
-      if (poLayer->CreateFeature(poFeature) != OGRERR_NONE)
-        throw HootException(QString("Error creating feature"));
+      if (_layer->CreateFeature(poFeature) != OGRERR_NONE)
+      {
+        LOG_ERROR("Error creating feature: " << node->getElementId());
+      }
 
       OGRFeature::DestroyFeature(poFeature);
     }
   }
 
-  GDALClose(poDS);
+  _cleanupDataset();
 }
 
 void OgrMultifileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& path)
 {
-  GDALAllRegister();
-
-  _removeMultifile(path);
-
-  const char* pszDriverName = "ESRI Shapefile";
-  GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if (poDriver == nullptr)
-    throw HootException(QString("%1 driver not available.").arg(pszDriverName));
-
-  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
-  if (poDS == nullptr)
-    throw HootException(QString("Data source creation failed. %1").arg(path));
-
-  OgrOptions options;
-  options["ENCODING"] = "UTF-8";
-
-  OGRLayer *poLayer;
-
-  QString layerName;
-  layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toLatin1(),
-                              map->getProjection().get(), wkbMultiPolygon,
-                              options.getCrypticOptions());
-  if (poLayer == nullptr)
-    throw HootException(QString("Layer creation failed. %1").arg(path));
-
-  QStringList shpColumns;
-  QStringList columns = getColumns(map, ElementType::Unknown);
-
-  for (int i = 0; i < columns.size(); i++)
-  {
-    OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
-    oField.SetWidth(64);
-    if (poLayer->CreateField(&oField) != OGRERR_NONE)
-      throw HootException(QString("Error creating field (%1).").arg(columns[i]));
-
-    shpColumns.append(poLayer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
-  }
-
-  if (_includeCircularError)
-  {
-    OGRFieldDefn oField("error_circ", OFTReal);
-    if (poLayer->CreateField(&oField) != OGRERR_NONE)
-      throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
-    _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
-  }
+  _setupDataset(map, path, _getPolygonGeometryType(), ElementType::Unknown);
 
   const WayMap& ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -370,7 +311,16 @@ void OgrMultifileWriter::writePolygons(const ConstOsmMapPtr& map, const QString&
     WayPtr way = it->second;
 
     if (AreaCriterion().isSatisfied(way))
-      _writeWayPolygon(map, way, poLayer, columns, shpColumns);
+      _writeWayPolygon(map, way);
+  }
+
+  //  For polygon only file types a multipolygon file needs to be written
+  if (_getPolygonGeometryType() == OGRwkbGeometryType::wkbPolygon)
+  {
+    _cleanupDataset();
+    QString multipolyPath = path;
+    multipolyPath.replace("Polygons" + _getFileExtension(), "MultiPolygons" + _getFileExtension());
+    _setupDataset(map, multipolyPath, OGRwkbGeometryType::wkbMultiPolygon, ElementType::Unknown);
   }
 
   const RelationMap& relations = map->getRelations();
@@ -379,86 +329,86 @@ void OgrMultifileWriter::writePolygons(const ConstOsmMapPtr& map, const QString&
     RelationPtr relation = it->second;
 
     if (relation->isMultiPolygon())
-      _writeRelationPolygon(map, relation, poLayer, columns, shpColumns);
+      _writeRelationPolygon(map, relation);
   }
 
-  GDALClose(poDS);
+  _cleanupDataset();
 }
 
-void OgrMultifileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation,
-                                            OGRLayer* poLayer, const QStringList& columns,
-                                            const QStringList& shpColumns) const
+void OgrMultifileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation) const
 {
-  OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
-  // set all the column values.
-  for (int i = 0; i < columns.size(); i++)
-  {
-    if (relation->getTags().contains(columns[i]))
-    {
-      QByteArray c = shpColumns[i].toLatin1();
-      QByteArray v = relation->getTags()[columns[i]].toUtf8();
-      poFeature->SetField(c.constData(), v.constData());
-    }
-  }
-
-  if (_includeCircularError)
-    poFeature->SetField(_circularErrorIndex, relation->getCircularError());
+  OGRFeature* poFeature = _createFeature(relation->getTags(), relation->getCircularError());
 
   // convert the geometry.
   const ConstRelationPtr& r = relation;
   std::shared_ptr<geos::geom::Geometry> geometry = ElementToGeometryConverter(map).convertToGeometry(r);
   if (!geometry.get() || geometry->isEmpty())
-    throw HootException(QString("Error converting geometry"));
+  {
+    LOG_WARN("Error converting geometry: " << r->getElementId());
+    OGRFeature::DestroyFeature(poFeature);
+    return;
+  }
 
   std::string wkt = geometry->toString();
   const char* t = wkt.data();
   OGRGeometry* geom;
-  if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
-    throw HootException(QString("Error parsing WKT (%1)").arg(QString::fromStdString(wkt)));
+
+  if (OGRGeometryFactory::createFromWkt(&t, _layer->GetSpatialRef(), &geom) != OGRERR_NONE)
+  {
+    LOG_WARN("Error parsing WKT (" << wkt << ")");
+    OGRFeature::DestroyFeature(poFeature);
+    return;
+  }
 
   if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
-    throw HootException(QString("Error setting geometry"));
+  {
+    LOG_ERROR("Error setting geometry " << r->getElementId());
+    OGRFeature::DestroyFeature(poFeature);
+    return;
+  }
 
-  if (poLayer->CreateFeature(poFeature) != OGRERR_NONE)
-    throw HootException(QString("Error creating feature"));
+  if (_layer->CreateFeature(poFeature) != OGRERR_NONE)
+  {
+    LOG_ERROR("Error creating feature " << r->getElementId());
+  }
 
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void OgrMultifileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer* poLayer,
-                                       const QStringList& columns, const QStringList &shpColumns) const
+void OgrMultifileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way) const
 {
-  OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
-  // set all the column values.
-  for (int i = 0; i < columns.size(); i++)
-  {
-    if (way->getTags().contains(columns[i]))
-    {
-      QByteArray c = shpColumns[i].toLatin1();
-      QByteArray v = way->getTags()[columns[i]].toUtf8();
-      poFeature->SetField(c.constData(), v.constData());
-    }
-  }
-
-  if (_includeCircularError)
-    poFeature->SetField(_circularErrorIndex, way->getCircularError());
+  OGRFeature* poFeature = _createFeature(way->getTags(), way->getCircularError());
 
   // convert the geometry.
   std::shared_ptr<Geometry> p = ElementToGeometryConverter(map).convertToGeometry(way);
   if (p->getGeometryTypeId() != GEOS_POLYGON)
-    throw InternalErrorException("Expected a polygon geometry, but got a: " + toString(p->getGeometryType()));
+  {
+    LOG_WARN("Geometry mismatch, expected polygon but created " << toString(p->getGeometryType()));
+    OGRFeature::DestroyFeature(poFeature);
+    return;
+  }
 
   std::string wkt = p->toString();
   const char* t = wkt.data();
   OGRGeometry* geom;
-  if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
-    throw HootException(QString("Error parsing WKT (%1)").arg(QString::fromStdString(wkt)));
+  if (OGRGeometryFactory::createFromWkt(&t, _layer->GetSpatialRef(), &geom) != OGRERR_NONE)
+  {
+    LOG_WARN("Error parsing WKT (" << wkt << ")");
+    OGRFeature::DestroyFeature(poFeature);
+    return;
+  }
 
   if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
-    throw HootException(QString("Error setting geometry"));
+  {
+    LOG_WARN("Error setting geometry " << way->getElementId());
+    OGRFeature::DestroyFeature(poFeature);
+    return;
+  }
 
-  if (poLayer->CreateFeature(poFeature) != OGRERR_NONE)
-    throw HootException(QString("Error creating feature"));
+  if (_layer->CreateFeature(poFeature) != OGRERR_NONE)
+  {
+    LOG_WARN("Error creating feature " << way->getElementId());
+  }
 
   OGRFeature::DestroyFeature(poFeature);
 }

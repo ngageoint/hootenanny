@@ -29,6 +29,7 @@
 #define OGR_MULTIFILE_WRITER_H
 
 // hoot
+#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -59,10 +60,11 @@ public:
    * path + "Polygons.<ext>"
    */
   void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
   QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
 
-  void setColumns(QStringList columns) { _columns = columns; }
+  void setColumns(QStringList columns) { _baseColumns = columns; }
 
   void writeLines(const ConstOsmMapPtr& map, const QString& path);
   void writePoints(const ConstOsmMapPtr& map, const QString& path);
@@ -70,19 +72,28 @@ public:
 
 protected:
 
-  QStringList _columns;
+  QStringList _baseColumns;
+  QStringList _usedColumns;
+  QStringList _ogrColumns;
   bool _includeCircularError;
   QDir _outputDir;
   int _circularErrorIndex;
+  GDALDriver* _driver;
+  GDALDataset* _dataset;
+  OGRLayer* _layer;
 
   virtual void _removeMultifile(const QString& path) const = 0;
   virtual const char* _getDriverName() const = 0;
   virtual QString _getFileExtension() const = 0;
+  virtual OgrOptions _getOptions() const = 0;
+  virtual OGRwkbGeometryType _getPolygonGeometryType() const = 0;
 
-  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation, OGRLayer* poLayer,
-                             const QStringList& columns, const QStringList& shpColumns) const;
-  void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
-                        const QStringList& columns, const QStringList &shpColumns) const;
+  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation) const;
+  void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way) const;
+
+  void _setupDataset(const ConstOsmMapPtr& map, const QString& path, OGRwkbGeometryType geometry_type, ElementType element_type);
+  OGRFeature* _createFeature(const Tags& tags, double circular_error) const;
+  void _cleanupDataset();
 };
 
 }

@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
 
-#ifndef SHAPEFILEWRITER_H
-#define SHAPEFILEWRITER_H
+#ifndef FLAT_GEOBUF_WRITER_H
+#define FLAT_GEOBUF_WRITER_H
 
 // hoot
 #include <hoot/core/io/OgrMultifileWriter.h>
@@ -35,31 +35,31 @@ namespace hoot
 {
 
 /**
- * ShapefileWriter writes an OsmMap to Shapefile file format, and is capable of custom handling of
+ * FlatGeobufWriter writes an OsmMap to FlatGeobuf file format, and is capable of custom handling of
  * columns. It is not capable of using translations. For that, use OgrWriter.
  */
-class ShapefileWriter : public OgrMultifileWriter
+class FlatGeobufWriter : public OgrMultifileWriter
 {
 public:
 
-  static QString className() { return "ShapefileWriter"; }
+  static QString className() { return "FlatGeobufWriter"; }
 
-  ShapefileWriter() = default;
-  ~ShapefileWriter() override = default;
+  FlatGeobufWriter() = default;
+  ~FlatGeobufWriter() override = default;
 
-  QString supportedFormats() const override { return ".shp"; }
-  bool isSupported(const QString& url) const override { return url.endsWith(".shp", Qt::CaseInsensitive); }
+  QString supportedFormats() const override { return ".fgb"; }
+  bool isSupported(const QString& url) const override { return url.endsWith(".fgb", Qt::CaseInsensitive); }
 
 protected:
 
   void _removeMultifile(const QString& path) const override;
-  const char* _getDriverName() const override { return "ESRI Shapefile"; };
-  QString _getFileExtension() const override { return ".shp"; }
+  const char* _getDriverName() const override { return "FlatGeobuf"; };
+  QString _getFileExtension() const override { return ".fgb"; }
   OgrOptions _getOptions() const override;
-  OGRwkbGeometryType _getPolygonGeometryType() const override { return OGRwkbGeometryType::wkbMultiPolygon; }
+  OGRwkbGeometryType _getPolygonGeometryType() const override { return OGRwkbGeometryType::wkbPolygon; }
 
 };
 
 }
 
-#endif // SHAPEFILEWRITER_H
+#endif // FLAT_GEOBUF_WRITER_H

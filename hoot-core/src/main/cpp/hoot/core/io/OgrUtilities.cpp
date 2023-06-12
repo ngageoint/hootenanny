@@ -43,6 +43,7 @@ void OgrUtilities::_loadDriverInfo()
   //  Load the extension-based driver info
   //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
   _drivers.emplace_back(".shp",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
+  _drivers.emplace_back(".fgb",      "FlatGeobuf",     true,     false,  GDAL_OF_VECTOR);
   _drivers.emplace_back(".sqlite",   "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".db",       "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".mif",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR);

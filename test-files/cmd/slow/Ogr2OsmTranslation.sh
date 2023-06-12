@@ -8,7 +8,7 @@ HOOT_OPTS="-C Testing.conf -D duplicate.node.remover.distance.threshold=1.0"
 
 echo "Converting osm to shp with cols..."
 hoot convert --warn $HOOT_OPTS -D shape.file.writer.cols="name;poi" test-files/OnePoint.osm $OUT/OnePoint.shp
-hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js $OUT/OnePoint.shp/Points.shp $OUT/OnePointTranslated.osm
+hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js $OUT/OnePointPoints.shp $OUT/OnePointTranslated.osm
 hoot diff $HOOT_OPTS test-output/cmd/slow/Ogr2OsmTranslation/OnePointTranslated.osm test-files/OnePoint.osm
 
 # Make sure we can read all layers from a shapefile

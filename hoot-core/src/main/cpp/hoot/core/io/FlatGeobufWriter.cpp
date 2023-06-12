@@ -22,38 +22,32 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
-#include "ShapefileWriter.h"
+#include "FlatGeobufWriter.h"
 
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, ShapefileWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, FlatGeobufWriter)
 
-void ShapefileWriter::_removeMultifile(const QString& path) const
+void FlatGeobufWriter::_removeMultifile(const QString& path) const
 {
   QFileInfo fi(path);
 
   QString base = fi.absolutePath() + "/" + fi.baseName();
 
-  QFile::remove(base + ".shp");
-  QFile::remove(base + ".SHP");
-  QFile::remove(base + ".dbf");
-  QFile::remove(base + ".DBF");
-  QFile::remove(base + ".shx");
-  QFile::remove(base + ".SHX");
-  QFile::remove(base + ".prj");
-  QFile::remove(base + ".PRJ");
+  QFile::remove(base + ".fgb");
+  QFile::remove(base + ".FGB");
 }
 
-OgrOptions ShapefileWriter::_getOptions() const
+OgrOptions FlatGeobufWriter::_getOptions() const
 {
   OgrOptions options;
-  options["ENCODING"] = "UTF-8";
+  options["SPATIAL_INDEX"] = "YES";
   return options;
 }
 

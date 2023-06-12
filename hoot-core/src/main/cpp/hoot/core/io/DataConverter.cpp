@@ -330,7 +330,7 @@ void DataConverter::_exportToShapeWithCols(const QString& output, const QStringL
   assert(shapeFileWriter.get());
   shapeFileWriter->setColumns(cols);
   shapeFileWriter->open(output);
-  shapeFileWriter->write(map);
+  shapeFileWriter->write(map, output);
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
