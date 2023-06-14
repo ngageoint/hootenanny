@@ -59,7 +59,7 @@ dnc = {
     else
     {
       // Just add tag1
-      dnc.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(dncPreRules.rawSchema));
+      dnc.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(dnc.rawSchema));
     }
 
     // Add the empty Review layers
@@ -1662,7 +1662,7 @@ dnc = {
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
 
-      // Since we are not going to the UI, add the reason for dumping the feature to the list of 
+      // Since we are not going to the UI, add the reason for dumping the feature to the list of
       // tags to help other tools.
       if (! attrs.F_CODE)
       {
