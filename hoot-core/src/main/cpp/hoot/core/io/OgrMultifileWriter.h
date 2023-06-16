@@ -54,10 +54,11 @@ public:
 
   void open(const QString& url) override;
   /**
-   * Will write out up to three files:
+   * Will write out up to four files:
    * path + "Points.<ext>"
    * path + "Lines.<ext>"
    * path + "Polygons.<ext>"
+   * path + "MultiPolygons.<ext>" (for FlatGeobuf format only)
    */
   void write(const ConstOsmMapPtr& map) override;
   void write(const ConstOsmMapPtr& map, const QString& path);

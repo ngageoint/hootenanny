@@ -116,11 +116,8 @@ QStringList OgrMultifileWriter::getColumns(ConstOsmMapPtr map, ElementType type)
 
 void OgrMultifileWriter::open(const QString& url)
 {
-  if (QDir(url).exists() == false)
-  {
-    if (FileUtils::makeDir(url) == false)
+  if (!QDir(url).exists() && !FileUtils::makeDir(url))
       throw HootException("Error creating directory for writing: " + url);
-  }
   _outputDir = QDir(url);
 }
 
@@ -166,9 +163,7 @@ void OgrMultifileWriter::_setupDataset(const ConstOsmMapPtr& map, const QString&
   OgrOptions options = _getOptions();
   QString layerName;
   layerName = QFileInfo(path).baseName();
-  _layer = _dataset->CreateLayer(layerName.toLatin1(),
-                              map->getProjection().get(), geometry_type,
-                              options.getCrypticOptions());
+  _layer = _dataset->CreateLayer(layerName.toLatin1(), map->getProjection().get(), geometry_type, options.getCrypticOptions());
   if (_layer == nullptr)
     throw HootException(QString("Layer creation failed. %1").arg(path));
 
