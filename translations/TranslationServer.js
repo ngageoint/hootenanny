@@ -33,6 +33,10 @@ if (typeof hoot === 'undefined') {
 
     //Tests should set hashseedzero to true for consistent results
     if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
+
+    // This is called in the supported translation files toOsm methods
+    createUuid = hoot.UuidHelper.createUuid;
+
 }
 
 // Setup the lists of schema
@@ -460,7 +464,6 @@ var ogr2osm = function(params) {
         //Get OSM tags for F_CODE
         // var osm = translateToOsm.toosm[params.translation].toOSM({
         //     'FCODE': params.fcode
-        createUuid = hoot.UuidHelper.createUuid;
         var osm = fcodeLookup[params.translation].toOsm({
             'FCODE': params.fcode
         }, '', params.geom || '');
