@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "OgrUtilities.h"
 
@@ -43,6 +43,7 @@ void OgrUtilities::_loadDriverInfo()
   //  Load the extension-based driver info
   //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
   _drivers.emplace_back(".shp",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
+  _drivers.emplace_back(".fgb",      "FlatGeobuf",     true,     false,  GDAL_OF_VECTOR);
   _drivers.emplace_back(".sqlite",   "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".db",       "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".mif",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR);
@@ -116,18 +117,27 @@ QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly) const
   return formats;
 }
 
-OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly) const
+OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
 {
+  //  Check the already found drivers first
+  auto d = _drivers_found.find(url);
+  if (d != _drivers_found.end())
+    return d->second;
+  //  Iterate all drivers to find the correct one
   for (const auto& driver : _drivers)
   {
     if (((driver._is_ext && url.endsWith(driver._indicator)) ||
         (!driver._is_ext && url.startsWith(driver._indicator))) && (readonly || driver._is_rw))
+    {
+      _drivers_found[url] = driver;
       return driver;
+    }
   }
+  _drivers_found[url] = OgrDriverInfo();
   return OgrDriverInfo();
 }
 
-bool OgrUtilities::isReasonableUrl(const QString& url) const
+bool OgrUtilities::isReasonableUrl(const QString& url, bool isRead)
 {
   QString relative_url = url;
   //  /vsi* files should have the "/vsi*/" portion of the URL removed before checking the file type
@@ -136,10 +146,10 @@ bool OgrUtilities::isReasonableUrl(const QString& url) const
   if (relative_url.endsWith("/"))
     relative_url = relative_url.left(relative_url.size() - 1);
   //  Check if there is a valid driver for this file type
-  return getDriverInfo(relative_url, true)._driverName != nullptr;
+  return getDriverInfo(relative_url, isRead)._driverName != nullptr;
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) const
+std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
   OgrDriverInfo driverInfo = getDriverInfo(url, false);
@@ -161,7 +171,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) 
   return result;
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly) const
+std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
@@ -199,7 +209,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   return result;
 }
 
-QStringList OgrUtilities::getValidFilesInContainer(const QString& url) const
+QStringList OgrUtilities::getValidFilesInContainer(const QString& url)
 {
   QString path = url;
   QStringList files;
@@ -242,7 +252,7 @@ QStringList OgrUtilities::getValidFilesInContainer(const QString& url) const
     {
       //  Check if the file found is a reasonable filename and store it
       QString file = path + "/" + file_list[i];
-      if (isReasonableUrl(file))
+      if (isReasonableUrl(file, true))
         files.append(file);
     }
     //  Destroy the GDAL memory buffer

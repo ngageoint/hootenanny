@@ -17,6 +17,7 @@
 * Overpass JSON (.json or http://overpass-api.de/[Overpass]) (memory bound)
 * Overpass XML (http://overpass-api.de/[Overpass])
 * Shapefile (.shp)
+* FlatGeobuf (.fgb)
 * Zip files containing shape files and/or File Geodatabase files (.zip)
 * Any additional OGR supported format not listed here (untested)
 
@@ -34,6 +35,7 @@
 * OpenStreetMap XML changeset (.osc)
 * Overpass JSON (.json) (memory bound)
 * Shapefile (.shp) (memory bound)
+* FlatGeobuf (.fgb)
 * Any additional OGR supported format not listed here (untested; memory bound)
 
 Additional data types can be made supportable via development effort using Hootenanny's pluggable I/O architecture. See 
