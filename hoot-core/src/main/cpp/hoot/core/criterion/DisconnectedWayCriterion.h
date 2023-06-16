@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef DISCONNECTED_WAY_CRITERION_H
 #define DISCONNECTED_WAY_CRITERION_H
@@ -38,14 +38,14 @@ namespace hoot
 /**
  * @brief The DisconnectedWayCriterion class identifies ways that are disconnected from other ways.
  */
-class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "DisconnectedWayCriterion"; }
 
   DisconnectedWayCriterion() = default;
-  DisconnectedWayCriterion(ConstOsmMapPtr map);
+  DisconnectedWayCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~DisconnectedWayCriterion() override = default;
 
   /**
@@ -54,20 +54,12 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<DisconnectedWayCriterion>(_map); }
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   QString getDescription() const override
   { return "Identifies ways that are connected to no other ways"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

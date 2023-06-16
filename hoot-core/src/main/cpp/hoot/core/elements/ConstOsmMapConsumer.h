@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef CONSTOSMMAPCONSUMER_H
 #define CONSTOSMMAPCONSUMER_H
@@ -32,8 +32,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
+/** Polymorphic base class used for collections and casting */
 class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
@@ -47,6 +47,20 @@ public:
   {
     setOsmMap((const OsmMap*)map);
   }
+};
+
+/** Base class that implements ConstOsmMapConsumer used to derive consumer class implementations */
+class ConstOsmMapConsumerBase : public ConstOsmMapConsumer
+{
+public:
+  ConstOsmMapConsumerBase() = default;
+  ConstOsmMapConsumerBase(const ConstOsmMapPtr& map) : _map(map) { }
+  ~ConstOsmMapConsumerBase() override = default;
+
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
+protected:
+  ConstOsmMapPtr _map;
 };
 
 }

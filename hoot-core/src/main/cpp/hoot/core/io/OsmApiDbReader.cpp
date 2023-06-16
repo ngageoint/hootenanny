@@ -75,8 +75,7 @@ void OsmApiDbReader::open(const QString& urlStr)
   _open = true;
 }
 
-void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
-                                               const ElementPtr& element) const
+void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element)
 {
   // If performance here is ever a problem, we should see if these tags can be read out at the same
   // time the element itself is read out.
@@ -109,7 +108,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
       tags << tag;
   }
   if (!tags.empty())
-    element->setTags(ApiDb::unescapeTags(tags.join(", ")));
+    _setTags(element, ApiDb::unescapeTags(tags.join(", ")));
 }
 
 NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)

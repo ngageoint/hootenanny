@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "HighwayCriterion.h"
 
@@ -44,7 +44,7 @@ HighwayCriterion::HighwayCriterion(const bool includeRelations)
 }
 
 HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations)
-  : _map(map),
+  : ConstOsmMapConsumerBase(map),
     _includeRelations(includeRelations)
 {
 }
@@ -63,7 +63,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   bool result = false;
   const Tags& tags = element->getTags();
 
-  Tags::const_iterator it = tags.find("highway");
+  auto it = tags.find("highway");
   const bool containsHighwayTag = it != tags.end() && it.value() != "";
 
   // Is it a legit highway?

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATABLE_CRITERIA_VISITOR_H
 #define CONFLATABLE_CRITERIA_VISITOR_H
@@ -39,7 +39,7 @@ namespace hoot
  * This is primarily useful for debugging when trying to find out whether hoot can conflate or
  * which conflator it will use for a particular feature.
  */
-class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumerBase
 {
 
 public:
@@ -59,11 +59,6 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

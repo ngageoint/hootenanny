@@ -1,0 +1,27 @@
+
+OSM to GPKG...
+
+
+POI Criterion...
+
+
+Check for invalid characters. You should see 3 sets of warnings.
+
+12:46:24.215 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 102) Found an invalid character in string: 'foo '
+12:46:24.215 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 103)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
+12:46:24.216 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 102) Found an invalid character in string: ''
+12:46:24.216 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 103)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
+12:46:24.216 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 102) Found an invalid character in string: '3 '
+12:46:24.216 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 103)   UCS-4 version of the string: [3]{51, 32, 1}
+
+Translation check...
+
+
+Multi-layer GDB to OSM...
+
+
+Multi-layer GPKG to OSM...
+
+
+Multi-layer GDB to OSM single layer only...
+

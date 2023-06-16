@@ -23,7 +23,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 translation: 'MGCP',
                 geometry: 'line'
-            }).length, 59);
+            }).length, 63);
         });
 
         it('should return fcodes for TDSv61 Point', function(){
@@ -64,7 +64,7 @@ describe('TranslationServer', function () {
                 translation: 'MGCP'
             });
 
-            assert.equal(fcodes.length, 196);
+            assert.equal(fcodes.length, 206);
             assert.equal(fcodes[0].geom[0], 'Area');
         });
 

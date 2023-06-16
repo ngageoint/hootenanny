@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_NODE_COPIER_H
 #define WAY_NODE_COPIER_H
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Performs way node copying from one way to another
  */
-class WayNodeCopier : public OsmMapConsumer, public ElementCriterionConsumer, public Configurable
+class WayNodeCopier : public OsmMapConsumerBase, public ElementCriterionConsumer, public Configurable
 {
 public:
 
@@ -56,11 +56,6 @@ public:
   void copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId) const;
 
   /**
-   * @see OsmMapConsumer
-   */
-  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
-
-  /**
    * @see ElementCriterionConsumer
    */
   void addCriterion(const ElementCriterionPtr& e) override;
@@ -72,7 +67,6 @@ public:
 
 private:
 
-  OsmMapPtr _map;
   // optional filtering criterion
   ElementCriterionPtr _crit;
   // allows for some leeway in what's considered a duplicate node; passed into WayLocation; 0.0 to

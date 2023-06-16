@@ -763,6 +763,32 @@
     <list_entry value="22" display_value="22 - Nipa"/>
     <list_entry value="999" display_value="999 - Other"/>
   </chunk>
+  <chunk id="hashcdfcecdffffeacef">
+    <list_entry value="1" display_value="1 - Limits and Information Known"/>
+    <list_entry value="2" display_value="2 - Limits and Information Unknown"/>
+  </chunk>
+  <chunk id="hashcaabcbcafadeff">
+    <list_entry value="5" display_value="5 - Area of No Sovereignty"/>
+    <list_entry value="7" display_value="7 - Demilitarized Zone (DMZ)"/>
+    <list_entry value="8" display_value="8 - Zone of Occupation"/>
+    <list_entry value="9" display_value="9 - Leased Area"/>
+    <list_entry value="10" display_value="10 - Political Entity"/>
+    <list_entry value="11" display_value="11 - Dependent Political Entity"/>
+    <list_entry value="12" display_value="12 - Freely Associated State"/>
+    <list_entry value="13" display_value="13 - Independent Political Entity"/>
+    <list_entry value="14" display_value="14 - Semi-independent Political Entity"/>
+    <list_entry value="15" display_value="15 - Economic Region"/>
+    <list_entry value="16" display_value="16 - Territory"/>
+    <list_entry value="17" display_value="17 - Buffer Zone"/>
+  </chunk>
+  <chunk id="hashdbeefdbabebccdaeecf">
+    <list_entry value="1" display_value="1 - First-order"/>
+    <list_entry value="2" display_value="2 - Second-order"/>
+    <list_entry value="3" display_value="3 - Third-order"/>
+    <list_entry value="4" display_value="4 - Fourth-order"/>
+    <list_entry value="5" display_value="5 - Undifferentiated"/>
+    <list_entry value="999" display_value="999 - Other"/>
+  </chunk>
   <chunk id="hashacbdbddaffad">
     <list_entry value="0" display_value="0 - Unknown"/>
     <list_entry value="1" display_value="1 - Small Arms"/>
@@ -983,6 +1009,27 @@
     <list_entry value="5" display_value="5 - Dyke Gate"/>
     <list_entry value="999" display_value="999 - Other"/>
   </chunk>
+  <chunk id="hashdbedabfcc">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="1" display_value="1 - Land"/>
+    <list_entry value="2" display_value="2 - Snow Field and/or Ice-field"/>
+  </chunk>
+  <chunk id="hashbfecdaeabc">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="1" display_value="1 - Index Contour"/>
+    <list_entry value="2" display_value="2 - Intermediate Contour"/>
+    <list_entry value="3" display_value="3 - Half Auxiliary Contour"/>
+    <list_entry value="5" display_value="5 - Depression Index Contour"/>
+    <list_entry value="6" display_value="6 - Depression Intermediate Contour"/>
+    <list_entry value="8" display_value="8 - Mound Index Contour"/>
+    <list_entry value="9" display_value="9 - Mound Intermediate Contour"/>
+    <list_entry value="14" display_value="14 - Quarter Auxiliary Contour"/>
+    <list_entry value="19" display_value="19 - Intermediate Carrying Contour"/>
+    <list_entry value="20" display_value="20 - Auxiliary Carrying Contour"/>
+    <list_entry value="21" display_value="21 - Index Carrying Contour"/>
+    <list_entry value="22" display_value="22 - Depression Auxiliary Contour"/>
+    <list_entry value="999" display_value="999 - Other"/>
+  </chunk>
   <chunk id="hashffeadfeabbcbebb">
     <list_entry value="0" display_value="0 - Unknown"/>
     <list_entry value="84" display_value="84 - Rock"/>
@@ -994,6 +1041,65 @@
     <list_entry value="1" display_value="1 - Mound"/>
     <list_entry value="2" display_value="2 - Fill"/>
     <list_entry value="3" display_value="3 - Dyke"/>
+  </chunk>
+  <chunk id="hashffafdebecb">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="1" display_value="1 - Definite"/>
+    <list_entry value="2" display_value="2 - Indefinite"/>
+    <list_entry value="3" display_value="3 - In Dispute"/>
+    <list_entry value="4" display_value="4 - No Defined Boundary"/>
+    <list_entry value="999" display_value="999 - Other"/>
+  </chunk>
+  <chunk id="hashefcbcdacefdf">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="7" display_value="7 - Elevation contour"/>
+    <list_entry value="8" display_value="8 - Drainage Limit"/>
+    <list_entry value="10" display_value="10 - Ridgeline"/>
+    <list_entry value="11" display_value="11 - Drainage Line"/>
+    <list_entry value="12" display_value="12 - Left Bank"/>
+    <list_entry value="13" display_value="13 - Right Bank"/>
+    <list_entry value="14" display_value="14 - Shoreline"/>
+    <list_entry value="15" display_value="15 - Lake Transec"/>
+    <list_entry value="16" display_value="16 - Meridian"/>
+    <list_entry value="17" display_value="17 - Median"/>
+    <list_entry value="18" display_value="18 - Parallel"/>
+    <list_entry value="19" display_value="19 - Straight Segmented"/>
+    <list_entry value="20" display_value="20 - Straight"/>
+    <list_entry value="33" display_value="33 - Anthropogeographic"/>
+  </chunk>
+  <chunk id="hashbddefceecfbad">
+    <list_entry value="1" display_value="1 - Generic Administrative Boundary"/>
+    <list_entry value="2" display_value="2 - Provisional Administrative Line"/>
+    <list_entry value="3" display_value="3 - Armistice Line"/>
+    <list_entry value="4" display_value="4 - Line of Control"/>
+    <list_entry value="5" display_value="5 - Demarcation Line"/>
+    <list_entry value="6" display_value="6 - Line of Convenience"/>
+    <list_entry value="7" display_value="7 - Cease Fire Line"/>
+    <list_entry value="8" display_value="8 - Convention Line"/>
+    <list_entry value="9" display_value="9 - Claim Line"/>
+    <list_entry value="10" display_value="10 - Intercolonial Line"/>
+    <list_entry value="11" display_value="11 - Interentity Line"/>
+    <list_entry value="12" display_value="12 - Line of Adjacency"/>
+    <list_entry value="13" display_value="13 - Line of Withdrawal"/>
+    <list_entry value="14" display_value="14 - Military Disengagement Line"/>
+    <list_entry value="15" display_value="15 - Treaty Line"/>
+    <list_entry value="16" display_value="16 - UNCLOS Claim Boundary"/>
+    <list_entry value="17" display_value="17 - Generic International Boundary"/>
+    <list_entry value="999" display_value="999 - Other"/>
+  </chunk>
+  <chunk id="hashdebfbabbbcabad">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="7" display_value="7 - Tribal"/>
+    <list_entry value="16" display_value="16 - City"/>
+    <list_entry value="23" display_value="23 - International"/>
+    <list_entry value="26" display_value="26 - Primary/1st Order"/>
+    <list_entry value="30" display_value="30 - Secondary/2nd Order"/>
+    <list_entry value="31" display_value="31 - Tertiary/3rd Order"/>
+    <list_entry value="32" display_value="32 - Insular"/>
+    <list_entry value="70" display_value="70 - Reserve/Reservation"/>
+    <list_entry value="141" display_value="141 - Forest Preserve"/>
+    <list_entry value="155" display_value="155 - Prohibited Area"/>
+    <list_entry value="999" display_value="999 - Other"/>
   </chunk>
   <chunk id="hashbefcbadceec">
     <list_entry value="0" display_value="0 - Unknown"/>
@@ -1234,6 +1340,19 @@
     <list_entry value="5" display_value="5 - Water-hole"/>
     <list_entry value="999" display_value="999 - Other"/>
   </chunk>
+  <chunk id="hashefeadafbbdb">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="1" display_value="1 - Accurate"/>
+    <list_entry value="2" display_value="2 - Approximate"/>
+  </chunk>
+  <chunk id="hashfbcbeabacdebd">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="1" display_value="1 - Land"/>
+    <list_entry value="2" display_value="2 - Snow Field and/or Ice-field"/>
+    <list_entry value="4" display_value="4 - Vegetation"/>
+    <list_entry value="5" display_value="5 - Inland Water"/>
+    <list_entry value="6" display_value="6 - Tidal Water"/>
+  </chunk>
   <chunk id="hashcdecaaabfbaea">
     <list_entry value="0" display_value="0 - Unknown"/>
     <list_entry value="17" display_value="17 - Non-Directional Radio Beacon (NDB)"/>
@@ -1281,6 +1400,39 @@
     <list_entry value="19" display_value="19 - MALSF"/>
     <list_entry value="20" display_value="20 - MALSR"/>
     <list_entry value="999" display_value="999 - Other"/>
+  </chunk>
+  <chunk id="hashbaeabeceeccb">
+    <list_entry value="0" display_value="0 - Unknown"/>
+    <list_entry value="1" display_value="1 - Astronomic Position"/>
+    <list_entry value="2" display_value="2 - Benchmark"/>
+    <list_entry value="3" display_value="3 - Cadastral Control Point"/>
+    <list_entry value="4" display_value="4 - Camera Station"/>
+    <list_entry value="5" display_value="5 - Geodetic Point"/>
+    <list_entry value="6" display_value="6 - Gravity Point"/>
+    <list_entry value="7" display_value="7 - Magnetic Station"/>
+    <list_entry value="8" display_value="8 - Theodolite Station"/>
+    <list_entry value="9" display_value="9 - Tidal Benchmark"/>
+    <list_entry value="999" display_value="999 - Other"/>
+  </chunk>
+  <chunk id="hashbebfaedeaae">
+    <list_entry value="1" display_value="1 - First"/>
+    <list_entry value="2" display_value="2 - Second"/>
+    <list_entry value="3" display_value="3 - Third"/>
+    <list_entry value="4" display_value="4 - Fourth"/>
+    <list_entry value="5" display_value="5 - Fifth"/>
+  </chunk>
+  <chunk id="hashbbcfaecebde">
+    <list_entry value="1" display_value="1 - Aeronautical"/>
+    <list_entry value="2" display_value="2 - Vegetation"/>
+    <list_entry value="3" display_value="3 - Utilities"/>
+    <list_entry value="4" display_value="4 - Population"/>
+    <list_entry value="5" display_value="5 - Physiography"/>
+    <list_entry value="6" display_value="6 - Industry"/>
+    <list_entry value="7" display_value="7 - Ground Transportation"/>
+    <list_entry value="8" display_value="8 - Elevation"/>
+    <list_entry value="9" display_value="9 - Boundaries"/>
+    <list_entry value="10" display_value="10 - Waterbodies"/>
+    <list_entry value="11" display_value="11 - Maritime"/>
   </chunk>
   <chunk id="hashbdebcacebabcf">
     <combo key="ACC" text="Horizontal Accuracy Category" values_searchable="true" default="1">
@@ -1602,6 +1754,31 @@
       <reference ref="hashafadfcacac"/>
     </combo>
   </chunk>
+  <chunk id="hashfbddadbdaecc">
+    <combo key="ACC" text="Horizontal Accuracy Category" values_searchable="true" default="1">
+      <reference ref="hashabeeefdfdfdaee"/>
+    </combo>
+  </chunk>
+  <chunk id="hashfdcebebbcfea">
+    <combo key="COD" text="Delineation Known" values_searchable="true" default="1">
+      <reference ref="hashcdfcecdffffeacef"/>
+    </combo>
+  </chunk>
+  <chunk id="hashebcdcad">
+    <combo key="GEC" text="Geopolitical Entity Type" values_searchable="true" default="7">
+      <reference ref="hashcaabcbcafadeff"/>
+    </combo>
+  </chunk>
+  <chunk id="hashbcdeabfbfeaaadcdd">
+    <combo key="SRT" text="Source Type" values_searchable="true" default="0">
+      <reference ref="hashffaacdbfebfac"/>
+    </combo>
+  </chunk>
+  <chunk id="hashddefadcbeda">
+    <combo key="BAL" text="BGN Administrative Level" values_searchable="true" default="1">
+      <reference ref="hashdbeefdbabebccdaeecf"/>
+    </combo>
+  </chunk>
   <chunk id="hashcfbafeefcfde">
     <combo key="FRT" text="Weapons Range Type" values_searchable="true" default="0">
       <reference ref="hashacbdbddaffad"/>
@@ -1757,6 +1934,16 @@
       <reference ref="hashacfbfdfbdceeccc"/>
     </combo>
   </chunk>
+  <chunk id="hashfdcbeebccbdbcafdbf">
+    <combo key="ESC" text="Elevation Surface Category" values_searchable="true" default="1">
+      <reference ref="hashdbedabfcc"/>
+    </combo>
+  </chunk>
+  <chunk id="hashaecacdfcbe">
+    <combo key="HQC" text="Hypsography Portrayal Type" values_searchable="true" default="0">
+      <reference ref="hashbfecdaeabc"/>
+    </combo>
+  </chunk>
   <chunk id="hashfdefaaebddcdbabdada">
     <combo key="SMC" text="Surface Material Type" values_searchable="true" default="0">
       <reference ref="hashffeadfeabbcbebb"/>
@@ -1765,6 +1952,26 @@
   <chunk id="hashffcccfebccbe">
     <combo key="FIC" text="Embankment Type" values_searchable="true" default="0">
       <reference ref="hashabfbedbaff"/>
+    </combo>
+  </chunk>
+  <chunk id="hashfcceaefcecaee">
+    <combo key="BST" text="Boundary Status" values_searchable="true" default="0">
+      <reference ref="hashffafdebecb"/>
+    </combo>
+  </chunk>
+  <chunk id="hashaaeedaaebbdacec">
+    <combo key="CFT" text="Boundary Determination Method" values_searchable="true" default="0">
+      <reference ref="hashefcbcdacefdf"/>
+    </combo>
+  </chunk>
+  <chunk id="hashcaadbcaaebebb">
+    <combo key="LSP" text="Geopolitical Line Type" values_searchable="true" default="1">
+      <reference ref="hashbddefceecfbad"/>
+    </combo>
+  </chunk>
+  <chunk id="hashaccdebddf">
+    <combo key="USE_" text="Usage" values_searchable="true" default="0">
+      <reference ref="hashdebfbabbbcabad"/>
     </combo>
   </chunk>
   <chunk id="hashfabeeeaeafffc">
@@ -1867,6 +2074,16 @@
       <reference ref="hashaffdaedbebedeedb"/>
     </combo>
   </chunk>
+  <chunk id="hashbeaddbfd">
+    <combo key="ELA" text="Elevation Accuracy Category" values_searchable="true" default="0">
+      <reference ref="hashefeadafbbdb"/>
+    </combo>
+  </chunk>
+  <chunk id="hashcfbbbefddefcfe">
+    <combo key="ESC" text="Elevation Surface Category" values_searchable="true" default="1">
+      <reference ref="hashfbcbeabacdebd"/>
+    </combo>
+  </chunk>
   <chunk id="hashaabfaacfeeb">
     <combo key="NST" text="Navigation System Type" values_searchable="true" default="0">
       <reference ref="hashcdecaaabfbaea"/>
@@ -1880,6 +2097,21 @@
   <chunk id="hashbbbcacebeacfbbce">
     <combo key="LFA" text="Aeronautical Light Function" values_searchable="true" default="0">
       <reference ref="hashdfdaacfadbbaaff"/>
+    </combo>
+  </chunk>
+  <chunk id="hashffbadfacaaeacc">
+    <combo key="SUY" text="Survey Point Type" values_searchable="true" default="0">
+      <reference ref="hashbaeabeceeccb"/>
+    </combo>
+  </chunk>
+  <chunk id="hashdfebcdedadead">
+    <combo key="ORD" text="Relative Importance" values_searchable="true" default="1">
+      <reference ref="hashbebfaedeaae"/>
+    </combo>
+  </chunk>
+  <chunk id="hashabddccfddbdd">
+    <combo key="THC" text="Thematic Classification" values_searchable="true" default="1">
+      <reference ref="hashbbcfaecebde"/>
     </combo>
   </chunk>
   <chunk id="hashadfeebbe">
@@ -1936,6 +2168,33 @@
   <chunk id="hashecfefada">
     <text key="DMB" text="Undergrowth Density" default="-32767.0" length="100"/>
   </chunk>
+  <chunk id="hashccaaffccaad">
+    <text key="CCN" text="Commercial Copyright" default="No copyright or restriction of rights of use is asserted by originator of this information."/>
+  </chunk>
+  <chunk id="hashcdacebcbddaebcc">
+    <text key="FCODE" text="Feature Code" default=""/>
+  </chunk>
+  <chunk id="hashaaabddcbfbab">
+    <text key="NAM" text="Name" default="UNK"/>
+  </chunk>
+  <chunk id="hashdaefeadadeecaaba">
+    <text key="NFI" text="Named Feature Identifier" default="N_A"/>
+  </chunk>
+  <chunk id="hashdbbdceeeedff">
+    <text key="NFN" text="Name Identifier" default="N_A"/>
+  </chunk>
+  <chunk id="hashcbdcdefeceac">
+    <text key="SDP" text="Source Description" default="N_A"/>
+  </chunk>
+  <chunk id="hashafcddbbfbbeafbcf">
+    <text key="SDV" text="Source Date and Time" default="N_A"/>
+  </chunk>
+  <chunk id="hasheaecfbceb">
+    <text key="TXT" text="Associated Text" default="N_A"/>
+  </chunk>
+  <chunk id="hashfdcbcffbdfcd">
+    <text key="UID" text="MGCP Feature universally unique identifier" default="UNK" length="36"/>
+  </chunk>
   <chunk id="hashcbaadafacfeaef">
     <text key="IKO" text="ICAO Location Indicator" default="UNK" length="254"/>
   </chunk>
@@ -1956,6 +2215,18 @@
   </chunk>
   <chunk id="hashacacbefadee">
     <text key="WD1" text="Route Minimum Travelled Way Width" default="-32767.0"/>
+  </chunk>
+  <chunk id="hashccabfbddbaa">
+    <text key="ZVH" text="Highest Elevation" default="-999999.0"/>
+  </chunk>
+  <chunk id="hashdbffdecccffbea">
+    <text key="NM3" text="Boundary First Name" default="UNK"/>
+  </chunk>
+  <chunk id="hashcabccfecfebbfa">
+    <text key="NM4" text="Boundary Second Name" default="UNK"/>
+  </chunk>
+  <chunk id="hashffbaffefbdfec">
+    <text key="BEL" text="Base Elevation" default="-999999.0"/>
   </chunk>
   <group name="MGCP" icon="presets/misc/MGCP_logo.png">
     <group name="Culture" icon="presets/sightseeing/museum.svg">
@@ -4873,6 +5144,50 @@
         </item>
       </group>
     </group>
+    <group name="Hypsography" icon="presets/landmark/peak.svg">
+      <group name="Relief Portrayal" icon="presets/landmark/cave_entrance.svg">
+        <item name="Elevation Contour - Line" type="way,closedway" preset_name_label="true">
+          <key key="F_CODE" value="CA010"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashfdcbeebccbdbcafdbf"/>
+          <reference ref="hashaecacdfcbe"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+          <reference ref="hashccabfbddbaa"/>
+        </item>
+        <item name="Inland Water Elevation - Point" type="node" preset_name_label="true">
+          <key key="F_CODE" value="CA035"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+          <reference ref="hashccabfbddbaa"/>
+        </item>
+        <item name="Spot Elevation - Point" type="node" preset_name_label="true">
+          <key key="F_CODE" value="CA030"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashffbaffefbdfec"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashbeaddbfd"/>
+          <reference ref="hashcfbbbefddefcfe"/>
+          <reference ref="hashaaabddcbfbab"/>
+          <reference ref="hashdaefeadadeecaaba"/>
+          <reference ref="hashdbbdceeeedff"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+        </item>
+      </group>
+    </group>
     <group name="Physiography" icon="presets/landmark/mountain_pass.svg">
       <group name="Exposed Surface Material" icon="presets/landmark/adit.svg">
         <item name="Soil Surface Region - Area" type="closedway,multipolygon" preset_name_label="true">
@@ -5401,6 +5716,37 @@
     </group>
     <group name="Demarcation" icon="presets/barrier/lift_gate.svg">
       <group name="Boundaries/Limits/Zones (Topographic)" icon="presets/place/village.svg">
+        <item name="Administrative Boundary - Line" type="way,closedway" preset_name_label="true">
+          <key key="F_CODE" value="FA000"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashfcceaefcecaee"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashaaeedaaebbdacec"/>
+          <reference ref="hashcaadbcaaebebb"/>
+          <reference ref="hashdbffdecccffbea"/>
+          <reference ref="hashcabccfecfebbfa"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+          <reference ref="hashaccdebddf"/>
+        </item>
+        <item name="Administrative Division - Area" type="closedway,multipolygon" preset_name_label="true">
+          <key key="F_CODE" value="FA003"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashddefadcbeda"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashfdcebebbcfea"/>
+          <reference ref="hashaaabddcbfbab"/>
+          <reference ref="hashdaefeadadeecaaba"/>
+          <reference ref="hashdbbdceeeedff"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+        </item>
         <item name="Firing Range - Area" type="closedway,multipolygon" preset_name_label="true">
           <key key="F_CODE" value="FA015"/>
           <reference ref="hashbdebcacebabcf"/>
@@ -5426,6 +5772,31 @@
           <reference ref="hashdeaefacefd"/>
           <reference ref="hasheafbcaeeccffbebadc"/>
         </item>
+        <item name="Geopolitical Entity - Area" type="closedway,multipolygon" preset_name_label="true">
+          <key key="F_CODE" value="FA002"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashfdcebebbcfea"/>
+          <reference ref="hashebcdcad"/>
+          <reference ref="hashaaabddcbfbab"/>
+          <reference ref="hashdaefeadadeecaaba"/>
+          <reference ref="hashdbbdceeeedff"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+        </item>
+        <item name="International Date Line - Line" type="way,closedway" preset_name_label="true">
+          <key key="F_CODE" value="FA110"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+        </item>
         <item name="Test Site - Area" type="closedway,multipolygon" preset_name_label="true">
           <key key="F_CODE" value="FA100"/>
           <reference ref="hashbdebcacebabcf"/>
@@ -5438,6 +5809,20 @@
           <reference ref="hashdafbffbeefcda"/>
           <reference ref="hashdeaefacefd"/>
           <reference ref="hasheafbcaeeccffbebadc"/>
+        </item>
+      </group>
+      <group name="Boundaries/Limits/Zones (Hydrographic)" icon="presets/place/capital.svg">
+        <item name="Maritime Limit Boundary - Line" type="way,closedway" preset_name_label="true">
+          <key key="F_CODE" value="FC021"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashdbffdecccffbea"/>
+          <reference ref="hashcabccfecfebbfa"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
         </item>
       </group>
     </group>
@@ -5700,7 +6085,39 @@
       </group>
     </group>
     <group name="General" icon="presets/place/locality.svg">
+      <group name="Control Points" icon="presets/landmark/survey_point.svg">
+        <item name="Survey - Point" type="node" preset_name_label="true">
+          <key key="F_CODE" value="ZB050"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashffbaffefbdfec"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashaaabddcbfbab"/>
+          <reference ref="hashdaefeadadeecaaba"/>
+          <reference ref="hashdbbdceeeedff"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hashffbadfacaaeacc"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+        </item>
+      </group>
       <group name="Miscellaneous" icon="presets/misc/name.svg">
+        <item name="Annotated Location - Point" type="node" preset_name_label="true">
+          <key key="F_CODE" value="ZD045"/>
+          <reference ref="hashfbddadbdaecc"/>
+          <reference ref="hashccaaffccaad"/>
+          <reference ref="hashaaabddcbfbab"/>
+          <reference ref="hashdaefeadadeecaaba"/>
+          <reference ref="hashdbbdceeeedff"/>
+          <reference ref="hashdfebcdedadead"/>
+          <reference ref="hashcbdcdefeceac"/>
+          <reference ref="hashafcddbbfbbeafbcf"/>
+          <reference ref="hashbcdeabfbfeaaadcdd"/>
+          <reference ref="hashabddccfddbdd"/>
+          <reference ref="hasheaecfbceb"/>
+          <reference ref="hashfdcbcffbdfcd"/>
+        </item>
         <item name="Named Location - Point" type="node" preset_name_label="true">
           <key key="F_CODE" value="ZD040"/>
           <reference ref="hashbdebcacebabcf"/>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "SpatialIndexer.h"
 
@@ -59,7 +59,7 @@ SpatialIndexer::SpatialIndexer(std::shared_ptr<HilbertRTree>& index, deque<Eleme
     _index(index),
     _indexToEid(indexToEid)
 {
-  _map = pMap.get();
+  _map = pMap;
 
   std::shared_ptr<ChainCriterion> chainCrit = std::dynamic_pointer_cast<ChainCriterion>(_criterion);
   if (chainCrit)

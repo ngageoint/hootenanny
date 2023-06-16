@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef USELESSELEMENTCRITERION_H
 #define USELESSELEMENTCRITERION_H
@@ -42,17 +42,15 @@ namespace hoot
  * For ways: return true if the way has no child nodes or parent relations
  * For relations: return true if the relation has no parent relations or members
  */
-class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "UselessElementCriterion"; }
 
   UselessElementCriterion() = default;
-  UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }
+  UselessElementCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~UselessElementCriterion() override = default;
-
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<UselessElementCriterion>(); }
@@ -62,9 +60,6 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "HttpTestServer.h"
@@ -61,7 +61,7 @@ std::string HttpResponse::to_string()
   //  Add the HTTP status header
   ss << "HTTP/1.1 " << _status << " " << get_status_text() << end_line;
   //  Followed by all the other headers added
-  for (std::vector<std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
+  for (auto it = _headers.begin(); it != _headers.end(); ++it)
     ss << *it << ": " << _header_values[*it] << end_line;
   //  Responses with response text are given the `Content-Length` header
   if (_response != "")

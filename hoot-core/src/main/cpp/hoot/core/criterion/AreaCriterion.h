@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef AREACRITERION_H
 #define AREACRITERION_H
@@ -38,14 +38,14 @@ namespace hoot
 /**
  * A criterion that identifies areas
  */
-class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "AreaCriterion"; }
 
   AreaCriterion() = default;
-  AreaCriterion(ConstOsmMapPtr map) : _map(map) { }
+  AreaCriterion(const ConstOsmMapPtr& map) : ConstOsmMapConsumerBase(map) { }
   ~AreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
@@ -59,15 +59,12 @@ public:
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   bool supportsSpecificConflation() const override { return true; }
 
   QStringList getChildCriteria() const override;
 
 private:
 
-  ConstOsmMapPtr _map;
   mutable ElementId _currentElementId;
 };
 

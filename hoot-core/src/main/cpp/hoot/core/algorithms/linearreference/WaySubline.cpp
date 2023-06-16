@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "WaySubline.h"
 
@@ -100,8 +100,7 @@ bool WaySubline::contains(const WayLocation& wl) const
 
 bool WaySubline::contains(const WaySubline& other) const
 {
-  return getStart().getWay() == other.getStart().getWay() &&
-      other.getStart() >= getStart() && other.getEnd() <= getEnd();
+  return getStart().getWay() == other.getStart().getWay() && other.getStart() >= getStart() && other.getEnd() <= getEnd();
 }
 
 WaySubline WaySubline::expand(Meters d) const
@@ -143,8 +142,7 @@ QString WaySubline::toString() const
   return "start: " + getStart().toString() + " end: " + getEnd().toString();
 }
 
-WayPtr WaySubline::toWay(const OsmMapPtr& map, std::shared_ptr<GeometryToElementConverter::NodeFactory> nf,
-                         bool reuse) const
+WayPtr WaySubline::toWay(const OsmMapPtr& map, std::shared_ptr<GeometryToElementConverter::NodeFactory> nf, bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
   LOG_VART(way->getElementId());

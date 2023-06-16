@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Removes non-existent element references from relations or ways
  */
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumerBase
 {
 public:
 
@@ -48,9 +48,7 @@ public:
                                const int maxReport = Log::getWarnMessageLimit());
   ~RemoveMissingElementsVisitor() override = default;
 
-  void setOsmMap(OsmMap* map) override { _v->setOsmMap(map);}
-  void setOsmMap(const OsmMap* /*map*/) const
-  { throw NotImplementedException("Set Map with const is not supported"); }
+  void setOsmMap(OsmMap* map) override;
 
   /**
    * @see ElementVisitor

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "AttributeCoOccurrence.h"
@@ -87,15 +87,16 @@ private:
 /**
  * Traverses the OsmMap and build a hashmap of Attribute Co-Occurrence values.
  */
-class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumerBase
 {
 public:
 
   CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h)
-    : _refSet(refSet), _coOccurrence(h) { }
+    : _refSet(refSet),
+      _coOccurrence(h)
+  {
+  }
   ~CoOccurrenceVisitor() override = default;
-
-  void setOsmMap(const OsmMap* map) override { _map = map; }
 
   QString getDescription() const override { return ""; }
   QString getName() const override { return ""; }
@@ -116,7 +117,7 @@ public:
       {
         // Find the REF1 id's in REF2.
         // NOTE: this blindly assumes that there is only ONE value in the REF1 tag list
-        RefToEidVisitor::RefToEid::const_iterator refId = _refSet.find(refs[0]);
+        auto refId = _refSet.find(refs[0]);
 
         if (refId != _refSet.end())
         {
@@ -187,7 +188,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   RefToEidVisitor::RefToEid _refSet;
   AttributeCoOccurrence::CoOccurrenceHash& _coOccurrence;
 
@@ -207,7 +207,6 @@ private:
 
 
 void AttributeCoOccurrence::addToMatrix(const ConstOsmMapPtr& in)
-
 {
   RefToEidVisitor ref2(MetadataTags::Ref2());
   in->visitRo(ref2);
@@ -249,7 +248,7 @@ QString AttributeCoOccurrence::printList()
   result.append(QString("N  : %1 -> %2\n").arg(MetadataTags::Ref1(), MetadataTags::Ref2()));
   for (const auto& key : qAsConst(keyList))
   {
-    CoOccurrenceHash::const_iterator jt = _resultMatrix.find(key);
+    auto jt = _resultMatrix.find(key);
     for (auto kt = jt->second.begin(); kt != jt->second.end(); ++kt)
       result += QString("%1: %2 -> %3\n").arg(kt->second,-3,10).arg(key, kt->first);
   }

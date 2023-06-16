@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef REVERSED_ROAD_CRITERION_H
 #define REVERSED_ROAD_CRITERION_H
@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Identifies reversed roads
  */
-class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "ReversedRoadCriterion"; }
 
   ReversedRoadCriterion() = default;
-  ReversedRoadCriterion(ConstOsmMapPtr map);
+  ReversedRoadCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~ReversedRoadCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
@@ -53,16 +53,11 @@ public:
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override { return "Identifies reversed roads"; }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

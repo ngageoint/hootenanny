@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "ElementComparer.h"
 
@@ -74,7 +74,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
     LOG_TRACE("Compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
-  if (_ignoreElementId && !_map.get())
+  if (_ignoreElementId && !_map)
     throw IllegalArgumentException("If ignoring element IDs in ElementComparer a map must be passed in.");
 
   LOG_VART(e1->getElementId());

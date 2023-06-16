@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -72,7 +72,7 @@ private:
    * The element ID is passed in separately from the element here, as the element may have been
    * set with a remapped ID, and we need to use the original ID to retrieve the element's tags.
    */
-  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element) const;
+  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element);
 };
 
 }

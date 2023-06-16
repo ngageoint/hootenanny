@@ -35,6 +35,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OgrWriterThread.h>
+#include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -119,8 +120,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
-  const bool isStreamable =
-    IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
+  const bool isStreamable = IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
   LOG_VARD(isStreamable);
   //  Running the translator in a separate thread from the writer is an option for OGR, but the I/O
   //  formats must be streamable.
@@ -195,6 +195,8 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     _setToOgrOptions(output);
   else if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
     _setFromOgrOptions(inputs);
+  else if (OsmGeoJsonWriter().isSupported(output))
+    _handleGeoJsonOutputTranslationOpts();
   else if (!_translationScript.trimmed().isEmpty())
     _handleNonOgrOutputTranslationOpts();
 
@@ -322,10 +324,8 @@ void DataConverter::_exportToShapeWithCols(const QString& output, const QStringL
   QElapsedTimer timer;
   timer.start();
 
-  std::shared_ptr<OsmMapWriter> writer =
-    OsmMapWriterFactory::createWriter(output);
-  std::shared_ptr<ShapefileWriter> shapeFileWriter =
-    std::dynamic_pointer_cast<ShapefileWriter>(writer);
+  std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(output);
+  std::shared_ptr<ShapefileWriter> shapeFileWriter = std::dynamic_pointer_cast<ShapefileWriter>(writer);
   //  Currently there is only one shape file writer, and this is it.
   assert(shapeFileWriter.get());
   shapeFileWriter->setColumns(cols);
@@ -340,8 +340,7 @@ void DataConverter::_exportToShapeWithCols(const QString& output, const QStringL
 void DataConverter::_fillElementCacheMT(const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const
 {
   //  Setup reader
-  std::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::createReader(inputUrl);
+  std::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::createReader(inputUrl);
   reader->open(inputUrl);
   std::shared_ptr<ElementInputStream> streamReader = std::dynamic_pointer_cast<ElementInputStream>(reader);
 
@@ -466,9 +465,7 @@ void DataConverter::_setToOgrOptions(const QString& output)
   //  warn callers that the opposite direction they specified won't be used.
   if (_translationDirection == "toosm")
   {
-    LOG_INFO(
-      "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
-      "OGR output...");
+    LOG_INFO("Ignoring specified schema.translation.direction=toosm and using toogr to write to OGR output...");
   }
 
   //  Set a config option so the translation script knows what the output format is. For this,
@@ -492,8 +489,7 @@ void DataConverter::_handleNonOgrOutputTranslationOpts()
   assert(!_shapeFileColumnsSpecified());
 
   //  For non OGR conversions, the translation must be passed in as an operator.
-  if (!_convertOps.contains(SchemaTranslationOp::className()) &&
-      !_convertOps.contains(SchemaTranslationVisitor::className()))
+  if (!_convertOps.contains(SchemaTranslationOp::className()) && !_convertOps.contains(SchemaTranslationVisitor::className()))
   {
     //  If a translation script was specified but not the translation op, we'll add auto add the op
     //  as the first conversion operation. If the caller wants the translation done after some
@@ -508,6 +504,13 @@ void DataConverter::_handleNonOgrOutputTranslationOpts()
     _convertOps.replaceInStrings(SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
   }
   LOG_VARD(_convertOps);
+}
+
+void DataConverter::_handleGeoJsonOutputTranslationOpts()
+{
+  //  For GeoJSON conversions, the translation is done in the writer and not in the reader, so remove the translators
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
 }
 
 void DataConverter::_addMergeNearbyNodesOps()

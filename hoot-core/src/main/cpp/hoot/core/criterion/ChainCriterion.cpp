@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "ChainCriterion.h"
 
@@ -62,6 +62,7 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
 
 void ChainCriterion::setOsmMap(const OsmMap* map)
 {
+  ConstOsmMapConsumerBase::setOsmMap(map);
   for (const auto& crit : _criteria)
   {
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);

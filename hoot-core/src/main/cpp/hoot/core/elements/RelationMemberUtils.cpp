@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationMemberUtils.h"
@@ -208,11 +208,9 @@ std::vector<RelationPtr> RelationMemberUtils::getContainingRelations(
   std::vector<RelationPtr> relationsToReturn;
   std::vector<ConstRelationPtr> relations =
     getContainingRelationsConst(childId, map, ignoreReviewRelations);
-  for (std::vector<ConstRelationPtr>::const_iterator itr = relations.begin();
-       itr != relations.end(); ++itr)
-  {
+  for (auto itr = relations.begin(); itr != relations.end(); ++itr)
     relationsToReturn.push_back(std::const_pointer_cast<Relation>(*itr));
-  }
+
   return relationsToReturn;
 }
 

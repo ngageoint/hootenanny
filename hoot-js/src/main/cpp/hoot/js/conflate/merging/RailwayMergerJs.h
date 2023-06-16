@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RAILWAY_MERGER_JS_H
@@ -57,7 +57,7 @@ public:
    * @param mergeTargetId the ID of the area which the other railway should be merged into
    * @param current the context this method should run under
    */
-  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
+  static ElementId merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
 };
 
 }

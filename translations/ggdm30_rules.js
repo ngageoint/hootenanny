@@ -4617,21 +4617,21 @@ ggdm30.rules = {
 
     // TSM - Terrain Surface Material
     // ['TSM','-999999',undefined,undefined], // No Information
-    ['TSM','1','desert_surface','asphalt'], // Asphalt
-    ['TSM','2','desert_surface','bedrock'], // Bedrock
-    ['TSM','3','desert_surface','boulders'], // Boulders
-    ['TSM','4','desert_surface','concrete'], // Concrete
-    ['TSM','5','desert_surface','evaporite'], // Evaporite
-    ['TSM','6','desert_surface','frozen_water'], // Frozen Water
-    ['TSM','7','desert_surface','gravel'], // Gravel
-    ['TSM','8','desert_surface','lava_flow'], // Lava Flow
-    ['TSM','9','desert_surface','loess'], // Loess
-    ['TSM','10','desert_surface','mud'], // Mud
-    ['TSM','11','desert_surface','paved'], // Paved
-    ['TSM','12','desert_surface','rock'], // Rock
-    ['TSM','13','desert_surface','sand'], // Sand
-    ['TSM','14','desert_surface','soil'], // Soil
-    ['TSM','999','desert_surface','other'], // Other
+    ['TSM','1','terrain_surface','asphalt'], // Asphalt
+    ['TSM','2','terrain_surface','bedrock'], // Bedrock
+    ['TSM','3','terrain_surface','boulders'], // Boulders
+    ['TSM','4','terrain_surface','concrete'], // Concrete
+    ['TSM','5','terrain_surface','evaporite'], // Evaporite
+    ['TSM','6','terrain_surface','frozen_water'], // Frozen Water
+    ['TSM','7','terrain_surface','gravel'], // Gravel
+    ['TSM','8','terrain_surface','lava_flow'], // Lava Flow
+    ['TSM','9','terrain_surface','loess'], // Loess
+    ['TSM','10','terrain_surface','mud'], // Mud
+    ['TSM','11','terrain_surface','paved'], // Paved
+    ['TSM','12','terrain_surface','rock'], // Rock
+    ['TSM','13','terrain_surface','sand'], // Sand
+    ['TSM','14','terrain_surface','soil'], // Soil
+    ['TSM','999','terrain_surface','other'], // Other
 
     // TSM2 - Terrain Surface Material [2]
     // TSM3 - Terrain Surface Material [3]
@@ -6417,6 +6417,33 @@ ggdm30.rules = {
   dropList : { '-999999.0':1,'-999999':1,'noinformation':1 },
   // ##### End of dropList #####
 
+  // ##### Start of ignoreList #####
+  // This is taken from OSM pre processing and a few added
+  ignoreList : [
+    'APT2','APT3', 'APU2','APU3', 'AQO2','AQO3', 'AQP2','AQP3', 'ASU','ASU2','ASU3', 'AT005_CAB','AT005_CAB2','AT005_CAB3',
+    'BBMCA2','BBMCA3', 'BBMCB2','BBMCB3', 'BC034_BRF2', 'BC034_MRT2','BC034_MRT2', 'BMC2','BMC3', 'BRF2', 'BSC2','BSC3',
+    'CAB2','CAB3', 'CSC2','CSC3', 'CVT2','CVT3',
+    'DFU2','DFU3', 'DKC2','DKC3', 'DPG2','DPG3',
+    'FCSUBTYPE','FCSubtype', 'FFN2','FFN3', 'FHC2','FHC3', 'FRT2','FRT3', 'F_CODE',
+    'HDP', 'HST2','HST3',
+    'LFC2','LFC3',
+    'MBC_MCC2', 'MBC_PSC2', 'MBC_SCO2', 'MEM', 'MCC2','MCC3', 'MCY2','MCY3', 'MGL2','MGL3', 'MNR2','MNR3', 'MST2','MST3',
+    'NDX2','NDX3', 'NFP2','NFP3', 'NMC2','NMC3', 'NOA2','NOA3', 'ORS2','ORS3',
+    'PBY','PBY2','PBY3', 'PFD', 'PLT2','PLT3', 'POS2','POS3', 'PPO','PPO2','PPO3', 'PRW','PRW2','PRW3',
+    'RCG', 'RIN_ROI2','RIN_ROI3', 'RIN_RTN2','RIN_RTN3', 'RRC2','RRC3', 'RTN2','RTN3',
+    'SBT2','SBT3', 'SSR2','SSR3', 'STA2','STA3', 'STL2','STL3',
+    'TRS2','TRS3', 'TSM2','TSM3', 'TTC2','TTC3',
+    'UTY2','UTY3',
+    'VCA2','VCA3', 'VCM2','VCM3', 'VCT2','VCT3', 'VIS2','VIS3', 'VSP2','VSP3',
+    'WBD', 'WD1', 'WEQ2','WEQ3', 'WPC2','WPC3', 'WWM2','WWM3',
+    'YWQ',
+    'ZHBH_DKC2','ZHBH_DKC3', 'ZHBH_TEC2','ZHBH_TEC3', 'ZHDP_DKC2','ZHDP_DKC3', 'ZHDP_TEC2','ZHDP_TEC3',
+    'ZI005_FNA2','ZI005_FNA3', 'ZI005_GNR2','ZI005_GNR3', 'ZI005_GNT2','ZI005_GNT3', 'ZI005_NFN2','ZI005_NFN3', 'ZI012_DKC2','ZI012_DKC3', 'ZI012_TEC2','ZI012_TEC3', 'ZI013_CSP2','ZI013_CSP3', 'ZI013_FFP2','ZI013_FFP3', 'ZI013_FMM2','ZI013_FMM3', 'ZI014_PBY2','ZI014_PBY3', 'ZI014_PPO2','ZI014_PPO3', 'ZI014_PRW2','ZI014_PRW3', 'ZI019_ASP2','ZI019_ASP3', 'ZI019_ASU2','ZI019_ASU3', 'ZI024_PUR2','ZI024_PUR3','ZI024_PUR4','ZI024_PUR5', 'ZI024_WUR2','ZI024_WUR3','ZI024_WUR4', 'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
+    'ZI025_WLE', 'ZI032_GUG', 'ZI032_PYC', 'ZI032_PYM', 'ZI032_TOS',
+    'ZSAX_RX3', 'ZSAX_RX4',
+    ],
+    // ##### End of ignoreList #####
+
   // ##### Start of swapListIn #####
   // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
   // but renamed in different features. We swap these so that there is only one
@@ -6436,6 +6463,7 @@ ggdm30.rules = {
     'BRF':'BC034_BRF',
     'BRF2':'BC034_BRF2',
     'COL':'BC040_COL',
+    'desert_surface':'terrain_surface',
     'DKC':'ZHDP_DKC',
     'DKC2':'ZHDP_DKC2',
     'DKC3':'ZHDP_DKC3',

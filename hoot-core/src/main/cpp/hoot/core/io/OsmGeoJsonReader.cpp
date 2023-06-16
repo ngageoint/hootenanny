@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmGeoJsonReader.h"
@@ -578,7 +578,7 @@ void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptre
                                                 const RelationPtr& relation) const
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
-  vector<JsonCoordinates>::const_iterator multi = multigeo.begin();
+  auto multi = multigeo.begin();
   for (auto coord = multi->begin(); coord != multi->end(); ++coord)
   {
     long node_id = _map->createNextNodeId();
@@ -682,7 +682,7 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry) cons
   {
     //  Single coordinate should only have two elements, lat/lon
     pt::ptree coordinates = geometry.get_child("coordinates");
-    pt::ptree::const_iterator it = coordinates.begin();
+    auto it = coordinates.begin();
     double x = it->second.get_value<double>();
     ++it;
     double y = it->second.get_value<double>();
@@ -692,7 +692,7 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry) cons
   {
     //  Line string is a single array of coordinates (array)
     pt::ptree coordinates = geometry.get_child("coordinates");
-    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
     {    
       std::shared_ptr<Coordinate> pCoord = _readCoordinate(it->second);
       if (pCoord)
@@ -833,7 +833,7 @@ void OsmGeoJsonReader::_addTags(const pt::ptree& item, const ElementPtr& element
         if (key.compare("other_tags", Qt::CaseInsensitive) == 0)
           _parseOtherTags(element, value);
         else if (value.compare("null", Qt::CaseInsensitive) != 0)  //  Don't include tags with a 'null' value
-          element->setTag(key, value);
+          element->setTag(getStringLocation(key), getStringLocation(value));
       }
     }
   }
@@ -868,7 +868,7 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree& item)
     return ss.str();
 }
 
-void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString& tags) const
+void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString& tags)
 {
   QString tag_string = tags;
   //  Remove the beginning and ending double quotes
@@ -883,7 +883,7 @@ void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString&
     //  Each tag looks like `key\"=>\"value` at this point, parse them
     QStringList key_value = tag.split("\"=>\"");
     if (key_value.size() == 2)
-      element->setTag(key_value[0], key_value[1]);
+      element->setTag(getStringLocation(key_value[0]), getStringLocation(key_value[1]));
   }
 }
 

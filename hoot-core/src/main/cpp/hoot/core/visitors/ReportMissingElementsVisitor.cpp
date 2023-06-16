@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
@@ -93,10 +93,10 @@ void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringLi
 {
   if (!missingChildIds.empty())
   {
-    if (_markWaysForReview && !ReviewMarker::isNeedsReview(_map->shared_from_this(), way))
+    if (_markWaysForReview && !ReviewMarker::isNeedsReview(_map, way))
     {
       _reviewMarker.mark(
-        _map->shared_from_this(), way,
+        _map, way,
         way->getElementId().toString() + ", name: " + way->getTags().getName() +
           "; Missing way node(s): " + missingChildIds.join(","), getName(), 1.0);
       _numWaysMarkedForReview++;
@@ -114,10 +114,10 @@ void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation, 
 {
   if (!missingChildIds.empty())
   {
-    if (_markRelationsForReview && !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
+    if (_markRelationsForReview && !ReviewMarker::isNeedsReview(_map, relation))
     {
       _reviewMarker.mark(
-        _map->shared_from_this(), relation,
+        _map, relation,
         relation->getElementId().toString() + ", name: " + relation->getTags().getName() +
           ", type: " + relation->getType() +
           ", Missing relation member(s): " + missingChildIds.join(","), getName(), 1.0);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
@@ -44,8 +44,7 @@ namespace hoot
  * to either mark elements with missing children as needing review or add a custom tag to the
  * elements.
  */
-class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-  public Configurable
+class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumerBase, public Configurable
 {
 public:
 
@@ -59,8 +58,6 @@ public:
    * @see ElementVisitor
    */
   void visit(const ConstElementPtr& e) override;
-
-  void setOsmMap(OsmMap* map) override { _map = map; }
 
   /**
    * @see Configurable
@@ -90,8 +87,6 @@ public:
   void setRelationKvp(QString kvp) { _relationKvp = kvp; }
 
 private:
-
-  OsmMap* _map;
 
   Log::WarningLevel _logLevel;
 

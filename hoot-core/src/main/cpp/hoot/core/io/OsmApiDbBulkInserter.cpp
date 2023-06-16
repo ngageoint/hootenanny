@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiDbBulkInserter.h"
@@ -126,30 +126,18 @@ void OsmApiDbBulkInserter::_verifyFileOutputs() const
 void OsmApiDbBulkInserter::_verifyStartingIds()
 {
   if (_idMappings.startingNodeId < 1 || _idMappings.startingWayId < 1 || _idMappings.startingRelationId < 1)
-  {
-    throw HootException(
-      "Invalid element starting ID specified.  IDs must be greater than or equal to 1.");
-  }
-  else if (!_validateData &&
-           (_idMappings.startingNodeId > 1 || _idMappings.startingWayId > 1 ||
-            _idMappings.startingRelationId > 1))
-  {
+    throw HootException("Invalid element starting ID specified.  IDs must be greater than or equal to 1.");
+  else if (!_validateData && (_idMappings.startingNodeId > 1 || _idMappings.startingWayId > 1 || _idMappings.startingRelationId > 1))
     throw HootException("Cannot specify element starting IDs when data validation is turned off.");
-  }
   else if (_reserveRecordIdsBeforeWritingData && !_validateData)
-  {
-    // this one may not be necessary, but haven't had time to think it through yet, so being safe for now
     throw HootException("Cannot reserve record IDs when data validation is turned off.");
-  }
 
   //this setting overrides any specified starting ids
   if (_reserveRecordIdsBeforeWritingData)
   {
-    if (_idMappings.startingNodeId > 1 || _idMappings.startingWayId > 1 ||
-        _idMappings.startingRelationId > 1)
+    if (_idMappings.startingNodeId > 1 || _idMappings.startingWayId > 1 || _idMappings.startingRelationId > 1)
     {
-      LOG_WARN(
-        "Custom starting element IDs ignored due to reserve record IDs before writing data enabled.");
+      LOG_WARN("Custom starting element IDs ignored due to reserve record IDs before writing data enabled.");
     }
     _idMappings.startingNodeId = 1;
     _idMappings.startingWayId = 1;
@@ -1198,8 +1186,7 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
   // Regardless of type, may be referenced in relation
   if (_unresolvedRefs.unresolvedRelationRefs)
   {
-    std::map<ElementId, UnresolvedRelationReference >::iterator relationRef =
-      _unresolvedRefs.unresolvedRelationRefs->find(element->getElementId());
+    auto relationRef = _unresolvedRefs.unresolvedRelationRefs->find(element->getElementId());
 
     if (relationRef != _unresolvedRefs.unresolvedRelationRefs->end())
     {

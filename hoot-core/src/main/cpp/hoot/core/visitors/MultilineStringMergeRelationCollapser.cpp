@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "MultilineStringMergeRelationCollapser.h"
@@ -52,8 +52,8 @@ MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser()
 
 void MultilineStringMergeRelationCollapser::setOsmMap(OsmMap* map)
 {
-  _map = map->shared_from_this();
-  _relationMerger.setOsmMap(_map.get());
+  OsmMapConsumerBase::setOsmMap(map);
+  _relationMerger.setOsmMap(map);
 }
 
 void MultilineStringMergeRelationCollapser::setTypes(const QStringList& types)

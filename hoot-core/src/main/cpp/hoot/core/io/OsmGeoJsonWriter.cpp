@@ -227,14 +227,6 @@ void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const C
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(translation_it->second);
     if (!way)
       continue;
-    //  Skip any ways that have parents
-    OsmMapPtr map = std::dynamic_pointer_cast<OsmMap>(provider);
-    if (map)
-    {
-      set<ElementId> parents = map->getParents(way->getElementId());
-      if (!parents.empty())
-        continue;
-    }
     //  Make sure that building ways are "complete"
     const vector<long>& nodes = way->getNodeIds();
     bool valid = true;
@@ -505,12 +497,32 @@ void OsmGeoJsonWriter::_writePointGeometry(const geos::geom::Geometry* geometry)
 
 void OsmGeoJsonWriter::_writeLineStringGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeGeometry(geometry, GeometryTypeId::GEOS_LINESTRING);
+  GeometryTypeId type = geometry->getGeometryTypeId();
+  switch (type)
+  {
+  default:
+  case GEOS_LINESTRING:
+    _writeGeometry(geometry, type);
+    break;
+  case GEOS_MULTILINESTRING:
+    _writeMultiGeometry(geometry, type);
+    break;
+  }
 }
 
 void OsmGeoJsonWriter::_writePolygonGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeGeometry(geometry, GeometryTypeId::GEOS_POLYGON);
+  GeometryTypeId type = geometry->getGeometryTypeId();
+  switch (type)
+  {
+  default:
+  case GEOS_POLYGON:
+    _writeGeometry(geometry, type);
+    break;
+  case GEOS_MULTIPOLYGON:
+    _writeMultiGeometry(geometry, type);
+    break;
+  }
 }
 
 void OsmGeoJsonWriter::_writeGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type)
@@ -764,7 +776,7 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
   //  Don't translate without a translator
   if (!_translator)
   {
-    QString table = _getLayerName(nullptr);
+    QString table = _getLayerName(e, nullptr);
     _translatedElementMap[table] = e;
     return convertGeometry(provider, e);
   }
@@ -773,7 +785,7 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
   translateToFeatures(provider, e, geometry, feature);
   if (feature.empty())
   {
-    QString table = _getLayerName(geometry);
+    QString table = _getLayerName(e, geometry);
     _translatedElementMap[table] = e;
     return geometry;
   }
@@ -782,7 +794,7 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
   {
     if (!f.feature)
     {
-      QString table = _getLayerName(geometry);
+      QString table = _getLayerName(e, geometry);
       _translatedElementMap[table] = e;
       continue;
     }
@@ -834,26 +846,36 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
     c->setTags(t);
     QString layer = "";
     if (_writeSplitFiles)
-      layer = _getLayerName(f, geometry);
+      layer = _getLayerName(e, f, geometry);
     _translatedElementMap[layer] = c;
   }
   return geometry;
 }
 
-QString OsmGeoJsonWriter::_getLayerName(const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
+QString OsmGeoJsonWriter::_getLayerName(const ConstElementPtr& e, const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
                                         const std::shared_ptr<geos::geom::Geometry>& geometry) const
 {
   if (!feature.tableName.isEmpty())
     return feature.tableName;
   else
-    return _getLayerName(geometry);
+    return _getLayerName(e, geometry);
 }
 
-QString OsmGeoJsonWriter::_getLayerName(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+QString OsmGeoJsonWriter::_getLayerName(const ConstElementPtr& e, const std::shared_ptr<geos::geom::Geometry>& geometry) const
 {
   if (!_writeSplitFiles)
     return "";
-  else if (_useThematicLayers)
+  //  Review and restriction relations have their own layer names
+  if (e->getElementType() ==  ElementType::Relation)
+  {
+    ConstRelationPtr r = std::static_pointer_cast<const Relation>(e);
+    if (r->getType() == MetadataTags::RelationReview())
+      return _useThematicLayers ? "Review" : "REVIEW";
+    else if (r->getType() == MetadataTags::RelationRestriction())
+      return _useThematicLayers ? "Restriction" : "RESTRICTION";
+  }
+  //  Unknown feature types get slightly different unknown layer names for thematic
+  if (_useThematicLayers)
     return _getThematicUnknown(geometry);
   else
     return _getFcodeUnknown(geometry);
@@ -905,30 +927,38 @@ QString OsmGeoJsonWriter::_getFcodeUnknown(const std::shared_ptr<geos::geom::Geo
   return "UNKNOWN";
 }
 
-std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry, bool validate) const
 {
-  //  Treat bounded vs unbounded differently
-  if (geometry && _bounds)
+  try
   {
-    if (geometry->intersects(_bounds.get()))
+    //  Treat bounded vs unbounded differently
+    if (geometry && _bounds)
     {
-      if (_cropFeaturesCrossingBounds)
+      if (geometry->intersects(_bounds.get()))
       {
-        //  Get the intersection of the geometry with the bounding envelope
-        try
+        if (_cropFeaturesCrossingBounds)
         {
+          //  Get the intersection of the geometry with the bounding envelope
           std::unique_ptr<geos::geom::Geometry> intersection = geometry->intersection(_bounds.get());
           return std::shared_ptr<geos::geom::Geometry>(intersection.release());
         }
-        catch (const geos::util::TopologyException& e)
-        {
-          LOG_WARN(e.what());
-          return nullptr;
-        }
       }
+      else  //  Geometry is outside of the bounds, eliminate it
+        return nullptr;
     }
-    else  //  Geometry is outside of the bounds, eliminate it
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (validate)
+    {
+      std::shared_ptr<geos::geom::Geometry> g(GeometryUtils::validateGeometry(geometry.get()));
+      return _cropGeometryToBounds(g, false);
+    }
+    else
+    {
+      LOG_WARN(e.what());
       return nullptr;
+    }
   }
   return geometry;
 }

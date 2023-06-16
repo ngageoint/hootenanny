@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef JSFUNCTIONVISITOR_H
 #define JSFUNCTIONVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 #include <hoot/js/util/JsFunctionConsumer.h>
@@ -40,22 +40,17 @@ namespace hoot
 /**
  * A criterion that will either keep or remove matches.
  */
-class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public JsFunctionConsumer
+class JsFunctionVisitor : public ConstElementVisitor, public OsmMapConsumerBase, public JsFunctionConsumer
 {
 public:
 
   static QString className() { return "JsFunctionVisitor"; }
 
-  JsFunctionVisitor();
+  JsFunctionVisitor() = default;
   ~JsFunctionVisitor() override = default;
 
   void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }
-
-  void setOsmMap(OsmMap* map) override { _map = map; }
-
-  void setOsmMap(const OsmMap*) override { }
 
   void visit(const ConstElementPtr& e) override;
 
@@ -66,7 +61,7 @@ public:
 private:
 
   v8::Persistent<v8::Function> _func;
-  OsmMap* _map;
+
 };
 
 }

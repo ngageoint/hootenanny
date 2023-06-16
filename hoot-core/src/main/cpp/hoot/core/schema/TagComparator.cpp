@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "TagComparator.h"
@@ -256,8 +256,7 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
   for (auto it = t1.begin(); it != t1.end(); ++it)
   {
     const SchemaVertex& tv = schema.getTagVertex(it.key());
-    if (schema.isAncestor(it.key(), "abstract_name") == false &&
-        tv.getValueType() == Text && t2.contains(it.key()))
+    if (schema.isAncestor(it.key(), "abstract_name") == false && tv.getValueType() == Text && t2.contains(it.key()))
     {
       score *= LevenshteinDistance::score(it.value(), t2[it.key()]);
       weight += tv.getInfluence();
@@ -376,8 +375,7 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool
     QString value = it1.value();
     //  Metadata keys are controlled by hoot and, therefore, should always be lower case, so no
     //  case check needed.
-    if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
-        !OsmSchema::getInstance().isMetaData(key, value))
+    if (!Tags::getNameKeys().contains(key, caseSensitivity) && !OsmSchema::getInstance().isMetaData(key, value))
     {
       if (!caseSensitive)
       {
@@ -393,8 +391,7 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool
   {
     QString key = it2.key();
     QString value = it2.value();
-    if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
-        !OsmSchema::getInstance().isMetaData(key, value))
+    if (!Tags::getNameKeys().contains(key, caseSensitivity) && !OsmSchema::getInstance().isMetaData(key, value))
     {
       if (!caseSensitive)
       {
@@ -479,8 +476,7 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
   }
 }
 
-void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys,
-                               bool caseSensitive) const
+void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys, bool caseSensitive) const
 {
   LOG_TRACE("Merging names...");
   LOG_VART(t1);
@@ -590,32 +586,20 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result, const QStringLis
     {
       // only keep the unique text fields
       QStringList values1 = t1.getList(it1.key());
-      //LOG_VART(values1);
       QStringList values2 = t2.getList(it1.key());
-      //LOG_VART(values2);
 
       // append all unique values in the existing order; don't overwrite tags in t2 that are in the
       // exclude list
       const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
       for (const auto& value : qAsConst(values1))
       {
-        //LOG_VART(values1[i]);
-        if (value.isEmpty() == false &&
-            (!t2.contains(it1.key()) ||
-             !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
-        {
+        if (value.isEmpty() == false && (!t2.contains(it1.key()) || !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
           result.appendValueIfUnique(it1.key(), value);
-          //LOG_VART(result);
-        }
       }
       for (const auto& value : qAsConst(values2))
       {
-        //LOG_VART(values2[i]);
         if (value.isEmpty() == false)
-        {
           result.appendValueIfUnique(it1.key(), value);
-          //LOG_VART(result);
-        }
       }
 
       t1.remove(it1.key());
@@ -700,12 +684,8 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2, const QStringLi
     const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
     for (auto it = t2.constBegin(); it != t2.constEnd(); ++it)
     {
-      if (!it.value().isEmpty() &&
-          (result.contains(it.key()) &&
-           overwriteExcludeTagKeys.contains(it.key(), caseSensitivity)))
-      {
+      if (!it.value().isEmpty() && (result.contains(it.key()) && overwriteExcludeTagKeys.contains(it.key(), caseSensitivity)))
         result[it.key()] = it.value();
-      }
     }
   }
 
@@ -729,7 +709,6 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result, co
     if (it2.value().isEmpty() == false)
       result[it2.key()] = it2.value();
   }
-  //LOG_VART(result);
 
   // Add t1 tags overwriting any t2 tags in the process.
   const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
@@ -742,9 +721,7 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result, co
     LOG_VART(result.contains(it1.key()));
 
     const bool tagsHaveKey = result.contains(it1.key());
-    if (it1.value().isEmpty() == false &&
-        (!tagsHaveKey ||
-         // Do not overwrite any tags whose keys are exclude list.
+    if (it1.value().isEmpty() == false && (!tagsHaveKey || // Do not overwrite any tags whose keys are exclude list.
          !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
     {
       if (!tagsHaveKey || !accumulateValuesTagKeys.contains(it1.key(), caseSensitivity))
@@ -806,8 +783,7 @@ void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) c
   {
     for (auto it2 = t2.begin(); it2 != t2.end(); )
     {
-      const SchemaVertex& ancestor = schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(),
-        it2.key() + "=" + it2.value());
+      const SchemaVertex& ancestor = schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(), it2.key() + "=" + it2.value());
       if (ancestor.isEmpty() == false)
       {
         // erase from the iterators in a safe way
@@ -826,7 +802,7 @@ void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) c
 
 QSet<QString> TagComparator::_toSet(const Tags& t, const QString& k)
 {
-  Tags::const_iterator it = t.find(k);
+  auto it = t.find(k);
   if (OsmSchema::getInstance().isList(k, *it))
     return QSet<QString>::fromList(t.getList(k));
 

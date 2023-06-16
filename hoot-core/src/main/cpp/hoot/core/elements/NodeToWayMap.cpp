@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeToWayMap.h"
@@ -56,7 +56,7 @@ void NodeToWayMap::addWay(const std::shared_ptr<const Way>& w)
 
 const set<long>& NodeToWayMap::getWaysByNode(long nid) const
 {
-  NodeToWayMap::const_iterator it = this->find(nid);
+  auto it = this->find(nid);
   if (it == this->end())
     return _emptySet;
   else

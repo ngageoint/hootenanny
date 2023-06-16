@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "NeedsReviewCriterion.h"
 
@@ -35,11 +35,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
-
-NeedsReviewCriterion::NeedsReviewCriterion(const ConstOsmMapPtr& map)
-  : _map(map)
-{
-}
 
 bool NeedsReviewCriterion::isSatisfied(const ConstElementPtr& e) const
 {

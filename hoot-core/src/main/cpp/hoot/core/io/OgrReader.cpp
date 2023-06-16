@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OgrReader.h"
@@ -155,10 +155,6 @@ private:
   NodeMap::const_iterator _nodesItr;
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
-
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
 
   QString _translatePath;
 
@@ -569,9 +565,9 @@ bool OgrReader::isSupported(const QString& url) const
 
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
-  LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath));
+  LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath, true));
   LOG_VART(IoUtils::isSupportedOgrFormat(url, true));
-  return OgrUtilities::getInstance().isReasonableUrl(justPath) || IoUtils::isSupportedOgrFormat(url, true);
+  return OgrUtilities::getInstance().isReasonableUrl(justPath, true) || IoUtils::isSupportedOgrFormat(url, true);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)

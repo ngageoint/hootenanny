@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONNECTED_RELATION_MEMBER_FINDER_H
@@ -38,9 +38,8 @@ namespace hoot
 /**
  * Finds instances where way members across different relations are connected
  */
-class ConnectedRelationMemberFinder : public ConstOsmMapConsumer
+class ConnectedRelationMemberFinder : public ConstOsmMapConsumerBase
 {
-
 public:
 
   ConnectedRelationMemberFinder() = default;
@@ -55,14 +54,6 @@ public:
    */
   bool haveConnectedWayMembers(const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

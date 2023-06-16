@@ -1859,8 +1859,8 @@ translate = {
   }, // End unpackOtherTags
 
 
-  // Untangle TDS attributes & OSM tags.
-  // Some people have been editing OSM files and inserting TDS attributes
+  // Untangle attributes & OSM tags.
+  // Some people have been editing OSM files and inserting attributes
   untangleAttributes: function (attrs, tags, spec)
   {
     for (var col in attrs)
@@ -1900,7 +1900,7 @@ translate = {
         continue;
       }
 
-      // See if the tag is a valid TDS attribute
+      // See if the tag is a valid attribute
       if (~spec.rules.ignoreList.indexOf(col) ||
           col in spec.rules.numBiased ||
           col in spec.rules.txtBiased ||

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "SchemaTranslatedTagCountVisitor.h"
 
@@ -47,8 +47,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor()
-  : _map(nullptr),
-    _populatedCount(0),
+  : _populatedCount(0),
     _defaultCount(0),
     _nullCount(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -56,8 +55,7 @@ SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor()
 }
 
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t)
-  : _map(nullptr),
-    _populatedCount(0),
+  : _populatedCount(0),
     _defaultCount(0),
     _nullCount(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -101,7 +99,7 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {
-    std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false);
+    std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map).convertToGeometry(e, false);
     if (!g || g->isEmpty())
       return;
     //  Copy the tags to modify and translate

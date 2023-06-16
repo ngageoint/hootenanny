@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef NONBUILDINGAREACRITERION_H
 #define NONBUILDINGAREACRITERION_H
@@ -41,14 +41,14 @@ namespace hoot
  * Should be able to accomplish the same thing with a not building and is area chain but
  * couldn't. See comments in train-area/RemoveIrrelevants.js in the regression tests.
  */
-class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumerBase
 {
 public:
 
   static QString className() { return "NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion() = default;
-  NonBuildingAreaCriterion(ConstOsmMapPtr map) : _map(map) { }
+  NonBuildingAreaCriterion(ConstOsmMapPtr map) : ConstOsmMapConsumerBase(map) { }
   ~NonBuildingAreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
@@ -56,17 +56,12 @@ public:
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override
   { return "Identifies features that are areas but not buildings"; }
 
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }

@@ -375,10 +375,10 @@ Subdivision::Subdivision(const Point2d & a, const Point2d & b, const Point2d & c
 
 Subdivision::~Subdivision()
 {
-  for (auto edge : _edges)//set<QuadEdge*>::iterator it = _edges.begin(); it != _edges.end(); ++it)
+  for (auto edge : _edges)
     delete edge;
   _edges.clear();
-  for (auto data : _data)//vector<Point2d*>::iterator it = _data.begin(); it != _data.end(); ++it)
+  for (auto data : _data)
     delete data;
   _data.clear();
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "PhoneNumberParser.h"
@@ -105,7 +105,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
   //fairly loose for now
   QList<ElementPhoneNumber> parsedPhoneNums;
   const Tags& tags = element.getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);

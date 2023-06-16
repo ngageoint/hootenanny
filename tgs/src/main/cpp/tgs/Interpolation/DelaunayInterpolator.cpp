@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "DelaunayInterpolator.h"
 
@@ -52,7 +52,7 @@ DelaunayInterpolator::DelaunayInterpolator()
 
 double DelaunayInterpolator::_addToResult(const Point2d& p, double w) const
 {
-  std::map<Point2d, int>::const_iterator it = _pointToIndex.find(p);
+  auto it = _pointToIndex.find(p);
   assert(it != _pointToIndex.end());
   if (it->second == -1)
     return 0.0;

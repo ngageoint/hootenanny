@@ -33,6 +33,8 @@ import static hoot.services.HootProperties.GRAIL_OVERPASS_LABEL;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.OVERPASS_QUERY_MAXSIZE;
+import static hoot.services.HootProperties.OVERPASS_QUERY_TIMEOUT;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
@@ -87,6 +89,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ReversedLinesFileReader;
+import org.apache.commons.lang3.CharSet;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -543,6 +547,24 @@ public class GrailResource {
         }
 
         try {
+            //check if diff.osc has translated tags by scanning lines in reverse
+            //looking for FCODE or F_CODE until just a single feature has been read
+            //we will assume all features in a translated schema will have this tag
+            ReversedLinesFileReader fr = new ReversedLinesFileReader(FileUtils.getFile(workDir, "diff.osc"), StandardCharsets.UTF_8);
+            String ln;
+            boolean hasFcode = false;
+            do {
+                ln = fr.readLine();
+                if (ln != null && ln.matches("\\s*<tag k=\"F_?CODE\" .*")) {
+                    hasFcode = true;
+                }
+            } while (ln != null && !ln.matches("\\s*<(node|way|relation) .*"));
+            fr.close();
+
+            if (hasFcode) {
+                jobInfo.put("error", "non-OSM tags detected in changeset");
+            }
+
             JSONParser parser = new JSONParser();
             String jsonDoc = FileUtils.readFileToString(FileUtils.getFile(workDir, "stats.json"), "UTF-8");
             JSONObject statsJson = (JSONObject) parser.parse(jsonDoc);
@@ -818,7 +840,10 @@ public class GrailResource {
         }
 
         // first line that lists columns which are counts for each feature type
-        overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
+        overpassQuery = overpassQuery.replace("[out:json]",
+                String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s]",
+                OVERPASS_QUERY_MAXSIZE, OVERPASS_QUERY_TIMEOUT)
+                );
 
         // overpass query can have multiple "out *" lines so need to replace all
         overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "ScriptSchemaTranslator.h"
 
@@ -51,13 +51,6 @@ void ScriptSchemaTranslator::close()
     _finalize();
     _initialized = false;
   }
-}
-
-const QString& ScriptSchemaTranslator::_saveMemory(const QString& s)
-{
-  if (!_strings.contains(s))
-    _strings[s] = s;
-  return _strings[s];
 }
 
 void ScriptSchemaTranslator::strictError(const QString& s) const

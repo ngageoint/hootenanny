@@ -1037,6 +1037,20 @@ tds40 = {
       }
       break;
 
+    case 'DA010': // Soil Surface Region
+      if (tags.natural && (tags.natural == tags.terrain_surface))
+      {
+        delete tags.geological;  // The natural tag is the better one to use
+        delete tags.terrain_surface; // Implied value: natural=sand -> terrain_surface=sand
+      }
+
+      if (tags.terrain_surface && !tags.surface)
+      {
+        tags.surface = tags.terrain_surface;
+        delete tags.terrain_surface;
+      }
+      break;
+
     case 'EA031': // Botanic Garden
       if (! tags.leisure) tags.leisure = 'garden';
       break;
@@ -2057,6 +2071,43 @@ tds40 = {
         }
       }
     }
+
+    // Soil Surface Regions
+    if (!attrs.F_CODE)
+    {
+      // if (tags.surface)
+      // {
+      //   attrs.F_CODE = 'DA010'; // Soil Surface Region
+      //   if (!tags.material)
+      //   {
+      //     tags.material = tags.surface;
+      //     delete tags.surface;
+      //   }
+      // }
+
+      switch (tags.natural)
+      {
+        case 'mud':
+        case 'sand':
+        case 'bare_rock':
+        case 'rock':
+        case 'stone':
+        case 'scree':
+        case 'shingle':
+          attrs.F_CODE = 'DA010'; // Soil Surface Region
+          if (tags.surface)
+          {
+            tags.terrain_surface = tags.surface;
+            delete tags.surface;
+          }
+          else
+          {
+            // Set the TSM type
+            tags.terrain_surface = tags.natural;
+          }
+          break;
+      }
+    } // End ! F_CODE
 
     // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly
     var pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];

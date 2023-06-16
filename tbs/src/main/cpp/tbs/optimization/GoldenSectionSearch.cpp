@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "GoldenSectionSearch.h"
 
@@ -38,9 +38,9 @@ using namespace std;
 namespace tbs
 {
 
-GoldenSectionSearch::GoldenSectionSearch(double epsilon, const int maxCacheSize) :
-_maxCacheSize(maxCacheSize),
-_epsilon(epsilon)
+GoldenSectionSearch::GoldenSectionSearch(double epsilon, const int maxCacheSize)
+  : _maxCacheSize(maxCacheSize),
+    _epsilon(epsilon)
 {
   _phi = (1.0 + sqrt(5.0)) / 2.0;
   _resphi = 2.0 - _phi;
@@ -58,7 +58,7 @@ double GoldenSectionSearch::argmin(Function& f, double minx, double maxx)
 double GoldenSectionSearch::_f(double x)
 {
   double result;
-  map<double, double>::iterator it = _cache.find(x);
+  auto it = _cache.find(x);
 
   if (it == _cache.end())
   {
@@ -66,15 +66,11 @@ double GoldenSectionSearch::_f(double x)
     // This is just here to keep runaway caches sizes from happening during testing. It can be
     // converted over to an actual LRU cache at some point if needed.
     if (_cache.size() < (unsigned int)_maxCacheSize)
-    {
       _cache[x] = y;
-    }
     result = y;
   }
   else
-  {
     result = it->second;
-  }
 
   return result;
 }
@@ -88,18 +84,12 @@ double GoldenSectionSearch::_search(double a, double b, double c)
   assert(_iterations < 1000);
 
   if (c - b > b - a)
-  {
     x = b + _resphi * (c - b);
-  }
   else
-  {
     x = b - _resphi * (b - a);
-  }
 
   if (fabs(c - a) < _epsilon)
-  {
     return (c + a) / 2;
-  }
 
   double fx = _f(x);
   double fb = _f(b);
@@ -113,42 +103,28 @@ double GoldenSectionSearch::_search(double a, double b, double c)
   //
 
   if (fx == fb && _f(a) == _f(c) && _f(a) == _f(b))
-  {
     throw invalid_argument("Expected a function where the slope is zero at only one location.");
-  }
 
   if (fx < fb)
-  {
     return _searchMid(a, b, c, x);
-  }
   else
-  {
     return _searchEdge(a, b, c, x);
-  }
 }
 
 double GoldenSectionSearch::_searchEdge(double a, double b, double c, double x)
 {
   if (c - b > b - a)
-  {
     return _search(a, b, x);
-  }
   else
-  {
     return _search(x, b, c);
-  }
 }
 
 double GoldenSectionSearch::_searchMid(double a, double b, double c, double x)
 {
   if (c - b > b - a)
-  {
     return _search(b, x, c);
-  }
   else
-  {
     return _search(a, x, b);
-  }
 }
 
 }

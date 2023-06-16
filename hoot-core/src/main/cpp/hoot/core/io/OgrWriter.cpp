@@ -212,8 +212,8 @@ bool OgrWriter::isSupported(const QString& url) const
   if (_scriptPath.isEmpty())
     return false;
 
-  LOG_VARD(OgrUtilities::getInstance().isReasonableUrl(url));
-  return OgrUtilities::getInstance().isReasonableUrl(url);
+  LOG_VARD(OgrUtilities::getInstance().isReasonableUrl(url, false));
+  return OgrUtilities::getInstance().isReasonableUrl(url, false);
 }
 
 void OgrWriter::write(const ConstOsmMapPtr& map)

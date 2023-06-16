@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/StringMemoryInterface.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -50,7 +51,7 @@ class ApiDb;
 /**
  * Abstract parent class for reading from an API style OSM database
  */
-class ApiDbReader : public PartialOsmMapReader, public Boundable
+class ApiDbReader : public PartialOsmMapReader, public Boundable, protected StringMemoryInterface
 {
 public:
 
@@ -172,6 +173,8 @@ protected:
   void _updateMetadataOnElement(ElementPtr element) const;
 
   bool _hasBounds() const;
+
+  void _setTags(const ElementPtr& element, const Tags& tags);
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef SCHEMATRANSLATEDTAGCOUNTVISITOR_H
 #define SCHEMATRANSLATEDTAGCOUNTVISITOR_H
@@ -45,8 +45,7 @@ class Schema;
  * @brief The SchemaTranslatedTagCountVisitor class counts tags that can be translated with the
  * configured schema.
  */
-class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumerBase, public SingleStatistic
 {
 public:
 
@@ -57,8 +56,6 @@ public:
   ~SchemaTranslatedTagCountVisitor() override = default;
 
   double getStat() const override { return (double)getPopulatedCount() / (double)getTotalCount(); }
-
-  void setOsmMap(const OsmMap* map) override { _map = map; }
 
   /**
    * @see ElementVisitor
@@ -86,7 +83,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   std::shared_ptr<const Schema> _schema;
   std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   long _populatedCount, _defaultCount, _nullCount;

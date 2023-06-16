@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014-2023 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -44,7 +44,7 @@ namespace hoot
 class WaySublineTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WaySublineTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runWaySublineTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -53,8 +53,7 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    Coordinate c1[] = { Coordinate(0, 0), Coordinate(10, 0), Coordinate(20, 0), Coordinate(30, 0),
-                       Coordinate::getNull() };
+    Coordinate c1[] = { Coordinate(0, 0), Coordinate(10, 0), Coordinate(20, 0), Coordinate(30, 0), Coordinate::getNull() };
     TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = { Coordinate(50, 0), Coordinate(150, 0), Coordinate::getNull() };
@@ -63,14 +62,12 @@ public:
     return map;
   }
 
-  void runTest()
+  void runWaySublineTest()
   {
     OsmMapPtr map = createTestMap();
     ElementToGeometryConverter ec(map);
-    WayPtr w1 =
-      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
-    WayPtr w2 =
-      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     {
       WaySubline uut(WayLocation(map, w1, 0), WayLocation(map, w1, 5));

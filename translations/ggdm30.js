@@ -884,7 +884,7 @@ ggdm30 = {
         ['t.cable =="yes" && t["cable:type"] == "transmission"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
-        ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
+        ['t.terrain_surface','t.surface = t.terrain_surface; delete t.terrain_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
         ['t["generator:source"]','t.power = "generator"'],
@@ -1166,6 +1166,20 @@ ggdm30 = {
     case 'BH082': // Inland Water
       // This leaves us with just "natural=water"
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
+      break;
+
+    case 'DA010': // Soil Surface Region
+      if (tags.natural && (tags.natural == tags.terrain_surface))
+      {
+        delete tags.geological;  // The natural tag is the better one to use
+        delete tags.terrain_surface; // Implied value: natural=sand -> terrain_surface=sand
+      }
+
+      if (tags.terrain_surface && !tags.surface)
+      {
+        tags.surface = tags.terrain_surface;
+        delete tags.terrain_surface;
+      }
       break;
 
     case 'EA031': // Botanic Garden
@@ -1506,7 +1520,7 @@ ggdm30 = {
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
         ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
-        ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
+        ['t.natural == "desert" && t.surface','t.terrain_surface = t.surface; delete t.surface'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
@@ -2063,6 +2077,43 @@ ggdm30 = {
         if (i in tags) attrs.F_CODE = fcodeMap[i];
       }
     }
+
+    // Soil Surface Regions
+    if (!attrs.F_CODE)
+    {
+      // if (tags.surface)
+      // {
+      //   attrs.F_CODE = 'DA010'; // Soil Surface Region
+      //   if (!tags.material)
+      //   {
+      //     tags.material = tags.surface;
+      //     delete tags.surface;
+      //   }
+      // }
+
+      switch (tags.natural)
+      {
+        case 'mud':
+        case 'sand':
+        case 'bare_rock':
+        case 'rock':
+        case 'stone':
+        case 'scree':
+        case 'shingle':
+          attrs.F_CODE = 'DA010'; // Soil Surface Region
+          if (tags.surface)
+          {
+            tags.terrain_surface = tags.surface;
+            delete tags.surface;
+          }
+          else
+          {
+            // Set the TSM type
+            tags.terrain_surface = tags.natural;
+          }
+          break;
+      }
+    } // End ! F_CODE
 
     // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly
     var pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];
@@ -2767,6 +2818,10 @@ ggdm30 = {
       // Debug
       // translate.dumpOne2OneLookup(ggdm30.lookup);
     }
+
+    // Untangle GGDM attributes & OSM tags.
+    // NOTE: This could get wrapped with an ENV variable so it only gets called during import
+    translate.untangleAttributes(attrs,tags,ggdm30);
 
     // Cleanput the usless values
     ggdm30.cleanAttrs(attrs);

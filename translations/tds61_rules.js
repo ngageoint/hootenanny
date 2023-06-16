@@ -2949,21 +2949,21 @@ tds61.rules = {
 
     // TSM - Terrain Surface Material - Added to ZI016_ROC list
     // ['TSM','-999999',undefined,undefined], // No Information
-    ['TSM','1','desert_surface','asphalt'], // Asphalt
-    ['TSM','2','desert_surface','bedrock'], // Bedrock
-    ['TSM','3','desert_surface','boulders'], // Boulders
-    ['TSM','4','desert_surface','concrete'], // Concrete
-    ['TSM','5','desert_surface','evaporite'], // Evaporite
-    ['TSM','6','desert_surface','frozen_water'], // Frozen Water
-    ['TSM','7','desert_surface','gravel'], // Gravel
-    ['TSM','8','desert_surface','lava_flow'], // Lava Flow
-    ['TSM','9','desert_surface','loess'], // Loess
-    ['TSM','10','desert_surface','mud'], // Mud
-    ['TSM','11','desert_surface','paved'], // Paved
-    ['TSM','12','desert_surface','rock'], // Rock
-    ['TSM','13','desert_surface','sand'], // Sand
-    ['TSM','14','desert_surface','soil'], // Soil
-    ['TSM','999','desert_surface','other'], // Other
+    ['TSM','1','terrain_surface','asphalt'], // Asphalt
+    ['TSM','2','terrain_surface','bedrock'], // Bedrock
+    ['TSM','3','terrain_surface','boulders'], // Boulders
+    ['TSM','4','terrain_surface','concrete'], // Concrete
+    ['TSM','5','terrain_surface','evaporite'], // Evaporite
+    ['TSM','6','terrain_surface','frozen_water'], // Frozen Water
+    ['TSM','7','terrain_surface','gravel'], // Gravel
+    ['TSM','8','terrain_surface','lava_flow'], // Lava Flow
+    ['TSM','9','terrain_surface','loess'], // Loess
+    ['TSM','10','terrain_surface','mud'], // Mud
+    ['TSM','11','terrain_surface','paved'], // Paved
+    ['TSM','12','terrain_surface','rock'], // Rock
+    ['TSM','13','terrain_surface','sand'], // Sand
+    ['TSM','14','terrain_surface','soil'], // Soil
+    ['TSM','999','terrain_surface','other'], // Other
 
     // TST - Cable Suspended Shape
     // ['TST','-999999',undefined,undefined], // No Information
@@ -4307,11 +4307,12 @@ tds61.rules = {
   swapListIn : {
     'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
     'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'desert_surface':'terrain_surface',
     'HYP':'ZI024_HYP',
     // 'LEN_':'LZN',
     'MEM':'ZI006_MEM',
-    'PFD':'PWA',
     'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+    'PFD':'PWA',
     'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
     'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
     'RCG':'ZI004_RCG',
@@ -4323,9 +4324,9 @@ tds61.rules = {
     'ZI025_MAN':'MAN',
     'ZI025_WLE':'WLE',
     'ZI032_GUG':'GUG',
-    'ZI032_TOS':'TOS',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
+    'ZI032_TOS':'TOS',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
     'ZVH_VDT':'VDT'
   },

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -80,7 +80,7 @@ private:
       CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
     }
 
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+    for (auto it = t1.begin(); it != t1.end(); ++it)
     {
       if (t1[it.key()] != t2[it.key()])
       {
