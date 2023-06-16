@@ -611,6 +611,12 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflati
     hoot convert input.osm output.shp
 -----
 
+==== Convert an OSM file to a FlatGeobuf file
+
+-----
+    hoot convert input.osm output.fgb
+-----
+
 ==== Bulk write a map to an offline OSM API database:
 
 -----
