@@ -31,6 +31,7 @@
 #include <ogr_geometry.h>
 
 // GEOS
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
 
@@ -298,7 +299,7 @@ void OgrMultifileWriter::writePoints(const ConstOsmMapPtr& map, const QString& p
 
 void OgrMultifileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& path)
 {
-  _setupDataset(map, path, _getPolygonGeometryType(), ElementType::Unknown);
+  _setupDataset(map, path, wkbMultiPolygon, ElementType::Unknown);
 
   const WayMap& ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -307,15 +308,6 @@ void OgrMultifileWriter::writePolygons(const ConstOsmMapPtr& map, const QString&
 
     if (AreaCriterion().isSatisfied(way))
       _writeWayPolygon(map, way);
-  }
-
-  //  For polygon only file types a multipolygon file needs to be written
-  if (_getPolygonGeometryType() == OGRwkbGeometryType::wkbPolygon)
-  {
-    _cleanupDataset();
-    QString multipolyPath = path;
-    multipolyPath.replace("Polygons" + _getFileExtension(), "MultiPolygons" + _getFileExtension());
-    _setupDataset(map, multipolyPath, OGRwkbGeometryType::wkbMultiPolygon, ElementType::Unknown);
   }
 
   const RelationMap& relations = map->getRelations();
@@ -343,6 +335,9 @@ void OgrMultifileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map, const 
     OGRFeature::DestroyFeature(poFeature);
     return;
   }
+
+  //  Convert the polygon to a multipolygon if needed (FlagGeobuf cannot combine polygons and multipolygons in the same layer)
+  geometry = _polyToMultipoly(geometry);
 
   std::string wkt = geometry->toString();
   const char* t = wkt.data();
@@ -383,6 +378,9 @@ void OgrMultifileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPt
     return;
   }
 
+  //  Convert the polygon to a multipolygon if needed (FlagGeobuf cannot combine polygons and multipolygons in the same layer)
+  p = _polyToMultipoly(p);
+
   std::string wkt = p->toString();
   const char* t = wkt.data();
   OGRGeometry* geom;
@@ -406,6 +404,18 @@ void OgrMultifileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPt
   }
 
   OGRFeature::DestroyFeature(poFeature);
+}
+
+std::shared_ptr<geos::geom::Geometry> OgrMultifileWriter::_polyToMultipoly(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+{
+  std::shared_ptr<geos::geom::Geometry> multi = geometry;
+  if (_convertPolygons() && geometry->getGeometryTypeId() == GeometryTypeId::GEOS_POLYGON)
+  {
+    //  Convert the single polygon to a multipolygon
+    std::vector<geos::geom::Geometry*>* single = new std::vector<geos::geom::Geometry*>({ geometry->clone().release() });
+    multi.reset(geos::geom::GeometryFactory::getDefaultInstance()->createMultiPolygon(single));
+  }
+  return multi;
 }
 
 }

@@ -56,7 +56,7 @@ protected:
   const char* _getDriverName() const override { return "ESRI Shapefile"; };
   QString _getFileExtension() const override { return ".shp"; }
   OgrOptions _getOptions() const override;
-  OGRwkbGeometryType _getPolygonGeometryType() const override { return OGRwkbGeometryType::wkbMultiPolygon; }
+  bool _convertPolygons() const override { return false; }
 
 };
 
