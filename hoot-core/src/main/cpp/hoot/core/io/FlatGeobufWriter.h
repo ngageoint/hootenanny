@@ -56,7 +56,7 @@ protected:
   const char* _getDriverName() const override { return "FlatGeobuf"; };
   QString _getFileExtension() const override { return ".fgb"; }
   OgrOptions _getOptions() const override;
-  OGRwkbGeometryType _getPolygonGeometryType() const override { return OGRwkbGeometryType::wkbPolygon; }
+  bool _convertPolygons() const override { return true; }
 
 };
 
