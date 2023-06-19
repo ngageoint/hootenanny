@@ -28,20 +28,13 @@ copy_war_to_tomcat()
 touch core-services-building.txt
 
 if [ "${HOOT_CLEAN:-0}" = "1" ]; then
-    make -f Makefile.hoot clean
+    ./docker/scripts/core-services-configure.sh
+    make clean
 fi;
 
-if [ ! -f configure ]; then
-    ./docker/scripts/core-services-configure.sh
-fi
-
 if [ "${HOOT_BUILD_CORE:-0}" = "1" ] || [ ! -f ./bin/hoot.bin ]; then
-    # everything the core target does except build servces
-    make -f Makefile.hoot -j$(nproc) \
-        makedirs js-make qt-make model-build \
-        conf/dictionary/words.sqlite \
-        conf/dictionary/WordsAbridged.sqlite \
-        hoot-services/src/main/resources/language-translation/langdetect-183.bin
+    ./docker/scripts/core-services-configure.sh
+    make core -j$(nproc)
 fi
 
 if [ "${HOOT_BUILD_HOOT_SERVICES:-0}" = "1" ] || [ ! -f hoot-services/target/hoot-services-$HOOT_USER.war ]; then
