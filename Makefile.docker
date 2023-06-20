@@ -27,32 +27,13 @@ hoot.env:
 	cp hoot.env.example hoot.env
 
 .env: hoot-ui-2x/README.md
-	source ./VagrantProvisionVars.sh
-	touch .env
+	cp .env_versions .env
 	mkdir -p bin lib .ccache
 	echo "HOOT_UID=$(UID)" >> .env
 	echo "HOOT_GID=$(GID)" >> .env
 	echo "HOOT_USER=hoot" >> .env
 	echo "HOOT_GROUP=hoot" >> .env
 	echo "HOOT_HOME=/var/lib/hootenanny" >> .env
-	echo "POSTGRESQL_VERSION=$(POSTGRESQL_VERSION)" >> .env
-	echo "GLPK_VERSION=$(GLPK_VERSION)" >> .env
-	echo "LIBOAUTHCPP_VERSION=$(LIBOAUTHCPP_VERSION)" >> .env
-	echo "LIBPHONENUMBER_VERSION=$(LIBPHONENUMBER_VERSION)" >> .env
-	echo "LIBPOSTAL_VERSION=$(LIBPOSTAL_VERSION)" >> .env
-	echo "NODE_VERSION=$(NODE_VERSION)" >> .env
-	echo "NPM_VERSION=$(NPM_VERSION)" >> .env
-	echo "V8_VERSION=$(V8_VERSION)" >> .env
-	echo "STXXL_VERSION=$(STXXL_VERSION)" >> .env
-	echo "ARMADILLO_VERSION=$(ARMADILLO_VERSION)" >> .env
-	echo "GDAL_VERSION=$(GDAL_VERSION)" >> .env
-	echo "GEOS_VERSION=$(GEOS_VERSION)" >> .env
-	echo "LIBGEOTIFF_VERSION=$(LIBGEOTIFF_VERSION)" >> .env
-	echo "PROJ_VERSION=$(PROJ_VERSION)" >> .env
-	echo "DEVTOOLSET_VERSION=$(DEVTOOLSET_VERSION)" >> .env
-	echo "STXXL_VERSION=$(STXXL_VERSION)" >> .env
-	echo "JDK_VERSION=$(JDK_VERSION)" >> .env
-
 
 conf/database/DatabaseConfigLocal.sh:
 	touch conf/database/DatabaseConfigLocal.sh

@@ -6,7 +6,6 @@ ARG hoot_gid
 ARG hoot_group
 ARG hoot_shell=/bin/bash
 ARG hoot_home
-
 ARG glpk_version
 ARG liboauthcpp_version
 ARG libphonenumber_version

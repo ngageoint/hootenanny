@@ -3,7 +3,7 @@
 export JDK_VERSION=1.8.0
 
 # Hoot deps library versions
-export GLPK_VERSION=4.65
+export GLPK_VERSION=4.64
 export LIBOAUTHCPP_VERSION=0.1.0
 export LIBPHONENUMBER_VERSION=8.12.39
 export LIBPOSTAL_VERSION=1.1
