@@ -35,6 +35,7 @@ fi;
 if [ "${HOOT_BUILD_CORE:-0}" = "1" ] || [ ! -f ./bin/hoot.bin ]; then
     ./docker/scripts/core-services-configure.sh
     make core -j$(nproc)
+    copy_war_to_tomcat
 fi
 
 if [ "${HOOT_BUILD_HOOT_SERVICES:-0}" = "1" ] || [ ! -f hoot-services/target/hoot-services-$HOOT_USER.war ]; then
