@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 // GEOS
@@ -33,6 +33,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/FlatGeobufWriter.h>
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -136,8 +137,10 @@ private:
 
   void _writeOutput(const OsmMapPtr& map, const QString& path) const
   {
-    if (path.endsWith(".shp", Qt::CaseInsensitive))
+    if (path.endsWith(ShapefileWriter::supportedExtension(), Qt::CaseInsensitive))
       ShapefileWriter().writePolygons(map, path);
+    else if (path.endsWith(FlatGeobufWriter::supportedExtension(), Qt::CaseInsensitive))
+      FlatGeobufWriter().writePolygons(map, path);
     else if (path.endsWith(".geojson", Qt::CaseInsensitive))
     {
       OsmGeoJsonWriter writer;
