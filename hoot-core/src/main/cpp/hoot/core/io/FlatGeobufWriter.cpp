@@ -40,8 +40,8 @@ void FlatGeobufWriter::_removeMultifile(const QString& path) const
 
   QString base = fi.absolutePath() + "/" + fi.baseName();
 
-  QFile::remove(base + ".fgb");
-  QFile::remove(base + ".FGB");
+  QFile::remove(base + supportedExtension());
+  QFile::remove(base + supportedExtension().toUpper());
 }
 
 OgrOptions FlatGeobufWriter::_getOptions() const

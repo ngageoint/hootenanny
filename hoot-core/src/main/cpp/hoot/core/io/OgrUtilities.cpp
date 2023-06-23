@@ -43,7 +43,7 @@ void OgrUtilities::_loadDriverInfo()
   //  Load the extension-based driver info
   //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
   _drivers.emplace_back(".shp",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
-  _drivers.emplace_back(".fgb",      "FlatGeobuf",     true,     false,  GDAL_OF_VECTOR);
+  _drivers.emplace_back(".fgb",      "FlatGeobuf",     true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".sqlite",   "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".db",       "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".mif",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR);
@@ -161,8 +161,8 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 
   OgrOptions options = _getOgrOptions(url, driverInfo);
 
-  // If the user specifies a shapefile, then crop off the .shp and create a directory.
-  if (url.endsWith(".shp", Qt::CaseInsensitive))
+  // If the user specifies a shapefile or flatgeobuf, then crop off the extension and create a directory.
+  if (url.endsWith(".shp", Qt::CaseInsensitive) || url.endsWith(".fgb", Qt::CaseInsensitive))
     source = url.mid(0, url.length() - 4);
 
   std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, options.getCrypticOptions()));
@@ -173,11 +173,12 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 
 std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
 {
+  QString source = url;
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
    * loaded which has been known to cause issues.
    */
-  OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
+  OgrDriverInfo driverInfo = getDriverInfo(source, readonly);
 
   // With GDALOpenEx, we need to specify the GDAL_OF_UPDATE option or the dataset will get opened
   // Read Only.
@@ -186,23 +187,27 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
 
   LOG_VART(driverInfo._driverName);
   LOG_VART(driverInfo._driverType);
-  LOG_VART(url.toUtf8().data());
+  LOG_VART(source.toUtf8().data());
 
   const char* drivers[2] = { driverInfo._driverName, nullptr };
 
+  // If the user specifies a flatgeobuf and a '.fgb' file doesn't exist, try it as a directory
+  if (source.endsWith(".fgb", Qt::CaseInsensitive) && !QFile::exists(source))
+    source = source.mid(0, source.length() - 4);
+
   // Setup read options for various file types
-  OgrOptions options = _getOgrOptions(url, driverInfo);
+  OgrOptions options = _getOgrOptions(source, driverInfo);
 
   std::shared_ptr<GDALDataset> result(
       static_cast<GDALDataset*>(
         GDALOpenEx(
-          url.toUtf8().data(), driverInfo._driverType,
+          source.toUtf8().data(), driverInfo._driverType,
           (driverInfo._driverName != nullptr ? drivers : nullptr),
           options.getCrypticOptions(), nullptr)));
   if (!result)
   {
-    QString errorMsg = "Unable to open: " + url + ".";
-    if (url.contains(".zip"))
+    QString errorMsg = "Unable to open: " + source + ".";
+    if (source.contains(".zip"))
       errorMsg += " Is your path within the zip file correct?";
     throw HootException(errorMsg);
   }

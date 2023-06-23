@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "IoUtils.h"
@@ -34,6 +34,7 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/FlatGeobufWriter.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
@@ -565,10 +566,15 @@ QString IoUtils::getOutputUrlFromInput(const QString& inputUrl, const QString& a
       // This is a little kludgy, and we may be able to make it more extensible going forward. We
       // want to get the extension from our custom dir formats as well in order to be able to write
       // the output URL correctly.
-      if (existingBaseName.endsWith(ShapefileWriter().supportedFormats()))
+      if (existingBaseName.endsWith(ShapefileWriter::supportedExtension()))
       {
-        existingExtension = ShapefileWriter().supportedFormats().replace(".", "");
-        existingBaseName = existingBaseName.replace(ShapefileWriter().supportedFormats(), "");
+        existingExtension = ShapefileWriter::supportedExtension().replace(".", "");
+        existingBaseName = existingBaseName.replace(ShapefileWriter::supportedExtension(), "");
+      }
+      else if (existingBaseName.endsWith(FlatGeobufWriter::supportedExtension()))
+      {
+        existingExtension = FlatGeobufWriter::supportedExtension().replace(".", "");
+        existingBaseName = existingBaseName.replace(FlatGeobufWriter::supportedExtension(), "");
       }
       else if (existingBaseName.endsWith("gdb"))
       {
