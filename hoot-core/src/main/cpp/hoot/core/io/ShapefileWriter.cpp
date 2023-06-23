@@ -40,8 +40,8 @@ void ShapefileWriter::_removeMultifile(const QString& path) const
 
   QString base = fi.absolutePath() + "/" + fi.baseName();
 
-  QFile::remove(base + ".shp");
-  QFile::remove(base + ".SHP");
+  QFile::remove(base + supportedExtension());
+  QFile::remove(base + supportedExtension().toUpper());
   QFile::remove(base + ".dbf");
   QFile::remove(base + ".DBF");
   QFile::remove(base + ".shx");

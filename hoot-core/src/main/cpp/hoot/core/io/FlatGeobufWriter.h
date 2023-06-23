@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
  */
 
-#ifndef FLAT_GEOBUF_WRITER_H
-#define FLAT_GEOBUF_WRITER_H
+#ifndef FLATGEOBUF_WRITER_H
+#define FLATGEOBUF_WRITER_H
 
 // hoot
 #include <hoot/core/io/OgrMultifileWriter.h>
@@ -47,19 +47,20 @@ public:
   FlatGeobufWriter() = default;
   ~FlatGeobufWriter() override = default;
 
-  QString supportedFormats() const override { return ".fgb"; }
-  bool isSupported(const QString& url) const override { return url.endsWith(".fgb", Qt::CaseInsensitive); }
+  inline static QString supportedExtension() { return ".fgb"; }
+  QString supportedFormats() const override { return supportedExtension(); }
+  bool isSupported(const QString& url) const override { return url.endsWith(supportedExtension(), Qt::CaseInsensitive); }
 
 protected:
 
   void _removeMultifile(const QString& path) const override;
   const char* _getDriverName() const override { return "FlatGeobuf"; };
-  QString _getFileExtension() const override { return ".fgb"; }
+  QString _getFileExtension() const override { return supportedExtension(); }
   OgrOptions _getOptions() const override;
-  OGRwkbGeometryType _getPolygonGeometryType() const override { return OGRwkbGeometryType::wkbPolygon; }
+  bool _convertPolygons() const override { return true; }
 
 };
 
 }
 
-#endif // FLAT_GEOBUF_WRITER_H
+#endif // FLATGEOBUF_WRITER_H

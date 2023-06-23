@@ -87,7 +87,7 @@ protected:
   virtual const char* _getDriverName() const = 0;
   virtual QString _getFileExtension() const = 0;
   virtual OgrOptions _getOptions() const = 0;
-  virtual OGRwkbGeometryType _getPolygonGeometryType() const = 0;
+  virtual bool _convertPolygons() const = 0;
 
   void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation) const;
   void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way) const;
@@ -95,6 +95,7 @@ protected:
   void _setupDataset(const ConstOsmMapPtr& map, const QString& path, OGRwkbGeometryType geometry_type, ElementType element_type);
   OGRFeature* _createFeature(const Tags& tags, double circular_error) const;
   void _cleanupDataset();
+  std::shared_ptr<geos::geom::Geometry> _polyToMultipoly(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
 };
 
 }

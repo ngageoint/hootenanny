@@ -55,5 +55,5 @@ echo ""
 FLATGEOBUF_OPTIONS="-D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D ogr.add.uuid=false"
 FLATGEOBUF_OPS="-D convert.ops=DuplicateNodeRemover"
 hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_GGDM $FLATGEOBUF_OPTIONS test-files/io/GeoJson/AllDataTypes.osm $OUTPUT_DIR/AllDataTypes.fgb
-hoot convert $LOG_LEVEL  $CONFIG $TRANSLATION_GGDM $FLATGEOBUF_OPTIONS $OUTPUT_DIR/AllDataTypes.fgb $OUTPUT_DIR/AllDataTypesFgb.osm
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_GGDM $FLATGEOBUF_OPTIONS $OUTPUT_DIR/AllDataTypes.fgb $OUTPUT_DIR/AllDataTypesFgb.osm
 hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/AllDataTypesFgb.osm $OUTPUT_DIR/AllDataTypesFgb.osm

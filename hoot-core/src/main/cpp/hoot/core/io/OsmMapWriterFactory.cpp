@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmMapWriterFactory.h"
 
@@ -50,6 +50,17 @@ namespace hoot
 
 unsigned int OsmMapWriterFactory::_debugMapCount = 1;
 
+//  Sort the writers so that OgrWriter is favored
+bool compareWriters(const QString& a, const QString& b)
+{
+  if (a == OgrWriter::className())
+    return true;
+  else if (b == OgrWriter::className())
+    return false;
+  else
+    return a < b;
+}
+
 std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& url)
 {
   LOG_VART(url);
@@ -62,6 +73,9 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
     writer = Factory::getInstance().constructObject<OsmMapWriter>(writerOverride);
 
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
+  //  Sort the writers so that OgrWriter is favored
+  sort(names.begin(), names.end(), compareWriters);
+  //  Iterate all writers
   for (const auto& name : names)
   {
     LOG_VART(name);
