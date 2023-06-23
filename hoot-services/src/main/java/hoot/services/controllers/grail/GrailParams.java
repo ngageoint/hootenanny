@@ -50,6 +50,9 @@ public class GrailParams {
     @JsonProperty("APPLY_TAGS")
     private Boolean applyTags = false;
 
+    @JsonProperty("clipExtent")
+    private Boolean clipExtent = false;
+
     @JsonIgnore
     private Users user;
 
@@ -97,6 +100,10 @@ public class GrailParams {
 
     private String source;
 
+    private String translation;
+
+    private String intermediateFile;
+
     public GrailParams() {}
 
     public GrailParams(GrailParams params) {
@@ -120,6 +127,8 @@ public class GrailParams {
         this.comment = params.getComment();
         this.hashtags = params.getHashtags();
         this.source = params.getSource();
+        this.clipExtent = params.getClipExtent();
+        this.translation = params.getTranslation();
     }
 
     public String getComment() {
@@ -144,6 +153,22 @@ public class GrailParams {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+
+    public void setTranslation(String translation) {
+        this.translation = translation;
+    }
+
+    public String getIntermediateFile() {
+        return intermediateFile;
+    }
+
+    public void setIntermediateFile(String intermediateFile) {
+        this.intermediateFile = intermediateFile;
     }
 
     public String getConflationType() {
@@ -176,6 +201,14 @@ public class GrailParams {
 
     public void setApplyTags(Boolean applyTags) {
         this.applyTags = applyTags;
+    }
+
+    public Boolean getClipExtent() {
+        return clipExtent;
+    }
+
+    public void setClipExtent(Boolean clipExtent) {
+        this.clipExtent = clipExtent;
     }
 
     public Users getUser() {
