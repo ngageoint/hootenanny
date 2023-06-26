@@ -1022,8 +1022,6 @@ public class GrailResource {
 
         try {
             // If clipExtent is true, split the import into two commands
-            // using an OGR format like GPKG as a middleman so that true geometry clipping can occur
-            // If clipExtent is true, split the import into two commands
             // using an OGR format like GPKG as an intermediate file so that true geometry clipping can occur
             if (params.getClipExtent()) {
 
