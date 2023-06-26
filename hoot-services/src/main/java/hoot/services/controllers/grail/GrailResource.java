@@ -741,8 +741,28 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         GrailParams getOverpassParams = new GrailParams(reqParams);
-        getOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
-        workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
+
+        // If clipExtent is true, split the import into two commands
+        // using an OGR format like GPKG as an intermediate file so that true geometry clipping can occur
+        if (reqParams.getClipExtent()) {
+
+            String translation = new File(HOME_FOLDER, "translations/RenderDb.js").getAbsolutePath();
+            getOverpassParams.setTranslation(translation);
+            File overpassFile = new File(workDir, SECONDARY + ".gpkg");
+            getOverpassParams.setOutput(overpassFile.getAbsolutePath());
+            if (overpassFile.exists()) overpassFile.delete();
+            workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
+
+            GrailParams dbOverpassParams = new GrailParams(reqParams);
+            dbOverpassParams.setIntermediateFile(overpassFile.getAbsolutePath());
+            dbOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+            dbOverpassParams.setTranslation(translation);
+            workflow.add(getPublicOverpassCommand(jobId, workDir, dbOverpassParams, debugLevel));
+
+        } else {
+            getOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+            workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
+        }
 
         GrailParams params = new GrailParams(reqParams);
 
@@ -991,7 +1011,6 @@ public class GrailResource {
         String layerName = params.getInput1();
 
         // Pull data from the reference OSM API or private Overpass API
-        // Until hoot can read API url directly, download to file first
         GrailParams getRailsParams = new GrailParams(params);
 
         // have to add the query for getting connected ways before calling getRailsPortApiCommand
@@ -1002,7 +1021,28 @@ public class GrailResource {
         }
 
         try {
-            workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
+            // If clipExtent is true, split the import into two commands
+            // using an OGR format like GPKG as an intermediate file so that true geometry clipping can occur
+            if (params.getClipExtent()) {
+
+                String translation = new File(HOME_FOLDER, "translations/RenderDb.js").getAbsolutePath();
+                getRailsParams.setTranslation(translation);
+                File overpassFile = new File(params.getWorkDir(), REFERENCE + ".gpkg");
+                getRailsParams.setOutput(overpassFile.getAbsolutePath());
+                if (overpassFile.exists()) overpassFile.delete();
+                getRailsParams.setWorkDir(null);
+                workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
+
+                GrailParams dbRailsParams = new GrailParams(params);
+                dbRailsParams.setIntermediateFile(overpassFile.getAbsolutePath());
+                dbRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+                dbRailsParams.setTranslation(translation);
+                workflow.add(getRailsPortApiCommand(jobId, dbRailsParams, debugLevel));
+
+            } else {
+                getRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+                workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
+            }
         } catch (UnavailableException exc) {
             throw new UnavailableException("The Rails port API is offline.");
         }
