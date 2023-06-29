@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018 2023 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -95,6 +95,7 @@ tds40.rules = {
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH082','natural','waterhole'], // Water-hole
+    ['F_CODE','BH135','landuse','rice_field'], // Rice Field - tag change
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
@@ -104,6 +105,7 @@ tds40.rules = {
     ['F_CODE','DB090','embankment','fill'],
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','divider'],
+    ['F_CODE','EA055','landuse','hop_garden'], // Hop Field
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','ED010','natural','wetland'], // Marsh
@@ -3208,47 +3210,47 @@ tds40.rules = {
     // ZI013_CSP - Crop Information : Crop Species
     // ['ZI013_CSP','-999999',undefined,undefined], // No Information
     ['ZI013_CSP','1','crop','almond'], // Almond
-    ['ZI013_CSP','2','crop','apple'], // Apple
+    ['ZI013_CSP','2','trees','apple_trees'], // Apple
     ['ZI013_CSP','3','crop','barley'], // Barley
-    ['ZI013_CSP','4','crop','berry'], // Berry
-    ['ZI013_CSP','5','crop','carob'], // Carob
-    ['ZI013_CSP','6','crop','chestnut'], // Chestnut
-    ['ZI013_CSP','7','crop','citrus'], // Citrus
+    ['ZI013_CSP','4','trees','berry'], // Berry
+    ['ZI013_CSP','5','trees','carob_trees'], // Carob
+    ['ZI013_CSP','6','trees','chestnut_trees'], // Chestnut
+    ['ZI013_CSP','7','trees','citrus_trees'], // Citrus
     ['ZI013_CSP','8','crop','cork-oak'], // Cork-Oak
-    ['ZI013_CSP','9','crop','cacao'], // Cacao
-    ['ZI013_CSP','10','crop','coffee'], // Coffee
+    ['ZI013_CSP','9','trees','cacao_trees'], // Cacao
+    ['ZI013_CSP','10','trees','coffea_plants'], // Coffee
     ['ZI013_CSP','11','crop','maize'], // Maize
     ['ZI013_CSP','13','crop','dry_crop'], // Dry Crop
     ['ZI013_CSP','14','crop','fibre_crop'], // Fibre Crop
-    ['ZI013_CSP','15','crop','fruit_tree'], // Fruit Tree
+    ['ZI013_CSP','15','trees','fruit_tree'], // Fruit Tree
     ['ZI013_CSP','16','crop','grape'], // Grape
-    ['ZI013_CSP','17','crop','hazelnut'], // Hazelnut
+    ['ZI013_CSP','17','trees','hazel_plants'], // Hazelnut
     ['ZI013_CSP','18','crop','hop'], // Hop
-    ['ZI013_CSP','19','crop','maple'], // Maple
+    ['ZI013_CSP','19','trees','maple_trees'], // Maple
     ['ZI013_CSP','20','crop','millet'], // Millet
-    ['ZI013_CSP','21','crop','oat'], // Oat
+    ['ZI013_CSP','21','crop','oats'], // Oat
     ['ZI013_CSP','22','crop','oil_crop'], // Oil Crop
-    ['ZI013_CSP','23','crop','olive'], // Olive
-    ['ZI013_CSP','24','crop','peach'], // Peach
+    ['ZI013_CSP','23','trees','olive_trees'], // Olive
+    ['ZI013_CSP','24','trees','peach_trees'], // Peach
     ['ZI013_CSP','25','crop','peanut'], // Peanut
     ['ZI013_CSP','26','crop','potato'], // Potato
     ['ZI013_CSP','27','crop','pulse'], // Pulse
     ['ZI013_CSP','28','crop','rice'], // Rice
-    ['ZI013_CSP','29','crop','rubber'], // Rubber
+    ['ZI013_CSP','29','trees','rubber_trees'], // Rubber
     ['ZI013_CSP','30','crop','rye'], // Rye
     ['ZI013_CSP','31','crop','sisal'], // Sisal
     ['ZI013_CSP','32','crop','sorghum'], // Sorghum
-    ['ZI013_CSP','33','crop','sugar_crop'], // Sugar Crop
-    ['ZI013_CSP','34','crop','tea'], // Tea
+    ['ZI013_CSP','33','crop','sugarcane'], // Sugar Crop
+    ['ZI013_CSP','34','trees','tea_plants'], // Tea
     ['ZI013_CSP','35','crop','tobacco'], // Tobacco
     ['ZI013_CSP','36','crop','tuber'], // Tuber
     ['ZI013_CSP','37','crop','vegetable'], // Vegetable Crop
-    ['ZI013_CSP','38','crop','walnut'], // Walnut
+    ['ZI013_CSP','38','trees','walnut_trees'], // Walnut
     ['ZI013_CSP','39','crop','wheat'], // Wheat
-    ['ZI013_CSP','40','crop','date'], // Date
-    ['ZI013_CSP','41','crop','banana'], // Banana
-    ['ZI013_CSP','42','crop','oil_palm'], // Oil Palm
-    ['ZI013_CSP','43','crop','coconut'], // Coconut
+    ['ZI013_CSP','40','trees','date_palms'], // Date
+    ['ZI013_CSP','41','trees','banana_plants'], // Banana
+    ['ZI013_CSP','42','trees','oil_palm'], // Oil Palm
+    ['ZI013_CSP','43','trees','coconut_palms'], // Coconut
     ['ZI013_CSP','44','crop','sugar_cane'], // Sugar Cane
     ['ZI013_CSP','45','crop','cotton'], // Cotton
     ['ZI013_CSP','46','crop','bamboo'], // Bamboo
@@ -4116,6 +4118,28 @@ tds40.rules = {
     ['VDT','navd88','source:datum:vertical','north_american_source:datum:vertical_1988'], // North American Vertical Datum (NAVD) 1988
     ['VDT','ngvd29','source:datum:vertical','national_geodetic_source:datum:vertical_1929'], // National Geodetic Vertical Datum (NGVD) 1929
 
+    ['ZI013_CSP','2','crop','apple'], // Apple
+    ['ZI013_CSP','4','crop','berry'], // Berry
+    ['ZI013_CSP','5','crop','carob'], // Carob
+    ['ZI013_CSP','6','crop','chestnut'], // Chestnut
+    ['ZI013_CSP','7','crop','citrus'], // Citrus
+    ['ZI013_CSP','9','crop','cacao'], // Cacao
+    ['ZI013_CSP','10','crop','coffee'], // Coffee
+    ['ZI013_CSP','15','crop','fruit_tree'], // Fruit Tree
+    ['ZI013_CSP','17','crop','hazelnut'], // Hazelnut
+    ['ZI013_CSP','18','trees','hop_plants'], // Hop
+    ['ZI013_CSP','19','crop','maple'], // Maple
+    ['ZI013_CSP','23','crop','olive'], // Olive
+    ['ZI013_CSP','24','crop','peach'], // Peach
+    ['ZI013_CSP','29','crop','rubber'], // Rubber
+    ['ZI013_CSP','34','crop','tea'], // Tea
+    ['ZI013_CSP','38','crop','walnut'], // Walnut
+    ['ZI013_CSP','40','crop','date'], // Date
+    ['ZI013_CSP','41','crop','banana'], // Banana
+    ['ZI013_CSP','42','crop','oil_palm'], // Oil Palm
+    ['ZI013_CSP','43','crop','coconut'], // Coconut
+    ['ZI013_CSP','159','trees','ornamental'], // Ornamental Trees
+
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
     ['ZI014_PPO','2','product','aluminum'], // Aluminum
     ['ZI014_PPO','83','product','fuel'], // Close...
@@ -4141,68 +4165,68 @@ tds40.rules = {
   // This is taken from OSM pre processing and a few things added.
   // NOTE: Need to think about XX2 and XX3 attributes
   ignoreList : [
-    'AQO2', 'AQO3',
-    'ASU', 'ASU2', 'ASU3',
-    'AT005_CAB', 'AT005_CAB2', 'AT005_CAB3',
-    'BMC2', 'BMC3',
-    'BSC2', 'BSC3',
-    'CAB2', 'CAB3',
-    'CSC2', 'CSC3',
+    'AQO2','AQO3',
+    'ASU','ASU2','ASU3',
+    'AT005_CAB','AT005_CAB2','AT005_CAB3',
+    'BMC2','BMC3',
+    'BSC2','BSC3',
+    'CAB2','CAB3',
+    'CSC2','CSC3',
     'DEP',
-    'FCSubtype', 'FCSUBTYPE',
-    'FFN1', 'FFN2', 'FFN3',
-    'FHC2', 'FHC3',
-    'FRT2', 'FRT3',
+    'FCSubtype','FCSUBTYPE',
+    'FFN1','FFN2','FFN3',
+    'FHC2','FHC3',
+    'FRT2','FRT3',
     'F_CODE',
     'HST2',
-    'HST2', 'HST3',
+    'HST2','HST3',
     'HYP',
     'LEN_',
-    'MCC2', 'MCC3',
+    'MCC2','MCC3',
     'MEM',
-    'MGL1', 'MGL2', 'MGL3',
-    'MST2', 'MST3',
-    'PBY', 'PBY2', 'PBY3',
-    'POS2', 'POS3',
-    'PPO', 'PPO2', 'PPO3',
-    'PRW', 'PRW2', 'PRW3',
-    'PRW2', 'PRW3',
+    'MGL1','MGL2','MGL3',
+    'MST2','MST3',
+    'PBY','PBY2','PBY3',
+    'POS2','POS3',
+    'PPO','PPO2','PPO3',
+    'PRW','PRW2','PRW3',
+    'PRW2','PRW3',
     'RCG',
-    'RRC2', 'RRC3',
-    'RTN2', 'RTN3',
-    'RTN_ROI2', 'RTN_ROI3',
-    'SBT2', 'SBT3',
-    'SSR2', 'SSR3',
-    'SRL1', 'SRL2', 'SRL3',
-    'STL2', 'STL3',
-    'TRS1','TRS2', 'TRS3',
-    'TSM2', 'TSM3',
-    'TTC2', 'TTC3',
-    'UTY2', 'UTY3',
-    'VCA2', 'VCA3',
-    'VCM2', 'VCM3',
-    'VCT2', 'VCT3',
-    'VSP2', 'VSP3',
+    'RRC2','RRC3',
+    'RTN2','RTN3',
+    'RTN_ROI2','RTN_ROI3',
+    'SBT2','SBT3',
+    'SSR2','SSR3',
+    'SRL1','SRL2','SRL3',
+    'STL2','STL3',
+    'TRS1','TRS2','TRS3',
+    'TSM2','TSM3',
+    'TTC2','TTC3',
+    'UTY2','UTY3',
+    'VCA2','VCA3',
+    'VCM2','VCM3',
+    'VCT2','VCT3',
+    'VSP2','VSP3',
     'WD1',
-    'WEQ2', 'WEQ3',
+    'WEQ2','WEQ3',
     'YWQ',
-    'ZI005_FNA1', 'ZI005_FNAA', 'ZI005_FNAB',
-    'ZI005_NFN1', 'ZI005_NFNA', 'ZI005_NFNB',
-    'ZI013_CSP2', 'ZI013_CSP3',
-    'ZI013_FFP2', 'ZI013_FFP3',
-    'ZI013_FMM2', 'ZI013_FMM3',
-    'ZI014_PBY2', 'ZI014_PBY3',
-    'ZI014_PPO2', 'ZI014_PPO3',
-    'ZI014_PRW2', 'ZI014_PRW3',
-    'ZI019_ASP2', 'ZI019_ASP3',
-    'ZI019_ASU2', 'ZI019_ASU3',
+    'ZI005_FNA1','ZI005_FNAA','ZI005_FNAB',
+    'ZI005_NFN1','ZI005_NFNA','ZI005_NFNB',
+    'ZI013_CSP2','ZI013_CSP3',
+    'ZI013_FFP2','ZI013_FFP3',
+    'ZI013_FMM2','ZI013_FMM3',
+    'ZI014_PBY2','ZI014_PBY3',
+    'ZI014_PPO2','ZI014_PPO3',
+    'ZI014_PRW2','ZI014_PRW3',
+    'ZI019_ASP2','ZI019_ASP3',
+    'ZI019_ASU2','ZI019_ASU3',
     'ZI020_IC2',
     'ZI025_WLE',
     'ZI032_GUG',
     'ZI032_PYC',
     'ZI032_PYM',
     'ZI032_TOS',
-    'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3'
+    'ZI071_FFN','ZI071_FFN2','ZI071_FFN3'
   ],
   // ##### End of ignoreList #####
 
@@ -4255,10 +4279,10 @@ tds40.rules = {
     ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch
     ['BH070', ['bh070','ford_c','ford_p']], // Ford
     ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody
-    ['BH140', ['bh140', 'river_s','river_c']], // River
+    ['BH140', ['bh140','river_s','river_c']], // River
     ['BH170', ['bh170','natural_pool_p']], // Natural Pool
-    ['BH230', ['bh230', 'water_well_p','water_well_s']], // Water Well
-    ['BI010', ['bi010', 'cistern_p']], // Cistern
+    ['BH230', ['bh230','water_well_p','water_well_s']], // Water Well
+    ['BI010', ['bi010','cistern_p']], // Cistern
     ['DB070', ['db070','cut_c']], // Cut
     ['DB150', ['db150','mountain_pass_p']], // Mountain Pass
     ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
@@ -4295,16 +4319,16 @@ tds40.rules = {
   // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
   // These get converted back on output - if we need to.
   swapListIn : {
-    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
-    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'ASU':'ZI019_ASU','ASU2':'ZI019_ASU3','ASU3':'ZI019_ASU3',
+    'AT005_CAB':'CAB','AT005_CAB2':'CAB2','AT005_CAB3':'CAB3',
     'desert_surface':'terrain_surface',
     'DEP':'DZP',
     'HYP':'ZI024_HYP',
     'LEN_':'LZN',
     'MEM':'ZI006_MEM',
-    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
-    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
-    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'PBY':'ZI014_PBY','PBY2':'ZI014_PBY2','PBY3':'ZI014_PBY3',
+    'PPO':'ZI014_PPO','PPO2':'ZI014_PPO2','PPO3':'ZI014_PPO3',
+    'PRW':'ZI014_PRW','PRW2':'ZI014_PRW2','PRW3':'ZI014_PRW3',
     'RCG':'ZI004_RCG',
     'WD1':'ZI016_WD1',
     'YWQ':'ZI024_YWQ',
@@ -4318,57 +4342,57 @@ tds40.rules = {
     'ZI032_TOS':'TOS',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
-    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3'
+    'ZI071_FFN':'FFN','ZI071_FFN2':'FFN2','ZI071_FFN3':'FFN3'
   },
   // ##### End of swapListIn #####
 
   // ##### Start of swapListOut #####
   // Format is: <FCODE>:{<from>:<to>}
   swapListOut : {
-    'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
-    'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA010':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AA020':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AA040':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AA052':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AA054':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AB000':{'ZI014_PBY':'PBY','ZI014_PBY2':'PBY2','ZI014_PBY3':'PBY3'},
+    'AC060':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AD020':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AD025':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AJ050':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
     'AL020':{'ZI005_NFN':'ZI005_NFN1'},
-    'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
-    'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM080':{'ZI014_YWQ':'YWQ', 'ZI016_WD1':'WD1'},
-    'AQ113':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AQ116':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM010':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AM040':{'ZI014_PRW':'PRW','ZI014_PRW2':'PRW2','ZI014_PRW3':'PRW3'},
+    'AM060':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AM070':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AM071':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AM080':{'ZI014_YWQ':'YWQ','ZI016_WD1':'WD1'},
+    'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
     'AT005':{'WLE':'ZI025_WLE'},
-    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB', 'CAB2':'AT005_CAB2', 'CAB3':'AT005_CAB3'},
+    'AT042':{'GUG':'ZI032_GUG','PYC':'ZI032_PYC','PYM':'ZI032_PYM','TOS':'ZI032_TOS','CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
     'BD100':{'WLE':'ZI025_WLE'},
-    'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+    'BH051':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
+    'DB029':{'FFN':'ZI071_FFN','FFN2':'ZI071_FFN2','FFN3':'ZI071_FFN3'},
     'ED010':{'ZI024_HYP':'HYP'},
-    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
-    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'}
+    'GB045':{'ZI019_ASU':'ASU','ZI019_ASU2':'ASU2','ZI019_ASU3':'ASU3'},
+    'ZI031':{'ZI006_MEM':'MEM','ZI004_RCG':'RCG'}
   },
   // ##### End of swapListOut #####
 
   // ##### Start of txtLength #####
   // This list is for validateing the lengths of text attributes prior to export
   txtLength : {
-    'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
-    'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
-    'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
-    'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
-    'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    'BA000_VDR':80,'BRN':24,'CID':20,'CPS':30,'EQC':30,'ETS':30,'ETZ':24,'GB052_RIDH':14,'GB052_RIDL':14,
+    'HZD':30,'IC2':14,'IKO':14,'MDE':20,'NA8':80,'RCG':30,'RTN2':24,'RTN':24,'RTN3':24,'SSE':14,'UFI':254,
+    'URI':254,'VDT':30,'VOI':14,'WPI':14,'ZI001_NSD':20,'ZI001_NSP':30,'ZI001_SSD':20,'ZI001_SSY':30,'ZI001_VSC':30,
+    'ZI001_VSD':20,'ZI004_RCG':30,'ZI005_FNA1':200,'ZI005_FNA':200,'ZI005_FNA2':200,'ZI005_NFN1':18,'ZI005_NFN':18,
+    'ZI005_NFN2':18,'ZSAX_RS0':2,'ZSAX_RX3':254,'ZSAX_RX4':254
   },
   // ##### End of txtLength #####
 
   // ##### Start of intList #####
   // This list is for validateing the integer attributes prior to export
-  intList : [ 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'VST' ],
+  intList : [ 'BNF','DEV','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST' ],
   // ##### End of intList#####
 
   // List of attributes that can't have '0' as a value

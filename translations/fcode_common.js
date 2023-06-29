@@ -187,7 +187,7 @@ fcodeCommon = {
       ['F_CODE','AP050','highway','path'], // Trail
       ['F_CODE','AP055','highway','tank_trail'], // Tank Trail
       ['F_CODE','AP056','crossing','tank'], // Tank Crossing
-      ['F_CODE','AQ035','sidewalk','yes'], // Sidewalk
+      ['F_CODE','AQ035','footway','sidewalk'], // Sidewalk
       ['F_CODE','AQ040','bridge','yes'], // Bridge
       ['F_CODE','AQ045','bridge:span','yes'], // Bridge Span
       ['F_CODE','AQ050','bridge:superstructure','yes'], // Bridge Superstructure
@@ -305,7 +305,7 @@ fcodeCommon = {
       ['F_CODE','BH110','pipeline:type','penstock'], // Penstock
       ['F_CODE','BH116','natural','aquifer'], // Aquifer
       ['F_CODE','BH120','waterway','rapids'], // Rapids
-      ['F_CODE','BH135','landuse','rice_field'], // Rice Field
+      ['F_CODE','BH135','crop','rice'], // Rice Field
       ['F_CODE','BH140','waterway','river'], // River - See custom rules
       ['F_CODE','BH145','waterway','vanishing_point'], // Vanishing point
       ['F_CODE','BH150','natural','salt_flat'], // Salt Flat, Salt Pan
@@ -367,7 +367,7 @@ fcodeCommon = {
       ['F_CODE','EA031','garden:type','botanical'], // Botanical Garden
       ['F_CODE','EA040','landuse','orchard'], // Orchard/Plantation
       ['F_CODE','EA050','landuse','vineyard'], // Vineyard
-      ['F_CODE','EA055','landuse','hop_garden'], // Hop Field
+      ['F_CODE','EA055','crop','hop'], // Hop Field
       ['F_CODE','EB010','natural','grassland'], // Grassland
       ['F_CODE','EB020','natural','scrub'], // Thicket (was FACC Scrub/Brush/Bush)
       ['F_CODE','EB070','natural','brush'], // Brush - possibly "heath"

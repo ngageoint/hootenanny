@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014 2023 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -49,7 +49,7 @@ ggdm30.rules = {
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
     ['F_CODE','AA054','man_made','petroleum_well'], // Non-Water Well
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
-    ['F_CODE','AG040','landuse','retail'], // Electric Power Station, Power Plant
+    ['F_CODE','AG040','landuse','retail'], // Office Park
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
     ['F_CODE','AK120','landuse','recreation_ground'], // Park
@@ -101,6 +101,7 @@ ggdm30.rules = {
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH082','natural','waterhole'], // Water-hole
+    ['F_CODE','BH135','landuse','rice_field'], // Rice Field - tag change
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
@@ -110,6 +111,7 @@ ggdm30.rules = {
     ['F_CODE','DB090','embankment','fill'],
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','divider'],
+    ['F_CODE','EA055','landuse','hop_garden'], // Hop Field
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','EC015','natural','wood'], // Trees
     ['F_CODE','ED010','natural','wetland'], // Marsh
@@ -5484,47 +5486,47 @@ ggdm30.rules = {
     // ZI013_CSP - Crop Information : Crop Species
     // ['ZI013_CSP','-999999',undefined,undefined], // No Information
     ['ZI013_CSP','1','crop','almond'], // Almond
-    ['ZI013_CSP','2','crop','apple'], // Apple
+    ['ZI013_CSP','2','trees','apple_trees'], // Apple
     ['ZI013_CSP','3','crop','barley'], // Barley
-    ['ZI013_CSP','4','crop','berry'], // Berry
-    ['ZI013_CSP','5','crop','carob'], // Carob
-    ['ZI013_CSP','6','crop','chestnut'], // Chestnut
-    ['ZI013_CSP','7','crop','citrus'], // Citrus
+    ['ZI013_CSP','4','trees','berry'], // Berry
+    ['ZI013_CSP','5','trees','carob_trees'], // Carob
+    ['ZI013_CSP','6','trees','chestnut_trees'], // Chestnut
+    ['ZI013_CSP','7','trees','citrus_trees'], // Citrus
     ['ZI013_CSP','8','crop','cork-oak'], // Cork-Oak
-    ['ZI013_CSP','9','crop','cacao'], // Cacao
-    ['ZI013_CSP','10','crop','coffee'], // Coffee
+    ['ZI013_CSP','9','trees','cacao_trees'], // Cacao
+    ['ZI013_CSP','10','trees','coffea_plants'], // Coffee
     ['ZI013_CSP','11','crop','maize'], // Maize
     ['ZI013_CSP','13','crop','dry_crop'], // Dry Crop
     ['ZI013_CSP','14','crop','fibre_crop'], // Fibre Crop
-    ['ZI013_CSP','15','crop','fruit_tree'], // Fruit Tree
+    ['ZI013_CSP','15','trees','fruit_tree'], // Fruit Tree
     ['ZI013_CSP','16','crop','grape'], // Grape
-    ['ZI013_CSP','17','crop','hazelnut'], // Hazelnut
+    ['ZI013_CSP','17','trees','hazel_plants'], // Hazelnut
     ['ZI013_CSP','18','crop','hop'], // Hop
-    ['ZI013_CSP','19','crop','maple'], // Maple
+    ['ZI013_CSP','19','trees','maple_trees'], // Maple
     ['ZI013_CSP','20','crop','millet'], // Millet
-    ['ZI013_CSP','21','crop','oat'], // Oat
+    ['ZI013_CSP','21','crop','oats'], // Oat
     ['ZI013_CSP','22','crop','oil_crop'], // Oil Crop
-    ['ZI013_CSP','23','crop','olive'], // Olive
-    ['ZI013_CSP','24','crop','peach'], // Peach
+    ['ZI013_CSP','23','trees','olive_trees'], // Olive
+    ['ZI013_CSP','24','trees','peach_trees'], // Peach
     ['ZI013_CSP','25','crop','peanut'], // Peanut
     ['ZI013_CSP','26','crop','potato'], // Potato
     ['ZI013_CSP','27','crop','pulse'], // Pulse
     ['ZI013_CSP','28','crop','rice'], // Rice
-    ['ZI013_CSP','29','crop','rubber'], // Rubber
+    ['ZI013_CSP','29','trees','rubber_trees'], // Rubber
     ['ZI013_CSP','30','crop','rye'], // Rye
     ['ZI013_CSP','31','crop','sisal'], // Sisal
     ['ZI013_CSP','32','crop','sorghum'], // Sorghum
-    ['ZI013_CSP','33','crop','sugar_crop'], // Sugar Crop
-    ['ZI013_CSP','34','crop','tea'], // Tea
+    ['ZI013_CSP','33','crop','sugarcane'], // Sugar Crop
+    ['ZI013_CSP','34','trees','tea_plants'], // Tea
     ['ZI013_CSP','35','crop','tobacco'], // Tobacco
     ['ZI013_CSP','36','crop','tuber'], // Tuber
     ['ZI013_CSP','37','crop','vegetable'], // Vegetable Crop
-    ['ZI013_CSP','38','crop','walnut'], // Walnut
+    ['ZI013_CSP','38','trees','walnut_trees'], // Walnut
     ['ZI013_CSP','39','crop','wheat'], // Wheat
-    ['ZI013_CSP','40','crop','date'], // Date
-    ['ZI013_CSP','41','crop','banana'], // Banana
-    ['ZI013_CSP','42','crop','oil_palm'], // Oil Palm
-    ['ZI013_CSP','43','crop','coconut'], // Coconut
+    ['ZI013_CSP','40','trees','date_palms'], // Date
+    ['ZI013_CSP','41','trees','banana_plants'], // Banana
+    ['ZI013_CSP','42','trees','oil_palm'], // Oil Palm
+    ['ZI013_CSP','43','trees','coconut_palms'], // Coconut
     ['ZI013_CSP','44','crop','sugar_cane'], // Sugar Cane
     ['ZI013_CSP','45','crop','cotton'], // Cotton
     ['ZI013_CSP','46','crop','bamboo'], // Bamboo
@@ -6164,7 +6166,6 @@ ggdm30.rules = {
     ['ZSAX_RS0','other','security:classification','other'], // Other
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
-
   ], // End one2one
 
   // Input Translation Rules:
@@ -6331,12 +6332,33 @@ ggdm30.rules = {
     ['ZI001_SRT','171','source:non_spatial_source:type','tomtom_data'], // TomTom Data
     ['ZI001_SRT','999','source:non_spatial_source:type','other'], // Other
 
-
     ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
     ['ZI004_RCG','28','attribution','australian_geospatial-intelligence_organization_(australia)'], // Australian Geospatial-Intelligence Organization (Australia)
     ['ZI004_RCG','36','attribution','bureau_geographie_hydrographie_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
     ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
     ['ZI004_RCG','45','attribution','geoint_new_zealand_(new_zealand)'], // GEOINT New Zealand (New Zealand)
+
+    ['ZI013_CSP','2','crop','apple'], // Apple
+    ['ZI013_CSP','4','crop','berry'], // Berry
+    ['ZI013_CSP','5','crop','carob'], // Carob
+    ['ZI013_CSP','6','crop','chestnut'], // Chestnut
+    ['ZI013_CSP','7','crop','citrus'], // Citrus
+    ['ZI013_CSP','9','crop','cacao'], // Cacao
+    ['ZI013_CSP','10','crop','coffee'], // Coffee
+    ['ZI013_CSP','15','crop','fruit_tree'], // Fruit Tree
+    ['ZI013_CSP','17','crop','hazelnut'], // Hazelnut
+    ['ZI013_CSP','18','trees','hop_plants'], // Hop
+    ['ZI013_CSP','19','crop','maple'], // Maple
+    ['ZI013_CSP','23','crop','olive'], // Olive
+    ['ZI013_CSP','24','crop','peach'], // Peach
+    ['ZI013_CSP','29','crop','rubber'], // Rubber
+    ['ZI013_CSP','34','crop','tea'], // Tea
+    ['ZI013_CSP','38','crop','walnut'], // Walnut
+    ['ZI013_CSP','40','crop','date'], // Date
+    ['ZI013_CSP','41','crop','banana'], // Banana
+    ['ZI013_CSP','42','crop','oil_palm'], // Oil Palm
+    ['ZI013_CSP','43','crop','coconut'], // Coconut
+    ['ZI013_CSP','159','trees','ornamental'], // Ornamental Trees
 
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
     ['ZI014_PPO','2','product','aluminum'], // Aluminum
@@ -6387,15 +6409,15 @@ ggdm30.rules = {
   // ##### Start of txtLength #####
   // This list is for validateing the lengths of text attributes prior to export
   txtLength : {
-    'BA000_VDR':80, 'BC040_COL':254, 'BC040_MLR':254, 'BEN':15, 'BER':254, 'BRN':24, 'BRR':14, 'CID':20, 'CNCP':20,
-    'COL':80, 'DIA':14, 'ETZ':24, 'FUFI':254, 'F_CODE':5, 'GA032_NSX':80, 'GB001_AID':14, 'GB052_RIDH':14,
-    'GB052_RIDL':14, 'HSE':14, 'IKO':14, 'LASZ':254, 'MCA':80, 'MDE':20, 'MLR':254, 'NA8':80, 'PRVR':254,
-    'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTL':254, 'RTN':24, 'RTN2':24, 'RTN3':24, 'SCVN':254,
-    'SSE':14, 'UFI':254, 'URI':254, 'VCS_VCR':132, 'VOI':14, 'WPI':14, 'WTCL':254, 'ZHBH_VDR':80, 'ZHDP_VDR':80,
-    'ZI001_SDV':20, 'ZI001_VSD':20, 'ZI002_UFI':254, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_FNA3':200,
-    'ZI005_FNAA':200, 'ZI005_FNAB':200, 'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI005_NFNA':18,
-    'ZI005_NFNB':18, 'ZI012_VDR':80, 'ZI020_FI2A':14, 'ZI020_FI2B':14, 'ZI020_IC4':200, 'ZI031S_URI':254,
-    'ZI039S_UFI':254, 'ZI103_MVD':20, 'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    'BA000_VDR':80,'BC040_COL':254,'BC040_MLR':254,'BEN':15,'BER':254,'BRN':24,'BRR':14,'CID':20,'CNCP':20,
+    'COL':80,'DIA':14,'ETZ':24,'FUFI':254,'F_CODE':5,'GA032_NSX':80,'GB001_AID':14,'GB052_RIDH':14,
+    'GB052_RIDL':14,'HSE':14,'IKO':14,'LASZ':254,'MCA':80,'MDE':20,'MLR':254,'NA8':80,'PRVR':254,
+    'PSE':14,'RIN_RTN':24,'RIN_RTN2':24,'RIN_RTN3':24,'RTL':254,'RTN':24,'RTN2':24,'RTN3':24,'SCVN':254,
+    'SSE':14,'UFI':254,'URI':254,'VCS_VCR':132,'VOI':14,'WPI':14,'WTCL':254,'ZHBH_VDR':80,'ZHDP_VDR':80,
+    'ZI001_SDV':20,'ZI001_VSD':20,'ZI002_UFI':254,'ZI005_FNA':200,'ZI005_FNA2':200,'ZI005_FNA3':200,
+    'ZI005_FNAA':200,'ZI005_FNAB':200,'ZI005_NFN':18,'ZI005_NFN2':18,'ZI005_NFN3':18,'ZI005_NFNA':18,
+    'ZI005_NFNB':18,'ZI012_VDR':80,'ZI020_FI2A':14,'ZI020_FI2B':14,'ZI020_IC4':200,'ZI031S_URI':254,
+    'ZI039S_UFI':254,'ZI103_MVD':20,'ZSAX_RX0':254,'ZSAX_RX3':254,'ZSAX_RX4':254
   },
   // ##### End of txtLength #####
 
@@ -6420,27 +6442,27 @@ ggdm30.rules = {
   // ##### Start of ignoreList #####
   // This is taken from OSM pre processing and a few added
   ignoreList : [
-    'APT2','APT3', 'APU2','APU3', 'AQO2','AQO3', 'AQP2','AQP3', 'ASU','ASU2','ASU3', 'AT005_CAB','AT005_CAB2','AT005_CAB3',
-    'BBMCA2','BBMCA3', 'BBMCB2','BBMCB3', 'BC034_BRF2', 'BC034_MRT2','BC034_MRT2', 'BMC2','BMC3', 'BRF2', 'BSC2','BSC3',
-    'CAB2','CAB3', 'CSC2','CSC3', 'CVT2','CVT3',
-    'DFU2','DFU3', 'DKC2','DKC3', 'DPG2','DPG3',
-    'FCSUBTYPE','FCSubtype', 'FFN2','FFN3', 'FHC2','FHC3', 'FRT2','FRT3', 'F_CODE',
-    'HDP', 'HST2','HST3',
+    'APT2','APT3','APU2','APU3','AQO2','AQO3','AQP2','AQP3','ASU','ASU2','ASU3','AT005_CAB','AT005_CAB2','AT005_CAB3',
+    'BBMCA2','BBMCA3','BBMCB2','BBMCB3','BC034_BRF2','BC034_MRT2','BC034_MRT2','BMC2','BMC3','BRF2','BSC2','BSC3',
+    'CAB2','CAB3','CSC2','CSC3','CVT2','CVT3',
+    'DFU2','DFU3','DKC2','DKC3','DPG2','DPG3',
+    'FCSUBTYPE','FCSubtype','FFN2','FFN3','FHC2','FHC3','FRT2','FRT3','F_CODE',
+    'HDP','HST2','HST3',
     'LFC2','LFC3',
-    'MBC_MCC2', 'MBC_PSC2', 'MBC_SCO2', 'MEM', 'MCC2','MCC3', 'MCY2','MCY3', 'MGL2','MGL3', 'MNR2','MNR3', 'MST2','MST3',
-    'NDX2','NDX3', 'NFP2','NFP3', 'NMC2','NMC3', 'NOA2','NOA3', 'ORS2','ORS3',
-    'PBY','PBY2','PBY3', 'PFD', 'PLT2','PLT3', 'POS2','POS3', 'PPO','PPO2','PPO3', 'PRW','PRW2','PRW3',
-    'RCG', 'RIN_ROI2','RIN_ROI3', 'RIN_RTN2','RIN_RTN3', 'RRC2','RRC3', 'RTN2','RTN3',
-    'SBT2','SBT3', 'SSR2','SSR3', 'STA2','STA3', 'STL2','STL3',
-    'TRS2','TRS3', 'TSM2','TSM3', 'TTC2','TTC3',
+    'MBC_MCC2','MBC_PSC2','MBC_SCO2','MEM','MCC2','MCC3','MCY2','MCY3','MGL2','MGL3','MNR2','MNR3','MST2','MST3',
+    'NDX2','NDX3','NFP2','NFP3','NMC2','NMC3','NOA2','NOA3','ORS2','ORS3',
+    'PBY','PBY2','PBY3','PFD','PLT2','PLT3','POS2','POS3','PPO','PPO2','PPO3','PRW','PRW2','PRW3',
+    'RCG','RIN_ROI2','RIN_ROI3','RIN_RTN2','RIN_RTN3','RRC2','RRC3','RTN2','RTN3',
+    'SBT2','SBT3','SSR2','SSR3','STA2','STA3','STL2','STL3',
+    'TRS2','TRS3','TSM2','TSM3','TTC2','TTC3',
     'UTY2','UTY3',
-    'VCA2','VCA3', 'VCM2','VCM3', 'VCT2','VCT3', 'VIS2','VIS3', 'VSP2','VSP3',
-    'WBD', 'WD1', 'WEQ2','WEQ3', 'WPC2','WPC3', 'WWM2','WWM3',
+    'VCA2','VCA3','VCM2','VCM3','VCT2','VCT3','VIS2','VIS3','VSP2','VSP3',
+    'WBD','WD1','WEQ2','WEQ3','WPC2','WPC3','WWM2','WWM3',
     'YWQ',
-    'ZHBH_DKC2','ZHBH_DKC3', 'ZHBH_TEC2','ZHBH_TEC3', 'ZHDP_DKC2','ZHDP_DKC3', 'ZHDP_TEC2','ZHDP_TEC3',
-    'ZI005_FNA2','ZI005_FNA3', 'ZI005_GNR2','ZI005_GNR3', 'ZI005_GNT2','ZI005_GNT3', 'ZI005_NFN2','ZI005_NFN3', 'ZI012_DKC2','ZI012_DKC3', 'ZI012_TEC2','ZI012_TEC3', 'ZI013_CSP2','ZI013_CSP3', 'ZI013_FFP2','ZI013_FFP3', 'ZI013_FMM2','ZI013_FMM3', 'ZI014_PBY2','ZI014_PBY3', 'ZI014_PPO2','ZI014_PPO3', 'ZI014_PRW2','ZI014_PRW3', 'ZI019_ASP2','ZI019_ASP3', 'ZI019_ASU2','ZI019_ASU3', 'ZI024_PUR2','ZI024_PUR3','ZI024_PUR4','ZI024_PUR5', 'ZI024_WUR2','ZI024_WUR3','ZI024_WUR4', 'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
-    'ZI025_WLE', 'ZI032_GUG', 'ZI032_PYC', 'ZI032_PYM', 'ZI032_TOS',
-    'ZSAX_RX3', 'ZSAX_RX4',
+    'ZHBH_DKC2','ZHBH_DKC3','ZHBH_TEC2','ZHBH_TEC3','ZHDP_DKC2','ZHDP_DKC3','ZHDP_TEC2','ZHDP_TEC3',
+    'ZI005_FNA2','ZI005_FNA3','ZI005_GNR2','ZI005_GNR3','ZI005_GNT2','ZI005_GNT3','ZI005_NFN2','ZI005_NFN3','ZI012_DKC2','ZI012_DKC3','ZI012_TEC2','ZI012_TEC3','ZI013_CSP2','ZI013_CSP3','ZI013_FFP2','ZI013_FFP3','ZI013_FMM2','ZI013_FMM3','ZI014_PBY2','ZI014_PBY3','ZI014_PPO2','ZI014_PPO3','ZI014_PRW2','ZI014_PRW3','ZI019_ASP2','ZI019_ASP3','ZI019_ASU2','ZI019_ASU3','ZI024_PUR2','ZI024_PUR3','ZI024_PUR4','ZI024_PUR5','ZI024_WUR2','ZI024_WUR3','ZI024_WUR4','ZI071_FFN','ZI071_FFN2','ZI071_FFN3',
+    'ZI025_WLE','ZI032_GUG','ZI032_PYC','ZI032_PYM','ZI032_TOS',
+    'ZSAX_RX3','ZSAX_RX4',
     ],
     // ##### End of ignoreList #####
 
@@ -6450,8 +6472,8 @@ ggdm30.rules = {
   // set of rules needed in the One2One section.
   // These get converted back on output - if we need to.
   swapListIn : {
-    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
-    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'ASU':'ZI019_ASU','ASU2':'ZI019_ASU3','ASU3':'ZI019_ASU3',
+    'AT005_CAB':'CAB','AT005_CAB2':'CAB2','AT005_CAB3':'CAB3',
     'BA000_VDC':'ZHDP_VDC',
     'BA000_VDR':'ZHDP_VDR',
     'BC010_REF':'REF',
@@ -6475,11 +6497,11 @@ ggdm30.rules = {
     'MLR':'BC040_MLR',
     'MRT':'BC034_MRT',
     'PFD':'PWA',
-    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
-    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
-    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'PBY':'ZI014_PBY','PBY2':'ZI014_PBY2','PBY3':'ZI014_PBY3',
+    'PPO':'ZI014_PPO','PPO2':'ZI014_PPO2','PPO3':'ZI014_PPO3',
+    'PRW':'ZI014_PRW','PRW2':'ZI014_PRW2','PRW3':'ZI014_PRW3',
     'RCG':'ZI004_RCG',
-    'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
+    'RTN':'RIN_RTN','RTN2':'RIN_RTN2','RTN3':'RIN_RTN3',
     'SUR':'ZI026_SUR',
     'WBD':'PWA',
     'WD1':'ZI016_WD1',
@@ -6518,7 +6540,7 @@ ggdm30.rules = {
     'ZI032_TOS':'TOS',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
-    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
+    'ZI071_FFN':'FFN','ZI071_FFN2':'FFN2','ZI071_FFN3':'FFN3',
     'ZVH_VDT':'VDT'
   },
   // ##### End of swapListIn #####
@@ -6675,10 +6697,10 @@ ggdm30.rules = {
     ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch
     ['BH070', ['bh070','ford_c','ford_p']], // Ford
     ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody
-    ['BH140', ['bh140', 'river_s','river_c']], // River
+    ['BH140', ['bh140','river_s','river_c']], // River
     ['BH170', ['bh170','natural_pool_p']], // Natural Pool
-    ['BH230', ['bh230', 'water_well_p','water_well_s']], // Water Well
-    ['BI010', ['bi010', 'cistern_p']], // Cistern
+    ['BH230', ['bh230','water_well_p','water_well_s']], // Water Well
+    ['BI010', ['bi010','cistern_p']], // Cistern
     ['DB070', ['db070','cut_c']], // Cut
     ['DB150', ['db150','mountain_pass_p']], // Mountain Pass
     ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
