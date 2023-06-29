@@ -101,6 +101,7 @@ ggdm30.rules = {
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH082','natural','waterhole'], // Water-hole
+    ['F_CODE','BH135','landuse','rice_field'], // Rice Field - tag change
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
@@ -110,6 +111,7 @@ ggdm30.rules = {
     ['F_CODE','DB090','embankment','fill'],
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','divider'],
+    ['F_CODE','EA055','landuse','hop_garden'], // Hop Field
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','EC015','natural','wood'], // Trees
     ['F_CODE','ED010','natural','wetland'], // Marsh
@@ -5484,47 +5486,47 @@ ggdm30.rules = {
     // ZI013_CSP - Crop Information : Crop Species
     // ['ZI013_CSP','-999999',undefined,undefined], // No Information
     ['ZI013_CSP','1','crop','almond'], // Almond
-    ['ZI013_CSP','2','crop','apple'], // Apple
+    ['ZI013_CSP','2','trees','apple_trees'], // Apple
     ['ZI013_CSP','3','crop','barley'], // Barley
-    ['ZI013_CSP','4','crop','berry'], // Berry
-    ['ZI013_CSP','5','crop','carob'], // Carob
-    ['ZI013_CSP','6','crop','chestnut'], // Chestnut
-    ['ZI013_CSP','7','crop','citrus'], // Citrus
+    ['ZI013_CSP','4','trees','berry'], // Berry
+    ['ZI013_CSP','5','trees','carob_trees'], // Carob
+    ['ZI013_CSP','6','trees','chestnut_trees'], // Chestnut
+    ['ZI013_CSP','7','trees','citrus_trees'], // Citrus
     ['ZI013_CSP','8','crop','cork-oak'], // Cork-Oak
-    ['ZI013_CSP','9','crop','cacao'], // Cacao
-    ['ZI013_CSP','10','crop','coffee'], // Coffee
+    ['ZI013_CSP','9','trees','cacao_trees'], // Cacao
+    ['ZI013_CSP','10','trees','coffea_plants'], // Coffee
     ['ZI013_CSP','11','crop','maize'], // Maize
     ['ZI013_CSP','13','crop','dry_crop'], // Dry Crop
     ['ZI013_CSP','14','crop','fibre_crop'], // Fibre Crop
-    ['ZI013_CSP','15','crop','fruit_tree'], // Fruit Tree
+    ['ZI013_CSP','15','trees','fruit_tree'], // Fruit Tree
     ['ZI013_CSP','16','crop','grape'], // Grape
-    ['ZI013_CSP','17','crop','hazelnut'], // Hazelnut
+    ['ZI013_CSP','17','trees','hazel_plants'], // Hazelnut
     ['ZI013_CSP','18','crop','hop'], // Hop
-    ['ZI013_CSP','19','crop','maple'], // Maple
+    ['ZI013_CSP','19','trees','maple_trees'], // Maple
     ['ZI013_CSP','20','crop','millet'], // Millet
-    ['ZI013_CSP','21','crop','oat'], // Oat
+    ['ZI013_CSP','21','crop','oats'], // Oat
     ['ZI013_CSP','22','crop','oil_crop'], // Oil Crop
-    ['ZI013_CSP','23','crop','olive'], // Olive
-    ['ZI013_CSP','24','crop','peach'], // Peach
+    ['ZI013_CSP','23','trees','olive_trees'], // Olive
+    ['ZI013_CSP','24','trees','peach_trees'], // Peach
     ['ZI013_CSP','25','crop','peanut'], // Peanut
     ['ZI013_CSP','26','crop','potato'], // Potato
     ['ZI013_CSP','27','crop','pulse'], // Pulse
     ['ZI013_CSP','28','crop','rice'], // Rice
-    ['ZI013_CSP','29','crop','rubber'], // Rubber
+    ['ZI013_CSP','29','trees','rubber_trees'], // Rubber
     ['ZI013_CSP','30','crop','rye'], // Rye
     ['ZI013_CSP','31','crop','sisal'], // Sisal
     ['ZI013_CSP','32','crop','sorghum'], // Sorghum
-    ['ZI013_CSP','33','crop','sugar_crop'], // Sugar Crop
-    ['ZI013_CSP','34','crop','tea'], // Tea
+    ['ZI013_CSP','33','crop','sugarcane'], // Sugar Crop
+    ['ZI013_CSP','34','trees','tea_plants'], // Tea
     ['ZI013_CSP','35','crop','tobacco'], // Tobacco
     ['ZI013_CSP','36','crop','tuber'], // Tuber
     ['ZI013_CSP','37','crop','vegetable'], // Vegetable Crop
-    ['ZI013_CSP','38','crop','walnut'], // Walnut
+    ['ZI013_CSP','38','trees','walnut_trees'], // Walnut
     ['ZI013_CSP','39','crop','wheat'], // Wheat
-    ['ZI013_CSP','40','crop','date'], // Date
-    ['ZI013_CSP','41','crop','banana'], // Banana
-    ['ZI013_CSP','42','crop','oil_palm'], // Oil Palm
-    ['ZI013_CSP','43','crop','coconut'], // Coconut
+    ['ZI013_CSP','40','trees','date_palms'], // Date
+    ['ZI013_CSP','41','trees','banana_plants'], // Banana
+    ['ZI013_CSP','42','trees','oil_palm'], // Oil Palm
+    ['ZI013_CSP','43','trees','coconut_palms'], // Coconut
     ['ZI013_CSP','44','crop','sugar_cane'], // Sugar Cane
     ['ZI013_CSP','45','crop','cotton'], // Cotton
     ['ZI013_CSP','46','crop','bamboo'], // Bamboo
@@ -6337,6 +6339,29 @@ ggdm30.rules = {
     ['ZI004_RCG','36','attribution','bureau_geographie_hydrographie_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
     ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
     ['ZI004_RCG','45','attribution','geoint_new_zealand_(new_zealand)'], // GEOINT New Zealand (New Zealand)
+
+    ['ZI013_CSP','2','crop','apple'], // Apple
+    ['ZI013_CSP','4','crop','berry'], // Berry
+    ['ZI013_CSP','5','crop','carob'], // Carob
+    ['ZI013_CSP','6','crop','chestnut'], // Chestnut
+    ['ZI013_CSP','7','crop','citrus'], // Citrus
+    ['ZI013_CSP','9','crop','cacao'], // Cacao
+    ['ZI013_CSP','10','crop','coffee'], // Coffee
+    ['ZI013_CSP','15','crop','fruit_tree'], // Fruit Tree
+    ['ZI013_CSP','17','crop','hazelnut'], // Hazelnut
+    ['ZI013_CSP','18','trees','hop_plants'], // Hop
+    ['ZI013_CSP','19','crop','maple'], // Maple
+    ['ZI013_CSP','23','crop','olive'], // Olive
+    ['ZI013_CSP','24','crop','peach'], // Peach
+    ['ZI013_CSP','29','crop','rubber'], // Rubber
+    ['ZI013_CSP','34','crop','tea'], // Tea
+    ['ZI013_CSP','38','crop','walnut'], // Walnut
+    ['ZI013_CSP','40','crop','date'], // Date
+    ['ZI013_CSP','41','crop','banana'], // Banana
+    ['ZI013_CSP','42','crop','oil_palm'], // Oil Palm
+    ['ZI013_CSP','43','crop','coconut'], // Coconut
+    ['ZI013_CSP','159','trees','ornamental'], // Ornamental Trees
+
 
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
     ['ZI014_PPO','2','product','aluminum'], // Aluminum
