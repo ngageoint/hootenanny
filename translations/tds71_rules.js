@@ -96,7 +96,6 @@ tds71.rules = {
     ['F_CODE','AL020','landuse','commercial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
-    ['F_CODE','AL024','place','neighborhood'], // Neighbourhood - US spelling
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins

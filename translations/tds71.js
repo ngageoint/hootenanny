@@ -1062,6 +1062,11 @@ tds71 = {
       if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
+    case 'AL270': // Industrial Farm
+      if (tags.trees == 'coffea_plants') tags.landuse = 'orchard';
+      if (tags.trees == 'tea_plants') tags.landuse = 'orchard';
+      break;
+
     case 'AN010': // Railway
       if (tags['railway:track'] == 'monorail')
       {
@@ -1937,7 +1942,6 @@ tds71 = {
           break;
       }
       break;
-
 
     case 'railway':
       if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
