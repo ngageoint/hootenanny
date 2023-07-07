@@ -23,7 +23,7 @@ Goals:
 
 # Documentation
 
-[pdf](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf)
+[pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.78/HootenannyUserGuide.pdf)
 
 This documentation is also available as part of the release package: `docs/HootenannyUserGuide.pdf` (located in `hootenanny-*.tar.gz`).
 
