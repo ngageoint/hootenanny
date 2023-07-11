@@ -27,6 +27,8 @@ Goals:
 
 This documentation is also available as part of the release package: `docs/HootenannyUserGuide.pdf` (located in `hootenanny-*.tar.gz`).
 
+There is also an introduction [video](https://www.youtube.com/watch?v=LeaTLxVCFmc) of a talk from State of the Map US 2019.
+
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 
 For installation from RPM, follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, follow [this](https://github.com/ngageoint/hootenanny/blob/master/docs/install/Vagrant.asciidoc).
