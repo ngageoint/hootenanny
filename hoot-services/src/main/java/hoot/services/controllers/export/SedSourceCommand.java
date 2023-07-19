@@ -40,7 +40,7 @@ class SedSourceCommand extends ExternalCommand {
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("INPUT", params.getInput());
-        substitutionMap.put("REGEX", "s/\"type\": \"FeatureCollection\",/\"type\": \"FeatureCollection\",\"source\": \"hootapidb:" + params.getTagOverrides() + "\",/");
+        substitutionMap.put("REGEX", "s/\"type\": \"FeatureCollection\",/\"generator\": \"Hootenanny\",\"type\": \"FeatureCollection\",\"source\": \"hootapidb:" + params.getTagOverrides() + "\",/");
 
 
         //Hack to add source property into geojson output
