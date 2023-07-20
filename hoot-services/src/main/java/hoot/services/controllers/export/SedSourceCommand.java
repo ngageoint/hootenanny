@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -40,7 +40,7 @@ class SedSourceCommand extends ExternalCommand {
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("INPUT", params.getInput());
-        substitutionMap.put("REGEX", "s/\"type\": \"FeatureCollection\",/\"type\": \"FeatureCollection\",\"source\": \"hootapidb:" + params.getTagOverrides() + "\",/");
+        substitutionMap.put("REGEX", "s/\"type\": \"FeatureCollection\",/\"generator\": \"Hootenanny\",\"type\": \"FeatureCollection\",\"source\": \"hootapidb:" + params.getTagOverrides() + "\",/");
 
 
         //Hack to add source property into geojson output
