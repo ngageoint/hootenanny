@@ -43,5 +43,6 @@
 {"type":"way","id":-21186770,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-21186764,-21186762,-21186760,-21186754],"tags":{"highway":"road","error:circular":"15","note":"2"}},
 {"type":"way","id":-21186769,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-21186700],"tags":{"highway":"road","error:circular":"15","note":"4"}},
 {"type":"way","id":-21186768,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-21186760,-21186710,-21186708],"tags":{"highway":"road","error:circular":"15","note":"3"}},
-{"type":"way","id":-21186767,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-21186758,-21186698,-21186696],"tags":{"highway":"road","error:circular":"15","note":"1"}}]
+{"type":"way","id":-21186767,"timestamp":"1970-01-01T00:00:00Z","version":1,"nodes":[-21186758,-21186698,-21186696],"tags":{"highway":"road","error:circular":"15","note":"1"}}
+]
 }

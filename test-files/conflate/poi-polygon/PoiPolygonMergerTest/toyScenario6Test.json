@@ -11,5 +11,6 @@
 {"type":"node","id":-3,"lat":-0.001455,"lon":0.00177},
 {"type":"node","id":-2,"lat":-0.0004766,"lon":0.001771},
 {"type":"node","id":-1,"lat":-0.0004775,"lon":0.00236},
-{"type":"way","id":-1,"nodes":[-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-12],"tags":{"alt_name":"F","building":"yes","error:circular":"15","hoot:poipolygon:poismerged":"1","hoot:poipolygon:poismerged:1":"0","hoot:poipolygon:poismerged:2":"1","name":"A","note":"Toy Scenario 6","poi":"yes"}}]
+{"type":"way","id":-1,"nodes":[-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-12],"tags":{"alt_name":"F","building":"yes","error:circular":"15","hoot:poipolygon:poismerged":"1","hoot:poipolygon:poismerged:1":"0","hoot:poipolygon:poismerged:2":"1","name":"A","note":"Toy Scenario 6","poi":"yes"}}
+]
 }

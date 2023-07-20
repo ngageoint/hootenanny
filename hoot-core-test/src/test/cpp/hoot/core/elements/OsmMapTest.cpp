@@ -711,7 +711,7 @@ public:
     writer.setIncludeCompatibilityTags(false);
     const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}\n]\n"
       "}\n",
       actual);
     CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));

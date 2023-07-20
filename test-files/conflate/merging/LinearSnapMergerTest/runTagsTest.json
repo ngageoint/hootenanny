@@ -16,5 +16,6 @@
 {"type":"way","ref":-14,"role":""}],"tags":{"error:circular":"15","highway":"footway","hoot:multilinestring":"yes","uuid":"r"}},
 {"type":"relation","id":-1,"members":[
 {"type":"way","ref":-12,"role":""},
-{"type":"way","ref":-13,"role":""}],"tags":{"error:circular":"15","highway":"footway","uuid":"r;w3"}}]
+{"type":"way","ref":-13,"role":""}],"tags":{"error:circular":"15","highway":"footway","uuid":"r;w3"}}
+]
 }
