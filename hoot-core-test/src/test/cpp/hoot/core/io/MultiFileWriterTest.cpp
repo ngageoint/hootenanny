@@ -128,7 +128,6 @@ public:
     }
     //  Write the footer
     writer.setFooterSection();
-    writer.write("\n");
     writer.write("]\n");
     writer.write("}\n");
   }
