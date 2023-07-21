@@ -292,6 +292,12 @@ public class GrailResource {
             if (input1 == null) {
                 // can't have the cut and replace options for hoot convert. used for DeriveChangesetReplacementCommand
                 getRailsParams.setAdvancedOptions(null);
+                File tempDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
+                File referenceOSMFile = new File(tempDir, REFERENCE + ".osm");
+                getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
+                if (referenceOSMFile.exists()) referenceOSMFile.delete();
+                // hide the changeset workDir so it doesn't get deleted by ImportCommand
+                getRailsParams.setWorkDir(null);
                 try {
                     workflow.addAll(setupRailsPull(jobId, getRailsParams, null, debugLevel));
                 } catch (UnavailableException ex) {
@@ -987,6 +993,8 @@ public class GrailResource {
         params.setUser(user);
         params.setWorkDir(workDir);
         params.setInput1(layerName);
+        params.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+
 
         List<Command> workflow;
         try {
@@ -1017,7 +1025,6 @@ public class GrailResource {
         if (usingPrivateOverpass) {
             String queryWithConnectedWays = PullApiCommand.connectedWaysQuery(getRailsParams.getCustomQuery());
             getRailsParams.setCustomQuery(queryWithConnectedWays);
-            getRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
         }
 
         try {
@@ -1035,12 +1042,10 @@ public class GrailResource {
 
                 GrailParams dbRailsParams = new GrailParams(params);
                 dbRailsParams.setIntermediateFile(overpassFile.getAbsolutePath());
-                dbRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
                 dbRailsParams.setTranslation(translation);
                 workflow.add(getRailsPortApiCommand(jobId, dbRailsParams, debugLevel));
 
             } else {
-                getRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
                 workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
             }
         } catch (UnavailableException exc) {
