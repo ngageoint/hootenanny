@@ -265,7 +265,7 @@ public class FolderResource {
         Users user = Users.fromRequest(request);
         Folders folder = getFolderForUser(user, folderId);
 
-        if(user != null && !folder.getUserId().equals(user.getId())) {
+        if(user != null && !UserResource.adminUserCheck(user) && !folder.getUserId().equals(user.getId())) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
         }
 
