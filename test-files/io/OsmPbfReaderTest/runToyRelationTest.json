@@ -16,5 +16,6 @@
 {"type":"relation","id":-1,"members":[
 {"type":"way","ref":-567,"role":"role1"},
 {"type":"way","ref":-569,"role":"role2"},
-{"type":"way","ref":-568,"role":"role3"}],"tags":{"error:circular":"15","foo":"bar"}}]
+{"type":"way","ref":-568,"role":"role3"}],"tags":{"error:circular":"15","foo":"bar"}}
+]
 }

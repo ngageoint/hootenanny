@@ -172,6 +172,7 @@ void OsmJsonWriter::finalizePartial()
 {
   //  Lastly write the footer of the file
   _writer.setFooterSection();
+  _writeLn("");
   _writeLn("]");
   _writeLn("}");
 

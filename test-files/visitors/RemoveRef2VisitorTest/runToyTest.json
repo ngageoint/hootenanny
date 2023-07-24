@@ -9,5 +9,6 @@
 {"type":"node","id":-861032,"lat":37.80132,"lon":-122.41689},
 {"type":"node","id":-861027,"lat":37.801158,"lon":-122.41708},
 {"type":"way","id":-861037,"nodes":[-861035,-861038],"tags":{"REF2":"B","error:circular":"15","highway":"road"}},
-{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"REF1":"B","error:circular":"15","highway":"road"}}]
+{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"REF1":"B","error:circular":"15","highway":"road"}}
+]
 }

@@ -22,5 +22,6 @@
 {"type":"Feature","properties":{"FCSUBTYPE":"100083","FFN":"572","F_CODE":"AL013","ZI005_FNA":"Subway","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.453844, 42.4739028]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100083","FFN":"643","F_CODE":"AL013","ZI005_FNA":"Santander","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.45182200000001, 42.475573]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100083","FFN":"572","F_CODE":"AL013","OSMTAGS":{"addr:city":"Acton","addr:housenumber":"255A","addr:postcode":"01720","addr:state":"MA","addr:street":"Main Street","cuisine":"Frozen_Yogurt"},"ZI005_FNA":"Orange Leaf","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4538842, 42.473853]}},
-{"type":"Feature","properties":{"FCSUBTYPE":"100083","FFN":"999","F_CODE":"AL013","OSMTAGS":{"addr:city":"Acton","addr:housenumber":"255","addr:postcode":"01720","addr:state":"MA","addr:street":"Main Street"},"OTH":"(FFN:dentist)","ZI005_FNA":"Ratti Handa DMD","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4539022, 42.4737558]}}]
+{"type":"Feature","properties":{"FCSUBTYPE":"100083","FFN":"999","F_CODE":"AL013","OSMTAGS":{"addr:city":"Acton","addr:housenumber":"255","addr:postcode":"01720","addr:state":"MA","addr:street":"Main Street"},"OTH":"(FFN:dentist)","ZI005_FNA":"Ratti Handa DMD","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4539022, 42.4737558]}}
+]
 }

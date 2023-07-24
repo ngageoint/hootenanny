@@ -14,5 +14,6 @@
 {"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4731367, 42.4761148]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4735269, 42.4769731]}},
 {"type":"Feature","properties":{"CAA":"999","FCSUBTYPE":"100186","FFN":"482","F_CODE":"AQ125","OSMTAGS":{"disused":"station","end_date":"1975","start_date":"1844","wikipedia":"en:West_Acton_(MBTA_station)"},"OTH":"(CAA:B&M)","TRS":"12","ZI005_FNA":"West Acton (closed)","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.4733725, 42.4765182]}},
-{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.47734869999999, 42.4825336]}}]
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5","img_mosaic":"no"},"geometry": {"type":"Point","coordinates": [-71.47734869999999, 42.4825336]}}
+]
 }

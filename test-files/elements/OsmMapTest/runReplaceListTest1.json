@@ -6,5 +6,6 @@
 {"type":"way","ref":2,"role":"bar"},
 {"type":"way","ref":3,"role":"bar"},
 {"type":"way","ref":2,"role":"lucky"},
-{"type":"way","ref":3,"role":"lucky"}],"tags":{"error:circular":"15"}}]
+{"type":"way","ref":3,"role":"lucky"}],"tags":{"error:circular":"15"}}
+]
 }
