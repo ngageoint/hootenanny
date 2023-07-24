@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -49,6 +49,7 @@ class OsmGeoJsonWriterTest : public HootTestFixture
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonHootTest);
   CPPUNIT_TEST(runCroppingTest);
+  CPPUNIT_TEST(runInvalidTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -238,6 +239,11 @@ public:
     s.set(ConfigOptions::getWriterCropFeaturesCrossingBoundsKey(), true);
     s.set(ConfigOptions::getBoundsKey(), "-76.6197293502900010,39.2858283149899989,-76.6146064976200023,39.2868360346200021");
     runTest(_inputPath + "CroppingTest.osm", "CroppingTest.geojson", &s, multi_files);
+  }
+
+  void runInvalidTagsTest()
+  {
+    runTest(_inputPath + "InvalidTags.osm", "InvalidTags.geojson");
   }
 
   void runTest(const QString& input, const QString& output, Settings* settings = nullptr, const QStringList& multiOutput = QStringList())
