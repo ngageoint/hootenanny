@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -711,7 +711,7 @@ public:
     writer.setIncludeCompatibilityTags(false);
     const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}\n]\n"
       "}\n",
       actual);
     CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));

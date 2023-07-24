@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -233,7 +233,7 @@ public:
                     "{\"type\":\"node\",\"ref\":2,\"role\":\"t\"},\n"
                     "{\"type\":\"node\",\"ref\":3,\"role\":\"u\"},\n"
                     "{\"type\":\"way\",\"ref\":1,\"role\":\"f\"},\n"
-                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"1.7\",\"hello\":\"world\",\"highway\":\"road\",\"note\":\"test tag\"}}]\n"
+                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"1.7\",\"hello\":\"world\",\"highway\":\"road\",\"note\":\"test tag\"}}\n]\n"
                     "}\n",
                     actual);
     CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));

@@ -10,5 +10,6 @@
 {"type":"way","id":-861037,"nodes":[-861035,-861038],"tags":{"REF1":"A","building":"yes","error:circular":"15"}},
 {"type":"way","id":-861031,"nodes":[-861027,-861032],"tags":{"REF2":"D","error:circular":"15"}},
 {"type":"way","id":-861030,"nodes":[-861027,-861032],"tags":{"REF2":"C","building":"yes","error:circular":"15"}},
-{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"REF2":"B","building":"yes","error:circular":"15"}}]
+{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"REF2":"B","building":"yes","error:circular":"15"}}
+]
 }

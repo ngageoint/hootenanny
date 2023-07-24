@@ -4,5 +4,6 @@
 {"type":"way","id":3,"nodes":[],"tags":{"error:circular":"15"}},
 {"type":"relation","id":1,"members":[
 {"type":"way","ref":2,"role":"foo"},
-{"type":"way","ref":3,"role":"foo"}],"tags":{"error:circular":"15"}}]
+{"type":"way","ref":3,"role":"foo"}],"tags":{"error:circular":"15"}}
+]
 }

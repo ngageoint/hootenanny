@@ -1,3 +1,4 @@
 {"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
-{"type":"Feature","properties":{"FCSUBTYPE":"100475","F_CODE":"ZD040","OSMTAGS":{"ele":"85","gnis:county_id":"017","gnis:created":"02/24/1974","gnis:feature_id":"611523","gnis:state_id":"25","natural":"peak"},"ZI005_FNA":"Wright Hill","ZI015_GCUC":"5","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4775447, 42.4781074]}}]
+{"type":"Feature","properties":{"FCSUBTYPE":"100475","F_CODE":"ZD040","OSMTAGS":{"ele":"85","gnis:county_id":"017","gnis:created":"02/24/1974","gnis:feature_id":"611523","gnis:state_id":"25","natural":"peak"},"ZI005_FNA":"Wright Hill","ZI015_GCUC":"5","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4775447, 42.4781074]}}
+]
 }

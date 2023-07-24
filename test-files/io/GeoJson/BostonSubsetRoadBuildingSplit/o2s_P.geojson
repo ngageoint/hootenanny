@@ -3,5 +3,6 @@
 {"type":"Feature","properties":{"tag1":{"highway":"motorway_junction","o2s_reason":"Point geometry is not valid for AP030","ref":"41"}},"geometry": {"type":"Point","coordinates": [-71.472939, 42.499278]}},
 {"type":"Feature","properties":{"tag1":{"highway":"traffic_signals","o2s_reason":"Point geometry is not valid for AP030"}},"geometry": {"type":"Point","coordinates": [-71.45376400000001, 42.474867]}},
 {"type":"Feature","properties":{"tag1":{"note":"semi-difficult stream crossing","o2s_reason":"Unable to assign an F_CODE"}},"geometry": {"type":"Point","coordinates": [-71.4838266, 42.4807977]}},
-{"type":"Feature","properties":{"tag1":{"amenity":"atm","o2s_reason":"Unable to assign an F_CODE","operator":"Bank of America"}},"geometry": {"type":"Point","coordinates": [-71.45308060000001, 42.4745696]}}]
+{"type":"Feature","properties":{"tag1":{"amenity":"atm","o2s_reason":"Unable to assign an F_CODE","operator":"Bank of America"}},"geometry": {"type":"Point","coordinates": [-71.45308060000001, 42.4745696]}}
+]
 }
