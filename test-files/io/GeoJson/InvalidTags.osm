@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.61.4 df4c946a">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2023-07-24T14:19:22Z"/>
+  <node id="629670313" lat="34.9409056" lon="-82.3920346" version="1" timestamp="2010-02-04T23:18:07Z" changeset="3794635" uid="135163" user="MikeN">
+    <tag k="description" v="History of Paris Mountain name"/>
+    <tag k="name" v="&quot;Pearis&quot; of &quot;Paris&quot;"/>
+    <tag k="tourism" v="information"/>
+  </node>
+  <node id="832322144" lat="8.9750228" lon="-79.5120267" version="1" timestamp="2010-07-25T03:09:49Z" changeset="5308622" uid="296990" user="hsaavedra"/>
+  <node id="832323831" lat="8.9750821" lon="-79.5118912" version="1" timestamp="2010-07-25T03:11:16Z" changeset="5308622" uid="296990" user="hsaavedra"/>
+  <node id="832326015" lat="8.9749095" lon="-79.5121221" version="1" timestamp="2010-07-25T03:12:52Z" changeset="5308622" uid="296990" user="hsaavedra"/>
+  <node id="832341181" lat="8.9750301" lon="-79.5115946" version="1" timestamp="2010-07-25T03:26:00Z" changeset="5308622" uid="296990" user="hsaavedra"/>
+  <node id="1230874174" lat="3.4643657" lon="-76.4954054" version="3" timestamp="2016-11-16T16:50:44Z" changeset="43704489" uid="463504" user="erickdeoliveiraleal">
+    <tag k="BARRIO" v="SECTOR TRANSITO MUNICIPAL"/>
+    <tag k="COMUNA" v="5"/>
+    <tag k="DIRTRAD" v="CR 5 # 58 - 83"/>
+    <tag k="ESTADO" v="B"/>
+    <tag k="LOCALIDAD" v="COMUNA 5"/>
+    <tag k="MANZANA" v="76001100005045"/>
+    <tag k="NIVSOCIO" v="3"/>
+    <tag k="addr:full" v="cra 5 58 83 villa del prado"/>
+    <tag k="id" v="62"/>
+    <tag k="name" v="&quot;taller electrico de autos &quot;&quot;alectro aire&quot;&quot;&quot;"/>
+    <tag k="parts" v="yes"/>
+    <tag k="repair" v="yes"/>
+    <tag k="shop" v="motorcycle"/>
+  </node>
+  <node id="1408369305" lat="46.9654618" lon="142.7233736" version="2" timestamp="2016-04-19T09:55:02Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="1408369306" lat="46.9656007" lon="142.7229797" version="2" timestamp="2016-04-19T09:55:02Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="1408369307" lat="46.9657389" lon="142.7228590" version="2" timestamp="2016-04-19T09:55:02Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="1408369308" lat="46.9657078" lon="142.7225450" version="3" timestamp="2020-04-16T02:09:21Z" changeset="83618381" uid="11022175" user="Jehone"/>
+  <node id="1408369309" lat="46.9651518" lon="142.7226463" version="4" timestamp="2020-04-16T02:09:21Z" changeset="83618381" uid="11022175" user="Jehone"/>
+  <node id="1408369310" lat="46.9652135" lon="142.7234181" version="2" timestamp="2016-04-19T09:55:02Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="1625102315" lat="56.6633900" lon="124.7144312" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102317" lat="56.6633890" lon="124.7146383" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102343" lat="56.6634781" lon="124.7142435" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102344" lat="56.6634737" lon="124.7146397" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102352" lat="56.6634730" lon="124.7147717" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102353" lat="56.6634773" lon="124.7144327" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102411" lat="56.6637019" lon="124.7142471" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="1625102412" lat="56.6636994" lon="124.7147754" version="4" timestamp="2018-08-11T11:04:06Z" changeset="61562878" uid="2643818" user="UpakOffka"/>
+  <node id="2953665495" lat="-24.0243901" lon="-53.4448130" version="1" timestamp="2014-07-08T04:12:37Z" changeset="24016171" uid="1840640" user="jpgon"/>
+  <node id="2953665496" lat="-24.0245763" lon="-53.4436689" version="1" timestamp="2014-07-08T04:12:37Z" changeset="24016171" uid="1840640" user="jpgon"/>
+  <node id="2953665497" lat="-24.0234528" lon="-53.4446701" version="1" timestamp="2014-07-08T04:12:37Z" changeset="24016171" uid="1840640" user="jpgon"/>
+  <node id="2953665498" lat="-24.0236167" lon="-53.4435168" version="1" timestamp="2014-07-08T04:12:37Z" changeset="24016171" uid="1840640" user="jpgon"/>
+  <node id="2953665506" lat="-24.0244621" lon="-53.4443709" version="1" timestamp="2014-07-08T04:12:37Z" changeset="24016171" uid="1840640" user="jpgon"/>
+  <node id="2953665507" lat="-24.0235172" lon="-53.4442027" version="1" timestamp="2014-07-08T04:12:37Z" changeset="24016171" uid="1840640" user="jpgon"/>
+  <node id="4132711429" lat="46.9651803" lon="142.7230430" version="1" timestamp="2016-04-19T09:54:38Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="4132711437" lat="46.9654563" lon="142.7232106" version="1" timestamp="2016-04-19T09:54:39Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="4132711443" lat="46.9655661" lon="142.7231945" version="1" timestamp="2016-04-19T09:54:39Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="4132711446" lat="46.9656521" lon="142.7231067" version="1" timestamp="2016-04-19T09:54:39Z" changeset="38690327" uid="2635538" user="Serzhanya"/>
+  <node id="4695668538" lat="8.9759039" lon="-79.5126772" version="4" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="4695668539" lat="8.9759112" lon="-79.5113188" version="3" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="4695668540" lat="8.9749962" lon="-79.5114237" version="2" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="4695668541" lat="8.9753172" lon="-79.5127229" version="4" timestamp="2018-10-09T16:21:01Z" changeset="63352208" uid="8525896" user="orca_horka"/>
+  <node id="4695676732" lat="8.9759086" lon="-79.5116592" version="3" timestamp="2018-02-06T15:38:36Z" changeset="56120482" uid="7419211" user="Luisyau14"/>
+  <node id="4695676733" lat="8.9758745" lon="-79.5113362" version="3" timestamp="2021-03-19T18:26:25Z" changeset="101346675" uid="4831756" user="sagarawrz07"/>
+  <node id="4695676734" lat="8.9753354" lon="-79.5113845" version="2" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="4796243360" lat="34.1521443" lon="-111.7777850" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243361" lat="34.1520266" lon="-111.7775533" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243362" lat="34.1519492" lon="-111.7773927" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243363" lat="34.1518634" lon="-111.7772138" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243364" lat="34.1518079" lon="-111.7771183" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243365" lat="34.1517558" lon="-111.7769719" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243366" lat="34.1517103" lon="-111.7768113" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243367" lat="34.1516885" lon="-111.7767178" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243368" lat="34.1516801" lon="-111.7766101" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243369" lat="34.1516935" lon="-111.7764698" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243370" lat="34.1517171" lon="-111.7761548" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243371" lat="34.1517221" lon="-111.7759149" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243372" lat="34.1517238" lon="-111.7755836" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243373" lat="34.1517120" lon="-111.7754270" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243374" lat="34.1517221" lon="-111.7752441" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243375" lat="34.1517625" lon="-111.7751404" version="1" timestamp="2017-04-16T08:03:02Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243376" lat="34.1517894" lon="-111.7750713" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243377" lat="34.1517978" lon="-111.7749798" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243378" lat="34.1517810" lon="-111.7748965" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243379" lat="34.1517204" lon="-111.7748376" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243380" lat="34.1516430" lon="-111.7747481" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243381" lat="34.1515690" lon="-111.7746424" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243382" lat="34.1515404" lon="-111.7745469" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243383" lat="34.1515404" lon="-111.7744859" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243384" lat="34.1515707" lon="-111.7743904" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243385" lat="34.1516044" lon="-111.7743517" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243386" lat="34.1516901" lon="-111.7742907" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243387" lat="34.1517843" lon="-111.7742277" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243388" lat="34.1518567" lon="-111.7741261" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243389" lat="34.1518987" lon="-111.7740245" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243390" lat="34.1519105" lon="-111.7739167" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243391" lat="34.1519492" lon="-111.7737846" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243392" lat="34.1519980" lon="-111.7736220" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243393" lat="34.1520232" lon="-111.7734858" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243394" lat="34.1520199" lon="-111.7734055" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243395" lat="34.1520252" lon="-111.7732534" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4796243398" lat="34.1520241" lon="-111.7734522" version="1" timestamp="2017-04-16T08:03:03Z" changeset="47832042" uid="3581386" user="Route 66 Rebel"/>
+  <node id="4886809845" lat="19.4095693" lon="-103.7028864" version="1" timestamp="2017-05-31T03:09:17Z" changeset="49120690" uid="6074533" user="miguelfic">
+    <tag k="amenity" v="place_of_worship"/>
+    <tag k="name" v="&quot;&quot;Templo Adventista del 7° Día&quot;"/>
+  </node>
+  <node id="5207623890" lat="-23.0653259" lon="-47.8432036" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623891" lat="-23.0648567" lon="-47.8431740" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623892" lat="-23.0648350" lon="-47.8427004" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623893" lat="-23.0648155" lon="-47.8422742" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623894" lat="-23.0648033" lon="-47.8420069" version="5" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623895" lat="-23.0645491" lon="-47.8419020" version="5" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623896" lat="-23.0645774" lon="-47.8408635" version="5" timestamp="2018-06-24T03:01:25Z" changeset="60111847" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623897" lat="-23.0651334" lon="-47.8409148" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623901" lat="-23.0658503" lon="-47.8417193" version="2" timestamp="2017-11-27T05:00:42Z" changeset="54111864" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623902" lat="-23.0660204" lon="-47.8416213" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623903" lat="-23.0660327" lon="-47.8417566" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623904" lat="-23.0662269" lon="-47.8418016" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623905" lat="-23.0662648" lon="-47.8418673" version="4" timestamp="2021-03-28T00:49:50Z" changeset="101858452" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623906" lat="-23.0663019" lon="-47.8419444" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623907" lat="-23.0663273" lon="-47.8420379" version="4" timestamp="2021-03-28T00:49:50Z" changeset="101858452" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623908" lat="-23.0660790" lon="-47.8420973" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623909" lat="-23.0660462" lon="-47.8432268" version="3" timestamp="2018-04-11T23:07:58Z" changeset="58020077" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623911" lat="-23.0653008" lon="-47.8408771" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623914" lat="-23.0658152" lon="-47.8417229" version="2" timestamp="2017-11-27T05:00:43Z" changeset="54111864" uid="6833365" user="IgorEliezer"/>
+  <node id="5207623927" lat="-23.0658491" lon="-47.8416331" version="2" timestamp="2017-11-27T05:00:43Z" changeset="54111864" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796078" lat="-23.0654181" lon="-47.8403987" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796079" lat="-23.0653887" lon="-47.8404901" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796080" lat="-23.0654004" lon="-47.8405831" version="5" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796081" lat="-23.0654884" lon="-47.8407091" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796082" lat="-23.0655542" lon="-47.8407716" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796083" lat="-23.0656723" lon="-47.8408444" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796166" lat="-23.0653606" lon="-47.8407611" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796167" lat="-23.0653135" lon="-47.8406180" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796168" lat="-23.0651633" lon="-47.8406400" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796169" lat="-23.0650689" lon="-47.8405961" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796170" lat="-23.0649634" lon="-47.8405765" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796171" lat="-23.0649595" lon="-47.8404808" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796172" lat="-23.0650970" lon="-47.8403822" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796173" lat="-23.0652519" lon="-47.8403633" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5249796202" lat="-23.0653370" lon="-47.8403415" version="3" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5328259664" lat="-23.0654274" lon="-47.8406329" version="2" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="5345923787" lat="34.0668641" lon="-106.9067654" version="5" timestamp="2018-06-21T15:15:32Z" changeset="60047570" uid="7453397" user="haprager">
+    <tag k="artist_name" v="Sharon Fullingim"/>
+    <tag k="artwork_type" v="statue"/>
+    <tag k="name" v="&quot;The Past&quot;, &quot;The Present&quot;, and &quot;The Future&quot;"/>
+    <tag k="tourism" v="artwork"/>
+  </node>
+  <node id="5393207338" lat="8.9754678" lon="-79.5127233" version="3" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="5393422114" lat="8.9759068" lon="-79.5123962" version="2" timestamp="2018-02-10T16:25:44Z" changeset="56244037" uid="497849" user="pyram"/>
+  <node id="5393422115" lat="8.9759135" lon="-79.5120680" version="2" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="5718780298" lat="8.9747651" lon="-79.5123156" version="1" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="5718780299" lat="8.9751627" lon="-79.5126392" version="1" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="5718780300" lat="8.9752741" lon="-79.5127073" version="1" timestamp="2018-06-25T23:17:50Z" changeset="60163896" uid="4347030" user="vbertola"/>
+  <node id="5730096885" lat="-23.0647858" lon="-47.8419997" version="2" timestamp="2022-02-06T18:48:13Z" changeset="117090929" uid="6833365" user="IgorEliezer"/>
+  <node id="5825135551" lat="56.6637012" lon="124.7144057" version="1" timestamp="2018-08-11T11:04:05Z" changeset="61562878" uid="2643818" user="UpakOffka">
+    <tag k="entrance" v="yes"/>
+  </node>
+  <node id="6274215828" lat="-30.0148679" lon="-52.9014300" version="3" timestamp="2021-12-23T23:19:13Z" changeset="115315766" uid="6338825" user="ricardopretto">
+    <tag k="name" v="&quot;Armazém da Véia&quot; [Fechado]"/>
+    <tag k="shop" v="supermarket"/>
+  </node>
+  <node id="6640815030" lat="-0.1754046" lon="-78.6005289" version="2" timestamp="2022-02-21T15:07:18Z" changeset="117686222" uid="498648" user="tkk">
+    <tag k="information" v="board"/>
+    <tag k="name" v="&quot;E3&quot;,&quot;Mojon-guia&quot;,-0.17541,-78.60053,&quot;AZUL&quot;"/>
+    <tag k="operator" v="Policia Nacional del Ecuador (GOE)"/>
+    <tag k="tourism" v="information"/>
+  </node>
+  <node id="6640815031" lat="-0.1745302" lon="-78.6006107" version="1" timestamp="2019-07-23T14:23:34Z" changeset="72561752" uid="9264823" user="Freddy Calderon P">
+    <tag k="information" v="board"/>
+    <tag k="name" v="&quot;E1&quot;,&quot;Cartel-Inf-Exper&quot;,-0.17454,-78.60061,&quot;ROJO PELIGRO:Crater del Volcan Guagua Pichincha&quot;"/>
+    <tag k="operator" v="Policia Nacional del Ecuador (GOE)"/>
+    <tag k="tourism" v="information"/>
+  </node>
+  <node id="6640815032" lat="-0.1767797" lon="-78.5991886" version="1" timestamp="2019-07-23T14:23:34Z" changeset="72561752" uid="9264823" user="Freddy Calderon P">
+    <tag k="information" v="board"/>
+    <tag k="name" v="&quot;E2&quot;,&quot;Cartel-Inf&quot;,-0.17679,-78.59919,&quot;AMARILLO PRECAUCIÓN: Ruta para personas con experiencia&quot;"/>
+    <tag k="operator" v="Policia Nacional del Ecuador (GOE)"/>
+    <tag k="tourism" v="information"/>
+  </node>
+  <node id="6640815033" lat="-0.1768424" lon="-78.5972416" version="1" timestamp="2019-07-23T14:23:34Z" changeset="72561752" uid="9264823" user="Freddy Calderon P">
+    <tag k="information" v="board"/>
+    <tag k="name" v="&quot;I&quot;,&quot;Cartel-Inf&quot;,-0.1768463,-78.59818071,&quot;AZUL Altura(msnm): 4643m&quot;"/>
+    <tag k="operator" v="Policia Nacional del Ecuador (GOE)"/>
+    <tag k="tourism" v="information"/>
+  </node>
+  <node id="7409286128" lat="46.9651862" lon="142.7230920" version="2" timestamp="2020-04-16T03:31:46Z" changeset="83620218" uid="11022175" user="Jehone">
+    <tag k="barrier" v="gate"/>
+  </node>
+  <node id="8538193237" lat="8.9753631" lon="-79.5113783" version="1" timestamp="2021-03-19T18:26:25Z" changeset="101346675" uid="4831756" user="sagarawrz07"/>
+  <node id="8568249248" lat="-23.0657735" lon="-47.8414142" version="1" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="8568249249" lat="-23.0657192" lon="-47.8411607" version="1" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="8568249250" lat="-23.0656661" lon="-47.8409596" version="1" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer"/>
+  <node id="8713434872" lat="39.4211081" lon="-81.4628280" version="6" timestamp="2022-07-01T02:03:48Z" changeset="123065646" uid="307520" user="wolfgang8741">
+    <tag k="historic" v="memorial"/>
+    <tag k="name" v="&quot;The Vanishing Steam Age&quot; Steam Boat &quot;W. P. Snyder, Jr.&quot;"/>
+    <tag k="start_date" v="1959"/>
+    <tag k="tourism" v="information"/>
+    <tag k="wikimedia_commons" v="File:WP Snyder Jr historical marker.jpg"/>
+  </node>
+  <node id="9484247027" lat="-23.0645499" lon="-47.8418731" version="1" timestamp="2022-02-06T18:48:13Z" changeset="117090929" uid="6833365" user="IgorEliezer"/>
+  <node id="10706925297" lat="-29.0823937" lon="-56.5383096" version="1" timestamp="2023-03-03T14:35:31Z" changeset="133256959" uid="16061127" user="Luna Tania Estefania">
+    <tag k="building" v="greenhouse"/>
+    <tag k="name" v="&quot;ASOCIACION COOPERADORA ESCUELA AGROTECNICA &quot;&quot;JOSE MARIA MALFUSSI&quot;&quot;&quot;"/>
+    <tag k="shop" v="garden_centre"/>
+  </node>
+  <node id="10744428661" lat="44.9538315" lon="-124.0143309" version="1" timestamp="2023-03-19T01:58:58Z" changeset="133843371" uid="14384558" user="Xanadu_Contractor"/>
+  <node id="10744428662" lat="44.9538453" lon="-124.0145069" version="1" timestamp="2023-03-19T01:58:58Z" changeset="133843371" uid="14384558" user="Xanadu_Contractor"/>
+  <node id="10744428663" lat="44.9539400" lon="-124.0144922" version="1" timestamp="2023-03-19T01:58:58Z" changeset="133843371" uid="14384558" user="Xanadu_Contractor"/>
+  <node id="10744428664" lat="44.9539264" lon="-124.0143162" version="1" timestamp="2023-03-19T01:58:58Z" changeset="133843371" uid="14384558" user="Xanadu_Contractor"/>
+  <way id="127188032" version="3" timestamp="2016-04-19T09:54:57Z" changeset="38690327" uid="2635538" user="Serzhanya">
+    <nd ref="1408369307"/>
+    <nd ref="1408369306"/>
+    <nd ref="4132711446"/>
+    <nd ref="4132711443"/>
+    <nd ref="4132711437"/>
+    <nd ref="1408369305"/>
+  </way>
+  <way id="149543972" version="8" timestamp="2018-12-08T00:08:55Z" changeset="65282928" uid="2643818" user="UpakOffka">
+    <nd ref="1625102411"/>
+    <nd ref="5825135551"/>
+    <nd ref="1625102412"/>
+    <nd ref="1625102352"/>
+    <nd ref="1625102344"/>
+    <nd ref="1625102317"/>
+    <nd ref="1625102315"/>
+    <nd ref="1625102353"/>
+    <nd ref="1625102343"/>
+    <nd ref="1625102411"/>
+    <tag k="addr:city" v="Нерюнгри"/>
+    <tag k="addr:country" v="RU"/>
+    <tag k="addr:housenumber" v="23/2"/>
+    <tag k="addr:postcode" v="678960"/>
+    <tag k="addr:street" v="улица Карла Маркса"/>
+    <tag k="building" v="yes"/>
+    <tag k="height" v="5"/>
+    <tag k="name" v="&quot;Айгуль&quot; &quot;Центральный&quot;"/>
+    <tag k="opening_hours" v="Mo-Su 09:00-21:00; Mo[1] off &quot;санитарный день&quot;"/>
+    <tag k="shop" v="supermarket"/>
+  </way>
+  <way id="291855819" version="5" timestamp="2017-04-06T12:02:14Z" changeset="47504848" uid="463504" user="erickdeoliveiraleal">
+    <nd ref="2953665495"/>
+    <nd ref="2953665506"/>
+    <nd ref="2953665496"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Rua Guararapes"/>
+    <tag k="postal_code" v="87580000"/>
+    <tag k="source" v="&quot;Bing&quot; + name=&quot;IBGE&quot;"/>
+  </way>
+  <way id="291855820" version="5" timestamp="2017-04-06T12:02:14Z" changeset="47504848" uid="463504" user="erickdeoliveiraleal">
+    <nd ref="2953665497"/>
+    <nd ref="2953665507"/>
+    <nd ref="2953665498"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Rua Araçatuba"/>
+    <tag k="postal_code" v="87580000"/>
+    <tag k="source" v="&quot;Bing&quot; + name=&quot;IBGE&quot;"/>
+  </way>
+  <way id="411642681" version="2" timestamp="2020-04-16T03:31:46Z" changeset="83620218" uid="11022175" user="Jehone">
+    <nd ref="1408369305"/>
+    <nd ref="1408369310"/>
+    <nd ref="7409286128"/>
+    <nd ref="4132711429"/>
+  </way>
+  <way id="411642692" version="1" timestamp="2016-04-19T09:54:49Z" changeset="38690327" uid="2635538" user="Serzhanya">
+    <nd ref="4132711429"/>
+    <nd ref="1408369309"/>
+    <nd ref="1408369308"/>
+    <nd ref="1408369307"/>
+  </way>
+  <way id="475882665" version="7" timestamp="2021-03-19T18:26:25Z" changeset="101346675" uid="4831756" user="sagarawrz07">
+    <nd ref="4695668538"/>
+    <nd ref="5393422114"/>
+    <nd ref="5393422115"/>
+    <nd ref="4695676732"/>
+    <nd ref="4695668539"/>
+    <nd ref="4695676733"/>
+    <nd ref="8538193237"/>
+    <nd ref="4695676734"/>
+    <nd ref="4695668540"/>
+    <nd ref="832341181"/>
+    <nd ref="832323831"/>
+    <nd ref="832322144"/>
+    <nd ref="832326015"/>
+    <nd ref="5718780298"/>
+    <nd ref="5718780299"/>
+    <nd ref="5718780300"/>
+    <nd ref="4695668541"/>
+    <nd ref="5393207338"/>
+    <nd ref="4695668538"/>
+    <tag k="leisure" v="park"/>
+    <tag k="name" v="Parque Marino &quot;Nacho&quot; Valdés [Parque Punta Paitilla]"/>
+  </way>
+  <way id="487110568" version="2" timestamp="2022-01-13T13:08:21Z" changeset="116106363" uid="443130" user="Alan Bragg">
+    <nd ref="4796243360"/>
+    <nd ref="4796243361"/>
+    <nd ref="4796243362"/>
+    <nd ref="4796243363"/>
+    <nd ref="4796243364"/>
+    <nd ref="4796243365"/>
+    <nd ref="4796243366"/>
+    <nd ref="4796243367"/>
+    <nd ref="4796243368"/>
+    <nd ref="4796243369"/>
+    <nd ref="4796243370"/>
+    <nd ref="4796243371"/>
+    <nd ref="4796243372"/>
+    <nd ref="4796243373"/>
+    <nd ref="4796243374"/>
+    <nd ref="4796243375"/>
+    <nd ref="4796243376"/>
+    <nd ref="4796243377"/>
+    <nd ref="4796243378"/>
+    <nd ref="4796243379"/>
+    <nd ref="4796243380"/>
+    <nd ref="4796243381"/>
+    <nd ref="4796243382"/>
+    <nd ref="4796243383"/>
+    <nd ref="4796243384"/>
+    <nd ref="4796243385"/>
+    <nd ref="4796243386"/>
+    <nd ref="4796243387"/>
+    <nd ref="4796243388"/>
+    <nd ref="4796243389"/>
+    <nd ref="4796243390"/>
+    <nd ref="4796243391"/>
+    <nd ref="4796243392"/>
+    <nd ref="4796243393"/>
+    <nd ref="4796243398"/>
+    <nd ref="4796243394"/>
+    <nd ref="4796243395"/>
+    <tag k="bicycle" v="no"/>
+    <tag k="highway" v="unclassified"/>
+    <tag k="name" v="[FR 575\"/>
+    <tag k="ref" v="FR 575"/>
+    <tag k="surface" v="dirt"/>
+  </way>
+  <way id="537873011" version="5" timestamp="2021-03-28T00:49:50Z" changeset="101858452" uid="6833365" user="IgorEliezer">
+    <nd ref="5249796083"/>
+    <nd ref="8568249250"/>
+    <nd ref="8568249249"/>
+    <nd ref="8568249248"/>
+    <nd ref="5207623914"/>
+    <nd ref="5207623901"/>
+    <nd ref="5207623927"/>
+    <nd ref="5207623902"/>
+    <nd ref="5207623903"/>
+    <nd ref="5207623904"/>
+    <nd ref="5207623905"/>
+    <nd ref="5207623906"/>
+    <nd ref="5207623907"/>
+    <tag k="source" v="Maxar"/>
+  </way>
+  <way id="543027856" version="4" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer">
+    <nd ref="5207623896"/>
+    <nd ref="5207623897"/>
+    <nd ref="5207623911"/>
+    <nd ref="5249796166"/>
+  </way>
+  <way id="923005809" version="1" timestamp="2021-03-28T00:27:44Z" changeset="101858191" uid="6833365" user="IgorEliezer">
+    <nd ref="5249796166"/>
+    <nd ref="5249796167"/>
+    <nd ref="5249796168"/>
+    <nd ref="5249796169"/>
+    <nd ref="5249796170"/>
+    <nd ref="5249796171"/>
+    <nd ref="5249796172"/>
+    <nd ref="5249796173"/>
+    <nd ref="5249796202"/>
+    <nd ref="5249796078"/>
+    <nd ref="5249796079"/>
+    <nd ref="5249796080"/>
+    <nd ref="5328259664"/>
+    <nd ref="5249796081"/>
+    <nd ref="5249796082"/>
+    <nd ref="5249796083"/>
+  </way>
+  <way id="923007928" version="3" timestamp="2022-02-06T18:48:22Z" changeset="117090929" uid="6833365" user="IgorEliezer">
+    <nd ref="5207623907"/>
+    <nd ref="5207623908"/>
+    <nd ref="5207623909"/>
+    <nd ref="5207623890"/>
+    <nd ref="5207623891"/>
+    <nd ref="5207623892"/>
+    <nd ref="5207623893"/>
+    <nd ref="5207623894"/>
+    <nd ref="5730096885"/>
+    <nd ref="5207623895"/>
+    <nd ref="9484247027"/>
+    <nd ref="5207623896"/>
+    <tag k="barrier" v="fence"/>
+    <tag k="fence_type" v="barbed_wire"/>
+  </way>
+  <way id="1155346495" version="1" timestamp="2023-03-19T01:58:58Z" changeset="133843371" uid="14384558" user="Xanadu_Contractor">
+    <nd ref="10744428664"/>
+    <nd ref="10744428661"/>
+    <nd ref="10744428662"/>
+    <nd ref="10744428663"/>
+    <nd ref="10744428664"/>
+    <tag k="addr:city" v="Lincoln City"/>
+    <tag k="addr:housenumber" v="1934"/>
+    <tag k="addr:postcode" v="97367"/>
+    <tag k="addr:state" v="OR"/>
+    <tag k="addr:street" v="Southwest Bard Road"/>
+    <tag k="addr:unit" v="B"/>
+    <tag k="building:part" v="yes"/>
+    <tag k="name" v="Cape Foulweather Coffee Company"/>
+    <tag k="opening_hours" v="&quot;by appointment&quot;; Sa[1,3] 10:00-14:00; Su[1,3] 10:00-14:00"/>
+    <tag k="phone" v="+1 541 996 9463"/>
+    <tag k="shop" v="coffee"/>
+  </way>
+  <relation id="6152255" version="1" timestamp="2016-04-19T09:54:52Z" changeset="38690327" uid="2635538" user="Serzhanya">
+    <member type="way" ref="411642681" role="outer"/>
+    <member type="way" ref="127188032" role="outer"/>
+    <member type="way" ref="411642692" role="outer"/>
+    <tag k="landuse" v="industrial"/>
+    <tag k="name" v="&quot;КонТек&quot;, &quot;Эйркон&quot;"/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+  <relation id="12499652" version="3" timestamp="2021-09-07T20:09:54Z" changeset="110878103" uid="6833365" user="IgorEliezer">
+    <member type="way" ref="923007928" role="outer"/>
+    <member type="way" ref="537873011" role="outer"/>
+    <member type="way" ref="923005809" role="outer"/>
+    <member type="way" ref="543027856" role="outer"/>
+    <tag k="description" v="Foi uma fazenda de café formada antes da cidade. Estas terras continham índios, nelas trabalharam escravos e por elas atravessaram bandeirantes rumo ao centro-oeste. Sua sede preservada é edificada em taipa em estilo bandeirantista, tem cerca de 200 anos."/>
+    <tag k="historic" v="farm"/>
+    <tag k="landuse" v="farmyard"/>
+    <tag k="name" v="Fazenda Estrela"/>
+    <tag k="old_name" v="Fazenda Capuava"/>
+    <tag k="source" v="João Fernando Piza, tese &quot;Nos sertões de Botucatu [...]&quot;, 2015"/>
+    <tag k="source:description" v="José Thomé, livro &quot;Laranjal Paulista, Nossa Terra – Nossa Gente&quot;, 1988."/>
+    <tag k="start_date" v="C18"/>
+    <tag k="tourism" v="yes"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="wikidata" v="Q108448674"/>
+  </relation>
+</osm>
