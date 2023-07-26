@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 #include "TranslationInterface.h"
 
 // geos
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
@@ -104,20 +105,30 @@ std::shared_ptr<geos::geom::Geometry> TranslationInterface::convertGeometry(cons
     {
       return ElementToGeometryConverter(provider).convertToGeometry(e, false);
     }
+    catch (const geos::util::TopologyException& err)
+    {
+      _logWarning(e, QString(err.what()));
+    }
     catch (const IllegalArgumentException& err)
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
+      _logWarning(e, err.getName());
     }
   }
   return GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 }
+
+void TranslationInterface::_logWarning(const ConstElementPtr& e, const QString& warning) const
+{
+  if (logWarnCount < Log::getWarnMessageLimit())
+  {
+    LOG_WARN("Error converting geometry: " << warning << " (" << e->getElementId().toString() << ")");
+  }
+  else if (logWarnCount == Log::getWarnMessageLimit())
+  {
+    LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+  }
+  logWarnCount++;
+}
+
 
 }
