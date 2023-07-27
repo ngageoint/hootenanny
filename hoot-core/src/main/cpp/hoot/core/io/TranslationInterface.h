@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TRANSLATION_INTERFACE_H
@@ -81,6 +81,8 @@ protected:
   /** Schema loaded by the translator */
   std::shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
+  /** Log the warning, keeping track of the warning count */
+  void _logWarning(const ConstElementPtr& e, const QString& warning) const;
 };
 
 }
