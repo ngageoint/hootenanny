@@ -127,7 +127,11 @@ public:
   void setMaxGridSize(double maxSize)
   { if (maxSize >= _coordGridSize) _maxGridSize = maxSize; }
 
-  bool isError() const { return _fatalError; }
+  bool isError() const { return _isError; }
+
+  bool isFatalError() const { return _isFatalError; }
+
+  QString getErrorMessage() const { return _errorMessage; }
 
 protected:
 
@@ -207,8 +211,12 @@ private:
   std::vector<std::thread> _threads;
   /** Mutex guarding error processing code */
   std::mutex _errorMutex;
-  /** Set to true if there was a fatal error in the query */
-  bool _fatalError;
+  /** Set to true if there was a error in the query that causes processing to stop */
+  bool _isError;
+  /** Set to true if there the error must immediately stop all processing */
+  bool _isFatalError;
+  /** Fatal error message */
+  QString _errorMessage;
   /** Flag set to true if the bounding box is to be output in the x1,y1,x2,y2 format and
    *  false will output x1,x2,y1,y2 format */
   bool _useOsmApiBboxFormat;

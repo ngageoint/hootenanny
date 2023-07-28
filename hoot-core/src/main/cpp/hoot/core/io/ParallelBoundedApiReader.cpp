@@ -54,7 +54,8 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
     _totalResults(0),
     _totalWork(0),
     _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
-    _fatalError(false),
+    _isError(false),
+    _isFatalError(false),
     _useOsmApiBboxFormat(useOsmApiBboxFormat),
     _addProjection(addProjection),
     _continueRunning(true),
@@ -163,10 +164,13 @@ bool ParallelBoundedApiReader::hasMoreResults()
     more = !_resultsList.empty();
   }
   bool done = isComplete();
+  //  Throw the fatal error here and not in the read threads
+  if (_isFatalError)
+    throw HootException(_errorMessage);
   //  There are more results when the queue contains results
   //  or the threads are still processing envelopes
   //  and there isn't an error
-  return (more || !done) && !_fatalError;
+  return (more || !done) && !_isError;
 }
 
 void ParallelBoundedApiReader::wait()
@@ -209,7 +213,7 @@ void ParallelBoundedApiReader::_process()
   int timeout = 0;
   int max_timeout = 3;
   //  Continue working until all of the results are back
-  while (!isComplete() && _continueRunning && !_fatalError)
+  while (!isComplete() && _continueRunning && !_isError)
   {
     //  Don't allow the results list to get too large, i.e larger than the thread count
     bool isFull = false;
@@ -301,7 +305,7 @@ void ParallelBoundedApiReader::_process()
             {
               std::lock_guard<std::mutex> error_lock(_errorMutex);
               LOG_ERROR("API Failure: " << error);
-              _fatalError = true;
+              _isError = true;
             }
             else
             {
@@ -343,9 +347,10 @@ void ParallelBoundedApiReader::_process()
         {
           //  Overpass API 400 Bad Request means the query didn't parse correctly and the error is in the response
           std::lock_guard<std::mutex> error_lock(_errorMutex);
-          LOG_ERROR("Overpass Error: " + parseOverpassError(QString::fromUtf8(request.getResponseContent().data())));
+          _errorMessage = "Overpass query parse error: " + parseOverpassError(QString::fromUtf8(request.getResponseContent().data()));
           LOG_VARD(url);
-          _fatalError = true;
+          _isError = true;
+          _isFatalError = true;
         }
         else
         {
@@ -357,7 +362,7 @@ void ParallelBoundedApiReader::_process()
       {
         std::lock_guard<std::mutex> error_lock(_errorMutex);
         LOG_ERROR(request.getErrorString());
-        _fatalError = true;
+        _isError = true;
         break;
       }
       case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:
@@ -407,7 +412,7 @@ void ParallelBoundedApiReader::_process()
             //  Log the unrecoverable error
             std::lock_guard<std::mutex> error_lock(_errorMutex);
             LOG_ERROR(request.getErrorString());
-            _fatalError = true;
+            _isError = true;
           }
         }
         else
@@ -415,7 +420,7 @@ void ParallelBoundedApiReader::_process()
           //  Log the unrecoverable error
           std::lock_guard<std::mutex> error_lock(_errorMutex);
           LOG_ERROR(request.getErrorString());
-          _fatalError = true;
+          _isError = true;
         }
         break;
       }
@@ -461,7 +466,7 @@ void ParallelBoundedApiReader::_logNetworkError(const HootNetworkRequest& reques
 {
   std::lock_guard<std::mutex> error_lock(_errorMutex);
   request.logConnectionError();
-  _fatalError = true;
+  _isError = true;
 }
 
 bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& error) const
