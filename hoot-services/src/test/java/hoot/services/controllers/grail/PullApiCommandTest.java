@@ -26,7 +26,10 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.OVERPASS_QUERY_MAXSIZE;
+import static hoot.services.HootProperties.OVERPASS_QUERY_TIMEOUT;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -91,6 +94,67 @@ public class PullApiCommandTest {
             filter = matcher.group(1);
         }
         assertEquals("~\"^(highway|building)$\"~\".\"", filter);
+
+    }
+
+    @Test
+    public void testGetFilterPatternTimeout() throws IOException {
+        String overpassql =
+                "[out:json][timeout:25];\n" +
+                "(\n" +
+                "node[amenity]({{bbox}})\n" +
+                ");\n" +
+                "(._;>;);\n" +
+                "out meta;";
+        String filter = null;
+        Matcher matcher = PullApiCommand.overpassqlFilterPattern.matcher(overpassql);
+        if (matcher.find()) {
+            filter = matcher.group(1);
+        }
+        assertEquals("amenity", filter);
+
+    }
+
+    @Test
+    public void testGetFilterPatternFence() throws IOException {
+        String overpassql =
+                "[out:json][timeout:25];\n" +
+                "(\n" +
+                "nwr[\"barrier\"=\"fence\"]({{bbox}})\n" +
+                ");\n" +
+                "(._;>;);\n" +
+                "out meta;";
+        String filter = null;
+        Matcher matcher = PullApiCommand.overpassqlFilterPattern.matcher(overpassql);
+        if (matcher.find()) {
+            filter = matcher.group(1);
+        }
+        assertEquals("\"barrier\"=\"fence\"", filter);
+
+    }
+
+    @Test
+    public void testReplaceFormatTimeoutMaxsize() throws IOException {
+        String remainder = "\n" +
+                "(\n" +
+                "nwr[\"barrier\"=\"fence\"]({{bbox}})\n" +
+                ");\n" +
+                "(._;>;);\n" +
+                "out meta;";
+        String expected = "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:536870912][timeout:180];" + remainder;
+        String replacer = String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s];",
+                OVERPASS_QUERY_MAXSIZE, OVERPASS_QUERY_TIMEOUT);
+        String overpassql1 = "[out:json][timeout:25];" + remainder;
+        String overpassql2 = "[out:json][mazsize:2048];" + remainder;
+        String overpassql3 = "[out:json][mazsize:2048][timeout:25];" + remainder;
+        String overpassql4 = "[out:json][timeout:25][mazsize:2048];" + remainder;
+        String overpassql5 = "[out:json];" + remainder;
+
+        assertEquals(expected, overpassql5.replaceFirst(PullApiCommand.overpassqlFormatPattern, replacer));
+        assertEquals(expected, overpassql1.replaceFirst(PullApiCommand.overpassqlFormatPattern, replacer));
+        assertEquals(expected, overpassql2.replaceFirst(PullApiCommand.overpassqlFormatPattern, replacer));
+        assertEquals(expected, overpassql3.replaceFirst(PullApiCommand.overpassqlFormatPattern, replacer));
+        assertEquals(expected, overpassql4.replaceFirst(PullApiCommand.overpassqlFormatPattern, replacer));
 
     }
 

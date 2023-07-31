@@ -72,7 +72,10 @@ import hoot.services.geo.BoundingBox;
 public class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
 
-    public static Pattern overpassqlFilterPattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
+    // matches [xxx] pattern but without timeout or maxsize
+    public static Pattern overpassqlFilterPattern = Pattern.compile(".+\\[((?!timeout|maxsize).*?)\\]");
+    // matches the [out:json] with optional timeout and maxsize props
+    public static String overpassqlFormatPattern = "^\\[out:(json|xml)\\].*";
 
     private final GrailParams params;
     private final String jobId;

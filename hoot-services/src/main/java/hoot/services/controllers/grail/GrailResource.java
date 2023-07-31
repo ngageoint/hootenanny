@@ -866,8 +866,8 @@ public class GrailResource {
         }
 
         // first line that lists columns which are counts for each feature type
-        overpassQuery = overpassQuery.replace("[out:json]",
-                String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s]",
+        overpassQuery = overpassQuery.replaceAll(PullApiCommand.overpassqlFormatPattern,
+                String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s];",
                 OVERPASS_QUERY_MAXSIZE, OVERPASS_QUERY_TIMEOUT)
                 );
 
