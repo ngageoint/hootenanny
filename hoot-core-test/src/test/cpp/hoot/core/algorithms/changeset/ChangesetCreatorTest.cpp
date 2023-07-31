@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -36,6 +36,7 @@ class ChangesetCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetCreatorTest);
   CPPUNIT_TEST(runUpdateVersionTest);
+  CPPUNIT_TEST(runEmptyChangesetTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -52,6 +53,18 @@ public:
     QString secondary = _inputPath + "ChangesetDeriveUpdateVersion_sec.osm";
     QString output = _outputPath + "ChangsetDeriveUpdateVersion_output.osc";
     QString expected = _inputPath + "ChangesetDeriveUpdateVersion_expected.osc";
+
+    ChangesetCreator(false, "").create(output, reference, secondary);
+
+    HOOT_FILE_EQUALS(output, expected);
+  }
+
+  void runEmptyChangesetTest()
+  {
+    QString reference = _inputPath + "ChangesetDeriveEmpty.osm";
+    QString secondary = "";
+    QString output = _outputPath + "ChangesetDeriveEmpty_output.osc";
+    QString expected = _inputPath + "ChangesetDeriveEmpty_expected.osc";
 
     ChangesetCreator(false, "").create(output, reference, secondary);
 
