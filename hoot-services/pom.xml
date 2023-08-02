@@ -47,7 +47,7 @@
         <slf4j.version>1.7.32</slf4j.version>
         <smiley-http-proxy-servlet.version>1.12</smiley-http-proxy-servlet.version>
         <spring.version>5.3.20</spring.version>
-        <spring.security.version>5.7.8</spring.security.version>
+        <spring.security.version>5.7.10</spring.security.version>
         <tika.version>1.26</tika.version>
         <xercesImpl.version>2.12.2</xercesImpl.version>
 
