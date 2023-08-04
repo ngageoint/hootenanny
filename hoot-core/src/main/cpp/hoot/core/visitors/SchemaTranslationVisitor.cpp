@@ -95,6 +95,10 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
 
 void SchemaTranslationVisitor::visit(const ElementPtr& e)
 {
+  //  Don't attempt translation without a translator
+  if (!_translator)
+    return;
+  //  Filter the elements
   if (e.get() && e->getTags().getNonDebugCount() > 0 &&
       (_elementStatusFilter == Status::Invalid || e->getStatus() == _elementStatusFilter))
   {

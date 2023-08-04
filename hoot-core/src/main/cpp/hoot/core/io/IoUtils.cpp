@@ -106,6 +106,12 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   }
 }
 
+bool IoUtils::isSupportedJsonFormat(const QString& input)
+{
+  const QString inputLower = input.toLower();
+  return inputLower.endsWith(".json") || inputLower.endsWith(".geojson");
+}
+
 bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
   if (inputs.empty())
