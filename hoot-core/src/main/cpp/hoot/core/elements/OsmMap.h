@@ -216,6 +216,9 @@ public:
   /** Removing multiple ways using other methods will trigger the indices in this object
    *  to be rebuilt between each delete operation which is expensive, this method will delete
    *  all of the ways in one shot and rebuild the indices afterwards.
+   * @param way_ids Vector of way IDs that are to be removed
+   * @param removeFully When set to true, way IDs are removed from relations in the map too
+   *  when false, the way is removed from the map only, relations still reference the way ID
    */
   void bulkRemoveWays(const std::vector<long>& way_ids, bool removeFully);
 
