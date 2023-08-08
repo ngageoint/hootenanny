@@ -213,6 +213,12 @@ public:
   int numWaysAppended() const { return _numWaysAppended; }
   int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
 
+  /** Removing multiple ways using other methods will trigger the indices in this object
+   *  to be rebuilt between each delete operation which is expensive, this method will delete
+   *  all of the ways in one shot and rebuild the indices afterwards.
+   */
+  void bulkRemoveWays(const std::vector<long>& way_ids, bool removeFully);
+
   ////////////////////////////////////////RELATION/////////////////////////////////////////////////
 
   ConstRelationPtr getRelation(long id) const override;
