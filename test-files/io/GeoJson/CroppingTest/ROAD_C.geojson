@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-76.621, 39.284, -76.614, 39.287],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-76.62, 39.286, -76.615, 39.287],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"100152","F_CODE":"AP030","LZN":"1118.6","OSMTAGS":{"highway":"primary"},"RIN_ROI":"3","RMWC":"5","RTY":"3","SGCC":"5","ZI005_FNA":"Highway Test","ZI016_WTC":"1","ZI026_CTUC":"5"},"geometry": {"type":"MultiLineString","coordinates": [[[-76.61972935029, 39.28622613963066],[-76.61925316929999, 39.28625017619],[-76.61922038510578, 39.28582831499]],[[-76.6148605218813, 39.28582831499],[-76.61492944837001, 39.28646608078],[-76.61460649762, 39.28648516172767]]]}}
 ]
 }

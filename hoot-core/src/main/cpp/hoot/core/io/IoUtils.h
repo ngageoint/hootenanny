@@ -79,6 +79,13 @@ public:
    */
   static bool isSupportedOgrFormat(const QString& input, const bool allowDir = false);
   /**
+   * Returns true if the input format is a Hootenanny supported JSON format
+   *
+   * @param input input path
+   * @return true if the input is a type of JSON; false otherwise
+   */
+  static bool isSupportedJsonFormat(const QString& input);
+  /**
    * Determines if a set of inputs paths are all OGR supported formats
    *
    * @param inputs input paths

@@ -651,6 +651,38 @@ void OsmMap::replaceNodes(const std::map<long, long>& replacements)
   }
 }
 
+void OsmMap::bulkRemoveWays(const std::vector<long>& way_ids, bool removeFully)
+{
+  //  Get a pointer to the element to relation map and then clear the index before working with the index again,
+  //  this will keep the index from being rebuilt with each removal of a way.  Rebuild it once at the end of the
+  //  function
+  std::shared_ptr<ElementToRelationMap> relationMap = _index->getElementToRelationMap();
+  if (removeFully)
+    _index->clearRelationIndex();
+
+  //  Remove all of the ways
+  for (auto& id : way_ids)
+  {
+    ElementId eid = ElementId::way(id);
+    if (removeFully)
+    {
+      //  Update all relations to remove references to this way
+      const set<long>& relations = relationMap->getRelationByElement(eid);
+      for (const auto& r : _relations)
+      {
+        if (relations.find(r.first) != relations.end())
+          r.second->removeElement(eid);
+      }
+    }
+    //  Actually remove the way from the map and the index
+    _index->removeWay(getWay(id));
+    _ways.erase(id);
+  }
+  //  Rebuild the relation map only one time
+  if (removeFully)
+    _index->getElementToRelationMap();
+}
+
 void OsmMap::setProjection(const std::shared_ptr<OGRSpatialReference>& srs)
 {
   _srs = srs;

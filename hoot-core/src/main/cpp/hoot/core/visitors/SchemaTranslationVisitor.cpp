@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaTranslationVisitor.h"
@@ -95,6 +95,10 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
 
 void SchemaTranslationVisitor::visit(const ElementPtr& e)
 {
+  //  Don't attempt translation without a translator
+  if (!_translator)
+    return;
+  //  Filter the elements
   if (e.get() && e->getTags().getNonDebugCount() > 0 &&
       (_elementStatusFilter == Status::Invalid || e->getStatus() == _elementStatusFilter))
   {
