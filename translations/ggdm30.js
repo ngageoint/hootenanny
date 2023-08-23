@@ -1563,7 +1563,6 @@ ggdm30 = {
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.railway == "crossing"','t["transport:type"] = "railway"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.resource','t.raw_material = t.resource; delete t.resource'],
-        ['t.route == "road" && !(t.highway)','t.highway = "road"; delete t.route'],
         // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
         ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
         ['t.tunnel == "building_passage"','t.tunnel = "yes"'],
