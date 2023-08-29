@@ -1262,6 +1262,36 @@ translate = {
   },
 
 
+  // Fix and convert the units for widths, lengths etc to metres
+  fixNumber : function(rawNum)
+  {
+    // convert common number formats. Pulled from Taginfo values
+    // _m  m  ' and "  _ft  _cm  _m.  _km
+    rawNum = rawNum.replace(' ','').replace(',','.'); // Initial cleanup
+
+    // Quit early if nothing to do
+    if (translate.isNumber(rawNum)) return rawNum;
+
+    if (rawNum.includes('km')) return 1000 * rawNum.replace('km','');
+    if (rawNum.includes('cm')) return (0.01 * rawNum.replace('cm','')).toFixed(2);
+    if (rawNum.includes('m')) return 1 * rawNum.replace('m','');
+
+    if (rawNum.includes('ft')) return (0.3048 * rawNum.replace('ft','')).toFixed(2);
+
+    if (rawNum.includes("'"))
+    {
+      var tList = rawNum.split("'");
+      var tNum = 0.3048 * tList[0];  // Convert Feet to M
+      if (tList.length > 1) // We have inch
+      {
+        tNum = tNum + 0.0254 * tList[1].replace('"',''); // Convert Inch to M
+      }
+
+     return tNum.toFixed(2);
+    }
+  },
+
+
   // Chop a datetime field down to a single value and get it to 20 characters long for export to MGCP & TDS
   chopDateTime : function(rawDateTime)
   {
