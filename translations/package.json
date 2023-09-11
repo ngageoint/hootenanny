@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@xmldom/xmldom": "^0.8.4",
-    "artillery": "^2.0.0-34",
+    "artillery": "^2.0.0-36-f351294",
     "lodash": ">=4.17.21",
     "mocha": "^9.2.2",
     "node-mocks-http": "^1.11.0",
