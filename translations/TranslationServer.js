@@ -192,7 +192,7 @@ function TranslationServer(request, response) {
                     params.method = request.method;
                     params.path = request.path || urlbits.pathname;
                     params.osm = payload;
-                    params.contentType = request.headers['Content-Type'];
+                    params.contentType = request.headers['content-type'];
                     header['Accept'] = 'text/xml';
                     header['Content-Type'] = 'text/xml';
                     var result = handleInputs(params);
