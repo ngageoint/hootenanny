@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Main sonar scanner
-SONAR_VERSION=4.6.0.2311 # Requires Java 11
-SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
-SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
-SONAR_ZIP=$SONAR_CLI.zip
-SONAR_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
-SONAR_PATH=/opt/sonar
-
-# Sonar build wrapper (required to scan C/C++)
-SONAR_BLD_PKG=build-wrapper-linux-x86
-SONAR_BLD_ZIP=$SONAR_BLD_PKG.zip
-SONAR_BLD_URL=https://sonarcloud.io/static/cpp
+source $HOOT_HOME/scripts/sonar/sonar-config.sh
 
 # Download sonar scanner
 if [ ! -f $SONAR_ZIP ]; then
@@ -50,11 +39,18 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     rm -rf $SONAR_BLD_PKG
 fi
 
-# Install Java 11 for the scan only
-sudo yum install -y java-11-openjdk java-11-openjdk-devel
+# Install Java 17 for the scan only
+wget $SONAR_JDK_URL
+sudo yum localinstall -yq $SONAR_JDK_RPM
+
+# Install an updated version of Maven for Sonar
+wget --no-check-certificate $SONAR_MVN_URL
+sudo tar xzf $SONAR_MVN_ZIP -C /opt
+sudo ln -s /opt/$SONAR_MVN_VERSION /opt/maven
 
 # Display the installed sonar version
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner --version
+JAVA_HOME=$SONAR_JDK_PATH sonar-scanner --version
+JAVA_HOME=$SONAR_JDK_PATH mvn --version
 
 # In order to run correctly in sonar, pre-compiled headers need to be turned off
 # Remove when https://jira.sonarsource.com/browse/CPP-2897 is resolved

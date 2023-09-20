@@ -228,6 +228,7 @@ pipeline {
                 }
             }
             steps{
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; ../scripts/sonar/sonar-scan-mvn.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
                         // PR scan will use github plugin
