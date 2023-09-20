@@ -40,12 +40,12 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
 fi
 
 # Install Java 17 for the scan only
-wget $SONAR_JDK_URL
-sudo yum localinstall -yq $SONAR_JDK_RPM
+wget -q $SONAR_JDK_URL
+sudo yum localinstall -y -q $SONAR_JDK_RPM
 
 # Install an updated version of Maven for Sonar
-wget --no-check-certificate $SONAR_MVN_URL
-sudo tar xzf $SONAR_MVN_ZIP -C /opt
+wget -q --no-check-certificate $SONAR_MVN_URL
+sudo tar xzf $SONAR_MVN_TAR -C /opt
 sudo ln -s /opt/$SONAR_MVN_VERSION /opt/maven
 
 # Display the installed sonar version
