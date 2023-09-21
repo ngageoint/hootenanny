@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+source $HOOT_HOME/scripts/sonar/sonar-config.sh
+
 # Defaults.
 USAGE=no
 DEBUG_MODE=""
@@ -107,7 +109,7 @@ if [ -n "$SONAR_LOGIN" ]; then
     # server for analysis and display
     OPTIONS=(
         "${OPTIONS[@]}"
-        "-Dsonar.login=$SONAR_LOGIN"
+        "-Dsonar.token=$SONAR_LOGIN"
     )
 fi
 
@@ -140,4 +142,4 @@ if [ -d $HOOT_HOME/.scannerwork ]; then
 fi
 
 # run the actual scanner
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner $DEBUG_MODE "${OPTIONS[@]}"
+JAVA_HOME=$SONAR_JDK_PATH sonar-scanner $DEBUG_MODE "${OPTIONS[@]}"
