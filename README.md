@@ -23,9 +23,11 @@ Goals:
 
 # Documentation
 
-[pdf](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf)
+[pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.78/HootenannyUserGuide.pdf)
 
 This documentation is also available as part of the release package: `docs/HootenannyUserGuide.pdf` (located in `hootenanny-*.tar.gz`).
+
+There is also an introduction [video](https://www.youtube.com/watch?v=LeaTLxVCFmc) of a talk from State of the Map US 2019.
 
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 

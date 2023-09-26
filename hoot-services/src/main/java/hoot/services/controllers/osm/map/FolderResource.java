@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -265,7 +265,7 @@ public class FolderResource {
         Users user = Users.fromRequest(request);
         Folders folder = getFolderForUser(user, folderId);
 
-        if(user != null && !folder.getUserId().equals(user.getId())) {
+        if(user != null && !UserResource.adminUserCheck(user) && !folder.getUserId().equals(user.getId())) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
         }
 

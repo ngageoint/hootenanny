@@ -22,15 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2019 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014 2019 2023 Maxar (http://www.maxar.com/)
  */
 
 /*
     TDSv61 conversion script
         TDSv61 -> OSM+, and
         OSM+ -> TDSv61
-
-    Based on mgcp/__init__.js script
 */
 
 tds61 = {
@@ -1071,6 +1069,11 @@ tds61 = {
       if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
+    case 'AL270': // Industrial Farm
+      if (tags.trees == 'coffea_plants') tags.landuse = 'orchard';
+      if (tags.trees == 'tea_plants') tags.landuse = 'orchard';
+      break;
+
     case 'AN010': // Railway
       if (tags['railway:track'] == 'monorail')
       {
@@ -1115,6 +1118,10 @@ tds61 = {
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
 
+    case 'BH135': // Ricefield
+      tags.landuse = 'farmland';
+      break;
+
     case 'BH140': // River
       if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
       if (tags.tidal == 'no') delete tags.tidal; // Default value
@@ -1148,13 +1155,37 @@ tds61 = {
       }
       break;
 
+    case 'EA010': // Crop Land
+      // Coffee is an orchard according to OSM. Tea is as well but GGDM calls it Crop Land
+      // Or, Industrial Farm
+      if (tags.trees == 'tea_plants') tags.landuse = 'orchard';
+      if (tags.trees == 'coffea_plants') tags.landuse = 'orchard';
+      if (tags.crop == 'other' && tags.trees) delete tags.crop;
+      break;
+
     case 'EA031': // Botanic Garden
       if (! tags.leisure) tags.leisure = 'garden';
+      break;
+
+    case 'EA040': // Orchard
+      // Crop vs Trees
+      if (tags.crop == 'other' && tags.trees) delete tags.crop;
       break;
 
     case 'EA050': // Vineyard
       // Landuse = vineyard implies crop=grape
       if (tags.crop == 'grape') delete tags.crop;
+      break;
+
+    case 'EA055': // Hop Field
+      tags.landuse = 'farmland';
+
+      // Cropland vs Orchard
+      if (tags.trees == 'hop_plants' && tags.crop)
+      {
+        delete tags.crop;
+        tags.landuse = 'orchard';
+      }
       break;
 
     case 'EC015': // Forest
@@ -1550,7 +1581,6 @@ tds61 = {
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type:2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.railway == "crossing"','t["transport:type"] = "railway"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.resource','t.raw_material = t.resource; delete t.resource'],
-        ['t.route == "road" && !(t.highway)','t.highway = "road"; delete t.route'],
         // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
         ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
         ['t["tower:type"] == "minaret" && t.man_made == "tower"','delete t.man_made'],
@@ -1813,7 +1843,37 @@ tds61 = {
 
     case 'farm':
     case 'allotments':
-      tags.landuse = 'farmland';
+    case 'farmland':
+      tags.landuse = 'farmland'; // For Farm and Allotments
+      switch (tags.crop)
+      {
+        case undefined: // Break early
+          break;
+
+        case 'rice':
+          delete tags.landuse; // Ricefield is a different F_CODE
+          break;
+
+        case 'tea': // Depreciated tag
+          tags.trees = 'tea_plants';
+          attrs.F_CODE = 'AL270'; // Industrial Farm
+          // tags.landuse = 'plantation'; // Industrial Farm
+          delete tags.crop;
+          break;
+
+        case 'coffee': // Depreciated Tag
+          tags.trees = 'coffea_plants';
+          delete tags.crop;
+          break;
+
+        case 'fruit_tree':
+          tags.landuse = 'orchard';
+          break;
+
+        case 'hop':
+          attrs.F_CODE = 'EA055'; // Hop Field
+          break;
+      }
       break;
 
     case 'farmyard': // NOTE: This is different to farm
@@ -1858,15 +1918,55 @@ tds61 = {
       }
       break;
 
+    case 'meadow':
+      tags.natural = 'grassland';
+      tags['grassland:type'] = 'meadow';
+      delete tags.landuse;
+      break;
+
     case 'military':
       if (tags.military !== 'range') tags.military = 'installation';
       delete tags.landuse;
       break;
 
-    case 'meadow':
-      tags.natural = 'grassland';
-      tags['grassland:type'] = 'meadow';
-      delete tags.landuse;
+    case 'orchard':
+      switch (tags.crop)
+      {
+        case undefined: // Break early
+          break;
+
+        case 'tea': // Depreciated tag
+          tags.trees = 'tea_plants';
+          delete tags.crop;
+          break;
+
+        case 'coffee': // Depreciated Tag
+          tags.trees = 'coffea_plants';
+          delete tags.crop;
+          break;
+
+        case 'hop':
+          attrs.F_CODE = 'EA055'; // Hop Field
+          break;
+      }
+
+      switch (tags.trees)
+      {
+        case undefined: // Break early
+          break;
+
+        case 'tea_plants':
+          attrs.F_CODE = 'AL270'; // Industrial Farm
+          break;
+
+        case 'coffea_plants':
+          attrs.F_CODE = 'EA010'; // Cropland
+          break;
+
+        case 'hop_plants':
+          attrs.F_CODE = 'EA055'; // Hop Field
+          break;
+      }
       break;
 
     case 'railway':
@@ -1881,6 +1981,10 @@ tds61 = {
     case 'residential':
       tags.use = 'residential';
       tags.landuse = 'built_up_area';
+      break;
+
+    case 'rice_field': // Old translation
+      if (! tags.crop) tags.crop = 'rice';
       break;
 
     case 'scrub':

@@ -1129,13 +1129,11 @@ mgcp = {
       }
       break;
 
-    // BA040 - Tidal Water
-    case 'BA040':
+    case 'BA040': // Tidal Water
       tags.natural = 'water';
       break;
 
-    // BB041 - Breakwater
-    case 'BB041':
+    case 'BB041': // Breakwater
       // Differentiate between Line and Area breakwaters
       if (geometryType == 'Area')
       {
@@ -1145,13 +1143,11 @@ mgcp = {
       }
       break;
 
-    // BB190 - Berthing Structure
-    case 'BB190':
+    case 'BB190': // Berthing Structure
       if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
       break;
 
-    // BD180 - Wreck
-    case 'BD180':
+    case 'BD180': // Wreck
       if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
       break;
 
@@ -1159,6 +1155,10 @@ mgcp = {
     //   // Fords are also supposed to be roads
     //   if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
     //   break;
+
+    case 'BH135': // Ricefield
+      tags.landuse = 'farmland';
+      break;
 
     case 'BH140': // River
       if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
@@ -1190,6 +1190,29 @@ mgcp = {
       {
         tags.surface = tags.material;
         delete tags.material;
+      }
+      break;
+
+    case 'EA010': // Crop Land
+        // Coffee is an orchard according to OSM. Tea is as well but MGCP calls it Crop Land.
+      if (tags.trees == 'tea_plants') tags.landuse = 'orchard';
+      if (tags.trees == 'coffea_plants') tags.landuse = 'orchard';
+      if (tags.crop == 'other' && tags.trees) delete tags.crop;
+      break;
+
+    case 'EA040': // Orchard
+      // Crop vs Trees
+      if (tags.crop == 'other' && tags.trees) delete tags.crop;
+      break;
+
+    case 'EA055': // Hop Field
+      tags.landuse = 'farmland';
+
+      // Cropland vs Orchard
+      if (tags.trees == 'hop_plants' && tags.crop)
+      {
+        delete tags.crop;
+        tags.landuse = 'orchard';
       }
       break;
 
@@ -1470,10 +1493,34 @@ mgcp = {
 
       case 'farm':
       case 'allotments':
-        tags.landuse = 'farmland';
+      case 'farmland':
+        tags.landuse = 'farmland'; // For Farm and Allotments
+        switch (tags.crop)
+        {
+          case undefined: // Break early
+            break;
+
+          case 'rice':
+            delete tags.landuse; // Ricefield is a different F_CODE
+            break;
+
+          case 'tea': // Depreciated tag
+            tags.trees = 'tea_plants';
+            delete tags.crop;
+            break;
+
+          case 'coffee': // Depreciated Tag
+            tags.trees = 'coffea_plants';
+            delete tags.crop;
+            break;
+
+          case 'hop':
+            attrs.F_CODE = 'EA055'; // Hop Field
+            break;
+        }
         break;
 
-      case 'farmyard': // NOTE: This is different to farm
+      case 'farmyard': // NOTE: This is different to farm && farmland
         tags.facility = 'yes';
         tags.use = 'agriculture';
         delete tags.landuse;
@@ -1521,6 +1568,21 @@ mgcp = {
         delete tags.landuse;
         break;
 
+      case 'orchard':
+        if (tags.trees == 'tea_plants')  // Tea is a cropland in MGCP and an Orchard in OSM
+        {
+          attrs.F_CODE = 'EA010'; // Cropland
+          attrs.CSP = '34'; // Tea
+          delete tags.landuse; // Stop it making an F_CODE later
+        }
+
+        if (tags.trees == 'hop_plants')
+        {
+          attrs.F_CODE = 'EA055'; // Hop Field
+          attrs.CSP = '18'; // Hops
+        }
+        break;
+
       case 'railway':
         if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
         break;
@@ -1533,6 +1595,11 @@ mgcp = {
       case 'residential':
         tags.use = 'residential';
         tags.landuse = 'built_up_area';
+        break;
+
+      case 'rice_field': // Old translation for BH135 Ricefield
+        tags.crop = 'rice';
+        delete tags.landuse;
         break;
 
       case 'scrub':
@@ -1639,7 +1706,7 @@ mgcp = {
     }
   */
 
-    // Moved these out og the complex rules to help with BH090 vs other things
+    // Moved these out of the complex rules to help with BH090 vs other things
     switch (tags.water)
     {
       case undefined:
@@ -1978,7 +2045,6 @@ mgcp = {
         delete tags['railway:type']
       }
     }
-
 
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
@@ -2479,6 +2545,79 @@ mgcp = {
       notUsedTags.power = tags.spower;
       delete notUsedTags.spower;
     }
+
+    // Crops: Many to One values
+    switch (tags.crops)
+    {
+    case undefined: // Break early
+      break;
+
+    case 'cereal':
+    case 'corn':
+    case 'wheat':
+    case 'soy':
+    case 'forage':
+    case 'field_cropland':
+    case 'barley':
+    case 'rape':
+      attrs.CSP = '13'; // Dry Crop
+      break;
+
+    case 'vegetable':
+    case 'vegetables':
+    case 'market_gardening':
+      attrs.CSP = '37'; // Vegetable Crop
+      break;
+
+    case 'sugarcane':
+      attrs.CSP = '999'; // Other
+      break;
+    } // End crops
+
+
+    // Trees in Orchard: Many to One values
+    switch (tags.trees)
+    {
+    case undefined: // Break early
+      break;
+
+    case 'apple_trees':
+    case 'orange_trees':
+    case 'avocado_trees':
+    case 'blueberry_planys':
+    case 'mango_trees':
+    case 'papaya_trees':
+    case 'pitaya_plants':
+    case 'cherry_trees':
+    case 'kiwi_plants':
+    case 'peach_trees':
+    case 'lemon_trees':
+    case 'plum_trees':
+      attrs.CSP = '15'; // Fruit Trees
+      break;
+
+    case 'almond_trees':
+    case 'hazel_plants':
+    case 'macadamia_trees':
+    case 'pecan_trees':
+    case 'walnut_trees':
+    case 'pistachio_trees':
+      attrs.CSP = '113'; // Nut
+      break;
+
+    case 'oil_palms':
+    case 'coconut_palms':
+    case 'date_palms':
+      attrs.CSP = '157'; // Palm
+      break;
+
+    case 'olive_trees':
+    case 'coffea_plants':
+    case 'pineapple_plants':
+      attrs.CSP = '999'; // Other
+      break;
+    } // End trees
+
   }, // End of applyToOgrPostProcessing
 
   // ##### End of the xxToOgrxx Block #####

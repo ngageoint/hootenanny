@@ -220,6 +220,11 @@ public class ImportCommand extends ExternalCommand {
         List<String> options = new ArrayList<String>();
         options.add("job.id=" + jobId);
 
+        String input = url;
+        // if an intermediate file is set, we are using it to clip the features
+        if (params.getIntermediateFile() != null) {
+            input = params.getIntermediateFile();
+        } else
         if (isOverpass) {
             File grailOverpassQueryFile;
             try {
@@ -248,6 +253,10 @@ public class ImportCommand extends ExternalCommand {
                 options.add("hoot.pkcs12.key.path=" + replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH));
                 options.add("hoot.pkcs12.key.phrase=" + replaceSensitiveData(PRIVATE_OVERPASS_CERT_PHRASE));
             }
+
+            if (params.getClipExtent()) {
+                options.add("writer.crop.features.crossing.bounds=true");
+            }
         } else {
             double maxBboxArea = params.getMaxBoundsSize();
             if (bboxArea > maxBboxArea) {
@@ -262,6 +271,10 @@ public class ImportCommand extends ExternalCommand {
             options.add("api.db.email=" + user.getEmail());
         }
 
+        if (params.getTranslation() != null) {
+            options.add("schema.translation.script=" + params.getTranslation());
+        }
+
         if (!bounds.contains(";")) {
             bounds = bbox.getMinLon() + "," + bbox.getMinLat() + "," + bbox.getMaxLon() + "," + bbox.getMaxLat();
         }
@@ -273,7 +286,7 @@ public class ImportCommand extends ExternalCommand {
         java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("INPUT_PATH", url);
+        substitutionMap.put("INPUT_PATH", input);
         substitutionMap.put("OUTPUT_PATH", params.getOutput());
 
         String command = "hoot.bin convert --${DEBUG_LEVEL} -C ImportOverpass.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "MapCropper.h"
@@ -190,6 +190,10 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_bounds->toString());
   LOG_VARD(_inclusionCrit.get());
 
+  //  First iteration finds the elements to delete and crop
+  vector<long> waysToRemove;
+  vector<long> waysToRemoveFully;
+  vector<long> waysToCrop;
   // go through all the ways
   long wayCtr = 0;
   //  Make a copy because the map is modified below
@@ -253,9 +257,9 @@ void MapCropper::apply(OsmMapPtr& map)
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
       //  Removal is based on the parent setting, either remove it fully or leave it in the relation
       if (_removeFromParentRelation)
-        RemoveWayByEid::removeWayFully(map, w->getId());
+        waysToRemoveFully.emplace_back(w->getId());
       else
-        RemoveWayByEid::removeWay(map, w->getId());
+        waysToRemove.emplace_back(w->getId());
       _numWaysOutOfBounds++;
       _numAffected++;
     }
@@ -271,7 +275,7 @@ void MapCropper::apply(OsmMapPtr& map)
     {
       // Way isn't wholly inside and the configuration requires it to be, so remove the way.
       LOG_TRACE("Dropping due to _keepOnlyFeaturesInsideBounds=true: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(map, w->getId());
+      waysToRemoveFully.emplace_back(w->getId());
       _numWaysOutOfBounds++;
       _numAffected++;
     }
@@ -280,7 +284,7 @@ void MapCropper::apply(OsmMapPtr& map)
       // Way crosses the boundary and we're not configured to keep ways that cross the bounds, so
       // do an expensive operation to decide how much to keep, if any.
       LOG_TRACE("Cropping due to _keepEntireFeaturesCrossingBounds=false: " << w->getElementId() << "...");
-      _cropWay(map, w->getId());
+      waysToCrop.emplace_back(w->getId());
       _numWaysCrossingThreshold++;
     }
     else
@@ -299,6 +303,17 @@ void MapCropper::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
+
+  //  Bulk remove ways from map and relations too
+  map->bulkRemoveWays(waysToRemoveFully, true);
+
+  //  Bulk remove ways from map only
+  map->bulkRemoveWays(waysToRemove, false);
+
+  //  Iterate the ways that cross the bounds and crop
+  for (auto id : waysToCrop)
+    _cropWay(map, id);
+
   LOG_VARD(map->size());
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-way-removal");
 

@@ -173,6 +173,7 @@ void OsmGeoJsonWriter::finalizePartial()
 {
   //  Finish up with the footer
   _writer.setFooterSection();
+  _writeLn("");
   _writeLn("]");
   _writeLn("}");
 
@@ -311,8 +312,10 @@ void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const C
 }
 
 QString OsmGeoJsonWriter::_getBbox() const
-{ 
+{
   Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);
+  if (_bounds)
+    bounds = *_bounds->getEnvelopeInternal();
   return QString("[%1, %2, %3, %4]")
       .arg(QString::number(bounds.getMinX(), 'g', 5), QString::number(bounds.getMinY(), 'g', 5),
            QString::number(bounds.getMaxX(), 'g', 5), QString::number(bounds.getMaxY(), 'g', 5));

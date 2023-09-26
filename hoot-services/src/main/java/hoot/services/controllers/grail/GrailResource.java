@@ -292,6 +292,12 @@ public class GrailResource {
             if (input1 == null) {
                 // can't have the cut and replace options for hoot convert. used for DeriveChangesetReplacementCommand
                 getRailsParams.setAdvancedOptions(null);
+                File tempDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
+                File referenceOSMFile = new File(tempDir, REFERENCE + ".osm");
+                getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
+                if (referenceOSMFile.exists()) referenceOSMFile.delete();
+                // hide the changeset workDir so it doesn't get deleted by ImportCommand
+                getRailsParams.setWorkDir(null);
                 try {
                     workflow.addAll(setupRailsPull(jobId, getRailsParams, null, debugLevel));
                 } catch (UnavailableException ex) {
@@ -741,8 +747,28 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         GrailParams getOverpassParams = new GrailParams(reqParams);
-        getOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
-        workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
+
+        // If clipExtent is true, split the import into two commands
+        // using an OGR format like GPKG as an intermediate file so that true geometry clipping can occur
+        if (reqParams.getClipExtent()) {
+
+            String translation = new File(HOME_FOLDER, "translations/RenderDb.js").getAbsolutePath();
+            getOverpassParams.setTranslation(translation);
+            File overpassFile = new File(workDir, SECONDARY + ".gpkg");
+            getOverpassParams.setOutput(overpassFile.getAbsolutePath());
+            if (overpassFile.exists()) overpassFile.delete();
+            workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
+
+            GrailParams dbOverpassParams = new GrailParams(reqParams);
+            dbOverpassParams.setIntermediateFile(overpassFile.getAbsolutePath());
+            dbOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+            dbOverpassParams.setTranslation(translation);
+            workflow.add(getPublicOverpassCommand(jobId, workDir, dbOverpassParams, debugLevel));
+
+        } else {
+            getOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+            workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
+        }
 
         GrailParams params = new GrailParams(reqParams);
 
@@ -840,8 +866,8 @@ public class GrailResource {
         }
 
         // first line that lists columns which are counts for each feature type
-        overpassQuery = overpassQuery.replace("[out:json]",
-                String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s]",
+        overpassQuery = overpassQuery.replaceAll(PullApiCommand.overpassqlFormatPattern,
+                String.format("[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")][maxsize:%s][timeout:%s];",
                 OVERPASS_QUERY_MAXSIZE, OVERPASS_QUERY_TIMEOUT)
                 );
 
@@ -967,6 +993,8 @@ public class GrailResource {
         params.setUser(user);
         params.setWorkDir(workDir);
         params.setInput1(layerName);
+        params.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+
 
         List<Command> workflow;
         try {
@@ -991,18 +1019,35 @@ public class GrailResource {
         String layerName = params.getInput1();
 
         // Pull data from the reference OSM API or private Overpass API
-        // Until hoot can read API url directly, download to file first
         GrailParams getRailsParams = new GrailParams(params);
 
         // have to add the query for getting connected ways before calling getRailsPortApiCommand
         if (usingPrivateOverpass) {
             String queryWithConnectedWays = PullApiCommand.connectedWaysQuery(getRailsParams.getCustomQuery());
             getRailsParams.setCustomQuery(queryWithConnectedWays);
-            getRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
         }
 
         try {
-            workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
+            // If clipExtent is true, split the import into two commands
+            // using an OGR format like GPKG as an intermediate file so that true geometry clipping can occur
+            if (params.getClipExtent()) {
+
+                String translation = new File(HOME_FOLDER, "translations/RenderDb.js").getAbsolutePath();
+                getRailsParams.setTranslation(translation);
+                File overpassFile = new File(params.getWorkDir(), REFERENCE + ".gpkg");
+                getRailsParams.setOutput(overpassFile.getAbsolutePath());
+                if (overpassFile.exists()) overpassFile.delete();
+                getRailsParams.setWorkDir(null);
+                workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
+
+                GrailParams dbRailsParams = new GrailParams(params);
+                dbRailsParams.setIntermediateFile(overpassFile.getAbsolutePath());
+                dbRailsParams.setTranslation(translation);
+                workflow.add(getRailsPortApiCommand(jobId, dbRailsParams, debugLevel));
+
+            } else {
+                workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
+            }
         } catch (UnavailableException exc) {
             throw new UnavailableException("The Rails port API is offline.");
         }

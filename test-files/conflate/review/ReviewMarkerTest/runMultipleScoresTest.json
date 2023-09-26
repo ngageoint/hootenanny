@@ -6,5 +6,6 @@
 {"type":"node","ref":2,"role":"reviewee"}],"tags":{"hoot:review:members":"2","hoot:review:needs":"yes","hoot:review:note":"a note 2","hoot:review:score":"0.5","hoot:review:type":"test"}},
 {"type":"relation","id":-1,"members":[
 {"type":"node","ref":1,"role":"reviewee"},
-{"type":"node","ref":2,"role":"reviewee"}],"tags":{"hoot:review:members":"2","hoot:review:needs":"yes","hoot:review:note":"a note","hoot:review:score":"0.15","hoot:review:type":"test"}}]
+{"type":"node","ref":2,"role":"reviewee"}],"tags":{"hoot:review:members":"2","hoot:review:needs":"yes","hoot:review:note":"a note","hoot:review:score":"0.15","hoot:review:type":"test"}}
+]
 }

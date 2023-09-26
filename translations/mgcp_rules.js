@@ -149,6 +149,7 @@ mgcp.rules = {
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
+    ['F_CODE','BH135','landuse','rice_field'], // Rice Field - tag change
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
     ['F_CODE','DA010','natural','desert'], // EE030 Desert - mapped to DA010 Soil Surface Region
     ['F_CODE','DB090','embankment','berm'],
@@ -432,11 +433,11 @@ mgcp.rules = {
     ['CSP','0','crop','unknown'], // Unknown
     ['CSP','113','crop','nut'], // Nut
     ['CSP','13','crop','dry_crop'], // Dry Crop
-    ['CSP','15','crop','fruit_tree'], // Fruit Tree
-    ['CSP','29','crop','rubber'], // Rubber
-    ['CSP','34','crop','tea'], // Tea
+    ['CSP','15','trees','fruit_tree'], // Fruit Tree
+    ['CSP','29','trees','rubber_tree'], // Rubber
+    ['CSP','34','trees','tea_plants'], // Tea
     ['CSP','37','crop','vegetable'], // Vegetable Crop
-    ['CSP','41','crop','banana'], // Banana
+    ['CSP','41','trees','banana_plants'], // Banana
     ['CSP','45','crop','cotton'], // Cotton
     ['CSP','157','crop','palm'], // Palm
     ['CSP','999','crop','other'], // Other

@@ -192,6 +192,7 @@ function TranslationServer(request, response) {
                     params.method = request.method;
                     params.path = request.path || urlbits.pathname;
                     params.osm = payload;
+                    params.contentType = request.headers['content-type'];
                     header['Accept'] = 'text/xml';
                     header['Content-Type'] = 'text/xml';
                     var result = handleInputs(params);
@@ -358,7 +359,7 @@ var postHandler = function(data) {
 
     var map = new hoot.OsmMap();
     // loadMapFrom(JSON)String arguments: map, XML, preserve ID's, hoot:status
-    if (data.osm[0] === "{")
+    if (data.contentType == 'application/json' || data.osm[0] === "{")
         hoot.loadMapFromJSONString(map, data.osm, true);
     else
         hoot.loadMapFromString(map, data.osm, true);

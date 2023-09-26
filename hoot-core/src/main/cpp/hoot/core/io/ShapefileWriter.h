@@ -47,16 +47,17 @@ public:
   ShapefileWriter() = default;
   ~ShapefileWriter() override = default;
 
-  QString supportedFormats() const override { return ".shp"; }
-  bool isSupported(const QString& url) const override { return url.endsWith(".shp", Qt::CaseInsensitive); }
+  inline static QString supportedExtension() { return ".shp"; }
+  QString supportedFormats() const override { return supportedExtension(); }
+  bool isSupported(const QString& url) const override { return url.endsWith(supportedExtension(), Qt::CaseInsensitive); }
 
 protected:
 
   void _removeMultifile(const QString& path) const override;
   const char* _getDriverName() const override { return "ESRI Shapefile"; };
-  QString _getFileExtension() const override { return ".shp"; }
+  QString _getFileExtension() const override { return supportedExtension(); }
   OgrOptions _getOptions() const override;
-  OGRwkbGeometryType _getPolygonGeometryType() const override { return OGRwkbGeometryType::wkbMultiPolygon; }
+  bool _convertPolygons() const override { return false; }
 
 };
 

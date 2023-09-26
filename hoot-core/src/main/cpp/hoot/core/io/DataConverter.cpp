@@ -109,7 +109,11 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
 {
   _validateInput(inputs, output);
 
-  if (!IoUtils::areSupportedOgrFormats(inputs, true) && IoUtils::isSupportedOgrFormat(output))
+  bool ogrInputs = IoUtils::areSupportedOgrFormats(inputs, true);
+  bool ogrOutput = IoUtils::isSupportedOgrFormat(output);
+  bool jsonOutput = IoUtils::isSupportedJsonFormat(output);
+
+  if (!ogrInputs && (ogrOutput || jsonOutput))
     _cropReadIfBounded = false;
 
   _progress.setJobId(ConfigOptions().getJobId());

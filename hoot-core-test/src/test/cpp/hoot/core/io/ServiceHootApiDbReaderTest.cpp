@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -130,7 +130,7 @@ public:
       LOG_DEBUG("Adding test data folder...");
       HootApiDb db;
       db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-      db.insertFolderMapMapping(writer.getMapId(), db.insertFolder(_testName, -1, db.getUserId(userEmail(_testName), true), folderIsPublic));
+      db.insertFolderMapMapping(writer.getMapId(), db.insertFolder(_testName, 0, db.getUserId(userEmail(_testName), true), folderIsPublic));
       db.close();
     }
 
@@ -716,7 +716,7 @@ public:
       db.close();
     }
     LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("access to map with ID"));  
+    CPPUNIT_ASSERT(exceptionMsg.contains("access to map with ID"));
   }
 
   void runMultipleMapsSameNameDifferentUsersPrivateTest()
@@ -872,7 +872,7 @@ public:
     const long secondMapId = writer.getMapId();
     LOG_VARD(secondMapId);
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    db.insertFolderMapMapping(secondMapId, db.insertFolder(_testName, -1, db.getUserId(differentUserEmail, true), true));
+    db.insertFolderMapMapping(secondMapId, db.insertFolder(_testName, 0, db.getUserId(differentUserEmail, true), true));
     db.close();
 
     // Configure the reader for no user

@@ -26,5 +26,6 @@
 {"type":"Feature","properties":{"task":"25","node_count":"360"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0411, 38.894],[-77.0411, 38.899],[-77.0341, 38.899],[-77.0341, 38.894],[-77.0411, 38.894]]]]}},
 {"type":"Feature","properties":{"task":"26","node_count":"218"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0341, 38.894],[-77.0341, 38.899],[-77.0271, 38.899],[-77.0271, 38.894],[-77.0341, 38.894]]]]}},
 {"type":"Feature","properties":{"task":"27","node_count":"259"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0411, 38.899],[-77.0411, 38.904],[-77.0341, 38.904],[-77.0341, 38.899],[-77.0411, 38.899]]]]}},
-{"type":"Feature","properties":{"task":"28","node_count":"201"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0341, 38.899],[-77.0341, 38.904],[-77.0271, 38.904],[-77.0271, 38.899],[-77.0341, 38.899]]]]}}]
+{"type":"Feature","properties":{"task":"28","node_count":"201"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0341, 38.899],[-77.0341, 38.904],[-77.0271, 38.904],[-77.0271, 38.899],[-77.0341, 38.899]]]]}}
+]
 }

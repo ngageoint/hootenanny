@@ -4,5 +4,6 @@
 {"type":"node","id":-3,"lat":20,"lon":20},
 {"type":"node","id":-2,"lat":0,"lon":20},
 {"type":"node","id":-1,"lat":0,"lon":0},
-{"type":"way","id":-1,"nodes":[-1,-2,-3,-4,-5],"tags":{"alt_name":"foo","amenity":"cafe","area":"yes","error:circular":"5","hoot:poipolygon:poismerged":"1","hoot:poipolygon:poismerged:1":"1","hoot:poipolygon:poismerged:2":"0","name":"bar","note":"w1"}}]
+{"type":"way","id":-1,"nodes":[-1,-2,-3,-4,-5],"tags":{"alt_name":"foo","amenity":"cafe","area":"yes","error:circular":"5","hoot:poipolygon:poismerged":"1","hoot:poipolygon:poismerged:1":"1","hoot:poipolygon:poismerged:2":"0","name":"bar","note":"w1"}}
+]
 }

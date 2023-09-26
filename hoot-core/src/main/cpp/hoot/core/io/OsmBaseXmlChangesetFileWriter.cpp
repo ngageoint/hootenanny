@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmBaseXmlChangesetFileWriter.h"
 
@@ -212,12 +212,13 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
     }
 
     LOG_VART(Change::changeTypeToString(last));
-    if (last != Change::ChangeType::Unknown)
+    if (last != Change::ChangeType::Unknown && last != Change::ChangeType::NoChange)
     {
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
       last = Change::ChangeType::Unknown;
-      _parsedChangeIds.append(changeElement->getElementId());
+      if (!changeElement)
+        _parsedChangeIds.append(changeElement->getElementId());
     }
   }
 

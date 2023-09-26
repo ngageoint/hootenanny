@@ -88,10 +88,12 @@ QString OsmJsonWriter::markupString(const QString& str)
   s.replace('\t', "\\t");
   s.replace('\r', "\\r");
   //  Don't add quotes around JSON values
-  if ((s.startsWith("{") && s.endsWith("}")) || (s.startsWith("[") && s.endsWith("]")) || (s.startsWith("\"") && s.endsWith("\"")) || s == "null")
+  if ((s.startsWith("{") && s.endsWith("}")) || (s.startsWith("[") && s.endsWith("]")) || s == "null")
     return s;
   else
   {
+    if (s.startsWith("\"") && s.endsWith("\"") && s.count("\"") == 2)
+      s = s.mid(1, s.length() - 2);
     s.replace('\\', "\\\\");
     s.replace('\"', "\\\"");
     return "\"" % s % "\"";
@@ -170,6 +172,7 @@ void OsmJsonWriter::finalizePartial()
 {
   //  Lastly write the footer of the file
   _writer.setFooterSection();
+  _writeLn("");
   _writeLn("]");
   _writeLn("}");
 

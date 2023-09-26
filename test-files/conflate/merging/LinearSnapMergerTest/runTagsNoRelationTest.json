@@ -5,5 +5,6 @@
 {"type":"node","id":-2,"lat":0.5000452184238038,"lon":0.5004491746338422},
 {"type":"node","id":-1,"lat":0.5000452184392712,"lon":0.5},
 {"type":"way","id":-6,"nodes":[-2,-4],"tags":{"error:circular":"15","highway":"footway","uuid":"r"}},
-{"type":"way","id":-4,"nodes":[-1,-2],"tags":{"error:circular":"15","highway":"road","uuid":"w1;r"}}]
+{"type":"way","id":-4,"nodes":[-1,-2],"tags":{"error:circular":"15","highway":"road","uuid":"w1;r"}}
+]
 }
