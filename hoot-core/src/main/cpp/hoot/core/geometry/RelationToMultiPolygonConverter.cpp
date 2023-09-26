@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "RelationToMultiPolygonConverter.h"
 
@@ -189,16 +189,42 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
 {
   LOG_TRACE("Creating multipolygon...");
 
+  vector<long> outer_ids;
+  vector<long> inner_ids;
+  vector<long> part_ids;
+  vector<long> empty_ids;
+  const vector<RelationData::Entry>& elements = _r->getMembers();
+  LOG_VART(elements.size());
+  for (const auto& e : elements)
+  {
+    ElementId eid = e.getElementId();
+    //  Ignore anything but ways
+    if (eid.getType() != ElementType::Way)
+      continue;
+    QString role = e.getRole();
+    //  Classify the ways
+    if (role == MetadataTags::RoleOuter())
+      outer_ids.push_back(eid.getId());
+    else if (role == MetadataTags::RoleInner())
+      inner_ids.push_back(eid.getId());
+    else if (role == MetadataTags::RolePart())
+      part_ids.push_back(eid.getId());
+    else if (role.isEmpty())
+      empty_ids.push_back(eid.getId());
+  }
+
   vector<LinearRing*> outers;
-  _createRings(MetadataTags::RoleOuter(), outers);
-  _createRings(MetadataTags::RolePart(), outers);
+  _createRings(outer_ids, empty_ids, outers);
+  _createRings(part_ids, empty_ids, outers);
 
   vector<LinearRing*> inners;
-  _createRings(MetadataTags::RoleInner(), inners);
+  _createRings(inner_ids, empty_ids, inners);
 
+  //  Move the empty ids to no roles and
+  vector<long> empty_tmp;
   // Now go looking for rings that are not classified (empty role)
   vector<LinearRing*> noRole;
-  _createRings("", noRole);
+  _createRings(empty_ids, empty_tmp, noRole);
   // Make sure that all rings are either an inner or an outer
   _classifyRings(noRole, inners, outers);
   LOG_TRACE("After classify: Outers: " << outers.size() << "  Inners: " << inners.size());
@@ -220,8 +246,7 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
       {
         LOG_VART(r->getElementId());
-        std::shared_ptr<Geometry> child(
-          RelationToMultiPolygonConverter(_provider, r).createMultipolygon());
+        std::shared_ptr<Geometry> child(RelationToMultiPolygonConverter(_provider, r).createMultipolygon());
         try
         {
           result = result->Union(child.get());
@@ -385,64 +410,51 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
   noRole.clear();
 }
 
-void RelationToMultiPolygonConverter::_createRings(const QString& role, vector<LinearRing*>& rings) const
+void RelationToMultiPolygonConverter::_createRings(const vector<long>& role_ways, vector<long>& no_role_ways, vector<LinearRing*>& rings) const
 {
-  LOG_TRACE("Creating rings for role: " << role << "...");
-
   vector<ConstWayPtr> partials;
 
-  LOG_VART(_r.get());
-  const vector<RelationData::Entry>& elements = _r->getMembers();
-  LOG_VART(elements.size());
-  for (const auto& e : elements)
+  for (auto way_id : role_ways)
   {
-    if (e.getElementId().getType() == ElementType::Way && e.getRole() == role)
+    const ConstWayPtr& w = _provider->getWay(way_id);
+    if (!w || w->getNodeCount() == 0)
+      continue;
+    LOG_VART(w->getElementId());
+
+    // if the way forms a simple ring
+    if (w->getNodeId(0) == w->getLastNodeId())
     {
-      const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
-      if (!w || w->getNodeCount() == 0)
-        continue;
-      LOG_VART(w->getElementId());
-
-      // if the way forms a simple ring
-      if (w->getNodeId(0) == w->getLastNodeId())
-      {
-        // don't try to add empty ways
-        LOG_VART(w->getNodeCount());
-        if (w->getNodeCount() > 0)
-          rings.push_back(_toLinearRing(w));
-      }
-      else
-      {
-        // Leaving this one at trace level, since it is happening so much in poi/poly conflation.
-        // See #2287.
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_TRACE(
-            "A multipolygon relation contains a way that is not a ring. While likely a valid " <<
-            "feature, fixing it is currently unsupported by Hoot and it will be dealt with as " <<
-            "is: " << e.getElementId());
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-
-        partials.push_back(w);
-      }
+      // don't try to add empty ways
+      LOG_VART(w->getNodeCount());
+      if (w->getNodeCount() > 0)
+        rings.push_back(_toLinearRing(w));
+    }
+    else
+    {
+      //  Add the way to the partial for later completion
+      partials.push_back(w);
     }
   }
   LOG_VART(partials.size());
 
   if (!partials.empty())
-    _createRingsFromPartials(partials, rings);
+    _createRingsFromPartials(partials, no_role_ways, rings);
 }
 
-void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
+void RelationToMultiPolygonConverter::_createRingsFromPartials(vector<ConstWayPtr> partials, vector<long>& no_role_ways, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating rings from partials...");
+  size_t original_size = partials.size();
+  //  no_role_way elements that have been joined to partials elements
+  set<long> joined;
+  //  Add the no role ways to the list of partials to check
+  for (auto way_id : no_role_ways)
+    partials.push_back(_provider->getWay(way_id));
 
   Tgs::DisjointSetMap<ConstWayPtr> ringSets;
+  //  Add all of the partials to the map set
+  for (const auto& way : partials)
+    ringSets.joinT(way, way);
 
   // find all the ways that are part of a single ring
   for (size_t i = 0; i < partials.size(); i++)
@@ -450,8 +462,11 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<Cons
     ConstWayPtr wi = partials[i];
     if (!wi)
       continue;
-    for (size_t j = i; j < partials.size(); j++)
+    for (size_t j = 0; j < partials.size(); j++)
     {
+      if (i == j)
+        continue;
+
       ConstWayPtr wj = partials[j];
       if (!wj)
         continue;
@@ -461,7 +476,43 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<Cons
           wi->getLastNodeId() == wj->getNodeId(0) ||
           wi->getLastNodeId() == wj->getLastNodeId())
       {
-        ringSets.joinT(wi, wj);
+        bool join_ways = false;
+        if (i < original_size && j < original_size)
+        {
+          //  Both are role ways, join them
+          join_ways = true;
+        }
+        else if (i < original_size && j >= original_size)
+        {
+          //  j is a no-role way but joins a role way, join them
+          joined.emplace(wj->getId());
+          join_ways = true;
+        }
+        else if (i >= original_size && j < original_size)
+        {
+          //  i is a no-role way but joins a role way, join them
+          joined.emplace(wi->getId());
+          join_ways = true;
+        }
+        else if (i >= original_size && j >= original_size)
+        {
+          //  Neither are role ways
+          if (joined.find(wi->getId()) != joined.end())
+          {
+            //  i is joined to a role way (maybe not directly), join them
+            joined.emplace(wj->getId());
+            join_ways = true;
+          }
+          else if (joined.find(wj->getId()) != joined.end())
+          {
+            //  j is joined to a role way (maybe not directly), join them
+            joined.emplace(wi->getId());
+            join_ways = true;
+          }
+        }
+        //  Any no-role ways that join each other but don't join a role way aren't added to the ringSet
+        if (join_ways)
+          ringSets.joinT(wi, wj);
       }
     }
   }
@@ -469,6 +520,15 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<Cons
   Tgs::DisjointSetMap<ConstWayPtr>::AllGroups ag = ringSets.getAllGroups();
   for (auto it = ag.begin(); it != ag.end(); ++it)
     _createSingleRing(it->second, rings);
+
+  //  Update the no role ways to reflect any that have been used
+  vector<long> no_roles;
+  for (auto id : no_role_ways)
+  {
+    if (joined.find(id) == joined.end())
+      no_roles.push_back(id);
+  }
+  no_role_ways.swap(no_roles);
 }
 
 void RelationToMultiPolygonConverter::_createSingleRing(const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
@@ -586,6 +646,15 @@ deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(const vect
   {
     ConstWayPtr wayPtr = extras.front();
     extras.pop_front();
+    // if the ways are start to start or end to end
+    if (wayPtr->getNodeId(0) == firstId || wayPtr->getLastNodeId() == lastId)
+    {
+      // This way needs to be reversed, but clone it first so we don't change any source data.
+      WayPtr cloned = std::make_shared<Way>(*wayPtr);
+      cloned->reverseOrder();
+      wayPtr = cloned;
+    }
+
     if (wayPtr->getNodeId(0) == lastId)
     {
       result.push_back(wayPtr);
