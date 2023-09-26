@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/var/cache/yum \
         bzip2 \
         git \
         git-core \
-        nodejs-devel yarn \
+        nodejs-devel yarn openssl \
         google-chrome-stable-91.0.4472.114 && \
     yum -q -y clean all && rm -f /tmp*.sh
 
@@ -35,6 +35,13 @@ RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
 
 COPY docker/scripts/frontend-entrypoint.sh /docker-entrypoint.sh
 COPY docker/scripts/frontend-healthcheck.sh /docker-healthcheck.sh
+
+# development server needs to use https for oauth2
+RUN openssl req \
+    -new -newkey rsa:2048 \
+    -days 365 -nodes -x509 \
+    -subj "/C=US/ST=New York/L=New York/O=Fake/OU=Fake Department/CN=localhost" \
+    -keyout ${hoot_home}/server.key -out ${hoot_home}/server.crt
 
 USER ${hoot_user}
 WORKDIR ${hoot_home}/hoot-ui-2x
