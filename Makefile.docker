@@ -25,14 +25,13 @@ hoot.env:
 	cp hoot.env.example hoot.env
 
 .env: hoot-ui-2x/README.md
-	touch .env
+	cp .env_versions .env
 	mkdir -p bin lib .ccache
 	echo "HOOT_UID=$(UID)" >> .env
 	echo "HOOT_GID=$(GID)" >> .env
 	echo "HOOT_USER=hoot" >> .env
 	echo "HOOT_GROUP=hoot" >> .env
 	echo "HOOT_HOME=/var/lib/hootenanny" >> .env
-	echo "POSTGRESQL_VERSION=14" >> .env
 
 conf/database/DatabaseConfigLocal.sh:
 	touch conf/database/DatabaseConfigLocal.sh

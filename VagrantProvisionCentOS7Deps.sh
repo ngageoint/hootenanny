@@ -148,7 +148,7 @@ sudo yum -y install \
     opencv-devel \
     opencv-python \
     osmosis \
-    java-1.8.0-openjdk \
+    java-${JDK_VERSION}-openjdk \
     perl-XML-LibXML \
     parallel \
     postgresql${POSTGRESQL_VERSION_DOTLESS} \

@@ -6,6 +6,22 @@ x-args: &default-args
   hoot_group: "${HOOT_GROUP}"
   hoot_home: "${HOOT_HOME}"
   postgresql_version: "${POSTGRESQL_VERSION}"
+  glpk_version: "${GLPK_VERSION}"
+  liboauthcpp_version: "${LIBOAUTHCPP_VERSION}"
+  libphonenumber_version: "${LIBPHONENUMBER_VERSION}"
+  libpostal_version: "${LIBPOSTAL_VERSION}"
+  node_version: "${NODE_VERSION}"
+  npm_version: "${NPM_VERSION}"
+  v8_version: "${V8_VERSION}"
+  stxxl_version: "${STXXL_VERSION}"
+  armadillo_version: "${ARMADILLO_VERSION}"
+  gdal_version: "${GDAL_VERSION}"
+  geos_version: "${GEOS_VERSION}"
+  libgeotiff_version: "${LIBGEOTIFF_VERSION}"
+  proj_version: "${PROJ_VERSION}"
+  devtoolset_version: "${DEVTOOLSET_VERSION}"
+  stxxl_version: "${STXXL_VERSION}"
+  jdk_version: "${JDK_VERSION}"
 services:
   frontend:
     build:
