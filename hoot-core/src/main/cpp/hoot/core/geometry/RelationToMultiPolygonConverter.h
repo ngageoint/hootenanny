@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_TO_MULTIPOLYGON_CONVERTER_H
 #define RELATION_TO_MULTIPOLYGON_CONVERTER_H
@@ -96,32 +96,30 @@ private:
 
   void _addWayToSequence(ConstWayPtr w, geos::geom::CoordinateSequence& cs, bool reversed) const;
 
-  void _createRings(const QString &role, std::vector<geos::geom::LinearRing *>& rings) const;
+  void _createRings(const std::vector<long>& role_ways, std::vector<long>& no_role_ways, std::vector<geos::geom::LinearRing*>& rings) const;
 
-  void _createRingsFromPartials(const std::vector<ConstWayPtr>& partials,
-                                std::vector<geos::geom::LinearRing *>& rings) const;
+  void _createRingsFromPartials(std::vector<ConstWayPtr> partials, std::vector<long>& no_role_ways,
+                                std::vector<geos::geom::LinearRing*>& rings) const;
 
   /*
    * Given a vector of unsorted partial ways, create a ring. If the partials do not create a
    * complete ring, log a warning and just connect the ends.
    */
-  void _createSingleRing(const std::vector<ConstWayPtr>& partials,
-                         std::vector<geos::geom::LinearRing *>& rings) const;
+  void _createSingleRing(const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing*>& rings) const;
 
   /*
    * Given a set of rings that are not either an inner or an outer, figure out what they are and
    * add them to the appropriate ring set.
    */
-  void _classifyRings(std::vector<geos::geom::LinearRing *>& noRole,
-                      std::vector<geos::geom::LinearRing *>& inners,
-                      std::vector<geos::geom::LinearRing *>& outers) const;
+  void _classifyRings(std::vector<geos::geom::LinearRing*>& noRole,
+                      std::vector<geos::geom::LinearRing*>& inners,
+                      std::vector<geos::geom::LinearRing*>& outers) const;
 
   /*
    * Given two Linear Rings, determine the realtionship between the two.
    * Inner, Outer or "" for neither
    */
-  MultiPolygonRelationRole _findRelationship(const geos::geom::LinearRing* ring1,
-                                             const geos::geom::LinearRing* ring2) const;
+  MultiPolygonRelationRole _findRelationship(const geos::geom::LinearRing* ring1, const geos::geom::LinearRing* ring2) const;
 
   bool _isValidInner(const geos::geom::LinearRing* innerRing) const;
 
