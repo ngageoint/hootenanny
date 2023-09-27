@@ -185,4 +185,11 @@ config.rpath
 0
 tbs/0
 .DS_Store
+.ccache
 .ccache/**/*
+.m2
+.env
+hoot.env
+.bash_history
+.config
+.npm

@@ -1,0 +1,196 @@
+FROM centos:7
+
+ARG hoot_user
+ARG hoot_uid
+ARG hoot_gid
+ARG hoot_group
+ARG hoot_shell=/bin/bash
+ARG hoot_home
+ARG glpk_version
+ARG liboauthcpp_version
+ARG libphonenumber_version
+ARG libpostal_version
+ARG node_version
+ARG npm_version
+ARG v8_version
+ARG stxxl_version
+ARG armadillo_version
+ARG gdal_version
+ARG geos_version
+ARG libgeotiff_version
+ARG proj_version
+ARG devtoolset_version
+ARG stxxl_version
+ARG postgresql_version
+ARG jdk_version
+
+
+ENV HOOT_HOME=$hoot_home
+
+COPY scripts/yum/geoint-repo.sh scripts/yum/hoot-repo.sh scripts/yum/pgdg-repo.sh /tmp
+
+RUN --mount=type=cache,target=/var/cache/yum \
+    /tmp/geoint-repo.sh && \
+    /tmp/hoot-repo.sh && \
+    /tmp/pgdg-repo.sh $postgresql_version && \
+    yum-config-manager --save \
+        --setopt=base.repo_gpgcheck=1 \
+        --setopt=extras.repo_gpgcheck=1 \
+        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
+    yum -y install epel-release centos-release-scl
+
+RUN yum install -y \
+        armadillo-$armadillo_version \
+        devtoolset-$devtoolset_version \
+        devtoolset-$devtoolset_version-libasan-devel \
+        geos-$geos_version \
+        geos-devel-$geos_version \
+        glpk-$glpk_version \
+        glpk-devel-$glpk_version \
+        gdal-$gdal_version \
+        gdal-devel-$gdal_version \
+        gdal-python-tools-$gdal_version \
+        google-chrome-stable-$google_chrome_version \
+        libgeotiff-$libgeotiff_version \
+        libgeotiff-devel-$libgeotiff_version \
+        liboauthcpp-$liboauthcpp_version \
+        liboauthcpp-devel-$liboauthcpp_version \
+        libphonenumber-$libphonenumber_version \
+        libphonenumber-devel-$libphonenumber_version \
+        libpostal-$libpostal_version \
+        libpostal-data-$libpostal_version \
+        libpostal-devel-$libpostal_version \
+        npm-$npm_version \
+        nodejs-$node_version \
+        nodejs-devel-$node_version \
+        nodejs-docs-$node_version \
+        nodejs-libs-$node_version \
+        postgresql$postgresql_version \
+        postgresql$postgresql_version-contrib \
+        postgresql$postgresql_version-server \
+        proj-$proj_version \
+        proj-devel-$proj_version \
+        stxxl-$stxxl_version \
+        stxxl-devel-$stxxl_version \
+        v8-devel-$v8_version
+
+RUN yum -y install \
+        asciidoc \
+        autoconf \
+        autoconf-archive \
+        automake \
+        bison \
+        boost-devel \
+        bzip2 \
+        ccache \
+        cmake \
+        cppunit-devel \
+        dblatex \
+        doxygen \
+        gcc-c++ \
+        git \
+        git-core \
+        gnuplot \
+        lcov \
+        libffi-devel \
+        libicu-devel \
+        libpng-devel \
+        libtool \
+        liquibase \
+        maven \
+        m4 \
+        mlocate \
+        opencv \
+        opencv-core \
+        opencv-devel \
+        opencv-python \
+        osmosis \
+        java-$jdk_version-openjdk \
+        perl-XML-LibXML \
+        parallel \
+        make \
+        protobuf \
+        protobuf-compiler \
+        protobuf-devel \
+        python \
+        python-devel \
+        python3 \
+        python3-devel \
+        python3-matplotlib \
+        python3-pip \
+        python3-setuptools \
+        qt5-qtbase \
+        qt5-qtbase-devel \
+        qt5-qtbase-postgresql \
+        qt5-qtwebkit \
+        qt5-qtwebkit-devel \
+        readline-devel \
+        redhat-lsb-core \
+        sqlite-devel \
+        swig \
+        tex-fonts-hebrew \
+        texlive \
+        texlive-collection-fontsrecommended \
+        texlive-collection-langcyrillic \
+        tomcat8 \
+        unzip \
+        vim \
+        wamerican-insane \
+        w3m \
+        wget \
+        words \
+        xorg-x11-server-Xvfb \
+        zip
+
+RUN yum install -y postgresql$postgresql_version-devel && \
+    alternatives --install /usr/bin/pg_config pgsql-pg_config /usr/pgsql-$postgresql_version/bin/pg_config 500
+
+RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
+    useradd -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \
+    chmod 0755 ${hoot_home}
+
+ARG tomcat_config=/etc/tomcat8
+ARG tomcat_logs=/var/log/tomcat8
+
+# vars needed for core entrypoint
+ENV DEVTOOLSET_VERSION=$devtoolset_version
+ENV HOOT_USER=$hoot_user
+ENV PG_MAJOR_VERSION=$postgresql_version
+ENV PATH=$PATH:/usr/pgsql-$postgresql_version/bin
+ENV MANPATH=/opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/share/
+ENV TOMCAT_CONFIG=$tomcat_config
+ENV TOMCAT8_HOME=/var/lib/tomcat8
+ENV TOMCAT_SERVER=$tomcat_config/server.xml
+
+# services configuration files.
+RUN echo -e '\
+export GDAL_DATA=$GDAL_DATA\n\
+export HOOT_HOME=$HOOT_HOME\n\
+export HOOT_WORKING_NAME=hootenanny\n\
+export JAVA_HOME=$JRE_HOME\n\
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib\n\
+export PATH=$HOOT_HOME/bin:$PATH\n\
+export JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"\n'\
+>> $tomcat_config/conf.d/hoot.conf
+
+RUN install -d -m 0775 $tomcat_logs
+RUN echo '\n\
+Please login to the host to view the logs:\n\
+   sudo journalctl -u tomcat8\n\
+EOF\n'\ >> $tomcat_logs/catalina.out
+
+RUN chown $hoot_user:$hoot_user $tomcat_logs/catalina.out
+
+COPY docker/scripts/tomcat_configure.sh /tmp
+RUN /tmp/tomcat_configure.sh && rm -f /tmp/tomcat_configure.sh
+
+# let hoot user execute tomcat8 commands
+RUN usermod -a -G tomcat $hoot_user
+
+COPY docker/scripts/core-services-entrypoint.sh /docker-entrypoint.sh
+COPY docker/scripts/core-services-healthcheck.sh /docker-healthcheck.sh
+
+WORKDIR ${hoot_home}
+USER ${hoot_user}
+ENTRYPOINT /docker-entrypoint.sh
+HEALTHCHECK --interval=15s --start-period=1m CMD ["/docker-healthcheck.sh"]

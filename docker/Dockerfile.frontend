@@ -1,0 +1,42 @@
+FROM centos:7
+
+ARG hoot_user
+ARG hoot_uid
+ARG hoot_gid
+ARG hoot_group
+ARG hoot_shell=/bin/bash
+ARG hoot_home
+ARG node_version
+
+ENV HOOT_HOME=$hoot_home
+
+COPY scripts/node/nodesource-repo.sh scripts/yum/hoot-repo.sh /tmp/
+
+RUN --mount=type=cache,target=/var/cache/yum \
+    /tmp/nodesource-repo.sh $node_version && \
+    /tmp/hoot-repo.sh && \
+    yum-config-manager --save \
+        --setopt=base.repo_gpgcheck=1 \
+        --setopt=extras.repo_gpgcheck=1 \
+        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
+    yum makecache -y && \
+    yum -q -y install epel-release && \
+    yum -y install \
+        bzip2 \
+        git \
+        git-core \
+        nodejs-devel yarn \
+        google-chrome-stable-91.0.4472.114 && \
+    yum -q -y clean all && rm -f /tmp*.sh
+
+RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
+    useradd -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \
+    chmod 0755 ${hoot_home}
+
+COPY docker/scripts/frontend-entrypoint.sh /docker-entrypoint.sh
+COPY docker/scripts/frontend-healthcheck.sh /docker-healthcheck.sh
+
+USER ${hoot_user}
+WORKDIR ${hoot_home}/hoot-ui-2x
+ENTRYPOINT /docker-entrypoint.sh
+HEALTHCHECK --interval=15s --start-period=1m CMD ["/docker-healthcheck.sh"]
