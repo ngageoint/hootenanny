@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014-2023 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -32,6 +32,8 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
+#include <hoot/core/io/OsmGeoJsonWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -46,9 +48,16 @@ class RelationToMultiPolygonConverterTest : public HootTestFixture
   CPPUNIT_TEST(runMultiPolygonExample1Test);
   CPPUNIT_TEST(runMultiPolygonExample7Test);
   CPPUNIT_TEST(runMultipleWaysFormingARing);
+  CPPUNIT_TEST(runOutOfOrderRelationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  RelationToMultiPolygonConverterTest()
+    : HootTestFixture("test-files/geometry/RelationToMultiPolygonConverter/",
+                      "test-output/geometry/RelationToMultiPolygonConverter/")
+  {
+  }
 
   FindNodesInWayFactory f;
 
@@ -231,6 +240,24 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000), (7.0000000000000000 6.0000000000000000, 8.0000000000000000 8.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000)))"),
                          g->toString());
+  }
+
+  void runOutOfOrderRelationTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "OutOfOrderRelation.osm", map);
+    reader.close();
+
+    OsmGeoJsonWriter writer;
+    writer.open(_outputPath + "OutOfOrderRelation.geojson");
+    writer.setIncludeCircularError(false);
+    writer.write(map);
+    writer.close();
+
+    HOOT_FILE_EQUALS(_inputPath + "OutOfOrderRelation.geojson", _outputPath + "OutOfOrderRelation.geojson");
   }
 
 };
