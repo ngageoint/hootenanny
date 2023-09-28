@@ -42,23 +42,40 @@ describe('Service Road', function () {
     schemas.forEach(schema => {
         var fcode_key = (schema === 'MGCP') ? 'FCODE' : 'F_CODE';
 
-        it('should handle translation of power line feature from ' + schema + ' -> osm -> ' + schema, function() {
+        it('should handle translation of service road with surface feature from ' + schema + ' -> osm -> ' + schema, function() {
             var data = startWay + '<tag k="highway" v="service"/><tag k="name" v="Frithwood Lane"/><tag k="surface" v="paved"/><tag k="tracktype" v="grade1"/>' + endWay;
             var trans_xml = server.handleInputs({osm: data, method: 'POST', translation: schema, path: '/translateTo'})
-            console.log(trans_xml);
+            //console.log(trans_xml);
             var xml = parser.parseFromString(trans_xml);
 
             var tags = osmtogeojson(xml).features[0].properties;
             assert.equal(tags[fcode_key], 'AP030');
-            // assert.equal(tags['CAB'], '6');
-            // assert.equal(tags['UFI'], 'd7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1');
 
             var osm_xml = server.handleInputs({osm: trans_xml, method: 'POST', translation: schema, path: '/translateFrom'});
-            console.log(osm_xml);
+            //console.log(osm_xml);
             xml = parser.parseFromString(osm_xml);
             tags = osmtogeojson(xml).features[0].properties;
             assert.equal(tags['highway'], 'service');
             assert.equal(tags['surface'], 'paved');
+        });
+
+        it('should handle translation of residential highway feature from ' + schema + ' -> osm -> ' + schema, function() {
+            var data = startWay
+                + '<tag k="highway" v="residential"/>'
+                + '<tag k="name" v="Portland Ave"/>'
+                + endWay;
+            var trans_xml = server.handleInputs({osm: data, method: 'POST', translation: schema, path: '/translateTo'})
+            //console.log(trans_xml);
+            var xml = parser.parseFromString(trans_xml);
+
+            var tags = osmtogeojson(xml).features[0].properties;
+            assert.equal(tags[fcode_key], 'AP030');
+
+            var osm_xml = server.handleInputs({osm: trans_xml, method: 'POST', translation: schema, path: '/translateFrom'});
+            //console.log(osm_xml);
+            xml = parser.parseFromString(osm_xml);
+            tags = osmtogeojson(xml).features[0].properties;
+            assert.equal(tags['highway'], 'residential');
         });
     });
 
