@@ -13,7 +13,6 @@ x-args: &default-args
   node_version: "${NODE_VERSION}"
   npm_version: "${NPM_VERSION}"
   v8_version: "${V8_VERSION}"
-  stxxl_version: "${STXXL_VERSION}"
   armadillo_version: "${ARMADILLO_VERSION}"
   gdal_version: "${GDAL_VERSION}"
   geos_version: "${GEOS_VERSION}"
