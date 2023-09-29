@@ -30,3 +30,5 @@ HOOT_SERVICES_PORT=8080
 HOOT_NPM_INSTALL=0
 ```
 to set any properties from 0 to 1 and then stop/start the containers.
+
+Once the images are built and the containers are up and running, open the UI at https://localhost:8080
