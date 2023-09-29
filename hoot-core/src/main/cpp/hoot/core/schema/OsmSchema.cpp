@@ -951,6 +951,15 @@ private:
     }
   }
 
+/**
+ *  Using the boost::graph_traits<>::edge_iterator from boost::edges() and boost::tie can cause compilers
+ *  to assume that the iterator isn't initialized and is maybe being used before initialization.  boost::tie()
+ *  actually does the initialization and therefore the code is correct.  Ignore the warning for these two
+ *  functions only.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
   void _getAssociatedTags(VertexId from, set<VertexId>& result)
   {
     boost::graph_traits<TagGraph>::edge_iterator ei, eend;
@@ -977,6 +986,9 @@ private:
       }
     }
   }
+
+/** End ignoring maybe-uninitialized warnings */
+#pragma GCC diagnostic pop
 
   VertexId _getParent(VertexId child) const
   {

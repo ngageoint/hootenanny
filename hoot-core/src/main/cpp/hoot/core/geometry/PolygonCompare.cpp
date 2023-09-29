@@ -58,6 +58,21 @@ PolygonCompare::PolygonCompare(const Envelope& e)
 {
 }
 
+PolygonCompare::PolygonCompare(const PolygonCompare& other)
+{
+  _e = other._e;
+  _curve = std::make_shared<HilbertCurve>(*other._curve.get());
+  _size = other._size;
+}
+
+PolygonCompare& PolygonCompare::operator=(PolygonCompare& other)
+{
+  _e = other._e;
+  _curve = std::make_shared<HilbertCurve>(*other._curve.get());
+  _size = other._size;
+  return *this;
+}
+
 bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
                                 const std::shared_ptr<geos::geom::Geometry>& p2) const
 {

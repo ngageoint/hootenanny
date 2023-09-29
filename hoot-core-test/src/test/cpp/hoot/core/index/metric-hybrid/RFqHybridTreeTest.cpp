@@ -55,12 +55,6 @@ class RFqHybridDummyData
 public:
 
   RFqHybridDummyData() {}
-  RFqHybridDummyData(const RFqHybridDummyData& dd)
-    : _e(dd._e),
-      _eid(dd._eid),
-      _name(dd._name)
-  {
-  }
 
   RFqHybridDummyData(const QString& name)
     : _name(name)

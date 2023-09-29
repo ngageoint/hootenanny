@@ -46,7 +46,6 @@ class FqDummyData
 public:
 
   FqDummyData() {}
-  FqDummyData(const FqDummyData& dd) : _str(dd._str) {}
   FqDummyData(const char* s) : _str(s) {}
   FqDummyData(const QString& s) : _str(s) {}
 
