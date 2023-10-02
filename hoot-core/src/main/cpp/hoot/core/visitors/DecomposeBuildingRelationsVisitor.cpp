@@ -43,7 +43,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
 void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
-  if (e == nullptr && e->getElementType() == ElementType::Relation)
+  if (e != nullptr && e->getElementType() == ElementType::Relation)
   {
     const std::shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == MetadataTags::RelationBuilding())
