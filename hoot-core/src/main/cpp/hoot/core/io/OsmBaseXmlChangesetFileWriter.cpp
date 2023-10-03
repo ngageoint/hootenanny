@@ -217,7 +217,7 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
       last = Change::ChangeType::Unknown;
-      if (!changeElement)
+      if (changeElement)
         _parsedChangeIds.append(changeElement->getElementId());
     }
   }

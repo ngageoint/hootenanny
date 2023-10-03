@@ -66,6 +66,14 @@
 #error Bundle support is required.
 #endif
 
+/**
+ *  Using the boost::graph_traits<>::edge_iterator from boost::edges() and boost::tie can cause compilers
+ *  to assume that the iterator isn't initialized and is maybe being used before initialization.  boost::tie()
+ *  actually does the initialization and therefore the code is correct.  Ignore the warning for this file only.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
 using namespace std;
 
 namespace hoot
@@ -1908,3 +1916,6 @@ QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2) const
 }
 
 }
+
+/** End ignoring maybe-uninitialized warnings */
+#pragma GCC diagnostic pop

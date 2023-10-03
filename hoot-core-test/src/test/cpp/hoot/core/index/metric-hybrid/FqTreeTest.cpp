@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,7 +46,6 @@ class FqDummyData
 public:
 
   FqDummyData() {}
-  FqDummyData(const FqDummyData& dd) : _str(dd._str) {}
   FqDummyData(const char* s) : _str(s) {}
   FqDummyData(const QString& s) : _str(s) {}
 

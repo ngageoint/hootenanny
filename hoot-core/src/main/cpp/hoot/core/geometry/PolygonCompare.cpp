@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "PolygonCompare.h"
@@ -56,6 +56,21 @@ PolygonCompare::PolygonCompare(const Envelope& e)
     _curve(std::make_shared<HilbertCurve>(2, 8)),
     _size((1 << 8) - 1)
 {
+}
+
+PolygonCompare::PolygonCompare(const PolygonCompare& other)
+{
+  _e = other._e;
+  _curve = std::make_shared<HilbertCurve>(*other._curve.get());
+  _size = other._size;
+}
+
+PolygonCompare& PolygonCompare::operator=(const PolygonCompare& other)
+{
+  _e = other._e;
+  _curve = std::make_shared<HilbertCurve>(*other._curve.get());
+  _size = other._size;
+  return *this;
 }
 
 bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,

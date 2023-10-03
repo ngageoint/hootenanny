@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __POLYGON_COMPARE_H__
@@ -43,7 +43,8 @@ class PolygonCompare
 {
 public:
 
-  PolygonCompare(const geos::geom::Envelope& e);
+  explicit PolygonCompare(const geos::geom::Envelope& e);
+  PolygonCompare(const PolygonCompare& other);
 
   bool operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
                   const std::shared_ptr<geos::geom::Geometry>& p2) const;
@@ -51,7 +52,7 @@ public:
 private:
 
   PolygonCompare() = default;
-  PolygonCompare& operator=(PolygonCompare& other);
+  PolygonCompare& operator=(const PolygonCompare& other);
 
   geos::geom::Envelope _e;
   std::shared_ptr<Tgs::HilbertCurve> _curve;
