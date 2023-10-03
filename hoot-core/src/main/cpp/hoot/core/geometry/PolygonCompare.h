@@ -52,7 +52,7 @@ public:
 private:
 
   PolygonCompare() = default;
-  PolygonCompare& operator=(PolygonCompare& other);
+  PolygonCompare& operator=(const PolygonCompare& other);
 
   geos::geom::Envelope _e;
   std::shared_ptr<Tgs::HilbertCurve> _curve;

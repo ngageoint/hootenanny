@@ -65,7 +65,7 @@ PolygonCompare::PolygonCompare(const PolygonCompare& other)
   _size = other._size;
 }
 
-PolygonCompare& PolygonCompare::operator=(PolygonCompare& other)
+PolygonCompare& PolygonCompare::operator=(const PolygonCompare& other)
 {
   _e = other._e;
   _curve = std::make_shared<HilbertCurve>(*other._curve.get());
