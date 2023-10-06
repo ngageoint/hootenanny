@@ -56,122 +56,15 @@
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542618470630714" lon="-104.8997171368441030"/>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548514075605169" lon="-104.9005693264315937"/>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549289695954272" lon="-104.9005253172436056"/>
-    <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
-        <nd ref="-200"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-198"/>
-        <nd ref="-7"/>
-        <nd ref="-32"/>
-        <nd ref="-31"/>
-        <nd ref="-30"/>
-        <nd ref="-36"/>
-        <nd ref="-199"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-    </way>
-    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-197"/>
-        <nd ref="-33"/>
-        <nd ref="-30"/>
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-181"/>
+        <nd ref="-177"/>
+        <nd ref="-174"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="2"/>
     </way>
-    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-68"/>
-        <nd ref="-196"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-194"/>
-        <nd ref="-43"/>
-        <nd ref="-68"/>
-        <nd ref="-67"/>
-        <nd ref="-66"/>
-        <nd ref="-72"/>
-        <nd ref="-195"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-    </way>
-    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-193"/>
-        <nd ref="-69"/>
-        <nd ref="-66"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2"/>
-    </way>
-    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-104"/>
-        <nd ref="-192"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-190"/>
-        <nd ref="-79"/>
-        <nd ref="-104"/>
-        <nd ref="-103"/>
-        <nd ref="-102"/>
-        <nd ref="-108"/>
-        <nd ref="-191"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-    </way>
-    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-189"/>
-        <nd ref="-105"/>
-        <nd ref="-102"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2"/>
-    </way>
-    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-140"/>
-        <nd ref="-188"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-186"/>
-        <nd ref="-115"/>
-        <nd ref="-140"/>
-        <nd ref="-139"/>
-        <nd ref="-138"/>
-        <nd ref="-144"/>
-        <nd ref="-187"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-    </way>
-    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-185"/>
-        <nd ref="-141"/>
-        <nd ref="-138"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2"/>
-    </way>
-    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-176"/>
-        <nd ref="-184"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-182"/>
         <nd ref="-151"/>
         <nd ref="-176"/>
@@ -183,14 +76,6 @@
         <tag k="highway" v="road"/>
         <tag k="note" v="0"/>
     </way>
-    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-181"/>
-        <nd ref="-177"/>
-        <nd ref="-174"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2"/>
-    </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-177"/>
         <nd ref="-152"/>
@@ -198,6 +83,33 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
+    </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-176"/>
+        <nd ref="-184"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-185"/>
+        <nd ref="-141"/>
+        <nd ref="-138"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-186"/>
+        <nd ref="-115"/>
+        <nd ref="-140"/>
+        <nd ref="-139"/>
+        <nd ref="-138"/>
+        <nd ref="-144"/>
+        <nd ref="-187"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-141"/>
@@ -207,6 +119,33 @@
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
     </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-140"/>
+        <nd ref="-188"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-189"/>
+        <nd ref="-105"/>
+        <nd ref="-102"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-190"/>
+        <nd ref="-79"/>
+        <nd ref="-104"/>
+        <nd ref="-103"/>
+        <nd ref="-102"/>
+        <nd ref="-108"/>
+        <nd ref="-191"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+    </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-105"/>
         <nd ref="-80"/>
@@ -214,6 +153,33 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-104"/>
+        <nd ref="-192"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-193"/>
+        <nd ref="-69"/>
+        <nd ref="-66"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-194"/>
+        <nd ref="-43"/>
+        <nd ref="-68"/>
+        <nd ref="-67"/>
+        <nd ref="-66"/>
+        <nd ref="-72"/>
+        <nd ref="-195"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-69"/>
@@ -223,6 +189,33 @@
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
     </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-68"/>
+        <nd ref="-196"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-197"/>
+        <nd ref="-33"/>
+        <nd ref="-30"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-198"/>
+        <nd ref="-7"/>
+        <nd ref="-32"/>
+        <nd ref="-31"/>
+        <nd ref="-30"/>
+        <nd ref="-36"/>
+        <nd ref="-199"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+    </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
         <nd ref="-8"/>
@@ -230,5 +223,12 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-32"/>
+        <nd ref="-200"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
     </way>
 </osm>

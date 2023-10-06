@@ -1686,15 +1686,6 @@
     </way>
     <way visible="true" id="-670" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6520"/>
-        <nd ref="-4579"/>
-        <nd ref="-4580"/>
-        <nd ref="-4581"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="primary"/>
-        <tag k="name" v="I- 66"/>
-    </way>
-    <way visible="true" id="-669" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6520"/>
         <nd ref="-6524"/>
         <nd ref="-6528"/>
         <nd ref="-6532"/>
@@ -1702,15 +1693,17 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
+    <way visible="true" id="-669" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6520"/>
+        <nd ref="-4579"/>
+        <nd ref="-4580"/>
+        <nd ref="-4581"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="primary"/>
+        <tag k="name" v="I- 66"/>
+    </way>
     <way visible="true" id="-668" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-100"/>
-        <nd ref="-7518"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-    </way>
-    <way visible="true" id="-667" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7519"/>
         <nd ref="-1607"/>
         <nd ref="-1608"/>
         <nd ref="-1609"/>
@@ -1718,6 +1711,13 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="motorway"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
+    </way>
+    <way visible="true" id="-667" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7519"/>
+        <nd ref="-7518"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
     </way>
     <way visible="true" id="-666" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6648"/>
@@ -2118,21 +2118,20 @@
     </way>
     <way visible="true" id="-640" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5512"/>
-        <nd ref="-5513"/>
-        <nd ref="-5181"/>
-        <tag k="alt_name" v="US Hwy 50"/>
+        <nd ref="-5511"/>
+        <nd ref="-5510"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 50"/>
     </way>
     <way visible="true" id="-639" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5510"/>
-        <nd ref="-5511"/>
-        <nd ref="-5512"/>
-        <tag k="alt_name" v="US Hwy 50"/>
+        <nd ref="-5509"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 50"/>
     </way>
     <way visible="true" id="-638" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4331"/>
@@ -2155,23 +2154,13 @@
     </way>
     <way visible="true" id="-636" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5509"/>
-        <nd ref="-5510"/>
-        <tag k="alt_name" v="US Hwy 50"/>
+        <nd ref="-5508"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 50"/>
     </way>
     <way visible="true" id="-635" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5377"/>
-        <nd ref="-5379"/>
-        <nd ref="-5381"/>
-        <nd ref="-5383"/>
-        <nd ref="-5385"/>
-        <nd ref="-7474"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-    </way>
-    <way visible="true" id="-634" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4329"/>
         <nd ref="-5036"/>
         <nd ref="-5038"/>
@@ -2188,13 +2177,23 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
+    <way visible="true" id="-634" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5377"/>
+        <nd ref="-5379"/>
+        <nd ref="-5381"/>
+        <nd ref="-5383"/>
+        <nd ref="-5385"/>
+        <nd ref="-7474"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+    </way>
     <way visible="true" id="-633" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5508"/>
-        <nd ref="-5509"/>
-        <tag k="alt_name" v="US Hwy 50"/>
+        <nd ref="-7506"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 50"/>
     </way>
     <way visible="true" id="-632" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3198"/>
@@ -2244,50 +2243,6 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
     </way>
-    <way visible="true" id="-631" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6224"/>
-        <nd ref="-4486"/>
-        <nd ref="-4488"/>
-        <nd ref="-4490"/>
-        <nd ref="-4492"/>
-        <nd ref="-4494"/>
-        <nd ref="-7517"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-630" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7516"/>
-        <nd ref="-6648"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Independence Ave SW"/>
-    </way>
-    <way visible="true" id="-629" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5179"/>
-        <nd ref="-5181"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="23rd St NW"/>
-    </way>
-    <way visible="true" id="-628" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6285"/>
-        <nd ref="-7514"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-627" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6402"/>
-        <nd ref="-4581"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-626" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7512"/>
-        <nd ref="-7378"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="foot" v="designated"/>
-        <tag k="highway" v="path"/>
-    </way>
     <way visible="true" id="-625" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7511"/>
         <nd ref="-7049"/>
@@ -2317,166 +2272,6 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="secondary"/>
         <tag k="name" v="US Hwy 50"/>
-    </way>
-    <way visible="true" id="-623" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7509"/>
-        <nd ref="-4617"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="foot" v="designated"/>
-        <tag k="highway" v="path"/>
-    </way>
-    <way visible="true" id="-622" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5509"/>
-        <nd ref="-7066"/>
-        <nd ref="-7067"/>
-        <nd ref="-7508"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="21st St NW"/>
-    </way>
-    <way visible="true" id="-621" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7507"/>
-        <nd ref="-4576"/>
-        <nd ref="-4577"/>
-        <nd ref="-4578"/>
-        <nd ref="-6520"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="primary"/>
-        <tag k="name" v="I- 66"/>
-    </way>
-    <way visible="true" id="-619" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6402"/>
-        <nd ref="-6405"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-618" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7504"/>
-        <nd ref="-6520"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-617" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5512"/>
-        <nd ref="-5201"/>
-        <nd ref="-5204"/>
-        <nd ref="-5207"/>
-        <nd ref="-7503"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="22nd St NW"/>
-    </way>
-    <way visible="true" id="-616" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7506"/>
-        <nd ref="-5508"/>
-        <tag k="alt_name" v="US Hwy 50"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
-    </way>
-    <way visible="true" id="-615" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5508"/>
-        <nd ref="-6821"/>
-        <nd ref="-6823"/>
-        <nd ref="-7501"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="20th St NW"/>
-    </way>
-    <way visible="true" id="-614" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7500"/>
-        <nd ref="-6217"/>
-        <nd ref="-6219"/>
-        <nd ref="-6221"/>
-        <nd ref="-6223"/>
-        <nd ref="-6224"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-613" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7499"/>
-        <nd ref="-57"/>
-        <nd ref="-58"/>
-        <nd ref="-4250"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-    </way>
-    <way visible="true" id="-612" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7498"/>
-        <nd ref="-3645"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
-    </way>
-    <way visible="true" id="-611" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4250"/>
-        <nd ref="-4252"/>
-        <nd ref="-4254"/>
-        <nd ref="-4256"/>
-        <nd ref="-7497"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="20TH ST NW"/>
-    </way>
-    <way visible="true" id="-610" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7496"/>
-        <nd ref="-3642"/>
-        <nd ref="-3645"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
-    </way>
-    <way visible="true" id="-609" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3407"/>
-        <nd ref="-1529"/>
-        <nd ref="-1531"/>
-        <nd ref="-1533"/>
-        <nd ref="-1535"/>
-        <nd ref="-1537"/>
-        <nd ref="-1539"/>
-        <nd ref="-1541"/>
-        <nd ref="-1543"/>
-        <nd ref="-1545"/>
-        <nd ref="-1547"/>
-        <nd ref="-1549"/>
-        <nd ref="-1551"/>
-        <nd ref="-1553"/>
-        <nd ref="-1555"/>
-        <nd ref="-1557"/>
-        <nd ref="-1559"/>
-        <nd ref="-1561"/>
-        <nd ref="-1563"/>
-        <nd ref="-1565"/>
-        <nd ref="-1567"/>
-        <nd ref="-1569"/>
-        <nd ref="-1571"/>
-        <nd ref="-1573"/>
-        <nd ref="-1575"/>
-        <nd ref="-1577"/>
-        <nd ref="-1579"/>
-        <nd ref="-1581"/>
-        <nd ref="-1583"/>
-        <nd ref="-1585"/>
-        <nd ref="-1587"/>
-        <nd ref="-1589"/>
-        <nd ref="-1591"/>
-        <nd ref="-1593"/>
-        <nd ref="-1595"/>
-        <nd ref="-1597"/>
-        <nd ref="-1598"/>
-        <nd ref="-1599"/>
-        <nd ref="-1600"/>
-        <nd ref="-1601"/>
-        <nd ref="-1602"/>
-        <nd ref="-1603"/>
-        <nd ref="-1604"/>
-        <nd ref="-1605"/>
-        <nd ref="-1606"/>
-        <nd ref="-7519"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
     </way>
     <way visible="true" id="-608" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7494"/>
@@ -2523,99 +2318,6 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
-    </way>
-    <way visible="true" id="-606" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3420"/>
-        <nd ref="-1682"/>
-        <nd ref="-1684"/>
-        <nd ref="-1686"/>
-        <nd ref="-1688"/>
-        <nd ref="-1690"/>
-        <nd ref="-1692"/>
-        <nd ref="-1694"/>
-        <nd ref="-1696"/>
-        <nd ref="-1698"/>
-        <nd ref="-1700"/>
-        <nd ref="-1702"/>
-        <nd ref="-1704"/>
-        <nd ref="-1706"/>
-        <nd ref="-1708"/>
-        <nd ref="-101"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
-    </way>
-    <way visible="true" id="-605" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-152"/>
-        <nd ref="-153"/>
-        <nd ref="-154"/>
-        <nd ref="-155"/>
-        <nd ref="-156"/>
-        <nd ref="-157"/>
-        <nd ref="-158"/>
-        <nd ref="-7491"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="22ND ST NW"/>
-    </way>
-    <way visible="true" id="-604" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-258"/>
-        <nd ref="-259"/>
-        <nd ref="-260"/>
-        <nd ref="-261"/>
-        <nd ref="-262"/>
-        <nd ref="-263"/>
-        <nd ref="-7490"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="23RD ST NW"/>
-    </way>
-    <way visible="true" id="-603" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-109"/>
-        <nd ref="-344"/>
-        <nd ref="-345"/>
-        <nd ref="-346"/>
-        <nd ref="-347"/>
-        <nd ref="-348"/>
-        <nd ref="-349"/>
-        <nd ref="-350"/>
-        <nd ref="-351"/>
-        <nd ref="-352"/>
-        <nd ref="-353"/>
-        <nd ref="-354"/>
-        <nd ref="-355"/>
-        <nd ref="-356"/>
-        <nd ref="-357"/>
-        <nd ref="-358"/>
-        <nd ref="-359"/>
-        <nd ref="-360"/>
-        <nd ref="-361"/>
-        <nd ref="-362"/>
-        <nd ref="-363"/>
-        <nd ref="-364"/>
-        <nd ref="-365"/>
-        <nd ref="-366"/>
-        <nd ref="-367"/>
-        <nd ref="-368"/>
-        <nd ref="-369"/>
-        <nd ref="-370"/>
-        <nd ref="-371"/>
-        <nd ref="-372"/>
-        <nd ref="-373"/>
-        <nd ref="-374"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
-    </way>
-    <way visible="true" id="-602" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3236"/>
-        <nd ref="-3237"/>
-        <nd ref="-3238"/>
-        <nd ref="-3239"/>
-        <nd ref="-7488"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="21ST ST NW"/>
     </way>
     <way visible="true" id="-599" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7199"/>
@@ -2702,6 +2404,16 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
     </way>
+    <way visible="true" id="-584" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7500"/>
+        <nd ref="-6217"/>
+        <nd ref="-6219"/>
+        <nd ref="-6221"/>
+        <nd ref="-6223"/>
+        <nd ref="-6224"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
     <way visible="true" id="-583" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6187"/>
         <nd ref="-6189"/>
@@ -2714,9 +2426,40 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
+    <way visible="true" id="-578" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5508"/>
+        <nd ref="-6821"/>
+        <nd ref="-6823"/>
+        <nd ref="-7501"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="20th St NW"/>
+    </way>
     <way visible="true" id="-574" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7197"/>
         <nd ref="-7199"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-571" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5512"/>
+        <nd ref="-5201"/>
+        <nd ref="-5204"/>
+        <nd ref="-5207"/>
+        <nd ref="-7503"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="22nd St NW"/>
+    </way>
+    <way visible="true" id="-570" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7504"/>
+        <nd ref="-6520"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-568" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6402"/>
+        <nd ref="-6405"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
@@ -2825,6 +2568,15 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
     </way>
+    <way visible="true" id="-547" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5181"/>
+        <nd ref="-5513"/>
+        <nd ref="-5512"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="US Hwy 50"/>
+    </way>
     <way visible="true" id="-543" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5766"/>
         <nd ref="-6986"/>
@@ -2873,6 +2625,16 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
+    <way visible="true" id="-502" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7507"/>
+        <nd ref="-4576"/>
+        <nd ref="-4577"/>
+        <nd ref="-4578"/>
+        <nd ref="-6520"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="primary"/>
+        <tag k="name" v="I- 66"/>
+    </way>
     <way visible="true" id="-498" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6843"/>
         <nd ref="-4601"/>
@@ -2888,6 +2650,22 @@
         <nd ref="-7029"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-490" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5509"/>
+        <nd ref="-7066"/>
+        <nd ref="-7067"/>
+        <nd ref="-7508"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="21st St NW"/>
+    </way>
+    <way visible="true" id="-488" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7509"/>
+        <nd ref="-4617"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="foot" v="designated"/>
+        <tag k="highway" v="path"/>
     </way>
     <way visible="true" id="-485" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7223"/>
@@ -2999,9 +2777,28 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Henry Bacon Dr NW"/>
     </way>
+    <way visible="true" id="-425" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7512"/>
+        <nd ref="-7378"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="foot" v="designated"/>
+        <tag k="highway" v="path"/>
+    </way>
     <way visible="true" id="-423" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4338"/>
         <nd ref="-5849"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-422" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6402"/>
+        <nd ref="-4581"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-407" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6285"/>
+        <nd ref="-7514"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
@@ -3027,6 +2824,13 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
     </way>
+    <way visible="true" id="-398" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5179"/>
+        <nd ref="-5181"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="23rd St NW"/>
+    </way>
     <way visible="true" id="-385" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7199"/>
         <nd ref="-5891"/>
@@ -3035,11 +2839,39 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
+    <way visible="true" id="-384" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7516"/>
+        <nd ref="-6648"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Independence Ave SW"/>
+    </way>
+    <way visible="true" id="-378" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6224"/>
+        <nd ref="-4486"/>
+        <nd ref="-4488"/>
+        <nd ref="-4490"/>
+        <nd ref="-4492"/>
+        <nd ref="-4494"/>
+        <nd ref="-7517"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
     <way visible="true" id="-375" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6553"/>
         <nd ref="-6731"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-350" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3236"/>
+        <nd ref="-3237"/>
+        <nd ref="-3238"/>
+        <nd ref="-3239"/>
+        <nd ref="-7488"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="21ST ST NW"/>
     </way>
     <way visible="true" id="-344" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3235"/>
@@ -3065,6 +2897,43 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="DANIEL C FRENCH DR SW"/>
+    </way>
+    <way visible="true" id="-342" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-109"/>
+        <nd ref="-344"/>
+        <nd ref="-345"/>
+        <nd ref="-346"/>
+        <nd ref="-347"/>
+        <nd ref="-348"/>
+        <nd ref="-349"/>
+        <nd ref="-350"/>
+        <nd ref="-351"/>
+        <nd ref="-352"/>
+        <nd ref="-353"/>
+        <nd ref="-354"/>
+        <nd ref="-355"/>
+        <nd ref="-356"/>
+        <nd ref="-357"/>
+        <nd ref="-358"/>
+        <nd ref="-359"/>
+        <nd ref="-360"/>
+        <nd ref="-361"/>
+        <nd ref="-362"/>
+        <nd ref="-363"/>
+        <nd ref="-364"/>
+        <nd ref="-365"/>
+        <nd ref="-366"/>
+        <nd ref="-367"/>
+        <nd ref="-368"/>
+        <nd ref="-369"/>
+        <nd ref="-370"/>
+        <nd ref="-371"/>
+        <nd ref="-372"/>
+        <nd ref="-373"/>
+        <nd ref="-374"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="name" v="INTERSTATE 66  BN"/>
     </way>
     <way visible="true" id="-339" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2898"/>
@@ -3114,12 +2983,109 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR NW"/>
     </way>
+    <way visible="true" id="-308" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-258"/>
+        <nd ref="-259"/>
+        <nd ref="-260"/>
+        <nd ref="-261"/>
+        <nd ref="-262"/>
+        <nd ref="-263"/>
+        <nd ref="-7490"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="23RD ST NW"/>
+    </way>
     <way visible="true" id="-307" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-257"/>
         <nd ref="-258"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="23RD ST NW"/>
+    </way>
+    <way visible="true" id="-274" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-152"/>
+        <nd ref="-153"/>
+        <nd ref="-154"/>
+        <nd ref="-155"/>
+        <nd ref="-156"/>
+        <nd ref="-157"/>
+        <nd ref="-158"/>
+        <nd ref="-7491"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="22ND ST NW"/>
+    </way>
+    <way visible="true" id="-269" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3420"/>
+        <nd ref="-1682"/>
+        <nd ref="-1684"/>
+        <nd ref="-1686"/>
+        <nd ref="-1688"/>
+        <nd ref="-1690"/>
+        <nd ref="-1692"/>
+        <nd ref="-1694"/>
+        <nd ref="-1696"/>
+        <nd ref="-1698"/>
+        <nd ref="-1700"/>
+        <nd ref="-1702"/>
+        <nd ref="-1704"/>
+        <nd ref="-1706"/>
+        <nd ref="-1708"/>
+        <nd ref="-101"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="name" v="INTERSTATE 66  BN"/>
+    </way>
+    <way visible="true" id="-266" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3407"/>
+        <nd ref="-1529"/>
+        <nd ref="-1531"/>
+        <nd ref="-1533"/>
+        <nd ref="-1535"/>
+        <nd ref="-1537"/>
+        <nd ref="-1539"/>
+        <nd ref="-1541"/>
+        <nd ref="-1543"/>
+        <nd ref="-1545"/>
+        <nd ref="-1547"/>
+        <nd ref="-1549"/>
+        <nd ref="-1551"/>
+        <nd ref="-1553"/>
+        <nd ref="-1555"/>
+        <nd ref="-1557"/>
+        <nd ref="-1559"/>
+        <nd ref="-1561"/>
+        <nd ref="-1563"/>
+        <nd ref="-1565"/>
+        <nd ref="-1567"/>
+        <nd ref="-1569"/>
+        <nd ref="-1571"/>
+        <nd ref="-1573"/>
+        <nd ref="-1575"/>
+        <nd ref="-1577"/>
+        <nd ref="-1579"/>
+        <nd ref="-1581"/>
+        <nd ref="-1583"/>
+        <nd ref="-1585"/>
+        <nd ref="-1587"/>
+        <nd ref="-1589"/>
+        <nd ref="-1591"/>
+        <nd ref="-1593"/>
+        <nd ref="-1595"/>
+        <nd ref="-1597"/>
+        <nd ref="-1598"/>
+        <nd ref="-1599"/>
+        <nd ref="-1600"/>
+        <nd ref="-1601"/>
+        <nd ref="-1602"/>
+        <nd ref="-1603"/>
+        <nd ref="-1604"/>
+        <nd ref="-1605"/>
+        <nd ref="-1606"/>
+        <nd ref="-100"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="name" v="INTERSTATE 66  BN"/>
     </way>
     <way visible="true" id="-262" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3645"/>
@@ -3131,6 +3097,14 @@
     <way visible="true" id="-257" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3671"/>
         <nd ref="-3672"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+    </way>
+    <way visible="true" id="-253" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7496"/>
+        <nd ref="-3642"/>
+        <nd ref="-3645"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
@@ -3315,6 +3289,23 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR NW"/>
     </way>
+    <way visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4250"/>
+        <nd ref="-4252"/>
+        <nd ref="-4254"/>
+        <nd ref="-4256"/>
+        <nd ref="-7497"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="20TH ST NW"/>
+    </way>
+    <way visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7498"/>
+        <nd ref="-3645"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+    </way>
     <way visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2447"/>
         <nd ref="-2448"/>
@@ -3355,7 +3346,7 @@
         <nd ref="-97"/>
         <nd ref="-98"/>
         <nd ref="-99"/>
-        <nd ref="-100"/>
+        <nd ref="-7519"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
@@ -3395,6 +3386,15 @@
         <nd ref="-60"/>
         <nd ref="-62"/>
         <nd ref="-3236"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+    </way>
+    <way visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7499"/>
+        <nd ref="-57"/>
+        <nd ref="-58"/>
+        <nd ref="-4250"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
