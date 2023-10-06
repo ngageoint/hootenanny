@@ -491,16 +491,17 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   {
     LOG_TRACE("Replacing way during crop check: " << way->getElementId() << " with element: " << e->getElementId() << "...");
 
-    e->setTags(way->getTags());
-
-    // retain the parent ID
     if (e->getElementType() == ElementType::Way)
     {
+      //  Update the current way with the cropped node IDs only
       WayPtr newWay = std::dynamic_pointer_cast<Way>(e);
-      newWay->setPid(way->getId());
+      way->setNodes(newWay->getNodeIds());
     }
     else if (e->getElementType() == ElementType::Relation)
     {
+      //  Copy the way tags to the relation
+      e->setTags(way->getTags());
+      //  When cropping a way that turns into a relation, one of the ways should retain the original ID
       RelationPtr newRelation = std::dynamic_pointer_cast<Relation>(e);
       const vector<RelationData::Entry>& members = newRelation->getMembers();
       for (const auto& element : members)
@@ -519,9 +520,9 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
           //memberWay->setTags(way->getTags());
         }
       }
+      //  Replace the way with the relation element
+      map->replace(way, e);
     }
-
-    map->replace(way, e);
 
     _numCrossingWaysKept++;
   }
