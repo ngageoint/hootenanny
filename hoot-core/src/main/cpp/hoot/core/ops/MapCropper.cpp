@@ -196,8 +196,7 @@ void MapCropper::apply(OsmMapPtr& map)
   vector<long> waysToCrop;
   // go through all the ways
   long wayCtr = 0;
-  //  Make a copy because the map is modified below
-  const WayMap ways = map->getWays();
+  const WayMap& ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
@@ -496,6 +495,9 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
       //  Update the current way with the cropped node IDs only
       WayPtr newWay = std::dynamic_pointer_cast<Way>(e);
       way->setNodes(newWay->getNodeIds());
+      //  In some instances, the new element has already been added to the map, remove it here
+      if (map->containsWay(e->getId()))
+        map->bulkRemoveWays({e->getId()}, false);
     }
     else if (e->getElementType() == ElementType::Relation)
     {
