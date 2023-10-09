@@ -182,16 +182,6 @@
         <node id="-17" version="0" lat="39.5912317949799970" lon="-104.8037465740300007" timestamp="">
             <tag k="test_key" v="test_val"/>
         </node>
-        <way id="-1" version="0" timestamp="">
-            <nd ref="-2"/>
-            <nd ref="-1"/>
-            <nd ref="-17"/>
-            <nd ref="-13"/>
-            <nd ref="-2"/>
-            <tag k="building" v="yes"/>
-            <tag k="name" v="Best Buy"/>
-            <tag k="test_key" v="test_val"/>
-        </way>
     </create>
     <delete>
         <way id="-21127844" version="1" timestamp="">
@@ -258,7 +248,7 @@
         </way>
     </delete>
     <create>
-        <way id="-2" version="0" timestamp="">
+        <way id="-1" version="0" timestamp="">
             <nd ref="-3"/>
             <nd ref="-4"/>
             <nd ref="-5"/>
@@ -268,7 +258,7 @@
             <tag k="building" v="yes"/>
             <tag k="test_key" v="test_val"/>
         </way>
-        <way id="-3" version="0" timestamp="">
+        <way id="-2" version="0" timestamp="">
             <nd ref="-7"/>
             <nd ref="-8"/>
             <nd ref="-15"/>
@@ -282,7 +272,7 @@
             <tag k="name" v="Target Grocery"/>
             <tag k="test_key" v="test_val"/>
         </way>
-        <way id="-4" version="0" timestamp="">
+        <way id="-3" version="0" timestamp="">
             <nd ref="-8"/>
             <nd ref="-13"/>
             <nd ref="-17"/>
@@ -294,7 +284,7 @@
             <tag k="name" v="Target - Aurora South"/>
             <tag k="test_key" v="test_val"/>
         </way>
-        <way id="-5" version="0" timestamp="">
+        <way id="-4" version="0" timestamp="">
             <nd ref="-15"/>
             <nd ref="-14"/>
             <nd ref="-16"/>
@@ -303,6 +293,16 @@
             <tag k="REF2" v="Target"/>
             <tag k="building" v="yes"/>
             <tag k="name" v="Target Pharmacy"/>
+            <tag k="test_key" v="test_val"/>
+        </way>
+        <way id="-5" version="0" timestamp="">
+            <nd ref="-2"/>
+            <nd ref="-1"/>
+            <nd ref="-17"/>
+            <nd ref="-13"/>
+            <nd ref="-2"/>
+            <tag k="building" v="yes"/>
+            <tag k="name" v="Best Buy"/>
             <tag k="test_key" v="test_val"/>
         </way>
     </create>
