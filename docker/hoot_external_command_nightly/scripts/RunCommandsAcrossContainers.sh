@@ -55,10 +55,6 @@ run-overpass()
 # Import data from overpass instance using a bounding box file
 run-overpass-bounds()
 {
-    hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
-        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
-        "${OP_URL}" ${OUTPUT_GPKG} 
-
     hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         "${OP_URL}" $OUTPUT_OSM
