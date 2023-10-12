@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
@@ -63,14 +63,19 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
     {
       const vector<RelationData::Entry>& multi_members = r->getMembers();
       const Tags& tags = r->getTags();
-      for (const auto& member : multi_members)
+      //  Empty tags on multilinestring relations can be removed
+      if (tags.getInformationCount() > 0)
       {
-        ElementPtr element = _map->getElement(member.getElementId());
-        if (element)
+        for (const auto& member : multi_members)
         {
-          LOG_VART(element->getTags().getInformationCount());
-          if (element->getTags().getInformationCount() > 0)
-            return;
+          ElementPtr element = _map->getElement(member.getElementId());
+          if (element)
+          {
+            const Tags& member_tags = element->getTags();
+            LOG_VART(member_tags.getInformationCount());
+            if (member_tags.getInformationCount() > 0 && member_tags != tags)
+                return;
+          }
         }
       }
 
