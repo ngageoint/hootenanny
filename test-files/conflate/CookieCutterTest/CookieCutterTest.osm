@@ -2593,44 +2593,16 @@
         <nd ref="-1189"/>
         <nd ref="-857"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2656"/>
-        <nd ref="-1150"/>
-        <nd ref="-1151"/>
-        <nd ref="-1152"/>
-        <nd ref="-1153"/>
-        <nd ref="-1154"/>
-        <nd ref="-1155"/>
-        <nd ref="-1156"/>
-        <nd ref="-1157"/>
-        <nd ref="-1158"/>
-        <nd ref="-1159"/>
-        <nd ref="-1160"/>
-        <nd ref="-1161"/>
-        <nd ref="-1162"/>
-        <nd ref="-1163"/>
-        <nd ref="-1164"/>
-        <nd ref="-1165"/>
-        <nd ref="-3224"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-251" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3220"/>
-        <nd ref="-1165"/>
-        <nd ref="-1164"/>
-        <nd ref="-1163"/>
-        <nd ref="-1162"/>
-        <nd ref="-1161"/>
-        <nd ref="-1160"/>
-        <nd ref="-1159"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Constitution Ave NW"/>
     </way>
     <way visible="true" id="-250" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-857"/>
         <nd ref="-1189"/>
         <nd ref="-3219"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="US Hwy 50"/>
     </way>
     <way visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2031"/>
@@ -3007,6 +2979,19 @@
         <nd ref="-2875"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3220"/>
+        <nd ref="-1165"/>
+        <nd ref="-1164"/>
+        <nd ref="-1163"/>
+        <nd ref="-1162"/>
+        <nd ref="-1161"/>
+        <nd ref="-1160"/>
+        <nd ref="-1159"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="US Hwy 50"/>
     </way>
     <way visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2111"/>
@@ -3564,6 +3549,29 @@
         <nd ref="-1150"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+    </way>
+    <way visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2656"/>
+        <nd ref="-1150"/>
+        <nd ref="-1151"/>
+        <nd ref="-1152"/>
+        <nd ref="-1153"/>
+        <nd ref="-1154"/>
+        <nd ref="-1155"/>
+        <nd ref="-1156"/>
+        <nd ref="-1157"/>
+        <nd ref="-1158"/>
+        <nd ref="-1159"/>
+        <nd ref="-1160"/>
+        <nd ref="-1161"/>
+        <nd ref="-1162"/>
+        <nd ref="-1163"/>
+        <nd ref="-1164"/>
+        <nd ref="-1165"/>
+        <nd ref="-3224"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Constitution Ave NW"/>
     </way>
     <way visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2658"/>
@@ -6701,19 +6709,15 @@
         <tag k="highway" v="road"/>
     </way>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-256" role=""/>
+        <member type="way" ref="-173" role=""/>
         <member type="way" ref="-257" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-250" role=""/>
-        <member type="way" ref="-251" role=""/>
+        <member type="way" ref="-199" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 50"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>

@@ -996,48 +996,6 @@
     <node visible="true" id="-1192" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8927900000000193" lon="-77.0417520000000025"/>
     <node visible="true" id="-1191" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8926419999999808" lon="-77.0417470000000009"/>
     <node visible="true" id="-1190" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920999999999921" lon="-77.0417309999999986"/>
-    <way visible="true" id="-13610" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170933"/>
-        <nd ref="-70697"/>
-        <nd ref="-70698"/>
-        <nd ref="-70699"/>
-        <nd ref="-70700"/>
-        <nd ref="-70701"/>
-        <nd ref="-70702"/>
-        <nd ref="-70703"/>
-        <nd ref="-70704"/>
-        <nd ref="-70705"/>
-        <nd ref="-28017"/>
-        <nd ref="-70706"/>
-        <nd ref="-70707"/>
-        <nd ref="-70708"/>
-        <nd ref="-70709"/>
-        <nd ref="-70710"/>
-        <nd ref="-70711"/>
-        <nd ref="-70712"/>
-        <nd ref="-70713"/>
-        <nd ref="-70714"/>
-        <nd ref="-70715"/>
-        <nd ref="-70716"/>
-        <nd ref="-70717"/>
-        <nd ref="-70718"/>
-        <nd ref="-70719"/>
-        <nd ref="-70720"/>
-        <nd ref="-70721"/>
-        <nd ref="-70722"/>
-        <nd ref="-70723"/>
-        <nd ref="-70724"/>
-        <nd ref="-70725"/>
-        <nd ref="-70726"/>
-        <nd ref="-70727"/>
-        <nd ref="-70728"/>
-        <nd ref="-70729"/>
-        <nd ref="-70730"/>
-        <nd ref="-70731"/>
-        <nd ref="-70732"/>
-        <nd ref="-61014"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-13609" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-61014"/>
         <nd ref="-70649"/>
@@ -1051,6 +1009,8 @@
         <nd ref="-70657"/>
         <nd ref="-170932"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
     <way visible="true" id="-5044" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170901"/>
@@ -2506,6 +2466,50 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Colonial Ln NW"/>
     </way>
+    <way visible="true" id="-658" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170933"/>
+        <nd ref="-70697"/>
+        <nd ref="-70698"/>
+        <nd ref="-70699"/>
+        <nd ref="-70700"/>
+        <nd ref="-70701"/>
+        <nd ref="-70702"/>
+        <nd ref="-70703"/>
+        <nd ref="-70704"/>
+        <nd ref="-70705"/>
+        <nd ref="-28017"/>
+        <nd ref="-70706"/>
+        <nd ref="-70707"/>
+        <nd ref="-70708"/>
+        <nd ref="-70709"/>
+        <nd ref="-70710"/>
+        <nd ref="-70711"/>
+        <nd ref="-70712"/>
+        <nd ref="-70713"/>
+        <nd ref="-70714"/>
+        <nd ref="-70715"/>
+        <nd ref="-70716"/>
+        <nd ref="-70717"/>
+        <nd ref="-70718"/>
+        <nd ref="-70719"/>
+        <nd ref="-70720"/>
+        <nd ref="-70721"/>
+        <nd ref="-70722"/>
+        <nd ref="-70723"/>
+        <nd ref="-70724"/>
+        <nd ref="-70725"/>
+        <nd ref="-70726"/>
+        <nd ref="-70727"/>
+        <nd ref="-70728"/>
+        <nd ref="-70729"/>
+        <nd ref="-70730"/>
+        <nd ref="-70731"/>
+        <nd ref="-70732"/>
+        <nd ref="-61014"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
+    </way>
     <way visible="true" id="-657" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-70733"/>
         <nd ref="-49737"/>
@@ -2694,10 +2698,8 @@
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13609" role=""/>
-        <member type="way" ref="-13610" role=""/>
+        <member type="way" ref="-658" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Lincoln Memorial Cir"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>

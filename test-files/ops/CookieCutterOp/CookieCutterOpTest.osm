@@ -4335,13 +4335,8 @@
         <nd ref="-2818"/>
         <nd ref="-2819"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-486" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2786"/>
-        <nd ref="-2787"/>
-        <nd ref="-2788"/>
-        <nd ref="-4595"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
     </way>
     <way visible="true" id="-482" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1002"/>
@@ -8241,6 +8236,15 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="15TH ST NW"/>
     </way>
+    <way visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2786"/>
+        <nd ref="-2787"/>
+        <nd ref="-2788"/>
+        <nd ref="-4595"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
+    </way>
     <way visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-485"/>
         <nd ref="-3004"/>
@@ -11577,11 +11581,9 @@
         <tag k="name" v="Ellipse Rd NW"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-486" role=""/>
+        <member type="way" ref="-230" role=""/>
         <member type="way" ref="-487" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>
