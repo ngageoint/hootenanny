@@ -150,75 +150,39 @@
     <node visible="true" id="-1397" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8901569999999666" lon="-77.0528329999999926"/>
     <node visible="true" id="-1396" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8900089999999778" lon="-77.0523879999999934"/>
     <node visible="true" id="-1395" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8899250000000123" lon="-77.0521329999999978"/>
-    <way visible="true" id="-13550" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170874"/>
-        <nd ref="-70647"/>
-        <nd ref="-70648"/>
-        <nd ref="-7226"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-13549" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170872"/>
         <nd ref="-27278"/>
         <nd ref="-170873"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13547" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170869"/>
-        <nd ref="-142486"/>
-        <nd ref="-142487"/>
-        <nd ref="-170870"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="-13546" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14577"/>
         <nd ref="-170868"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13544" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170865"/>
-        <nd ref="-55146"/>
-        <nd ref="-55147"/>
-        <nd ref="-55148"/>
-        <nd ref="-55149"/>
-        <nd ref="-55150"/>
-        <nd ref="-7226"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="name" v="INTERSTATE 66  BN"/>
     </way>
     <way visible="true" id="-13543" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36947"/>
         <nd ref="-170864"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="-13541" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170860"/>
         <nd ref="-38758"/>
         <nd ref="-170861"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13540" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7227"/>
-        <nd ref="-38743"/>
-        <nd ref="-38744"/>
-        <nd ref="-170859"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13538" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170857"/>
-        <nd ref="-14583"/>
-        <nd ref="-14584"/>
-        <nd ref="-14585"/>
-        <nd ref="-14586"/>
-        <nd ref="-14587"/>
-        <nd ref="-14588"/>
-        <nd ref="-14589"/>
-        <nd ref="-14590"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="-13537" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14577"/>
         <nd ref="-170856"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="OHIO DR NW"/>
     </way>
     <way visible="true" id="-12501" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170862"/>
@@ -249,6 +213,20 @@
         <nd ref="-14575"/>
         <nd ref="-14576"/>
         <nd ref="-14577"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="OHIO DR NW"/>
+    </way>
+    <way visible="true" id="-11774" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170857"/>
+        <nd ref="-14583"/>
+        <nd ref="-14584"/>
+        <nd ref="-14585"/>
+        <nd ref="-14586"/>
+        <nd ref="-14587"/>
+        <nd ref="-14588"/>
+        <nd ref="-14589"/>
+        <nd ref="-14590"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="OHIO DR NW"/>
@@ -321,11 +299,28 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
+    <way visible="true" id="-2511" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7227"/>
+        <nd ref="-38743"/>
+        <nd ref="-38744"/>
+        <nd ref="-170859"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
     <way visible="true" id="-2235" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36947"/>
         <nd ref="-7227"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-2224" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170869"/>
+        <nd ref="-142486"/>
+        <nd ref="-142487"/>
+        <nd ref="-170870"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="name" v="INTERSTATE 66  BN"/>
     </way>
     <way visible="true" id="-2223" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14590"/>
@@ -336,6 +331,17 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="motorway"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
+    </way>
+    <way visible="true" id="-1610" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170865"/>
+        <nd ref="-55146"/>
+        <nd ref="-55147"/>
+        <nd ref="-55148"/>
+        <nd ref="-55149"/>
+        <nd ref="-55150"/>
+        <nd ref="-7226"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="-1305" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7227"/>
@@ -396,41 +402,42 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
     </way>
-    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-13549" role=""/>
-        <member type="way" ref="-13550" role=""/>
+    <way visible="true" id="-659" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170874"/>
+        <nd ref="-70647"/>
+        <nd ref="-70648"/>
+        <nd ref="-7226"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
+    </way>
+    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-13549" role=""/>
+        <member type="way" ref="-659" role=""/>
+        <tag k="error:circular" v="5"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13546" role=""/>
-        <member type="way" ref="-13547" role=""/>
+        <member type="way" ref="-2224" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13543" role=""/>
-        <member type="way" ref="-13544" role=""/>
+        <member type="way" ref="-1610" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-13540" role=""/>
+        <member type="way" ref="-2511" role=""/>
         <member type="way" ref="-13541" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13537" role=""/>
-        <member type="way" ref="-13538" role=""/>
+        <member type="way" ref="-11774" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="OHIO DR NW"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>

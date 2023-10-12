@@ -2614,21 +2614,7 @@
         <nd ref="-80390"/>
         <nd ref="-34177"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5054" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-14818"/>
-        <nd ref="-49708"/>
-        <nd ref="-80357"/>
-        <nd ref="-80358"/>
-        <nd ref="-80359"/>
-        <nd ref="-80360"/>
-        <nd ref="-80361"/>
-        <nd ref="-80362"/>
-        <nd ref="-80363"/>
-        <nd ref="-70547"/>
-        <nd ref="-80364"/>
-        <nd ref="-89024"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="-5044" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89030"/>
@@ -6538,6 +6524,22 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="road"/>
     </way>
+    <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14818"/>
+        <nd ref="-49708"/>
+        <nd ref="-80357"/>
+        <nd ref="-80358"/>
+        <nd ref="-80359"/>
+        <nd ref="-80360"/>
+        <nd ref="-80361"/>
+        <nd ref="-80362"/>
+        <nd ref="-80363"/>
+        <nd ref="-70547"/>
+        <nd ref="-80364"/>
+        <nd ref="-89024"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+    </way>
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39690"/>
         <nd ref="-80432"/>
@@ -6621,10 +6623,9 @@
         <tag k="name" v="Henry Bacon Dr NW"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5054" role=""/>
+        <member type="way" ref="-55" role=""/>
         <member type="way" ref="-5055" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>

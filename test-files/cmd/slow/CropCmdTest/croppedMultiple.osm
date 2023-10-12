@@ -2330,48 +2330,6 @@
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920886313681109" lon="-77.0304179666096758"/>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920886792046971" lon="-77.0303617779620993"/>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920877740408173" lon="-77.0300300329649446"/>
-    <way visible="true" id="-644" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7530"/>
-        <nd ref="-5038"/>
-        <nd ref="-5040"/>
-        <nd ref="-5042"/>
-        <nd ref="-5044"/>
-        <nd ref="-5046"/>
-        <nd ref="-5048"/>
-        <nd ref="-5050"/>
-        <nd ref="-5052"/>
-        <nd ref="-5054"/>
-        <nd ref="-7323"/>
-        <nd ref="-5057"/>
-        <nd ref="-5060"/>
-        <nd ref="-5063"/>
-        <nd ref="-5066"/>
-        <nd ref="-5069"/>
-        <nd ref="-5072"/>
-        <nd ref="-5075"/>
-        <nd ref="-5078"/>
-        <nd ref="-5081"/>
-        <nd ref="-5083"/>
-        <nd ref="-5086"/>
-        <nd ref="-5089"/>
-        <nd ref="-5092"/>
-        <nd ref="-5095"/>
-        <nd ref="-5098"/>
-        <nd ref="-5100"/>
-        <nd ref="-5102"/>
-        <nd ref="-5104"/>
-        <nd ref="-5106"/>
-        <nd ref="-5108"/>
-        <nd ref="-5110"/>
-        <nd ref="-5113"/>
-        <nd ref="-5116"/>
-        <nd ref="-5119"/>
-        <nd ref="-5122"/>
-        <nd ref="-5125"/>
-        <nd ref="-5128"/>
-        <nd ref="-7378"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-643" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7378"/>
         <nd ref="-4958"/>
@@ -2385,6 +2343,8 @@
         <nd ref="-4966"/>
         <nd ref="-7529"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
     <way visible="true" id="-600" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5430"/>
@@ -2747,6 +2707,50 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="D St NW"/>
+    </way>
+    <way visible="true" id="-567" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7530"/>
+        <nd ref="-5038"/>
+        <nd ref="-5040"/>
+        <nd ref="-5042"/>
+        <nd ref="-5044"/>
+        <nd ref="-5046"/>
+        <nd ref="-5048"/>
+        <nd ref="-5050"/>
+        <nd ref="-5052"/>
+        <nd ref="-5054"/>
+        <nd ref="-7323"/>
+        <nd ref="-5057"/>
+        <nd ref="-5060"/>
+        <nd ref="-5063"/>
+        <nd ref="-5066"/>
+        <nd ref="-5069"/>
+        <nd ref="-5072"/>
+        <nd ref="-5075"/>
+        <nd ref="-5078"/>
+        <nd ref="-5081"/>
+        <nd ref="-5083"/>
+        <nd ref="-5086"/>
+        <nd ref="-5089"/>
+        <nd ref="-5092"/>
+        <nd ref="-5095"/>
+        <nd ref="-5098"/>
+        <nd ref="-5100"/>
+        <nd ref="-5102"/>
+        <nd ref="-5104"/>
+        <nd ref="-5106"/>
+        <nd ref="-5108"/>
+        <nd ref="-5110"/>
+        <nd ref="-5113"/>
+        <nd ref="-5116"/>
+        <nd ref="-5119"/>
+        <nd ref="-5122"/>
+        <nd ref="-5125"/>
+        <nd ref="-5128"/>
+        <nd ref="-7378"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
     <way visible="true" id="-565" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7531"/>
@@ -6499,10 +6503,8 @@
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-643" role=""/>
-        <member type="way" ref="-644" role=""/>
+        <member type="way" ref="-567" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Lincoln Memorial Cir"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>
