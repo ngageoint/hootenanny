@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ScriptTest.h"
@@ -84,7 +84,7 @@ QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
   QStringList outLines;
   QStringList inLines = input.split("\n");
 
-  for (auto line : inLines)
+  for (auto line : qAsConst(inLines))
   {
     if (!line.contains(" STATUS ") && !line.contains(" INFO ") &&
         !line.contains(" DEBUG ") && !line.contains(" elapsed: ") &&
@@ -227,6 +227,8 @@ void ScriptTest::runTest()
 void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 {
   QProcess p;
+  p.setProcessChannelMode(QProcess::SeparateChannels);
+  p.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
   p.start("diff", QStringList() << file1 << file2, QProcess::ReadOnly);
 
   while (p.waitForStarted(500) == false)
@@ -258,9 +260,14 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= _scriptTestTimeOutSeconds)
     {
-      LOG_ERROR(
-        "Forcefully ending diff command for: " << _script << " after " << timeElapsedSeconds <<
-        " seconds.");
+      //  Check the state of the process
+      if (p.state() == QProcess::NotRunning)
+        break;
+      if (p.processId() == 0)
+        break;
+      LOG_ERROR("Forcefully ending diff command for: " << _script << " after " << timeElapsedSeconds << " seconds.");
+      //  Terminate the process
+      p.terminate();
       break;
     }
   }
@@ -276,6 +283,8 @@ void ScriptTest::_runProcess()
   // It would be nice if we could specify Testing.conf here to avoid having to specify it in every
   // test file (#3823).
   QProcess p;
+  p.setProcessChannelMode(QProcess::SeparateChannels);
+  p.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
   p.start(_script, QProcess::ReadOnly);
 
   while (p.waitForStarted(500) == false)
@@ -307,7 +316,14 @@ void ScriptTest::_runProcess()
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= _scriptTestTimeOutSeconds)
     {
+      //  Check the state of the process
+      if (p.state() == QProcess::NotRunning)
+        break;
+      if (p.processId() == 0)
+        break;
       LOG_ERROR("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      //  Terminate the process
+      p.terminate();
       break;
     }
   }
