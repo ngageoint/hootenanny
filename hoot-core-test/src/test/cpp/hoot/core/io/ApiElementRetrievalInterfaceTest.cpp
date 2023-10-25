@@ -44,7 +44,7 @@ public:
   ApiElementRetrievalInterfaceTest() = default;
 
   const QString overpass_url = "https://overpass-api.de/api/interpreter";
-  const QString osm_api_url = "https://www.openstreetmap.org/api/0.6/map";
+  const QString osm_api_url = "https://api.openstreetmap.org/api/0.6/map";
 
   void checkOsmQueryTest()
   {
@@ -56,8 +56,8 @@ public:
 
     std::vector<QString> osm_queries(
       {
-        "https://www.openstreetmap.org/api/0.6/way/12345/full",
-        "https://www.openstreetmap.org/api/0.6/relation/54321/full"
+        "https://api.openstreetmap.org/api/0.6/way/12345/full",
+        "https://api.openstreetmap.org/api/0.6/relation/54321/full"
       });
 
     int i = 0;
