@@ -3294,7 +3294,7 @@ collected (export).
 * Default Value: `https://overpass-api.de/api/interpreter`
 
 URL to an API (OSM or Overpass) to retrieving an missing elements in the initial data.  Can be the OSM API
-`https://www.openstreetmap.org/api/0.6/map` or Overpass API `https://overpass-api.de/api/interpreter`
+`https://api.openstreetmap.org/api/0.6/map` or Overpass API `https://overpass-api.de/api/interpreter`
 or any local OSM or Overpass APIs.
 
 === multilinestring.relation.collapser.types
@@ -6053,7 +6053,7 @@ potential projections change over time. Very handy in unit tests.
 === test.script.max.exec.time
 
 * Data Type: int
-* Default Value: `900`
+* Default Value: `600`
 
 For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
 If the script runs longer than the specified time, then it is forcefully stopped by the system. If

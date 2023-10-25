@@ -946,27 +946,8 @@
         <nd ref="-804"/>
         <nd ref="-3054"/>
         <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-260" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3054"/>
-        <nd ref="-634"/>
-        <nd ref="-635"/>
-        <nd ref="-636"/>
-        <nd ref="-637"/>
-        <nd ref="-638"/>
-        <nd ref="-639"/>
-        <nd ref="-640"/>
-        <nd ref="-641"/>
-        <nd ref="-642"/>
-        <nd ref="-643"/>
-        <nd ref="-855"/>
-        <nd ref="-644"/>
-        <nd ref="-645"/>
-        <nd ref="-646"/>
-        <nd ref="-647"/>
-        <nd ref="-648"/>
-        <nd ref="-3229"/>
-        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
     <way visible="true" id="-226" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1106"/>
@@ -1337,6 +1318,29 @@
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="D St NW"/>
+    </way>
+    <way visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3054"/>
+        <nd ref="-634"/>
+        <nd ref="-635"/>
+        <nd ref="-636"/>
+        <nd ref="-637"/>
+        <nd ref="-638"/>
+        <nd ref="-639"/>
+        <nd ref="-640"/>
+        <nd ref="-641"/>
+        <nd ref="-642"/>
+        <nd ref="-643"/>
+        <nd ref="-855"/>
+        <nd ref="-644"/>
+        <nd ref="-645"/>
+        <nd ref="-646"/>
+        <nd ref="-647"/>
+        <nd ref="-648"/>
+        <nd ref="-3229"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
     </way>
     <way visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3231"/>
@@ -2465,11 +2469,9 @@
         <tag k="name" v="Ellipse Rd NW"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-260" role=""/>
+        <member type="way" ref="-193" role=""/>
         <member type="way" ref="-261" role=""/>
         <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Lincoln Memorial Cir"/>
         <tag k="type" v="multilinestring"/>
     </relation>
 </osm>

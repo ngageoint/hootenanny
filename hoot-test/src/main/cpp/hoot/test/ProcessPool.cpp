@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 #include "ProcessPool.h"
 
@@ -68,8 +68,7 @@ void JobQueue::push(const QString& job)
 
 QString JobQueue::toString() const
 {
-  return "Name: " + _name + "; Size: " + QString::number(_jobs.size()) + "; Jobs: " +
-          hoot::StringUtils::setToString(_jobs);
+  return QString("Name: %1; Size: %2; Jobs: %3").arg(_name, QString::number(_jobs.size()), hoot::StringUtils::setToString(_jobs));
 }
 
 ProcessThread::ProcessThread(int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
@@ -111,8 +110,7 @@ QProcess* ProcessThread::createProcess()
   QString suppressFailureDetail = (_suppressFailureDetail ? "--suppress-failure-detail" : "");
   QString diff = (_printDiff ? "--diff" : "");
 
-  proc->start(QString("HootTest %1 %2 %3 --listen %4")
-              .arg(names, suppressFailureDetail, diff).arg((int)_waitTime));
+  proc->start(QString("HootTest %1 %2 %3 --listen %4").arg(names, suppressFailureDetail, diff).arg((int)_waitTime));
   return proc;
 }
 
@@ -178,8 +176,7 @@ void ProcessThread::processJobs(JobQueue* queue)
           if (output != "" && output != "." && !output.endsWith("\n"))
             output.append("\n");
         }
-        else if ((line.contains(" ERROR ") || line.contains("Failure: ")) &&
-                 !_disableFailureRetries)
+        else if ((line.contains(" ERROR ") || line.contains("Failure: ")) && !_disableFailureRetries)
         {
           ++_failures;
           line.append("\n");

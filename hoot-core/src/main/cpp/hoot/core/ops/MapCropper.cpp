@@ -501,8 +501,9 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     }
     else if (e->getElementType() == ElementType::Relation)
     {
-      //  Copy the way tags to the relation
-      e->setTags(way->getTags());
+      //  Find the way with the most nodes in the relation to retain the ID
+      long eid = 0;
+      size_t max_nodes = 0;
       //  When cropping a way that turns into a relation, one of the ways should retain the original ID
       RelationPtr newRelation = std::dynamic_pointer_cast<Relation>(e);
       const vector<RelationData::Entry>& members = newRelation->getMembers();
@@ -512,20 +513,27 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
         {
           WayPtr memberWay = map->getWay(element.getElementId().getId());
           memberWay->setPid(way->getId());
-          // It seems like it would be nice to retain the way tags here. The output looks better
-          // b/c you can see the original features that were cropped rendered correctly in JOSM.
-          // However, if tags are added here the multilinestring relations can't be removed by
-          // RemoveInvalidMultilineStringMembersVisitor b/c it expects all the members to have no
-          // information tags. Then you end up with extra relations in the output. It may be worth
-          // considering a way to reconcile these two things, as it would be nice to get the better
-          // feature rendering for the cropped features.
-          //memberWay->setTags(way->getTags());
+          // Retain the way tags here and not on the multilinestring relation
+          memberWay->setTags(way->getTags());
+          if (memberWay->getNodeCount() > max_nodes)
+          {
+            eid = memberWay->getId();
+            max_nodes = memberWay->getNodeCount();
+          }
         }
       }
+      WayPtr oldWay = std::dynamic_pointer_cast<Way>(way->clone());
       //  Replace the way with the relation element
       map->replace(way, e);
+      //  Replace the new way in the relation with the modified way
+      if (eid != 0)
+      {
+        //  Update the old way and replace the old one with the new one just created in the geometry
+        WayPtr newWay = map->getWay(eid);
+        oldWay->setNodes(newWay->getNodeIds());
+        map->replace(newWay, oldWay);
+      }
     }
-
     _numCrossingWaysKept++;
   }
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -914,9 +914,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(1941L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(239L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(56L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(419L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(76L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(21L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(417L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(78L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(19L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);

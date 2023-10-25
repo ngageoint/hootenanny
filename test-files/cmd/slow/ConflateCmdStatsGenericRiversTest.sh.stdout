@@ -1,7 +1,7 @@
-21:31:45.933 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 112) Comparing ...st/generic-rivers-out.osm and ...st/generic-rivers-out.osm...
-21:31:45.965 STATUS ...ore/io/OsmMapReaderFactory.cpp( 176) Read 481 elements from input in: 00:00.
-21:31:45.981 STATUS ...ore/io/OsmMapReaderFactory.cpp( 176) Read 481 elements from input in: 00:00.
-21:31:45.985 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 146) Map difference calculated in 00:00 total.
+15:16:50.517 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 112) Comparing ...st/generic-rivers-out.osm and ...st/generic-rivers-out.osm...
+15:16:50.561 STATUS ...ore/io/OsmMapReaderFactory.cpp( 189) Read 481 elements from input in: 00:00.
+15:16:50.588 STATUS ...ore/io/OsmMapReaderFactory.cpp( 189) Read 481 elements from input in: 00:00.
+15:16:50.599 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 146) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	338	176	448	
 Ways	14	15	32	
@@ -18,11 +18,11 @@ Unique Feature Tags	22	18	51
 Unique Feature Tag Keys	6	4	20	
 Least Tags on a Feature	4	3	0	
 Most Tags on a Feature	6	4	9	
-Average Tags Per Feature	5.142857142857143	3.133333333333333	5.375	
+Average Tags Per Feature	5.142857142857143	3.133333333333333	5.46875	
 Least Information Tags on a Feature	3	3	0	
 Most Information Tags on a Feature	5	4	8	
-Average Information Tags Per Feature	4.142857142857143	3.133333333333333	4.9375	
-Features with Names	4	2	10	
+Average Information Tags Per Feature	4.142857142857143	3.133333333333333	5.03125	
+Features with Names	4	2	11	
 Multi-Use Features	0	0	0	
 Features with Addresses	0	0	0	
 Total Addresses	0	0	0	
@@ -64,7 +64,7 @@ Percentage of Rivers Marked for Review	0	0	6.25
 Percentage of Unmatched Rivers From Map 1	100	0	0	
 Percentage of Unmatched Rivers From Map 2	0	100	56.25	
 Percentage of Unmatched Rivers	100	100	56.25	
-Translated Populated Tags	14	92	215	
+Translated Populated Tags	14	92	216	
 Difference Between Total Features in Output and Total Features in Inputs			3	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			10.3448275862069	
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			100	
@@ -73,10 +73,10 @@ Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			1
 Percentage of Length of Map 1 Rivers Matched With Map 2 Rivers			99.99999999680529	
 Percentage of Length of Map 1 Rivers Not Matched With Map 2 Rivers			0	
 Percentage of Length of Map 2 Rivers Not Matched With Map 1 Rivers			54.19652446284084	
-Calculate Stats for Input 1 Time (sec)				1.214991807937622
-Calculate Stats for Input 2 Time (sec)				0.892003059387207
-Apply Pre-Conflate Ops Time (sec)				0.03232502937316895
-Apply Post-Conflate Ops Time (sec)				0.01352500915527344
-Calculate Stats for Output Time (sec)				0.8231980800628662
+Calculate Stats for Input 1 Time (sec)				1.216032028198242
+Calculate Stats for Input 2 Time (sec)				0.9618699550628662
+Apply Pre-Conflate Ops Time (sec)				0.07422804832458496
+Apply Post-Conflate Ops Time (sec)				0.03351402282714844
+Calculate Stats for Output Time (sec)				1.060007095336914
 
-21:31:45.529 STATUS ...pp/hoot/core/util/Progress.cpp(  80) Conflate (100%): Conflation job completed in 00:02 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
+15:16:50.075 STATUS ...pp/hoot/core/util/Progress.cpp(  80) Conflate (100%): Conflation job completed in 00:03 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
