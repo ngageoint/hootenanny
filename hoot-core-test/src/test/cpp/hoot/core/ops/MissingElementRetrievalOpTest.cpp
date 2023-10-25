@@ -52,7 +52,7 @@ public:
   }
 
   const QString overpass_url = "https://overpass-api.de/api/interpreter";
-  const QString osm_api_url = "https://www.openstreetmap.org/api/0.6/map";
+  const QString osm_api_url = "https://api.openstreetmap.org/api/0.6/map";
 
   /** NOTE: This test reaches out to the public OSM API to retrieve all nodes and ways for a single relation */
   void runMissingElementOsmApiTest()

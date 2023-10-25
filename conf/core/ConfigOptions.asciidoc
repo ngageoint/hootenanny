@@ -3294,7 +3294,7 @@ collected (export).
 * Default Value: `https://overpass-api.de/api/interpreter`
 
 URL to an API (OSM or Overpass) to retrieving an missing elements in the initial data.  Can be the OSM API
-`https://www.openstreetmap.org/api/0.6/map` or Overpass API `https://overpass-api.de/api/interpreter`
+`https://api.openstreetmap.org/api/0.6/map` or Overpass API `https://overpass-api.de/api/interpreter`
 or any local OSM or Overpass APIs.
 
 === multilinestring.relation.collapser.types
