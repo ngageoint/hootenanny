@@ -1,2 +1,0 @@
-Place conflate case tests which need to run serially in this directory. Generally, that includes 
-tests which make changes to the global settings via hoot.set.
