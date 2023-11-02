@@ -59,6 +59,7 @@ void PhoneNumberLocator::setRegionCode(const QString& code)
   if (!_regionCode.isEmpty())
   {
     std::set<std::string> regions;
+    std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
     PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
     if (regions.find(_regionCode.toStdString()) == regions.end())
       throw HootException("Invalid phone number region code: " + _regionCode);
@@ -70,23 +71,17 @@ QString PhoneNumberLocator::getLocationDescription(const QString& phoneNumber) c
   LOG_VART(phoneNumber);
 
   PhoneNumber parsedPhoneNumber;
-  PhoneNumberUtil::ErrorType error =
-    PhoneNumberUtil::GetInstance()->Parse(phoneNumber.toStdString(), _regionCode.toStdString(), &parsedPhoneNumber);
+  std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
+  PhoneNumberUtil::ErrorType error = PhoneNumberUtil::GetInstance()->Parse(phoneNumber.toStdString(), _regionCode.toStdString(), &parsedPhoneNumber);
   LOG_VART(error);
   if (error == PhoneNumberUtil::ErrorType::NO_PARSING_ERROR)
   {
     const icu::Locale locale = icu::Locale("en", "US");
     QString locationDescription;
     if (!_regionCode.isEmpty())
-    {
-      locationDescription =
-        QString::fromStdString(_geocoder.GetDescriptionForNumber(parsedPhoneNumber, locale, _regionCode.toStdString()));
-    }
+      locationDescription = QString::fromStdString(_geocoder.GetDescriptionForNumber(parsedPhoneNumber, locale, _regionCode.toStdString()));
     else
-    {
-      locationDescription =
-        QString::fromStdString(_geocoder.GetDescriptionForNumber(parsedPhoneNumber, locale));
-    }
+      locationDescription = QString::fromStdString(_geocoder.GetDescriptionForNumber(parsedPhoneNumber, locale));
     _numLocated++;
     LOG_VART(locationDescription);
     return locationDescription;

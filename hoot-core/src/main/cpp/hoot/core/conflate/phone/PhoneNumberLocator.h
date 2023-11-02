@@ -29,6 +29,7 @@
 #define PHONE_NUMBER_LOCATOR_H
 
 // Hoot
+#include <hoot/core/conflate/phone/PhoneNumberBase.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -41,7 +42,7 @@ namespace hoot
 /**
  * Attempts to determine the location of a phone number down to the city level using libphonenumber
  */
-class PhoneNumberLocator : public Configurable
+class PhoneNumberLocator : public PhoneNumberBase, public Configurable
 {
 public:
 

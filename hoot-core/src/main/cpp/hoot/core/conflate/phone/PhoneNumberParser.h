@@ -29,6 +29,7 @@
 #define PHONE_NUMBER_PARSER_H
 
 // Hoot
+#include <hoot/core/conflate/phone/PhoneNumberBase.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -47,7 +48,7 @@ struct ElementPhoneNumber
  *
  * Looks at tag keys containing "phone" by default and can be expanded with additional tag keys.
  */
-class PhoneNumberParser : public Configurable
+class PhoneNumberParser : public PhoneNumberBase, public Configurable
 {
 public:
 

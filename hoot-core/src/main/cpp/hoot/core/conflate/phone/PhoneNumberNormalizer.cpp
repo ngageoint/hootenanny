@@ -59,6 +59,7 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
   if (!code.isEmpty())
   {
     std::set<std::string> regions;
+    std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
     PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
     if (regions.find(code.toStdString()) == regions.end())
       throw IllegalArgumentException("Invalid phone number region code: " + code);
@@ -108,6 +109,7 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
       const QString tagValue = it.value().toUtf8().trimmed().simplified();
       LOG_VART(tagValue);
 
+      std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
       if (!_searchInText)
       {
         if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(tagValue.toStdString(), _regionCode.toStdString()))
