@@ -42,7 +42,7 @@ protected:
 
   PhoneNumberBase() = default;
   ~PhoneNumberBase() = default;
-
+  /** Shared mutex used for calls to libphonenumber */
   std::mutex& getPhoneNumberMutex() const
   {
     static std::mutex m;

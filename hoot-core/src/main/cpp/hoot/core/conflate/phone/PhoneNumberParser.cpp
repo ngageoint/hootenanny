@@ -33,9 +33,10 @@
 #include <hoot/core/util/StringUtils.h>
 
 // libphonenumber
-#include <phonenumbers/phonenumberutil.h>
-#include <phonenumbers/phonenumbermatcher.h>
 #include <phonenumbers/phonenumbermatch.h>
+#include <phonenumbers/phonenumbermatcher.h>
+#include <phonenumbers/phonenumberutil.h>
+
 using namespace i18n::phonenumbers;
 
 namespace hoot

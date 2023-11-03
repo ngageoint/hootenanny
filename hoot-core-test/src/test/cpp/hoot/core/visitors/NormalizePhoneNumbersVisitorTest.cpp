@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -34,6 +34,7 @@
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
+
 using namespace i18n::phonenumbers;
 
 namespace hoot
@@ -51,10 +52,9 @@ class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 
 public:
 
-  NormalizePhoneNumbersVisitorTest() :
-  HootTestFixture(
-    "test-files/visitors/NormalizePhoneNumbersVisitorTest/",
-    "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
+  NormalizePhoneNumbersVisitorTest()
+    : HootTestFixture("test-files/visitors/NormalizePhoneNumbersVisitorTest/",
+                      "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
   {
   }
 
@@ -109,24 +109,19 @@ public:
     NormalizePhoneNumbersVisitor uut;
 
     uut._phoneNumberNormalizer.setFormat("E164");
-    CPPUNIT_ASSERT_EQUAL(
-      PhoneNumberUtil::PhoneNumberFormat::E164, uut._phoneNumberNormalizer._format);
+    CPPUNIT_ASSERT_EQUAL(PhoneNumberUtil::PhoneNumberFormat::E164, uut._phoneNumberNormalizer._format);
 
     uut._phoneNumberNormalizer.setFormat("INTERNATIONAL");
-    CPPUNIT_ASSERT_EQUAL(
-      PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL, uut._phoneNumberNormalizer._format);
+    CPPUNIT_ASSERT_EQUAL(PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL, uut._phoneNumberNormalizer._format);
 
     uut._phoneNumberNormalizer.setFormat("NATIONAL");
-    CPPUNIT_ASSERT_EQUAL(
-      PhoneNumberUtil::PhoneNumberFormat::NATIONAL, uut._phoneNumberNormalizer._format);
+    CPPUNIT_ASSERT_EQUAL(PhoneNumberUtil::PhoneNumberFormat::NATIONAL, uut._phoneNumberNormalizer._format);
 
     uut._phoneNumberNormalizer.setFormat("RFC3966");
-    CPPUNIT_ASSERT_EQUAL(
-      PhoneNumberUtil::PhoneNumberFormat::RFC3966, uut._phoneNumberNormalizer._format);
+    CPPUNIT_ASSERT_EQUAL(PhoneNumberUtil::PhoneNumberFormat::RFC3966, uut._phoneNumberNormalizer._format);
 
     uut._phoneNumberNormalizer.setFormat("rfc3966");
-    CPPUNIT_ASSERT_EQUAL(
-      PhoneNumberUtil::PhoneNumberFormat::RFC3966, uut._phoneNumberNormalizer._format);
+    CPPUNIT_ASSERT_EQUAL(PhoneNumberUtil::PhoneNumberFormat::RFC3966, uut._phoneNumberNormalizer._format);
 
     QString exceptionMsg;
     try
@@ -137,8 +132,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Invalid phone number format: blah").toStdString(), exceptionMsg.toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("Invalid phone number format: blah").toStdString(), exceptionMsg.toStdString());
   }
 
   void runInvalidRegionCodeTest()
@@ -156,9 +150,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Empty phone number region code.").toStdString(),
-      exceptionMsg.toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("Empty phone number region code.").toStdString(), exceptionMsg.toStdString());
 
     try
     {
@@ -168,9 +160,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Invalid phone number region code: BLAH").toStdString(),
-      exceptionMsg.toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("Invalid phone number region code: BLAH").toStdString(), exceptionMsg.toStdString());
   }
 
   void runConfigureTest()
@@ -203,5 +193,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NormalizePhoneNumbersVisitorTest, "quick");
 
 }
-
-

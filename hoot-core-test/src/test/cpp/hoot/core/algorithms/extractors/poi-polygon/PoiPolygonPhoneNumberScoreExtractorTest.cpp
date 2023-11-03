@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -53,8 +53,7 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "(123) 456 7890");
@@ -67,8 +66,7 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "(123) 456 7890");
@@ -90,8 +88,7 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "blah");
@@ -104,8 +101,7 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("source:phone", "(123) 456 7890");
@@ -133,8 +129,7 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("note", "(123) 456 7890");
@@ -152,13 +147,10 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
-    node1->getTags().set(
-      "phone",
-      "this is some text with a phone number: (123) 456 7890; and here's another one: 123 456 7890");
+    node1->getTags().set("phone", "this is some text with a phone number: (123) 456 7890; and here's another one: 123 456 7890");
     way1->getTags().set("phone", "123 456 7890");
 
     uut._phoneNumberParser.setRegionCode("US");

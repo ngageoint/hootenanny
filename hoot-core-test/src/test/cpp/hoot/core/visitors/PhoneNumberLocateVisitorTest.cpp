@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/PhoneNumberLocateVisitor.h>
@@ -46,10 +46,9 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 
 public:
 
-  PhoneNumberLocateVisitorTest() :
-  HootTestFixture(
-    "test-files/visitors/PhoneNumberLocateVisitorTest/",
-    "test-output/visitors/PhoneNumberLocateVisitorTest/")
+  PhoneNumberLocateVisitorTest()
+    : HootTestFixture("test-files/visitors/PhoneNumberLocateVisitorTest/",
+                      "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
     setResetType(ResetEnvironment);
   }
