@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PHONE_NUMBER_PARSER_H
 #define PHONE_NUMBER_PARSER_H
 
 // Hoot
+#include <hoot/core/conflate/phone/PhoneNumberBase.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -47,7 +48,7 @@ struct ElementPhoneNumber
  *
  * Looks at tag keys containing "phone" by default and can be expanded with additional tag keys.
  */
-class PhoneNumberParser : public Configurable
+class PhoneNumberParser : public PhoneNumberBase, public Configurable
 {
 public:
 

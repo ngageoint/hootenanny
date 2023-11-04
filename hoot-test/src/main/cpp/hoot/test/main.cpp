@@ -488,19 +488,12 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
     vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT,
                                                        hideDisableTests, suppressFailureDetail, false));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
-    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases/serial", suppressFailureDetail,
-                                                             printValidationReportDiff, hideDisableTests, true));
   }
   //  Test cases go last because of the way they change the environment.
   if (t & CASE_TESTS)
   {
     vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", suppressFailureDetail,
                                                              printValidationReportDiff, hideDisableTests));
-    if (t & SERIAL)
-    {
-      vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases/serial", suppressFailureDetail,
-                                                               printValidationReportDiff, hideDisableTests, true));
-    }
   }
   // If test output validation is enabled, then we want to enable only those tests that use it. At
   // this time that includes all case tests (includes serial) and selected script tests from the
@@ -519,8 +512,6 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
     // Run case tests last for the reason noted previously.
     vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", suppressFailureDetail,
                                                              printValidationReportDiff, hideDisableTests));
-    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases/serial", suppressFailureDetail,
-                                                             printValidationReportDiff, hideDisableTests, true));
   }
 }
 

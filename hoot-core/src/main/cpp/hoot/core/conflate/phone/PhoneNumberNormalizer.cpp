@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "PhoneNumberNormalizer.h"
@@ -35,6 +35,7 @@
 // libphonenumber
 #include <phonenumbers/phonenumbermatcher.h>
 #include <phonenumbers/phonenumbermatch.h>
+
 using namespace i18n::phonenumbers;
 
 namespace hoot
@@ -59,6 +60,7 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
   if (!code.isEmpty())
   {
     std::set<std::string> regions;
+    std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
     PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
     if (regions.find(code.toStdString()) == regions.end())
       throw IllegalArgumentException("Invalid phone number region code: " + code);
@@ -108,6 +110,7 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
       const QString tagValue = it.value().toUtf8().trimmed().simplified();
       LOG_VART(tagValue);
 
+      std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
       if (!_searchInText)
       {
         if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(tagValue.toStdString(), _regionCode.toStdString()))

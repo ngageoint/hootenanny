@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -43,8 +43,8 @@ class PhoneNumberCountVisitorTest : public HootTestFixture
 
 public:
 
-  PhoneNumberCountVisitorTest() :
-  HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/", UNUSED_PATH)
+  PhoneNumberCountVisitorTest()
+    : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/", UNUSED_PATH)
   {
   }
 
@@ -69,7 +69,7 @@ public:
     settings.set(ConfigOptions::getPhoneNumberRegionCodeKey(), "US");
     settings.set(ConfigOptions::getPhoneNumberAdditionalTagKeysKey(), QStringList());
     settings.set(ConfigOptions::getPhoneNumberSearchInTextKey(), false);
-    uut.setConfiguration(/*conf()*/settings);
+    uut.setConfiguration(settings);
 
     map->visitRo(uut);
 
@@ -80,5 +80,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberCountVisitorTest, "quick");
 
 }
-
-

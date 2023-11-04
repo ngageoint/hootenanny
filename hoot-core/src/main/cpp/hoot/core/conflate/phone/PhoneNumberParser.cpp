@@ -33,9 +33,10 @@
 #include <hoot/core/util/StringUtils.h>
 
 // libphonenumber
-#include <phonenumbers/phonenumberutil.h>
-#include <phonenumbers/phonenumbermatcher.h>
 #include <phonenumbers/phonenumbermatch.h>
+#include <phonenumbers/phonenumbermatcher.h>
+#include <phonenumbers/phonenumberutil.h>
+
 using namespace i18n::phonenumbers;
 
 namespace hoot
@@ -61,6 +62,7 @@ void PhoneNumberParser::setRegionCode(const QString& code)
   if (!_regionCode.isEmpty())
   {
     std::set<std::string> regions;
+    std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
     PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
     if (regions.find(_regionCode.toStdString()) == regions.end())
       throw HootException("Invalid phone number region code: " + _regionCode);
@@ -128,6 +130,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
         {
           // IsPossibleNumber is a fairly quick check (IsValidNumber is more strict and a little
           // more expensive)
+          std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
           if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(tagValue.toStdString(), _regionCode.toStdString()))
             _addPhoneNumber(element.getTags().getName(), tagKey, tagValue, parsedPhoneNums);
         }
@@ -135,6 +138,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
         {
           // This lets us search through text that may have other things in it besides phone
           // numbers.
+          std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
           PhoneNumberMatcher numberFinder(
             *PhoneNumberUtil::GetInstance(),
             tagValue.toStdString(),

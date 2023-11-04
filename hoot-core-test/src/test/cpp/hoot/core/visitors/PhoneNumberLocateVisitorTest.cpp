@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/PhoneNumberLocateVisitor.h>
@@ -46,10 +46,9 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 
 public:
 
-  PhoneNumberLocateVisitorTest() :
-  HootTestFixture(
-    "test-files/visitors/PhoneNumberLocateVisitorTest/",
-    "test-output/visitors/PhoneNumberLocateVisitorTest/")
+  PhoneNumberLocateVisitorTest()
+    : HootTestFixture("test-files/visitors/PhoneNumberLocateVisitorTest/",
+                      "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
     setResetType(ResetEnvironment);
   }
@@ -57,31 +56,23 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-      false,
-      Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "BasicTest.osm", false, Status::Unknown1);
 
     PhoneNumberLocateVisitor uut;
     uut._phoneNumberLocator.setRegionCode("US");
     map->visitRw(uut);
 
-    const QString outputFile = _outputPath + "out.osm";
+    const QString outputFile = _outputPath + "BasicTestOutput.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberLocator.getNumLocated());
-    HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "BasicTestExpected.osm", outputFile);
   }
 
   void runConfigurationTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-      false,
-      Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "ConfigTest.osm", false, Status::Unknown1);
 
     PhoneNumberLocateVisitor uut;
     Settings settings;
@@ -89,16 +80,15 @@ public:
     uut.setConfiguration(settings);
     map->visitRw(uut);
 
-    const QString outputFile = _outputPath + "out.osm";
+    const QString outputFile = _outputPath + "ConfigTestOutput.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberLocator.getNumLocated());
-    HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "ConfigTestExpected.osm", outputFile);
   }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberLocateVisitorTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberLocateVisitorTest, "serial");
 
 }
 

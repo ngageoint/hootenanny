@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiPolygonPhoneNumberScoreExtractor.h"
@@ -72,9 +72,8 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
     for (const auto& polyNumber : qAsConst(polyPhoneNumbers))
     {
       _matchAttemptMade = true;
-      PhoneNumberUtil::MatchType numberMatchType =
-        PhoneNumberUtil::GetInstance()->IsNumberMatchWithTwoStrings(
-          poiNumber.tagValue.toStdString(), polyNumber.tagValue.toStdString());
+      std::lock_guard<std::mutex> libphonenumber_lock(getPhoneNumberMutex());
+      PhoneNumberUtil::MatchType numberMatchType = PhoneNumberUtil::GetInstance()->IsNumberMatchWithTwoStrings(poiNumber.tagValue.toStdString(), polyNumber.tagValue.toStdString());
       LOG_VART(numberMatchType);
       if (numberMatchType > PhoneNumberUtil::MatchType::NO_MATCH)
       {
