@@ -77,6 +77,8 @@ void RubberSheetCreator::create(const QString& tiepoints, const QString& input, 
         {
           lat_lon[index] = coord.second.get_value<double>();
           index++;
+          if (index >= 2)
+            break;
         }
         //  Convert the array to a coordinate
         coords.emplace_back(lat_lon[1], lat_lon[0]);
@@ -84,6 +86,9 @@ void RubberSheetCreator::create(const QString& tiepoints, const QString& input, 
     }
     //  Reproject the tie-points to planar
     std::vector<geos::geom::Coordinate> post = MapProjector::project(coords, prepojection, projection);
+    //  Make sure that they post vector has an even number of coordinates
+    if (post.size() % 2 != 0)
+      post.pop_back();
     //  Create the tie-point vector for the rubber sheet
     for (size_t i = 0; i < post.size(); i += 2)
       ties.emplace_back(post[i], post[i + 1]);
