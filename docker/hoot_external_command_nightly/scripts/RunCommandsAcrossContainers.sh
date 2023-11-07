@@ -37,7 +37,7 @@ run-translate-directory()
 # Translate a file
 run-translate()
 {
-    hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT $FILE_NAME $OUTPUT_FILE
+    hoot convert -D ogr.append.data=true -D schema.translation.script=$TRANSLATION_SCRIPT $FILE_NAME $OUTPUT_FILE
 }
 
 # Import data from overpass instance using specific bounding box coordinates
