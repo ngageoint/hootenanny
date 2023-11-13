@@ -44,19 +44,39 @@ run-translate()
 run-overpass()
 {
     hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
-        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST -D writer.thematic.structure=$THEMATIC_STRUCT \
+        -D reader.http.bbox.max.download.size=32.0 \
+        -D reader.http.bbox.thread.count=15 \
+        -D writer.include.id.tag=true \
+        -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" ${OUTPUT_GPKG} 
 
     hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
+        -D reader.http.bbox.max.download.size=32.0 \
+        -D reader.http.bbox.thread.count=15 \
+        -D writer.include.id.tag=true \
+        -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" $OUTPUT_OSM
 }
 
 # Import data from overpass instance using a bounding box file
 run-overpass-bounds()
 {
+    hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST -D writer.thematic.structure=$THEMATIC_STRUCT \
+        -D reader.http.bbox.max.download.size=32.0 \
+        -D reader.http.bbox.thread.count=15 \
+        -D writer.include.id.tag=true \
+        -D writer.crop.features.crossing.bounds=true \
+        "${OP_URL}" ${OUTPUT_GPKG}
+
     hoot convert -D bounds.input.file=$BOUNDING_BOX -D overpass.api.query.path=$OQF \
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
+        -D reader.http.bbox.max.download.size=32.0 \
+        -D reader.http.bbox.thread.count=15 \
+        -D writer.include.id.tag=true \
+        -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" $OUTPUT_OSM
 }
 
@@ -106,6 +126,7 @@ case "$1" in
         OUTPUT_GPKG=${11}
         OUTPUT_OSM=${12}
         OVERPASS_API_HOST=${13}
+        THEMATIC_STRUCT=${14}
         run-overpass ;;
     -b)
         BOUNDING_BOX=$2
@@ -117,6 +138,7 @@ case "$1" in
         OUTPUT_GPKG=$8
         OUTPUT_OSM=$9
         OVERPASS_API_HOST=${10}
+        THEMATIC_STRUCT=${11}
         run-overpass-bounds ;;
     -e)
         TRANSLATE_SCRIPT=$2
