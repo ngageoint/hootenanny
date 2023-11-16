@@ -1698,7 +1698,7 @@ enc311.rules = {
   'seamark:airport:category':'CATAIR','seamark:bridge:category':'CATBRG','seamark:cable_area:category':'CATCBL',
   'seamark:cable_overhead:category':'CATCBL','seamark:cable_submarine:category':'CATCBL','seamark:beacon_cardinal:category':'CATCAM',
   'seamark:buoy_cardinal:category':'CATCAM','seamark:dumping_ground:category':'CATDPG','seamark:harbour:category':'CATHAF',
-  'seamark:hulf:category':'CATHLK','seamark:beacon_lateral:category':'CATLAM','seamark:buoy_lateral:category':'CATLAM',
+  'seamark:hulk:category':'CATHLK','seamark:beacon_lateral:category':'CATLAM','seamark:buoy_lateral:category':'CATLAM',
   'seamark:light:category':'CATLIT','seamark:landmark:category':'CATLMK','seamark:military_area:category':'CATMPA',
   'seamark:platform:category':'CATOFP','seamark:pipeline_area:category':'CATPIP','seamark:pipeline_overhead:category':'CATPIP',
   'seamark:pipeline_submarine:category':'CATPIP','seamark:restricted_area:category':'CATREA','seamark:radio_station:category':'CATROS',

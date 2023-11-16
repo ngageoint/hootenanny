@@ -3271,7 +3271,7 @@ tds71 = {
             }
           }
 
-          // If we are using the TDS structre, fill the rest of the unused attrs in the schema
+          // If we are using the TDS structure, fill the rest of the unused attrs in the schema
           if (tds71.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds71.thematicGroupList[gFcode];

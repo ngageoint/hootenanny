@@ -110,6 +110,7 @@ fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => file.isDirectory()
                   translationsMap.toogr[fmt.name] = new hoot.SchemaTranslationOp({
                     'schema.translation.script': dirName + fmt.exportPath,
                     'schema.translation.direction':'toogr'});
+
                   translationsMap.toosm[fmt.name] = new hoot.SchemaTranslationOp({
                     'schema.translation.script': dirName + fmt.importPath,
                     'schema.translation.direction':'toosm'});

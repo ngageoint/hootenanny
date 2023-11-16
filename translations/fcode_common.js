@@ -194,7 +194,8 @@ fcodeCommon = {
       ['F_CODE','AQ055','bridge:pylon','yes'], // Bridge Tower/Bridge Pylon
       ['F_CODE','AQ056','bridge:pier','yes'], // Bridge Pier
       ['F_CODE','AQ059','route_change','yes'], // Transportation Route Characteristic Change
-      ['F_CODE','AQ060','control_tower','yes'], // Control Tower
+      // ['F_CODE','AQ060','control_tower','yes'], // Control Tower
+      ['F_CODE','AQ060','service','aircraft_control'], // Control Tower
       ['F_CODE','AQ062','crossing_point','yes'], // Crossing
       ['F_CODE','AQ063','man_made','causeway'], // Causeway Structure
       ['F_CODE','AQ065','tunnel','culvert'], // Culvert
