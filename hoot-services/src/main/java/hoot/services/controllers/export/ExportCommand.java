@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -45,8 +45,13 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.UnTARFileCommand;
 import hoot.services.models.db.Users;
 
+// Temp to get some output
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class ExportCommand extends ExternalCommand {
     private final ExportParams params;
+    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
 
     ExportCommand(String jobId, ExportParams exportParams) {
         super(jobId);
@@ -81,14 +86,14 @@ class ExportCommand extends ExternalCommand {
         super.configureCommand(command, substitutionMap, caller);
     }
 
-    //Appends data to a blank FGDB. The template is either stored with translation or with the "local" ones.
+    //Appends data to a blank fgdb. The template is either stored with translation or with the "local" ones.
     private void appendToFGDB() {
 
         // Split the translation string: "translations/TDSv71.js"
         String[] tTrans = params.getTranslation().split("/");
         String templateName = tTrans[1].replace(".js",".tgz");
 
-        // See if the translation has a template
+        // See if the translation includes a template
         File templateHome = new File(new File(HOME_FOLDER, tTrans[0]), "template");
         if (!templateHome.exists()) {
             // Use the "default" location
@@ -99,6 +104,7 @@ class ExportCommand extends ExternalCommand {
         File exportTemplate = new File(templateHome, templateName);
 
         if (exportTemplate.exists()) {
+            logger.info("Export: FGDB append using template {}",templateName);
             File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "." + params.getOutputType().toLowerCase());
             try {
                 FileUtils.forceMkdir(outputDir);
