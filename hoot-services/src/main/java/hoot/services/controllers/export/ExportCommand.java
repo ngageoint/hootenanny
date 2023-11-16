@@ -47,7 +47,6 @@ import hoot.services.models.db.Users;
 
 class ExportCommand extends ExternalCommand {
     private final ExportParams params;
-    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
 
     ExportCommand(String jobId, ExportParams exportParams) {
         super(jobId);
