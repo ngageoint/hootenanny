@@ -181,7 +181,7 @@ private:
    * @param data Response from API to write to file
    * @param name Name of file to write in $HOOT_HOME/tmp/
    */
-  void _writeDebugMap(const QString& data, const QString& name);
+  void _writeDebugMap(const QByteArray& data, const QString& name);
   /**
    * @brief logNetworkError Function to log an unknown network request error
    * @param request Network request object

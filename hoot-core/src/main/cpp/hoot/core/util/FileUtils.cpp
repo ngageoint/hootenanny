@@ -156,6 +156,28 @@ void FileUtils::writeFully(const QString& path, const QString& text)
   outFile.close();
 }
 
+void FileUtils::writeFully(const QString& path, const QByteArray& text)
+{
+  QFile outFile(path);
+  QFileInfo fi(outFile);
+  QDir dir = fi.dir();
+  //  Attempt to create the directory if it doesn't exist
+  if (!dir.exists())
+    makeDir(dir.absolutePath());
+  //  Delete the previous file
+  if (outFile.exists() && !outFile.remove())
+    throw HootException("Unable to remove file: " + path);
+  //  Open to write
+  if (!outFile.open(QFile::WriteOnly | QFile::Text))
+    throw HootException("Error opening file: " + path);
+  //  Write a UTF-8 file
+  QTextStream out(&outFile);
+  out.setCodec("UTF-8");
+  out << text;
+  out.flush();
+  outFile.close();
+}
+
 long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());

@@ -319,7 +319,7 @@ void ParallelBoundedApiReader::_process()
             _resultsQueue.emplace(request.getResponseContent());
             _totalResults++;
             //  Write out a "debug map" for each result that comes in
-//TODO: FIX ME            _writeDebugMap(result, "bounded-reader-result");
+            _writeDebugMap(request.getResponseContent(), "bounded-reader-result");
             //  Reset the timeout because this thread has successfully received a response
             timeout = 0;
             //  Update the user status
@@ -435,7 +435,7 @@ void ParallelBoundedApiReader::_process()
   }
 }
 
-void ParallelBoundedApiReader::_writeDebugMap(const QString& data, const QString& name)
+void ParallelBoundedApiReader::_writeDebugMap(const QByteArray& data, const QString& name)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
