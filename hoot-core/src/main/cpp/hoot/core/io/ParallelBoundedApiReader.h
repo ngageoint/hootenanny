@@ -92,7 +92,7 @@ public:
    * @param result Single, full query result (output)
    * @return True if there is a result to return, false otherwise
    */
-  bool getSingleResult(QString& result);
+  bool getSingleResult(QByteArray& result);
   /**
    * @brief hasMoreResults
    * @return True if there are more results to process
@@ -161,7 +161,7 @@ protected:
    * @param error
    * @return
    */
-  bool _isQueryError(const QString& result, QString& error) const;
+  bool _isQueryError(const QByteArray& result, QString& error) const;
 
   std::shared_ptr<geos::geom::Geometry> _getBoundingPoly() const { return _boundingPoly; }
   void _setBoundingPoly(const std::shared_ptr<geos::geom::Geometry>& poly);
@@ -181,7 +181,7 @@ private:
    * @param data Response from API to write to file
    * @param name Name of file to write in $HOOT_HOME/tmp/
    */
-  void _writeDebugMap(const QString& data, const QString& name);
+  void _writeDebugMap(const QByteArray& data, const QString& name);
   /**
    * @brief logNetworkError Function to log an unknown network request error
    * @param request Network request object
@@ -193,11 +193,11 @@ private:
    */
   void _splitJob(const ParallelApiJobPtr& job);
 
-  /** List of result strings, one for each HTTP response */
-  QStringList _resultsList;
+  /** Queue of byte arrays, one for each HTTP response */
+  std::queue<QByteArray> _resultsQueue;
   /** Total number of results received, should match _totalEnvelopes at the end to ensure all data has arrived */
   int _totalResults;
-  /** Mutex guarding the results list */
+  /** Mutex guarding the results queue */
   std::mutex _resultsMutex;
   /** Essentially the work queue of bounding boxes that the threads query from */
   std::queue<ParallelApiJobPtr> _workQueue;

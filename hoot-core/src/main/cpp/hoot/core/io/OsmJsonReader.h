@@ -210,6 +210,8 @@ protected:
    */
   void _loadJSON(const QString& jsonStr);
 
+  void _loadJSON(const QByteArray& json);
+
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param in_stream Stream to read the JSON from

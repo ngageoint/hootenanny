@@ -602,7 +602,7 @@ void verifyValidationConfig()
   if (ConfigOptions().getTestValidationEnable())
   {
     if (!QFile::exists(testValidationEnabledFile))
-      FileUtils::writeFully(testValidationEnabledFile, "");
+      FileUtils::writeFully(testValidationEnabledFile, QString(""));
   }
   else
   {

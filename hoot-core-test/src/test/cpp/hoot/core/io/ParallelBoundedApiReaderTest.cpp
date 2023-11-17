@@ -59,7 +59,7 @@ public:
         "\"remark\": \"runtime error: Query ran out of memory in \"query\" at line 1. It would need at least 95 MB of RAM to continue.\""
         "}";
     QString error;
-    CPPUNIT_ASSERT(uut._isQueryError(json_error_result, error));
+    CPPUNIT_ASSERT(uut._isQueryError(json_error_result.toUtf8(), error));
     HOOT_STR_EQUALS(expected_result, error);
 
     QString xml_error_result =
@@ -70,7 +70,7 @@ public:
         "<remark> runtime error: Query ran out of memory in \"query\" at line 1. It would need at least 95 MB of RAM to continue. </remark>"
         "</osm>";
     error = "";
-    CPPUNIT_ASSERT(uut._isQueryError(xml_error_result, error));
+    CPPUNIT_ASSERT(uut._isQueryError(xml_error_result.toUtf8(), error));
     HOOT_STR_EQUALS(expected_result, error);
 
     /** This data caused infinite splitting in JOSM because of the 'remark' tag */
@@ -85,7 +85,7 @@ public:
         "\"elements\": ["
         "\"{\"type\": \"node\",\"id\": 3767576613,\"lat\": 47.8026036,\"lon\": 18.9633523,\"tags\": {\"name\": \"Nagyne Marika\",\"remark\": \"2012-2014\"}}]}}";
     error = "";
-    CPPUNIT_ASSERT(!uut._isQueryError(json_success, error));
+    CPPUNIT_ASSERT(!uut._isQueryError(json_success.toUtf8(), error));
     HOOT_STR_EQUALS("", error);
   }
 
