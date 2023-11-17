@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -45,9 +45,13 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.UnTARFileCommand;
 import hoot.services.models.db.Users;
 
+// Temp to get some output
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class ExportCommand extends ExternalCommand {
     private final ExportParams params;
+    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
 
     ExportCommand(String jobId, ExportParams exportParams) {
         super(jobId);
@@ -64,6 +68,7 @@ class ExportCommand extends ExternalCommand {
         if (params.getTranslation() == null || params.getTranslation().isEmpty()) {
             params.setTranslation("translations/RenderDb.js");
         }
+
         if (params.getAppend()) {
             appendToFGDB();
         }
@@ -81,26 +86,25 @@ class ExportCommand extends ExternalCommand {
         super.configureCommand(command, substitutionMap, caller);
     }
 
+    //Appends data to a blank fgdb. The template is either stored with translation or with the "local" ones.
     private void appendToFGDB() {
-        //Appends data to a blank fgdb. The template is stored with the fouo translations.
 
-        //$(HOOT_HOME)/translations-local/template
-        File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
+        // Split the translation string: "translations/TDSv71.js"
+        String[] tTrans = params.getTranslation().split("/");
+        String templateName = tTrans[1].replace(".js",".tgz");
 
-        String translation = params.getTranslation();
-        File tdsTemplate = null;
-
-        if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
-            tdsTemplate = new File(templateHome, "tds61.tgz");
-        }
-        else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
-            tdsTemplate = new File(templateHome, "tds40.tgz");
-        }
-        else if (translation.equalsIgnoreCase("translations/TDSv70.js")) {
-            tdsTemplate = new File(templateHome, "tds70.tgz");
+        // See if the translation includes a template
+        File templateHome = new File(new File(HOME_FOLDER, tTrans[0]), "template");
+        if (!templateHome.exists()) {
+            // Use the "default" location
+            // Todo: This should probably be a config variable
+            templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
         }
 
-        if ((tdsTemplate != null) && tdsTemplate.exists()) {
+        File exportTemplate = new File(templateHome, templateName);
+
+        if (exportTemplate.exists()) {
+            logger.info("Export: FGDB append using template {}",templateName);
             File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "." + params.getOutputType().toLowerCase());
             try {
                 FileUtils.forceMkdir(outputDir);
@@ -109,7 +113,7 @@ class ExportCommand extends ExternalCommand {
                 throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
             }
 
-            ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplate, outputDir, this.getClass());
+            ExternalCommand untarFileCommand = new UnTARFileCommand(exportTemplate, outputDir, this.getClass());
             untarFileCommand.execute();
         }
     }
