@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "FileUtils.h"
@@ -135,6 +135,28 @@ QString FileUtils::readFully(const QString& path)
 }
 
 void FileUtils::writeFully(const QString& path, const QString& text)
+{
+  QFile outFile(path);
+  QFileInfo fi(outFile);
+  QDir dir = fi.dir();
+  //  Attempt to create the directory if it doesn't exist
+  if (!dir.exists())
+    makeDir(dir.absolutePath());
+  //  Delete the previous file
+  if (outFile.exists() && !outFile.remove())
+    throw HootException("Unable to remove file: " + path);
+  //  Open to write
+  if (!outFile.open(QFile::WriteOnly | QFile::Text))
+    throw HootException("Error opening file: " + path);
+  //  Write a UTF-8 file
+  QTextStream out(&outFile);
+  out.setCodec("UTF-8");
+  out << text;
+  out.flush();
+  outFile.close();
+}
+
+void FileUtils::writeFully(const QString& path, const QByteArray& text)
 {
   QFile outFile(path);
   QFileInfo fi(outFile);

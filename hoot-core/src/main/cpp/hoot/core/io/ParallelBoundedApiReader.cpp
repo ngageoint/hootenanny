@@ -143,17 +143,17 @@ bool ParallelBoundedApiReader::isComplete()
   return jobs == results && results > 0;
 }
 
-bool ParallelBoundedApiReader::getSingleResult(QString& result)
+bool ParallelBoundedApiReader::getSingleResult(QByteArray& result)
 {
-  bool success = true;
   std::lock_guard<std::mutex> results_lock(_resultsMutex);
   //  takeFirst() pops the first element and returns it
-  if (!_resultsList.empty())
-    result = _resultsList.takeFirst();
-  else
-    success = false;
-  //  Return the result found
-  return success;
+  if (!_resultsQueue.empty())
+  {
+    result = _resultsQueue.front();
+    _resultsQueue.pop();
+    return true;
+  }
+  return false;
 }
 
 bool ParallelBoundedApiReader::hasMoreResults()
@@ -161,7 +161,7 @@ bool ParallelBoundedApiReader::hasMoreResults()
   bool more = false;
   {
     std::lock_guard<std::mutex> results_lock(_resultsMutex);
-    more = !_resultsList.empty();
+    more = !_resultsQueue.empty();
   }
   bool done = isComplete();
   //  Throw the fatal error here and not in the read threads
@@ -219,7 +219,7 @@ void ParallelBoundedApiReader::_process()
     bool isFull = false;
     {
       std::lock_guard<std::mutex> results_lock(_resultsMutex);
-      isFull = _resultsList.size() >= _threadCount;
+      isFull = _resultsQueue.size() >= static_cast<size_t>(_threadCount);
     }
     if (isFull)
     {
@@ -295,11 +295,9 @@ void ParallelBoundedApiReader::_process()
       case HttpResponseCode::HTTP_OK:
         try
         {
-          //  Store the result and increment the number of results received
-          QString result = QString::fromUtf8(request.getResponseContent().data());
-          //  Check for an error
+         //  Check for an error
           QString error;
-          if (_isQueryError(result, error))
+          if (_isQueryError(request.getResponseContent(), error))
           {
             if (error.contains("Cannot allocate memory"))
             {
@@ -318,10 +316,10 @@ void ParallelBoundedApiReader::_process()
           else
           {
             std::lock_guard<std::mutex> results_lock(_resultsMutex);
-            _resultsList.append(result);
+            _resultsQueue.emplace(request.getResponseContent());
             _totalResults++;
             //  Write out a "debug map" for each result that comes in
-            _writeDebugMap(result, "bounded-reader-result");
+            _writeDebugMap(request.getResponseContent(), "bounded-reader-result");
             //  Reset the timeout because this thread has successfully received a response
             timeout = 0;
             //  Update the user status
@@ -437,7 +435,7 @@ void ParallelBoundedApiReader::_process()
   }
 }
 
-void ParallelBoundedApiReader::_writeDebugMap(const QString& data, const QString& name)
+void ParallelBoundedApiReader::_writeDebugMap(const QByteArray& data, const QString& name)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
@@ -469,8 +467,12 @@ void ParallelBoundedApiReader::_logNetworkError(const HootNetworkRequest& reques
   _isError = true;
 }
 
-bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& error) const
+bool ParallelBoundedApiReader::_isQueryError(const QByteArray& result, QString& error) const
 {
+  //  Run a quick check on the byte array to see if "runtime error" exists, if not then no error occurred.  If that text exists
+  //  further matching and parsing can be done
+  if (result.indexOf("runtime error") == -1)
+    return false;
   //  XML handling regular expression
   // <remark> runtime error: Query ran out of memory in "query" at line 10. It would need at least 0 MB of RAM to continue. </remark>
   static QRegularExpression regexXml("<remark> (.*) </remark>", QRegularExpression::OptimizeOnFirstUsageOption);
