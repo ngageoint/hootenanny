@@ -90,7 +90,7 @@ features = processFiles(args.datafiles,features)
 item = next(iter(features)) # We only have a single object property
 
 for item in features:
-    print item
+    print(item)
 
     if 'toOSM' not in features[item]:
         print('# Missing toOSM')

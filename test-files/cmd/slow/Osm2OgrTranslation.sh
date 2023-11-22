@@ -5,7 +5,7 @@ OUTPUT=test-output/cmd/slow/Osm2OgrTranslation
 function getLayerNames() {
     # For LC_ALL explanation see:
     # https://github.com/ngageoint/hootenanny-rpms/issues/41
-    result=`ogrinfo -q $1 2>&1 | sed "s/[0-9]*: //;s/ \(.*\)//g" | LC_ALL=C sort`
+    result=`ogrinfo -q $1 2>&1 | sed "s/Layer: //;s/[0-9]*: //;s/ \(.*\)//g" | LC_ALL=C sort`
 }
 
 # Using this function instead of "ogrinfo -al" gives more consistent output between

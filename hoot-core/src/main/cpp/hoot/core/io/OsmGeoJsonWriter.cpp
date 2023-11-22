@@ -52,6 +52,7 @@
 
 //  GEOS
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 using namespace std;

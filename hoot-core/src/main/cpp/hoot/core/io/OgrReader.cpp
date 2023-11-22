@@ -30,6 +30,7 @@
 // GDAL
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
+#include <ogrsf_frmts.h>
 
 // GEOS
 #include <geos/geom/LineString.h>

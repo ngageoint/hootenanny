@@ -29,9 +29,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 
-// geos
-#include <geos/util/TopologyException.h>
-
 using namespace geos::geom;
 using namespace std;
 

@@ -30,6 +30,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/elements/Element.h>
