@@ -3,7 +3,7 @@ It is not possible to run a non-streamable map operation (OsmMapOperation) on tw
 nodes: [4]{1669725, 1669727, 1669729, 1669735}
 tags: highway = road
 note = 2
-cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000
+cached envelope: nan,nan,nan,nan
 status: unknown1
 version: 2
 visible: 1
@@ -12,7 +12,7 @@ circular error: 15
 nodes: [3]{1669725, 1669729, 1669735}
 tags: highway = road
 note = 2
-cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000
+cached envelope: nan,nan,nan,nan
 status: unknown2
 version: 2
 visible: 1
