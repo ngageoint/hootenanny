@@ -133,7 +133,7 @@ public:
       ec.convertToLineString(map->getWay(-7))->toString());
     HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -6}\n"
-                    "tags: cached envelope: nan,nan,nan,nan\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -141,7 +141,7 @@ public:
                     map->getWay(-1)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
-                    "tags: cached envelope: nan,nan,nan,nan\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -150,7 +150,7 @@ public:
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
-                    "tags: cached envelope: nan,nan,nan,nan\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown2\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -197,7 +197,7 @@ public:
     HOOT_STR_EQUALS(1, map->getWayCount());
     HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -2}\n"
-                    "tags: cached envelope: nan,nan,nan,nan\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"

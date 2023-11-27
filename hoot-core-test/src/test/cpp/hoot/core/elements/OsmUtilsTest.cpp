@@ -44,16 +44,15 @@ class OsmUtilsTest : public HootTestFixture
 
 public:
 
-  OsmUtilsTest() :
-  HootTestFixture("test-files/elements/OsmUtilsTest/", "test-output/elements/OsmUtilsTest/")
+  OsmUtilsTest()
+    : HootTestFixture("test-files/elements/OsmUtilsTest/", "test-output/elements/OsmUtilsTest/")
   {
   }
 
   void runElementsDetailStringTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map, "test-files/cmd/quick/BuildingOutlineUpdateOpTest/BuildingOutlineUpdateOpTest.osm");
+    OsmMapReaderFactory::read(map, "test-files/cmd/quick/BuildingOutlineUpdateOpTest/BuildingOutlineUpdateOpTest.osm");
 
     std::vector<ElementPtr> elements;
     NodePtr node = map->getNode(-13395959);
@@ -64,23 +63,20 @@ public:
     elements.push_back(relation);
 
     HOOT_STR_EQUALS(
-      FileUtils::readFully(
-        _inputPath + "OsmUtilsTest-runElementsDetailStringTest-out").trimmed().toStdString(),
-      OsmUtils::getElementsDetailString(elements, map).trimmed().toStdString());
+      FileUtils::readFully(_inputPath + "OsmUtilsTest-runElementsDetailStringTest-out").trimmed(),
+                           OsmUtils::getElementsDetailString(elements, map).trimmed());
   }
 
   void runRelationDetailStringTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map, "test-files/cmd/quick/BuildingOutlineUpdateOpTest/BuildingOutlineUpdateOpTest.osm");
+    OsmMapReaderFactory::read(map, "test-files/cmd/quick/BuildingOutlineUpdateOpTest/BuildingOutlineUpdateOpTest.osm");
 
     ConstRelationPtr relation = map->getRelation(-2);
 
     HOOT_STR_EQUALS(
-      FileUtils::readFully(
-        _inputPath + "OsmUtilsTest-runRelationDetailStringTest-out").trimmed().toStdString(),
-      OsmUtils::getRelationDetailString(relation, map).trimmed().toStdString());
+      FileUtils::readFully(_inputPath + "OsmUtilsTest-runRelationDetailStringTest-out").trimmed(),
+                           OsmUtils::getRelationDetailString(relation, map).trimmed());
   }
 };
 
