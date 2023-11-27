@@ -52,7 +52,6 @@
 
 //  GEOS
 #include <geos/geom/GeometryFactory.h>
-#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -951,7 +950,7 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(co
         return nullptr;
     }
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     if (validate)
     {

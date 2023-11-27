@@ -34,7 +34,6 @@
 
 // geos
 #include <geos/geom/Geometry.h>
-#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 
@@ -70,7 +69,7 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map, const C
     }*/
     return polyAlphaShape->distance(poiGeom.get());
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     LOG_TRACE(
       "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "

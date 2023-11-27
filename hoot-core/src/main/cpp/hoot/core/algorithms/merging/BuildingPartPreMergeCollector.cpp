@@ -26,9 +26,6 @@
  */
 #include "BuildingPartPreMergeCollector.h"
 
-// geos
-#include <geos/util/TopologyException.h>
-
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -128,7 +125,7 @@ void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(ElementPtr 
   {
     contains = buildingGeom->contains(buildingPartMatchCandidateGeom.get());
   }
-  catch (const geos::util::TopologyException&)
+  catch (const std::runtime_error&)
   {
     // Something is wrong with the geometry, so let's try cleaning it.
     LOG_TRACE("cleaning...");

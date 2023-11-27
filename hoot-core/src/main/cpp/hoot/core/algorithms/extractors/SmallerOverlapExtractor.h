@@ -32,6 +32,9 @@
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
 
+// geos
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -73,6 +76,8 @@ public:
   { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
 private:
+
+  std::shared_ptr<geos::geom::Geometry> _validate(std::shared_ptr<geos::geom::Geometry>& a1, std::shared_ptr<geos::geom::Geometry>& a2) const;
 
   bool _requireAreaForPolygonConversion;
 };

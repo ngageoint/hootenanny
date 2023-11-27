@@ -26,9 +26,6 @@
  */
 #include "ConflateInfoCache.h"
 
-// geos
-#include <geos/util/TopologyException.h>
-
 // hoot
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
@@ -161,7 +158,7 @@ std::shared_ptr<geos::geom::Geometry> ConflateInfoCache::_getGeometry(const Cons
   {
     newGeom = ElementToGeometryConverter(_map).convertToGeometry(element);
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     // try to clean it
     newGeom.reset(GeometryUtils::validateGeometry(newGeom.get()));

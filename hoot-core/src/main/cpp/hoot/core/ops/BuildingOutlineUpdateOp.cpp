@@ -30,7 +30,6 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -174,7 +173,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
     pOutline = pOutline->Union(pGeometry.get());
     LOG_VART(pOutline->getGeometryTypeId());
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
     std::shared_ptr<Geometry> cleanedGeom(GeometryUtils::validateGeometry(pGeometry.get()));
@@ -183,7 +182,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       pOutline = pOutline->Union(cleanedGeom.get());
       LOG_VART(pOutline->getGeometryTypeId());
     }
-    catch (const geos::util::TopologyException& ex)
+    catch (const std::runtime_error& ex)
     {
       //couldn't clean, so mark parent relation for review (eventually we'll come up with
       //cleaning that works here)

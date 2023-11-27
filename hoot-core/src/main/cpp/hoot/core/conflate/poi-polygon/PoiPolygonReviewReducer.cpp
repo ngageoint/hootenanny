@@ -40,9 +40,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// geos
-#include <geos/util/TopologyException.h>
-
 // Std
 #include <float.h>
 
@@ -653,7 +650,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           return true;
         }
       }
-      catch (const geos::util::TopologyException& e)
+      catch (const std::runtime_error& e)
       {
         // Not doing anything here for now.
         LOG_TRACE("PoiPolygonReviewReducer neighbor loop: " << e.what());

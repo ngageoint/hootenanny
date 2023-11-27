@@ -28,7 +28,6 @@
 
 // geos
 #include <geos/geom/Geometry.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/criterion/AreaCriterion.h>
@@ -107,7 +106,7 @@ bool RemoveDuplicateAreasVisitor::_equals(const std::shared_ptr<Element>& e1, co
   {
     overlap = std::shared_ptr<Geometry>(g1->intersection(g2.get()));
   }
-  catch (const geos::util::TopologyException&)
+  catch (const std::runtime_error&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
