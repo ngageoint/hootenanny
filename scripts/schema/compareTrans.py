@@ -99,40 +99,40 @@ for item in features:
     inLayer = getLayer(features[item]['toOSM'])
 
     if 'toOgr' not in features[item]:
-        print "in:",inLayer,'out: Missing'
+        print("in: " + inLayer + ' out: Missing')
         continue
 
     outLayer = getLayer(features[item]['toOgr'])
 
-    print "in:",inLayer,'out:',outLayer
+    print("in: " + inLayer + ' out: ' + outLayer)
     if outLayer != inLayer:
-        print "# Different layers: %s vs %s" % (inLayer,outLayer)
+        print("# Different layers: %s vs %s" % (inLayer,outLayer))
 
     # Look at the translated tags
     inSet = set(features[item]['toOSM'][inLayer])
     outSet = set(features[item]['toOgr'][outLayer])
 
-    print "translated:"
-    print "  in - out:",inSet - outSet
-    print "  out - in:",outSet - inSet
+    print("translated:")
+    print("  in - out: " + str(inSet - outSet))
+    print("  out - in: " + str(outSet - inSet))
 
 
     # Look at the translated tags
     inSet = set(features[item]['toOSM']['outputOSM'])
     outSet = set(features[item]['toOgr']['inputOSM'])
 
-    print "OSM:"
-    print "  in - out:",inSet - outSet
-    print "  out - in:",outSet - inSet
+    print("OSM:")
+    print("  in - out: " + str(inSet - outSet))
+    print("  out - in: " + str(outSet - inSet))
 
     print
 
     # Debug
     # for i in features[item]:
-    #     print i
+    #     print(i)
     #     for j in features[item][i]:
-    #         print j
-    #         print features[item][i][j]
+    #         print(j)
+    #         print(features[item][i][j])
 
 
 
