@@ -125,10 +125,10 @@ Envelope* GeometryUtils::toEnvelope(const OGREnvelope& e)
 std::shared_ptr<OGREnvelope> GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
 {
   std::shared_ptr<OGREnvelope> result = std::make_shared<OGREnvelope>();
-  result->MinX = e.getMinX();
-  result->MaxX = e.getMaxX();
-  result->MinY = e.getMinY();
-  result->MaxY = e.getMaxY();
+  result->MinX = e.isNull() ?  0.0 : e.getMinX();
+  result->MaxX = e.isNull() ? -1.0 : e.getMaxX();
+  result->MinY = e.isNull() ?  0.0 : e.getMinY();
+  result->MaxY = e.isNull() ? -1.0 : e.getMaxY();
   return result;
 }
 
@@ -136,30 +136,30 @@ QString GeometryUtils::toMinMaxString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4")
-          .arg(e.getMinX(), 0, 'f', precision)
-          .arg(e.getMaxX(), 0, 'f', precision)
-          .arg(e.getMinY(), 0, 'f', precision)
-          .arg(e.getMaxY(), 0, 'f', precision);
+          .arg(e.isNull() ?  0.0 : e.getMinX(), 0, 'f', precision)
+          .arg(e.isNull() ? -1.0 : e.getMaxX(), 0, 'f', precision)
+          .arg(e.isNull() ?  0.0 : e.getMinY(), 0, 'f', precision)
+          .arg(e.isNull() ? -1.0 : e.getMaxY(), 0, 'f', precision);
 }
 
 QString GeometryUtils::toLonLatString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4")
-          .arg(e.getMinX(), 0, 'f', precision)
-          .arg(e.getMinY(), 0, 'f', precision)
-          .arg(e.getMaxX(), 0, 'f', precision)
-          .arg(e.getMaxY(), 0, 'f', precision);
+          .arg(e.isNull() ?  0.0 : e.getMinX(), 0, 'f', precision)
+          .arg(e.isNull() ?  0.0 : e.getMinY(), 0, 'f', precision)
+          .arg(e.isNull() ? -1.0 : e.getMaxX(), 0, 'f', precision)
+          .arg(e.isNull() ? -1.0 : e.getMaxY(), 0, 'f', precision);
 }
 
 QString GeometryUtils::toLatLonString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4")
-          .arg(e.getMinY(), 0, 'f', precision)
-          .arg(e.getMinX(), 0, 'f', precision)
-          .arg(e.getMaxY(), 0, 'f', precision)
-          .arg(e.getMaxX(), 0, 'f', precision);
+          .arg(e.isNull() ?  0.0 : e.getMinY(), 0, 'f', precision)
+          .arg(e.isNull() ?  0.0 : e.getMinX(), 0, 'f', precision)
+          .arg(e.isNull() ? -1.0 : e.getMaxY(), 0, 'f', precision)
+          .arg(e.isNull() ? -1.0 : e.getMaxX(), 0, 'f', precision);
 }
 
 bool GeometryUtils::isEnvelopeString(const QString& str)

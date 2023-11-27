@@ -300,16 +300,20 @@ QString OsmApiDbSqlStatementFormatter::changesetToSqlString(const long changeset
                                                             const long numChangesInChangeset,
                                                             const Envelope& changesetBounds)
 {
+  double min_x = changesetBounds.isNull() ?  0.0 : changesetBounds.getMinX();
+  double min_y = changesetBounds.isNull() ?  0.0 : changesetBounds.getMinY();
+  double max_x = changesetBounds.isNull() ? -1.0 : changesetBounds.getMaxX();
+  double max_y = changesetBounds.isNull() ? -1.0 : changesetBounds.getMaxY();
   return
     _outputFormatStrings[ApiDb::getChangesetsTableName()]
       .arg(
         QString::number(changesetId),
         QString::number(changesetUserId),
         _dateString,
-        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMinY())),
-        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMaxY())),
-        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMinX())),
-        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMaxX())),
+        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(min_y)),
+        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(max_y)),
+        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(min_x)),
+        QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(max_x)),
         _dateString,
         QString::number(numChangesInChangeset));
 }
