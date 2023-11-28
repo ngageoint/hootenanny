@@ -42,6 +42,11 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "### Add epel repo ###" >> CentOS_upgrade.txt
     sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
+# TESTING
+# Get updated geoint-deps from the staging repo
+export GEOINT_DEPS_INCLUDE_STAGING=true
+# END TESTING
+
     # add GEOINT for spatial libraries and utilities.
     echo "### Add geoint-deps repo ###" >> CentOS_upgrade.txt
     sudo $HOOT_HOME/scripts/yum/geoint-repo.sh
