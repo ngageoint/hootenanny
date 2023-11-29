@@ -55,12 +55,6 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
     sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh $POSTGRESQL_VERSION
 fi
 
-# TESTING
-# Get updated geoint-deps from the staging repo
-echo "### Add geoint-deps staging repository for testing ###"
-sudo GEOINT_DEPS_INCLUDE_STAGING=true $HOOT_HOME/scripts/yum/geoint-repo.sh
-# END TESTING
-
 # configure the devtoolset repository
 echo "### Add devtoolset repo and postgresql ${POSTGRESQL_VERSION} libraries ###"
 sudo yum install -y \

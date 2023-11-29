@@ -61,21 +61,3 @@ gpgcheck = 1
 gpgkey=file://${GEOINT_DEPS_KEY}
 repo_gpgcheck = 1
 EOF
-
-GEOINT_DEPS_INCLUDE_STAGING="${GEOINT_DEPS_INCLUDE_STAGING:-false}"
-GEOINT_DEPS_STAGING_CHANNEL="${GEOINT_DEPS_STAGING_CHANNEL:-staging}"
-GEOINT_DEPS_STAGING_URL="${GEOINT_DEPS_STAGING_URL:-https://geoint-deps.s3.amazonaws.com/el7/${GEOINT_DEPS_STAGING_CHANNEL}}"
-
-if [ "${GEOINT_DEPS_INCLUDE_STAGING}" == "true" ]; then
-cat >> "${GEOINT_DEPS_REPO}" << EOF
-
-[geoint-deps-staging]
-name = GEOINT Dependencies - Staging
-baseurl = ${GEOINT_DEPS_STAGING_URL}
-enable = 1
-gpgcheck = 1
-gpgkey=file://${GEOINT_DEPS_KEY}
-repo_gpgcheck = 1
-EOF
-
-fi
