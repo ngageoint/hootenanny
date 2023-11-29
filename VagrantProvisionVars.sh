@@ -15,8 +15,8 @@ export GOOGLE_CHROME_VERSION=91.0.4472.114
 
 # Geoint deps library versions
 export ARMADILLO_VERSION=10.8.2
-export GDAL_VERSION=3.2.3
-export GEOS_VERSION=3.9.3
+export GDAL_VERSION=3.8.0
+export GEOS_VERSION=3.11.3
 export LIBGEOTIFF_VERSION=1.6.0
 export PROJ_VERSION=7.2.1
 

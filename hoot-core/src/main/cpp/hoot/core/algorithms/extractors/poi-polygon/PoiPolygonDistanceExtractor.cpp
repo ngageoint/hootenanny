@@ -22,15 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonDistanceExtractor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-
-// geos
-#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 using namespace std;

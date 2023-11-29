@@ -35,7 +35,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/criterion/AreaCriterion.h>
@@ -251,7 +250,7 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
         {
           result = result->Union(child.get());
         }
-        catch (const geos::util::TopologyException&)
+        catch (const std::runtime_error&)
         {
           child.reset(GeometryUtils::validateGeometry(child.get()));
           result.reset(GeometryUtils::validateGeometry(result.get()));

@@ -738,7 +738,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
           std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
           wkt = intersection->toString();
         }
-        catch (const geos::util::TopologyException& e)
+        catch (const std::runtime_error& e)
         {
           LOG_WARN(e.what());
           return;

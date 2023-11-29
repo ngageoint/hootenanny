@@ -76,8 +76,16 @@ PolygonCompare& PolygonCompare::operator=(const PolygonCompare& other)
 bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
                                 const std::shared_ptr<geos::geom::Geometry>& p2) const
 {
+  if (!p1)
+    return false;
+  if (!p2)
+    return true;
   const Envelope* e1 = p1->getEnvelopeInternal();
   const Envelope* e2 = p2->getEnvelopeInternal();
+  if (!e1 || e1->isNull())
+    return false;
+  if (!e2 || e2->isNull())
+    return true;
   double x1 = (e1->getMinX() + e1->getMaxX()) / 2.0;
   double x2 = (e2->getMinX() + e2->getMaxX()) / 2.0;
   double y1 = (e1->getMinY() + e1->getMaxY()) / 2.0;

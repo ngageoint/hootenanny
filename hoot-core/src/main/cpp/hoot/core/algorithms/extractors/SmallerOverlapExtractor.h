@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef SMALLEROVERLAPEXTRACTOR_H
 #define SMALLEROVERLAPEXTRACTOR_H
@@ -31,6 +31,9 @@
 // hoot
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
+
+// geos
+#include <geos/geom/Geometry.h>
 
 namespace hoot
 {
@@ -73,6 +76,8 @@ public:
   { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
 private:
+
+  std::shared_ptr<geos::geom::Geometry> _validate(std::shared_ptr<geos::geom::Geometry>& a1, std::shared_ptr<geos::geom::Geometry>& a2) const;
 
   bool _requireAreaForPolygonConversion;
 };

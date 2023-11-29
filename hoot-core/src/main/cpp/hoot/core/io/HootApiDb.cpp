@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "HootApiDb.h"
 
@@ -530,10 +530,10 @@ void HootApiDb::beginChangeset(const Tags& tags)
         .arg(getChangesetsTableName(mapId), _escapeTags(tags)));
   }
   _insertChangeSet->bindValue(":user_id", (qlonglong)userId);
-  _insertChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
-  _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
-  _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
-  _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
+  _insertChangeSet->bindValue(":min_lat", _changesetEnvelope.isNull() ?  0.0 : _changesetEnvelope.getMinY());
+  _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.isNull() ? -1.0 : _changesetEnvelope.getMaxY());
+  _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.isNull() ?  0.0 : _changesetEnvelope.getMinX());
+  _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.isNull() ? -1.0 : _changesetEnvelope.getMaxX());
   LOG_VART(_insertChangeSet->lastQuery());
 
   _currChangesetId = _insertRecord(*_insertChangeSet);
@@ -563,10 +563,10 @@ long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& 
         .arg(getChangesetsTableName(mapId), _escapeTags(tags)));
   }
   _insertChangeSet2->bindValue(":user_id", (qlonglong)userId);
-  _insertChangeSet2->bindValue(":min_lat", bounds.getMinY());
-  _insertChangeSet2->bindValue(":max_lat", bounds.getMaxY());
-  _insertChangeSet2->bindValue(":min_lon", bounds.getMinX());
-  _insertChangeSet2->bindValue(":max_lon", bounds.getMaxX());
+  _insertChangeSet2->bindValue(":min_lat", bounds.isNull() ?  0.0 : bounds.getMinY());
+  _insertChangeSet2->bindValue(":max_lat", bounds.isNull() ? -1.0 : bounds.getMaxY());
+  _insertChangeSet2->bindValue(":min_lon", bounds.isNull() ?  0.0 : bounds.getMinX());
+  _insertChangeSet2->bindValue(":max_lon", bounds.isNull() ? -1.0 : bounds.getMaxX());
   _insertChangeSet2->bindValue(":num_changes", (int)numChanges);
   LOG_VART(_insertChangeSet2->lastQuery());
 
@@ -603,10 +603,10 @@ void HootApiDb::endChangeset()
         "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id")
          .arg(getChangesetsTableName(mapId)));
   }
-  _closeChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
-  _closeChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
-  _closeChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
-  _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
+  _closeChangeSet->bindValue(":min_lat", _changesetEnvelope.isNull() ?  0.0 : _changesetEnvelope.getMinY());
+  _closeChangeSet->bindValue(":max_lat", _changesetEnvelope.isNull() ? -1.0 : _changesetEnvelope.getMaxY());
+  _closeChangeSet->bindValue(":min_lon", _changesetEnvelope.isNull() ?  0.0 : _changesetEnvelope.getMinX());
+  _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.isNull() ? -1.0 : _changesetEnvelope.getMaxX());
   _closeChangeSet->bindValue(":num_changes", (int)_changesetChangeCount);
   _closeChangeSet->bindValue(":id", (qlonglong)_currChangesetId);
   LOG_VART(_closeChangeSet->lastQuery());

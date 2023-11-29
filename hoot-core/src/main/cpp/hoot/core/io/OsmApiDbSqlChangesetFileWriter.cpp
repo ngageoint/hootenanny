@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
@@ -184,10 +184,10 @@ void OsmApiDbSqlChangesetFileWriter::_updateChangeset(const int numChanges)
   _outputSql.write(
     QString("UPDATE %1 SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5, num_changes=%6 WHERE id=%7;\n")
       .arg(ApiDb::getChangesetsTableName())
-      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinY()))
-      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxY()))
-      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinX()))
-      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxX()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.isNull() ?  0.0 : _changesetBounds.getMinY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.isNull() ? -1.0 : _changesetBounds.getMaxY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.isNull() ?  0.0 : _changesetBounds.getMinX()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.isNull() ? -1.0 : _changesetBounds.getMaxX()))
       .arg(numChanges)
       .arg(_changesetId)
     .toUtf8());
