@@ -30,6 +30,7 @@
 // GDAL
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
+#include <ogrsf_frmts.h>
 
 // GEOS
 #include <geos/geom/LineString.h>
@@ -200,11 +201,7 @@ class OgrElementIterator : public ElementIterator
 {
 public:
 
-  OgrElementIterator(std::shared_ptr<OgrReaderInternal> d)
-  {
-    _d = d;
-    _map = std::make_shared<OsmMap>();
-  }
+  OgrElementIterator(std::shared_ptr<OgrReaderInternal> d) : _map(std::make_shared<OsmMap>()), _d(d) { }
 
   ~OgrElementIterator() override
   {
@@ -244,7 +241,7 @@ OgrReader::OgrReader()
 OgrReader::OgrReader(const QString& path)
   : _d(std::make_shared<OgrReaderInternal>())
 {
-  if (isSupported(path) == true)
+  if (isSupported(path))
     _d->open(path, QString(""));
 }
 
@@ -473,8 +470,7 @@ QStringList OgrReader::_getLayersFromPath(QString& input) const
   return layers;
 }
 
-void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource,
-                     const int numTasks)
+void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource, const int numTasks)
 {
   LOG_VARD(path);
   LOG_VARD(layer);
@@ -494,8 +490,7 @@ void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr&
   // Read each layer's data.
   for (int j = 0; j < layers.size(); j++)
   {
-    PROGRESS_STATUS(
-      "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
+    PROGRESS_STATUS("Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
     LOG_VART(progressWeights[j]);
     if (!jobSource.isEmpty() && numTasks != -1)
     {
@@ -685,9 +680,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
     // Make sure the tag is only added if its value is non-null.
     if ( value.length() == 0 )
     {
-      LOG_TRACE(
-        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
-        " since the value field is empty");
+      LOG_TRACE("Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() << " since the value field is empty");
       continue;
     }
 
@@ -696,12 +689,9 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   _translate(t);
 
+  // Add an ingest datetime tag
   if (_addSourceDateTime)
-  {
-    // Add an ingest datetime tag
-    t.appendValue(MetadataTags::SourceIngestDateTime(),
-                  QDateTime::currentDateTimeUtc().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
-  }
+    t.appendValue(MetadataTags::SourceIngestDateTime(), QDateTime::currentDateTimeUtc().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
 
   if (!t.empty())
     _addGeometry(f->GetGeometryRef(), t);
@@ -736,8 +726,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
       case wkbMultiCurve:
       case wkbGeometryCollection:
       {
-        LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.): " <<
-                  _toWkt(g).left(100));
+        LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.): " << _toWkt(g).left(100));
         OGRGeometryCollection* gc = dynamic_cast<OGRGeometryCollection*>(g);
         int nParts = gc->getNumGeometries();
         for (int i = 0; i < nParts; i++)
@@ -750,8 +739,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
     }
     catch (const IllegalArgumentException& e)
     {
-      throw IllegalArgumentException(
-        "Error projecting geometry with tags: " + t.toString() + " " + e.what());
+      throw IllegalArgumentException(QString("Error projecting geometry with tags: %1 %2").arg(t.toString(), e.what()));
     }
   }
 }
@@ -781,15 +769,14 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
 
   int nParts = mp->getNumGeometries();
   if (nParts == 1)
-    _addPolygon((OGRPolygon*)mp->getGeometryRef(0), t);
+    _addPolygon(mp->getGeometryRef(0), t);
   else
   {
-    RelationPtr r =
-      std::make_shared<Relation>(_status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
+    RelationPtr r = std::make_shared<Relation>(_status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     r->setTags(t);
 
     for (int i = 0; i < nParts; i++)
-      _addPolygon((OGRPolygon*)mp->getGeometryRef(i), r, circularError);
+      _addPolygon(mp->getGeometryRef(i), r, circularError);
 
     _map->addRelation(r);
   }
@@ -851,8 +838,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
   else
   {
-    RelationPtr r =
-      std::make_shared<Relation>(_status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
+    RelationPtr r = std::make_shared<Relation>(_status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     if (areaCrit.isSatisfied(t, ElementType::Relation) == false && _importImpliedTags)
       t.setArea(true);
     r->setTags(t);
@@ -965,8 +951,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
 
     result = std::make_shared<Envelope>();
     std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
-    std::shared_ptr<OGRCoordinateTransformation> transform(
-      OGRCreateCoordinateTransformation(wgs84.get(), srs));
+    std::shared_ptr<OGRCoordinateTransformation> transform(OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
     for (int xi = 0; xi <= steps; xi++)
     {
@@ -1258,14 +1243,12 @@ bool OgrReaderInternal::hasMoreElements()
   // empty.
   populateElementMap();
 
-  return ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) ||
-         (_relationsItr != _map->getRelations().end()));
+  return ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) || (_relationsItr != _map->getRelations().end()));
 }
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  if ((_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
-      && (_relationsItr == _map->getRelations().end()))
+  if ((_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end()) && (_relationsItr == _map->getRelations().end()))
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     // element types.

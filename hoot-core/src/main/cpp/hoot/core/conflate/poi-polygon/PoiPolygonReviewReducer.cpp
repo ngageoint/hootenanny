@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonReviewReducer.h"
 
@@ -39,9 +39,6 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-// geos
-#include <geos/util/TopologyException.h>
 
 // Std
 #include <float.h>
@@ -653,7 +650,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           return true;
         }
       }
-      catch (const geos::util::TopologyException& e)
+      catch (const std::runtime_error& e)
       {
         // Not doing anything here for now.
         LOG_TRACE("PoiPolygonReviewReducer neighbor loop: " << e.what());

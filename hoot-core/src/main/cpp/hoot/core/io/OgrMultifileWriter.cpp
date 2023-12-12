@@ -28,6 +28,8 @@
 #include "OgrMultifileWriter.h"
 
 // GDAL
+#include <gdal_frmts.h>
+#include <gdal_priv.h>
 #include <ogr_geometry.h>
 
 // GEOS

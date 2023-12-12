@@ -28,7 +28,6 @@
 
 // geos
 #include <geos/geom/GeometryFactory.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
@@ -105,7 +104,7 @@ std::shared_ptr<geos::geom::Geometry> TranslationInterface::convertGeometry(cons
     {
       return ElementToGeometryConverter(provider).convertToGeometry(e, false);
     }
-    catch (const geos::util::TopologyException& err)
+    catch (const std::runtime_error& err)
     {
       _logWarning(e, QString(err.what()));
     }

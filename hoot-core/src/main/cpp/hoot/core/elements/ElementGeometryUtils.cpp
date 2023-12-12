@@ -36,9 +36,6 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 
-// GEOS
-#include <geos/util/TopologyException.h>
-
 using namespace geos::geom;
 
 namespace hoot
@@ -110,7 +107,7 @@ std::shared_ptr<Geometry> ElementGeometryUtils::_getGeometry(const ConstElementP
   {
     newGeom = ElementToGeometryConverter(map).convertToGeometry(element);
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     // try to clean it
     newGeom.reset(GeometryUtils::validateGeometry(newGeom.get()));

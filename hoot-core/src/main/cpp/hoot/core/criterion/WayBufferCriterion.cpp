@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "WayBufferCriterion.h"
@@ -30,7 +30,6 @@
 // GEOS
 #include <geos/geom/Geometry.h>
 #include <geos/operation/buffer/BufferOp.h>
-#include <geos/util/TopologyException.h>
 
 // Hoot
 #include <hoot/core/elements/Way.h>
@@ -107,7 +106,7 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
     }
     return result;
   }
-  catch (const geos::util::TopologyException&)
+  catch (const std::runtime_error&)
   {
     LOG_VART(ElementToGeometryConverter(_map).convertToLineString(_map->getWay(w->getId())));
     throw;

@@ -950,7 +950,7 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(co
         return nullptr;
     }
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     if (validate)
     {
