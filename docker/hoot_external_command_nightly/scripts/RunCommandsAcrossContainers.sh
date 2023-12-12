@@ -47,7 +47,6 @@ run-overpass()
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST -D writer.thematic.structure=$THEMATIC_STRUCT \
         -D reader.http.bbox.max.download.size=32.0 \
         -D reader.http.bbox.thread.count=15 \
-        -D writer.include.id.tag=true \
         -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" ${OUTPUT_GPKG} 
 
@@ -55,7 +54,6 @@ run-overpass()
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         -D reader.http.bbox.max.download.size=32.0 \
         -D reader.http.bbox.thread.count=15 \
-        -D writer.include.id.tag=true \
         -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" $OUTPUT_OSM
 }
@@ -67,7 +65,6 @@ run-overpass-bounds()
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST -D writer.thematic.structure=$THEMATIC_STRUCT \
         -D reader.http.bbox.max.download.size=32.0 \
         -D reader.http.bbox.thread.count=15 \
-        -D writer.include.id.tag=true \
         -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" ${OUTPUT_GPKG}
 
@@ -75,7 +72,6 @@ run-overpass-bounds()
         -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=$OVERPASS_API_HOST \
         -D reader.http.bbox.max.download.size=32.0 \
         -D reader.http.bbox.thread.count=15 \
-        -D writer.include.id.tag=true \
         -D writer.crop.features.crossing.bounds=true \
         "${OP_URL}" $OUTPUT_OSM
 }
