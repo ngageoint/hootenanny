@@ -78,7 +78,7 @@ def getLayer(data):
 ###########
 # Main Starts Here
 #
-parser = argparse.ArgumentParser(description='Process GGDM files and build a schema')
+parser = argparse.ArgumentParser(description='Compare translation output')
 parser.add_argument('datafiles', help='The roughly JSON structured datafiles', action='store',nargs='+')
 
 args = parser.parse_args()
@@ -133,8 +133,6 @@ for item in features:
     #     for j in features[item][i]:
     #         print(j)
     #         print(features[item][i][j])
-
-
 
 # End
 

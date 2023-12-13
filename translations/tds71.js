@@ -3262,7 +3262,8 @@ tds71 = {
               returnData[i]['attrs']['OSMTAGS'] = tList[1];
               for (var j = 2, tLen = tList.length; j < tLen; j++)
               {
-                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+                // Drop empty values
+                if (tList[j] !== "") returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
               }
             }
             else

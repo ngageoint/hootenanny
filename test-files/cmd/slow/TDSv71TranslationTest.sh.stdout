@@ -11,7 +11,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -31,7 +31,7 @@ A7694937-07D8-437B-8A03-384B8A3B7369
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -49,7 +49,7 @@ C7575604-8E31-4F89-A83A-2C247279CAE6
 in: VegetationSrf out: VegetationSrf
 translated:
   in - out: set([u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS7', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'ZI001_SDP'])
+  out - in: set([u'FCSUBTYPE', u'ZI001_SDP'])
 OSM:
   in - out: set([u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -58,7 +58,7 @@ FD5605A3-70B6-492B-896A-6BDB2E5E439C
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -76,7 +76,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -85,7 +85,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source', u'condition'])
   out - in: set([u'construction', u'error:circular'])
@@ -94,7 +94,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -103,7 +103,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -121,7 +121,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -184,7 +184,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -202,7 +202,7 @@ AC05FED0-E5D2-40EA-9916-B979E1E2FF49
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -229,7 +229,7 @@ E68C306D-BD66-4A9C-896C-3A313A9C0A64
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -238,7 +238,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -256,7 +256,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -274,7 +274,7 @@ E0D8B175-219B-4811-A59E-C44FD731DE9B
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -292,7 +292,7 @@ C253DA4D-F6D4-41E1-A7AD-8BB6EA55D8F8
 in: AeronauticPnt out: AeronauticPnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'building', u'source', u'condition'])
   out - in: set([u'abandoned:building', u'error:circular'])
@@ -310,7 +310,7 @@ C650708F-0984-4C35-A971-8154879AF68F
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source', u'gauge:type'])
   out - in: set([u'error:circular'])
@@ -319,7 +319,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -364,7 +364,7 @@ OSM:
 in: FacilitySrf out: FacilitySrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -373,7 +373,7 @@ ADA3FB8E-D49A-412A-A427-1DF9FDBDDE9B
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -391,7 +391,7 @@ E0E597A8-F2FD-4982-B3F0-2DC6FFDEA549
 in: HydrographyCrv out: HydrographyCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -409,7 +409,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -436,7 +436,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -445,7 +445,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -472,7 +472,7 @@ OSM:
 in: VegetationSrf out: VegetationSrf
 translated:
   in - out: set([u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS7', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'ZI001_SDP'])
+  out - in: set([u'FCSUBTYPE', u'ZI001_SDP'])
 OSM:
   in - out: set([u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -490,7 +490,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source', u'condition'])
   out - in: set([u'construction', u'error:circular'])
@@ -499,7 +499,7 @@ OSM:
 in: TransportationGroundPnt out: TransportationGroundPnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular', u'public_transport'])
@@ -517,7 +517,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -553,7 +553,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'building', u'source', u'condition'])
   out - in: set([u'demolished:building', u'error:circular'])
@@ -571,7 +571,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -589,7 +589,7 @@ OSM:
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -607,7 +607,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -616,7 +616,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:resource_owner', u'source', u'security:classification'])
   out - in: set([u'error:circular'])
@@ -688,7 +688,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -697,7 +697,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -771,7 +771,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -798,7 +798,7 @@ D9D0703D-83D7-4874-AC98-1B323E5DE301
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -807,7 +807,7 @@ A941263E-CA69-413D-9148-B2550CD5256D
 in: AeronauticPnt out: AeronauticPnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -825,7 +825,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -861,7 +861,7 @@ CDDE649E-AB52-416B-AA26-6188D3641214
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -917,7 +917,7 @@ C9E03C34-8AB5-4F9C-B31F-5F4D316BC61D
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -926,7 +926,7 @@ F9F1E2E7-7699-4DD7-8271-586970F42122
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'building', u'source', u'condition'])
   out - in: set([u'abandoned:building', u'error:circular'])
@@ -953,7 +953,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source', u'condition'])
   out - in: set([u'construction', u'error:circular'])
@@ -962,7 +962,7 @@ B9745971-A030-4956-BA12-1BCD926F0F78
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -971,7 +971,7 @@ E8CBC330-A431-4CF6-ADCF-73A9C8F10FE9
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -989,7 +989,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -998,7 +998,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'building', u'source', u'condition'])
   out - in: set([u'demolished:building', u'error:circular'])
@@ -1034,7 +1034,7 @@ F0ECD77E-FDAC-4DEB-BD9C-D4F84DAD328C
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1043,7 +1043,7 @@ OSM:
 in: UtilityInfrastructurePnt out: UtilityInfrastructurePnt
 translated:
   in - out: set([u'TOS', u'PYC', u'PYM', u'CAB'])
-  out - in: set([u'OSMTAGS8', u'FCSUBTYPE', u'ZI032_PYM', u'AT005_CAB', u'OSMTAGS6', u'ZI032_TOS', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'ZI032_PYC', u'OSMTAGS7'])
+  out - in: set([u'ZI032_PYM', u'ZI032_TOS', u'AT005_CAB', u'FCSUBTYPE', u'ZI032_PYC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1070,7 +1070,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1079,7 +1079,7 @@ AAD37B05-3771-44B8-ACE3-3F7933D18890
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'building', u'source', u'condition'])
   out - in: set([u'abandoned:building', u'error:circular'])
@@ -1124,7 +1124,7 @@ AF4E3199-44C2-477D-BB18-758584294DF8
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1160,7 +1160,7 @@ OSM:
 in: TransportationGroundPnt out: TransportationGroundPnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1169,7 +1169,7 @@ ADA332AC-AEEC-428C-8011-5241C94F4B8E
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1178,7 +1178,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -1205,7 +1205,7 @@ EEA2047E-4A2D-449E-9DEF-8D1BC1765166
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1223,7 +1223,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1232,7 +1232,7 @@ B202F179-5156-4769-A5A0-031BB3468D10
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source', u'condition'])
   out - in: set([u'construction', u'error:circular'])
@@ -1241,7 +1241,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1279,7 +1279,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1306,7 +1306,7 @@ OSM:
 in: AeronauticPnt out: AeronauticPnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1315,7 +1315,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1360,7 +1360,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:resource_owner', u'source', u'security:classification'])
   out - in: set([u'error:circular'])
@@ -1369,7 +1369,7 @@ FB58F307-C7ED-4023-90D2-535B440BB474
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1387,7 +1387,7 @@ B865241D-FB0A-4662-8042-21378B5D8149
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1405,7 +1405,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1414,7 +1414,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1423,7 +1423,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1450,7 +1450,7 @@ C57BCB46-FABF-46F1-A3E6-2E77F4F5C32D
 in: StructureSrf out: StructureSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1468,7 +1468,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1477,7 +1477,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1486,7 +1486,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1495,7 +1495,7 @@ B14E13C0-5EA4-4B04-8CE9-422E15B3037E
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source', u'condition'])
   out - in: set([u'construction', u'error:circular'])
@@ -1513,7 +1513,7 @@ D2A441D2-5080-4C6B-9E05-B40ED6569FFD
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])
@@ -1531,7 +1531,7 @@ OSM:
 in: StructurePnt out: StructurePnt
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'use', u'error:circular'])
@@ -1540,7 +1540,7 @@ OSM:
 in: RecreationSrf out: RecreationSrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1558,7 +1558,7 @@ OSM:
 in: FacilitySrf out: FacilitySrf
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1567,7 +1567,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+  out - in: set([u'FCSUBTYPE'])
 OSM:
   in - out: set([u'security:classification', u'source', u'security:resource_owner'])
   out - in: set([u'error:circular'])

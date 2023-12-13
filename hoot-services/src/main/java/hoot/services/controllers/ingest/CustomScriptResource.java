@@ -313,7 +313,7 @@ public class CustomScriptResource {
 
                 // Sanity check
                 if (!confFile.exists()) {
-                    logger.error("Missing translation conf file: " + confFile.getName());
+                    logger.error("Missing translation conf file: " + confFile.getName() + " in " + file);
                     continue;
                 }
 

@@ -121,6 +121,7 @@ tds71.rules = {
     // ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
     // ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
     ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ060','control_tower','yes'], // Control Tower
     ['F_CODE','AQ062','railway','crossing'],
     ['F_CODE','AQ062','railway','level_crossing'],
     ['F_CODE','AQ095','man_made','adit'], // Tunnel Mouth
