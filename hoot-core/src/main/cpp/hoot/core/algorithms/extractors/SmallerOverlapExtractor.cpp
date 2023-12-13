@@ -23,13 +23,12 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "SmallerOverlapExtractor.h"
 
 // geos
 #include <geos/geom/Geometry.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/elements/Element.h>
@@ -75,12 +74,14 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
   {
     overlap = g1->intersection(g2.get());
   }
-  catch (const geos::util::TopologyException&)
+  catch (const std::runtime_error&)
   {
-    g1.reset(GeometryUtils::validateGeometry(g1.get()));
-    g2.reset(GeometryUtils::validateGeometry(g2.get()));
-    overlap = g2->intersection(g1.get());
+    //  Validate and intersect
+    overlap = _validate(g1, g2);
   }
+
+  if (!overlap)
+    return 0.0;
 
   double a1 = g1->getArea();
   double a2 = g2->getArea();
@@ -95,5 +96,20 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
 
   return std::min(1.0, overlapArea / min(a1, a2));
 }
+
+std::shared_ptr<Geometry> SmallerOverlapExtractor::_validate(std::shared_ptr<Geometry>& g1, std::shared_ptr<Geometry>& g2) const
+{
+  try
+  {
+    g1.reset(GeometryUtils::validateGeometry(g1.get()));
+    g2.reset(GeometryUtils::validateGeometry(g2.get()));
+    return g2->intersection(g1.get());
+  }
+  catch (const std::runtime_error&)
+  {
+    return nullptr;
+  }
+}
+
 
 }

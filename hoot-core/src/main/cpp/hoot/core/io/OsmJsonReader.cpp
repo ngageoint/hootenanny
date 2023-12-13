@@ -257,6 +257,20 @@ void OsmJsonReader::_loadJSON(const QString& jsonStr)
   _loadJSON(ss);
 }
 
+void OsmJsonReader::_loadJSON(const QByteArray& json)
+{
+  // Clear out anything that might be hanging around
+  _propTree.clear();
+
+  // Convert string to stringstream
+  stringstream ss(json.constData(), ios::in);
+
+  if (!ss.good())
+    throw HootException("Error reading from JSON buffer");
+
+  _loadJSON(ss);
+}
+
 bool OsmJsonReader::isValidJson(const QString& jsonStr)
 {
   try
@@ -876,7 +890,7 @@ void OsmJsonReader::_readFromHttp()
   //  Iterate all of the XML results
   while (hasMoreResults())
   {
-    QString jsonResult;
+    QByteArray jsonResult;
     //  Get one JSON string at a time
     if (getSingleResult(jsonResult))
     {

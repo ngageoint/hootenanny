@@ -272,6 +272,7 @@ OgrOptions OgrUtilities::_getOgrOptions(const QString& url, const OgrDriverInfo&
   OgrOptions options;
   //  Turn off writing a properties file for GZIP operations in GDAL
   CPLSetConfigOption("CPL_VSIL_GZIP_WRITE_PROPERTIES", "NO");
+  CPLSetConfigOption("OSR_USE_NON_DEPRECATED", "NO");
 
   QString driver(driverInfo._driverName);
 

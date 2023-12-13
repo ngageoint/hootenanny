@@ -129,7 +129,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   //  Iterate all of the XML results
   while (hasMoreResults())
   {
-    QString xmlResult;
+    QByteArray xmlResult;
     //  Get one XML string at a time
     if (getSingleResult(xmlResult))
     {
@@ -139,7 +139,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
       reader.setErrorHandler(this);
       //  Convert the string to a buffer to parse
       QBuffer buffer;
-      buffer.setData(xmlResult.toUtf8());
+      buffer.setData(xmlResult);
       //  Do the actual parsing
       QXmlInputSource xmlInputSource(&buffer);
       if (reader.parse(xmlInputSource) == false)
@@ -257,7 +257,7 @@ bool OsmApiReader::hasMoreElements()
     if (!_elementConverter)
       _elementConverter = std::make_shared<ElementToGeometryConverter>(_getElementProvider());
 
-    QString xmlResult;
+    QByteArray xmlResult;
     //  Get one XML string to parse
     while (!getSingleResult(xmlResult))
     {
@@ -268,7 +268,7 @@ bool OsmApiReader::hasMoreElements()
 
     if (_xmlBuffer.isOpen())
       _xmlBuffer.close();
-    _xmlBuffer.setData(xmlResult.toUtf8());
+    _xmlBuffer.setData(xmlResult);
     _xmlBuffer.open(QBuffer::ReadOnly);
     _streamReader.setDevice(&_xmlBuffer);
 

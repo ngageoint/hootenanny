@@ -22,12 +22,9 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #include "BuildingPartPreMergeCollector.h"
-
-// geos
-#include <geos/util/TopologyException.h>
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
@@ -128,7 +125,7 @@ void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(ElementPtr 
   {
     contains = buildingGeom->contains(buildingPartMatchCandidateGeom.get());
   }
-  catch (const geos::util::TopologyException&)
+  catch (const std::runtime_error&)
   {
     // Something is wrong with the geometry, so let's try cleaning it.
     LOG_TRACE("cleaning...");

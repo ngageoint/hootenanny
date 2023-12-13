@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
@@ -34,7 +34,6 @@
 
 // geos
 #include <geos/geom/Geometry.h>
-#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 
@@ -70,7 +69,7 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map, const C
     }*/
     return polyAlphaShape->distance(poiGeom.get());
   }
-  catch (const geos::util::TopologyException& e)
+  catch (const std::runtime_error& e)
   {
     LOG_TRACE(
       "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
