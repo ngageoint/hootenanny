@@ -3262,7 +3262,8 @@ tds71 = {
               returnData[i]['attrs']['OSMTAGS'] = tList[1];
               for (var j = 2, tLen = tList.length; j < tLen; j++)
               {
-                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+                // Drop empty values
+                if (tList[j] !== "") returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
               }
             }
             else
@@ -3271,7 +3272,7 @@ tds71 = {
             }
           }
 
-          // If we are using the TDS structre, fill the rest of the unused attrs in the schema
+          // If we are using the TDS structure, fill the rest of the unused attrs in the schema
           if (tds71.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds71.thematicGroupList[gFcode];

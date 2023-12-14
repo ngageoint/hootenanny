@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -313,7 +313,7 @@ public class CustomScriptResource {
 
                 // Sanity check
                 if (!confFile.exists()) {
-                    logger.error("Missing translation conf file: " + confFile.getName());
+                    logger.error("Missing translation conf file: " + confFile.getName() + " in " + file);
                     continue;
                 }
 

@@ -21,7 +21,8 @@ var runningStatus = 'running',
     completeStatus = 'complete';
 
 // Loop through all "hootHome/translations*" directories and load config files if they exist.
-fs.readdirSync(hootHome,{withFileTypes:true}).filter(file => file.isDirectory() && (file.name.indexOf('translations') == 0)).forEach( function (file){
+// Added following symbolic links.
+fs.readdirSync(hootHome,{withFileTypes:true}).filter(file => (file.isDirectory() || file.isSymbolicLink()) && (file.name.indexOf('translations') == 0)).forEach( function (file){
   var tLocal = {};
   var dirName = hootHome + '/' + file.name + '/';
 
@@ -488,7 +489,8 @@ exports.buildCommand = buildCommand
 function doExport(req, res, hash, input) {
     //Check existing jobs
     var job = jobs[hash];
-    var isFile = req.params.format === 'OSM XML';
+    // var isFile = req.params.format === 'OSM XML';
+    var isFile = ['OSM XML', 'GeoPackage'].includes(req.params.format);
     if (job) {
         if (job.status === completeStatus) { //if complete, return file
             if (req.method === 'POST') {

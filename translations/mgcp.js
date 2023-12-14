@@ -1088,7 +1088,7 @@ mgcp = {
     //     tags.seasonal = 'fair';
     //     break;
 
-    case 'AP030': // Trail
+    case 'AP030': // Road
       if (tags.highway == 'yes') tags.highway = 'road';
       break;
 

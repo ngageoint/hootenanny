@@ -72,8 +72,7 @@ var translationsMap = {
 //     "exportPath" : "export_smurf.js"
 //   }
 // ]
-
-fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => file.isDirectory() && (file.name.indexOf('translations') == 0)).forEach( function (file){
+fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => (file.isDirectory() || file.isSymbolicLink()) && (file.name.indexOf('translations') == 0)).forEach( function (file){
   var tLocal = {};
   var dirName = HOOT_HOME + '/' + file.name + '/';
 
@@ -110,6 +109,7 @@ fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => file.isDirectory()
                   translationsMap.toogr[fmt.name] = new hoot.SchemaTranslationOp({
                     'schema.translation.script': dirName + fmt.exportPath,
                     'schema.translation.direction':'toogr'});
+
                   translationsMap.toosm[fmt.name] = new hoot.SchemaTranslationOp({
                     'schema.translation.script': dirName + fmt.importPath,
                     'schema.translation.direction':'toosm'});
