@@ -472,8 +472,6 @@ function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, is
     }
 
     // Appending to a FGDB is only applicable for FGDB outputs....
-    console.log('Format: ' + params.format + '\n');
-    process.stdout.write('StdFormat: ' + params.format + '\n');
     if (params.appendFgdb === 'true' && params.format === 'File Geodatabase') {
         command += ' -D ogr.append.data=true';
     }
