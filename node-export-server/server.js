@@ -194,6 +194,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         + req.query.crop
         + req.query.poly
         + req.query.overrideTags
+        + req.query.appendFgdb
         + req.query.style;
     var hash = crypto.createHash('sha1').update(params).digest('hex');
     var input = config.datasources[req.params.datasource].conn;
@@ -468,6 +469,11 @@ function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, is
     var eConf = hootHome + '/' + config.schemas[paramschema].replace('.js','') + 'Export.conf';
     if (fs.existsSync(eConf)) {
         command += ' -C "' + eConf + '"';
+    }
+
+    // Appending to a FGDB is only applicable for FGDB outputs....
+    if (params.appendFgdb === 'true' && params.format === 'File Geodatabase') {
+        command += ' -D ogr.append.data=true';
     }
 
     command += ' ' + input + ' ' + outFile;
