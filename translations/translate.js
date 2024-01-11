@@ -1559,9 +1559,9 @@ translate = {
   // addSingleO2sFeature - Add a single o2s feature to a schema
   addSingleO2sFeature: function(schema)
   {
-    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',columns:[ {name:'tag1',desc:'Tag List',type:'String'/*,length:'8192'*/}] });
-    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',columns:[ {name:'tag1',desc:'Tag List',type:'String'/*,length:'8192'*/}] });
-    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',columns:[ {name:'tag1',desc:'Tag List',type:'String'/*,length:'8192'*/}] });
+    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
+    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
+    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
 
     return schema;
   }, // End addSingleO2sFeature

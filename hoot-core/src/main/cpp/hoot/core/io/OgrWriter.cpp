@@ -654,7 +654,10 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
 
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
+    {
+      LOG_DEBUG("Field " << ba.constData() << " does not exist. Skipping");
       continue;
+    }
 
     switch (v.type())
     {

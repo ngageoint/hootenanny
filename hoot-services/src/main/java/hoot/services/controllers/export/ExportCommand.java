@@ -116,6 +116,10 @@ class ExportCommand extends ExternalCommand {
             ExternalCommand untarFileCommand = new UnTARFileCommand(exportTemplate, outputDir, this.getClass());
             untarFileCommand.execute();
         }
+        else {
+            params.setAppend(false);
+        }
+
     }
 
     List<String> getCommonExportHootOptions() {
