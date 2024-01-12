@@ -31,7 +31,7 @@ fi
 find /etc/pki/rpm-gpg -type f -name RPM-GPG-KEY-PGDG-\* -delete
 find /etc/yum.repos.d -type f -name pgdg-\*-centos.repo -delete
 
-cat > "${PGDG_KEY}" <<EOF
+cat > "$PGDG_KEY" <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2.0.22 (GNU/Linux)
 
