@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
  */
 #include "OgrWriter.h"
 
@@ -654,7 +654,10 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
 
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
+    {
+      LOG_DEBUG("Field " << ba.constData() << " does not exist. Skipping");
       continue;
+    }
 
     switch (v.type())
     {

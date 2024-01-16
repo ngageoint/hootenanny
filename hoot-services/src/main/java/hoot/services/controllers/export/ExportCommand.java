@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2024 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -88,7 +88,6 @@ class ExportCommand extends ExternalCommand {
 
     //Appends data to a blank fgdb. The template is either stored with translation or with the "local" ones.
     private void appendToFGDB() {
-
         // Split the translation string: "translations/TDSv71.js"
         String[] tTrans = params.getTranslation().split("/");
         String templateName = tTrans[1].replace(".js",".tgz");
@@ -116,6 +115,10 @@ class ExportCommand extends ExternalCommand {
             ExternalCommand untarFileCommand = new UnTARFileCommand(exportTemplate, outputDir, this.getClass());
             untarFileCommand.execute();
         }
+        else {
+            params.setAppend(false);
+        }
+
     }
 
     List<String> getCommonExportHootOptions() {
