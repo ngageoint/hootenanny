@@ -2242,7 +2242,7 @@ var schema = [
    },
    {name:"ZI001_VSD",desc:"Source Information : Vertical Source Date and Time",optional:"R",type:"String",defValue:"noInformation"},
    {name:"ZI001_VSN",desc:"Source Information : Vertical Source Description",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"ZI020_GE4",desc:"(Location Country) Designation : GENC Short URN-based Identifier",optional:"R",type:"enumeration",defValue:"noInformation",enumerations: full_ZI020_GE4},
+   {name:"ZI020_GE4",desc:"(Location Country) Designation : GENC Short URN-based Identifier",optional:"R",type:"textEnumeration",defValue:"noInformation",enumerations: full_ZI020_GE4},
    {name:"ZI020_GE42",desc:"Location Country Designation : GENC Short URN-based Identifier second",optional:"R",type:"enumeration",defValue:"noInformation",enumerations: full_ZI020_GE4},
    {name:"ZI020_GE43",desc:"Location Country Designation : GENC Short URN-based Identifier third",optional:"R",type:"enumeration",defValue:"noInformation",enumerations: full_ZI020_GE4},
    {name:"ZI020_GE44",desc:"Location Country Designation : GENC Short URN-based Identifier fourth",optional:"R",type:"enumeration",defValue:"noInformation",enumerations: full_ZI020_GE4},
