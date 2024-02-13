@@ -260,10 +260,12 @@ mgcp = {
 
     for (var i = 0, len = mgcpAttrList.length; i < len; i++)
     {
+      // Defensive
+      if (mgcpAttrList[i] == 'OSMTAGS') continue;
+
       if (attrList.indexOf(mgcpAttrList[i]) == -1) attrs[mgcpAttrList[i]] = undefined;
       //if (attrList.indexOf(mgcpAttrList[i]) == -1) attrs[mgcpAttrList[i]] = null;
     }
-
   }, // End validateThematicAttrs
 
 
@@ -3074,7 +3076,7 @@ mgcp = {
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
-        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
       print('');
