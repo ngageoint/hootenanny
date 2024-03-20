@@ -9,7 +9,7 @@ pipeline {
 
     triggers {
         // Set nightly trigger
-        // cron((BRANCH_NAME == "master") ? "H H(4-5) * * 1-5" : "")
+        cron((BRANCH_NAME == "master") ? "H H(4-5) * * 1-5" : "")
     }
 
     // Configurable parameters for users to skip steps and control pipeline behavior
