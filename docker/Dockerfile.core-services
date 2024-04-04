@@ -36,8 +36,9 @@ RUN --mount=type=cache,target=/var/cache/yum \
     yum-config-manager --save \
         --setopt=base.repo_gpgcheck=1 \
         --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
-    yum -y install epel-release centos-release-scl
+        --setopt=updates.repo_gpgcheck=1 &> /dev/null
+
+RUN yum -y install epel-release centos-release-scl
 
 RUN yum install -y \
         armadillo-$armadillo_version \

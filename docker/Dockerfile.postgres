@@ -18,8 +18,9 @@ RUN --mount=type=cache,target=/var/cache/yum \
     yum-config-manager --save \
         --setopt=base.repo_gpgcheck=1 \
         --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
-    yum -q -y install epel-release
+        --setopt=updates.repo_gpgcheck=1 &> /dev/null
+
+RUN yum -q -y install epel-release
 
 RUN /tmp/postgres-install.sh $postgresql_version && rm -f /tmp/*.sh
 
