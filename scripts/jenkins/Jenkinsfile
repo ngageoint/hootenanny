@@ -77,6 +77,7 @@ pipeline {
                     git submodule update --init
                     ( [ -d ../software.ubuntu1404 ] && cp -R ../software.ubuntu1404 software ) || true
                     rm -rf ./test-files/ui/screenshot_*.png
+                    vagrant plugin install vagrant-bindfs vagrant-sshfs
                 '''
             }
         }
