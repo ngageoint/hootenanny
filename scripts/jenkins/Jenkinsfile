@@ -77,7 +77,6 @@ pipeline {
                     git submodule update --init
                     ( [ -d ../software.ubuntu1404 ] && cp -R ../software.ubuntu1404 software ) || true
                     rm -rf ./test-files/ui/screenshot_*.png
-                    vagrant plugin install vagrant-bindfs vagrant-sshfs
                 '''
             }
         }
@@ -85,6 +84,7 @@ pipeline {
             when { expression { return params.Hoot_provision } }
             steps {
                 // NOTE: Only installs hoot build dependencies
+                sh "vagrant plugin install vagrant-bindfs vagrant-sshfs"
                 sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
                 script {
                     SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
