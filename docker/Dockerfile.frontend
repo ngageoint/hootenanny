@@ -19,9 +19,11 @@ RUN --mount=type=cache,target=/var/cache/yum \
         --setopt=base.repo_gpgcheck=1 \
         --setopt=extras.repo_gpgcheck=1 \
         --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
-    yum makecache -y && \
-    yum -q -y install epel-release && \
-    yum -y install \
+    yum makecache -y
+
+RUN yum -q -y install epel-release
+
+RUN yum -y install \
         bzip2 \
         git \
         git-core \

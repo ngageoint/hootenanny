@@ -521,6 +521,10 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['geom'] = fGeometry
             tSchema[rawfCode]['columns'] = {}
             tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
+            tSchema[rawfCode]['columns']['GlobalID'] = { 'name':'GlobalID','desc':'GlobalID','type':'String','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','defValue':'UNK'}
+            tSchema[rawfCode]['columns']['GFID'] = { 'name':'GFID','desc':'Global Feature Identifier','type':'String','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','defValue':'UNK'}
+            tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'Integer','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':'0'}
+
 
             if rawfCode in thematicLookup:
                 tSchema[rawfCode]['thematic'] = thematicLookup[rawfCode]

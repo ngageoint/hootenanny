@@ -1556,7 +1556,8 @@ tds71 = {
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type:2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.railway == "crossing"','t["transport:type"] = "railway"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.resource','t.raw_material = t.resource; delete t.resource'],
-        ['(t.shop || t.office) && !(t.facility) && !(t.building)','a.F_CODE = "AL013"'],
+        ['(t.shop || t.office) && !(t.facility) && !(t.building) && !(t.amenity == "fuel")','a.F_CODE = "AL013"'],
+        ['t.amenity == "fuel" && t.building == "yes"','a.F_CODE = "AL013"'],
         ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
         ['t["tower:type"] == "minaret" && t.man_made == "tower"','delete t.man_made'],
         ['t.tunnel == "building_passage"','t.tunnel = "yes"'],
@@ -1725,6 +1726,13 @@ tds71 = {
       {
         tags.use = 'religious_activities';
       }
+    }
+
+    // The existence of tidal = yes in combination with a natural = wetland tag should remain
+    // in VegetationSrf (was changing to HydrographySrf)
+    if (tags.tidal == 'yes' && (tags.natural == 'wetland'))
+    {
+      attrs.F_CODE = 'ED010';
     }
 
     if (tags.water == 'tidal')
