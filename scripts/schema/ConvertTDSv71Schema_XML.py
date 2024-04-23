@@ -77,7 +77,7 @@ def printJavascript(schema,withDefs):
                 aString += 'definition:"%s",' % (schema[f]['columns'][k]['definition'])
 
             if 'func' in schema[f]['columns'][k]:
-                aString += 'type:"enumeration",defValue:"%s",enumerations: %s}' % (schema[f]['columns'][k]['defValue'],schema[f]['columns'][k]['func'])
+                aString += 'type:"%s",defValue:"%s",enumerations: %s}' % (schema[f]['columns'][k]['type'], schema[f]['columns'][k]['defValue'],schema[f]['columns'][k]['func'])
                 if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
                     aString += ','
                     num_attrib -= 1
