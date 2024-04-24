@@ -57,7 +57,7 @@
 #include <node/node_version.h>
 
 // v8
-#include <v8-version-string.h>
+#include <include/v8-version-string.h>
 
 // tgs
 #include <tgs/System/SystemInfo.h>
