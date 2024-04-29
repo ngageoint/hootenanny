@@ -33,6 +33,8 @@ There is also an introduction [video](https://www.youtube.com/watch?v=LeaTLxVCFm
 
 For installation from RPM, follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, follow [this](https://github.com/ngageoint/hootenanny/blob/master/docs/install/Vagrant.asciidoc).
 
+For installation using Docker, [follow these instructions](https://github.com/ngageoint/hootenanny/blob/master/Docker.md).
+
 # Conflatable Feature Types
 
 Hootenanny has specifically tailored conflation algorithms available for the following data types:
