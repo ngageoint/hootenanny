@@ -81,7 +81,7 @@ sudo yum install -y \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION \
-     v8-devel
+     v8-devel-$V8_VERSION
 
 echo "### Locking versions of libraries"
 sudo yum versionlock add \
@@ -112,7 +112,7 @@ sudo yum versionlock add \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION \
-     v8-devel
+     v8-devel-$V8_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
