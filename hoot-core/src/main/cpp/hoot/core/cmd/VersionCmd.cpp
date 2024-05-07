@@ -122,7 +122,7 @@ public:
       LOG_DEBUG("CppUnit Version:\t" << CPPUNIT_VERSION);
 #   endif
     LOG_DEBUG("NodeJs Version:\t" << NODE_VERSION_STRING);
-    LOG_DEBUG("v8 Version:  \t" << V8_VERSION_STRING);
+    LOG_DEBUG("v8 Version:  \t" << V8_MAJOR_VERSION << "." << V8_MINOR_VERSION << "." << V8_BUILD_NUMBER << "." << V8_PATCH_LEVEL);
     LOG_DEBUG("Python Version:\t" << PY_VERSION);
     LOG_DEBUG("Protobuf Version:\t" << QString("%1.%2.%3")
               .arg(GOOGLE_PROTOBUF_VERSION / 1000000)
