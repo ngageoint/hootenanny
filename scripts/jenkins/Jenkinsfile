@@ -84,7 +84,7 @@ pipeline {
             when { expression { return params.Hoot_provision } }
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh "vagrant plugin repair"
+                sh "vagrant plugin expunge --reinstall"
                 sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
                 script {
                     SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
