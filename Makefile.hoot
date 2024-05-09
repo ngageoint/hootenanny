@@ -395,7 +395,7 @@ ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
 	scripts/database/AddKarmaTestUser.sh
 	cd $$HOOT_HOME/hoot-ui-2x && \
-	npm i && \
+	npm i --legacy-peer-deps && \
 	npm test
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
