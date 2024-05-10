@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
  */
 
 // Boost
@@ -57,7 +57,7 @@
 #include <node/node_version.h>
 
 // v8
-#include <v8-version-string.h>
+#include <v8-version.h>
 
 // tgs
 #include <tgs/System/SystemInfo.h>
@@ -122,7 +122,7 @@ public:
       LOG_DEBUG("CppUnit Version:\t" << CPPUNIT_VERSION);
 #   endif
     LOG_DEBUG("NodeJs Version:\t" << NODE_VERSION_STRING);
-    LOG_DEBUG("v8 Version:  \t" << V8_VERSION_STRING);
+    LOG_DEBUG("v8 Version:  \t" << V8_MAJOR_VERSION << "." << V8_MINOR_VERSION << "." << V8_BUILD_NUMBER << "." << V8_PATCH_LEVEL);
     LOG_DEBUG("Python Version:\t" << PY_VERSION);
     LOG_DEBUG("Protobuf Version:\t" << QString("%1.%2.%3")
               .arg(GOOGLE_PROTOBUF_VERSION / 1000000)

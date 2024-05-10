@@ -12,6 +12,7 @@ conf/services/importHoot2Ops.json
 **/.project
 *.gcov
 *.autosave
+*.so
 *~
 *.kate-swp
 aclocal.m4
@@ -19,6 +20,8 @@ autom4te.cache
 BuildDate.txt
 bin/
 bw-output/
+.cache/*
+apndTest/*
 callgrind.*
 conf/database/DatabaseConfigLocal.sh
 conf/LocalHoot.json
