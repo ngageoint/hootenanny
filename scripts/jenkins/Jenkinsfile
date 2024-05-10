@@ -9,7 +9,7 @@ pipeline {
 
     triggers {
         // Set nightly trigger
-        // cron((BRANCH_NAME == "master") ? "H H(4-5) * * 1-5" : "")
+        cron((BRANCH_NAME == "master") ? "H H(4-5) * * 1-5" : "")
     }
 
     // Configurable parameters for users to skip steps and control pipeline behavior
@@ -216,7 +216,8 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
             }
         }
-        stage("Sonar") {
+        // Reenable this stage when migrated to EL9
+        /* stage("Sonar") {
             when {
                 anyOf {
                     expression { return params.Sonar }
@@ -239,7 +240,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
     post {
         //  always runs first so halting on non-release VM should happen at the end in cleanup
