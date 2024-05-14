@@ -828,6 +828,10 @@ int main(int argc, char* argv[])
       vector<string> allNames;
       getNames(allNames, vTestsToRun);
       set<string> nameCheck(allNames.begin(), allNames.end());
+      for (const auto& name : allNames)
+      {
+        cout << "Name of test: " << QString(name.c_str()) << endl;
+      }
 
       //  Get a list of all conflate cases jobs that must be processed last.
       vector<TestPtr> conflateCases;
