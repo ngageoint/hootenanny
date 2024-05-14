@@ -9,7 +9,7 @@ DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 DATABASE="$DB_URL/HootApiDbReaderNegativeIdsStreamTest"
 
 DB_TRANSLATE="-D schema.translation.script=test-files/jakarta_raya_coastline.js"
-OUT_TRANSLATE="-D schema.translation.script=$HOOT_HOME/translations/TDSv70.js"
+OUT_TRANSLATE="-D schema.translation.script=$HOOT_HOME/translations/TDSv71.js"
 
 INPUT_FILE="$HOOT_HOME/test-files/jakarta_raya_coastline.shp"
 OUTPUT_PATH="$HOOT_HOME/test-output/cmd/slow/HootApiDbReaderNegativeIdsStream"
