@@ -80,11 +80,11 @@ void Feature::validate(StrictChecking strict)
         _values[d->getName()] = d->getDefaultValue();
     }
     else
-    {
-      if (_values[d->getName()].isNull())
-        _values[d->getName()] = d->getDefaultValue();
+    //{
+      //if (_values[d->getName()].isNull())
+        //_values[d->getName()] = d->getDefaultValue();
       d->validate(_values[d->getName()], strict);
-    }
+    //}
   }
 }
 
