@@ -531,8 +531,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     else
       throw HootException("Expected a value of 'true' or 'false' for allowNull.");
   }
-  else if (map["name"].toString() != "OSMTAGS")
-    result->setAllowNull(false);
+  //else if (map["name"].toString() != "OSMTAGS")
+  //  result->setAllowNull(false);
 
   return result;
 }
