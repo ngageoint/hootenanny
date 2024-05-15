@@ -488,6 +488,9 @@ def processFile(fileName,enValues):
                 tschema[fName]['columns'][aName]['defValue'] = '5'
                 dataType = 'CodeList'
 
+            if aName == 'SGCC' or aName == 'RMWC':
+                tschema[fName]['columns'][aName]['defValue'] = '5'
+
             if dataType == 'Enumeration':
                 tschema[fName]['columns'][aName]['enum'] = []
                 continue
