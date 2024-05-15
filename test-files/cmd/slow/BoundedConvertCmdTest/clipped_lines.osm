@@ -25,23 +25,12 @@
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="-23"/>
-        <tag k="angle" v="0"/>
-        <tag k="bridge:horizontal_clearance" v="0"/>
-        <tag k="bridge:under_clearance" v="0"/>
-        <tag k="depth" v="0"/>
-        <tag k="ele:max" v="0"/>
         <tag k="error:circular" v="15"/>
-        <tag k="height" v="0"/>
-        <tag k="height:feature" v="0"/>
         <tag k="highway" v="road"/>
-        <tag k="max_clearance" v="0"/>
         <tag k="note" v="2"/>
-        <tag k="railway:track:length" v="0"/>
-        <tag k="safe_clearance:vertical" v="0"/>
         <tag k="source" v="tdsv70:transportationgroundcrv"/>
         <tag k="source:imagery:mosaic" v="no"/>
         <tag k="source:ingest:datetime" v="2023-01-04T00:11:42.450Z"/>
-        <tag k="thickness" v="0"/>
         <tag k="uuid" v="{73662f5c-ac22-48ee-99ca-0857458b06ec}"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -55,23 +44,12 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-21"/>
-        <tag k="angle" v="0"/>
-        <tag k="bridge:horizontal_clearance" v="0"/>
-        <tag k="bridge:under_clearance" v="0"/>
-        <tag k="depth" v="0"/>
-        <tag k="ele:max" v="0"/>
         <tag k="error:circular" v="15"/>
-        <tag k="height" v="0"/>
-        <tag k="height:feature" v="0"/>
         <tag k="highway" v="road"/>
-        <tag k="max_clearance" v="0"/>
         <tag k="note" v="0"/>
-        <tag k="railway:track:length" v="0"/>
-        <tag k="safe_clearance:vertical" v="0"/>
         <tag k="source" v="tdsv70:transportationgroundcrv"/>
         <tag k="source:imagery:mosaic" v="no"/>
         <tag k="source:ingest:datetime" v="2023-01-04T00:11:42.449Z"/>
-        <tag k="thickness" v="0"/>
         <tag k="uuid" v="{a0d73ab9-61c0-4779-8cf4-bbd331689795}"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -83,46 +61,24 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-11"/>
-        <tag k="angle" v="0"/>
-        <tag k="bridge:horizontal_clearance" v="0"/>
-        <tag k="bridge:under_clearance" v="0"/>
-        <tag k="depth" v="0"/>
-        <tag k="ele:max" v="0"/>
         <tag k="error:circular" v="15"/>
-        <tag k="height" v="0"/>
-        <tag k="height:feature" v="0"/>
         <tag k="highway" v="road"/>
-        <tag k="max_clearance" v="0"/>
         <tag k="note" v="0"/>
-        <tag k="railway:track:length" v="0"/>
-        <tag k="safe_clearance:vertical" v="0"/>
         <tag k="source" v="tdsv70:transportationgroundcrv"/>
         <tag k="source:imagery:mosaic" v="no"/>
         <tag k="source:ingest:datetime" v="2023-01-04T00:11:42.449Z"/>
-        <tag k="thickness" v="0"/>
         <tag k="uuid" v="{a0d73ab9-61c0-4779-8cf4-bbd331689795}"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="angle" v="0"/>
-        <tag k="bridge:horizontal_clearance" v="0"/>
-        <tag k="bridge:under_clearance" v="0"/>
-        <tag k="depth" v="0"/>
-        <tag k="ele:max" v="0"/>
         <tag k="error:circular" v="15"/>
-        <tag k="height" v="0"/>
-        <tag k="height:feature" v="0"/>
         <tag k="highway" v="road"/>
-        <tag k="max_clearance" v="0"/>
         <tag k="note" v="1"/>
-        <tag k="railway:track:length" v="0"/>
-        <tag k="safe_clearance:vertical" v="0"/>
         <tag k="source" v="tdsv70:transportationgroundcrv"/>
         <tag k="source:imagery:mosaic" v="no"/>
         <tag k="source:ingest:datetime" v="2023-01-04T00:11:42.447Z"/>
-        <tag k="thickness" v="0"/>
         <tag k="uuid" v="{e40c6d68-5546-4981-ba9e-f2209eb3d15e}"/>
     </way>
 </osm>
