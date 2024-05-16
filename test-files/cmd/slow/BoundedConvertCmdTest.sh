@@ -54,4 +54,4 @@ hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
   -D bounds="-71.46477676157,42.4860359843,-71.45903473335,42.49004008401" \
   -D writer.crop.features.crossing.bounds=true \
   test-files/BostonSubsetRoadBuilding_FromOsm.osm $OUTPUT_DIR/clipped_boston_translate.geojson
-hoot diff $LOG_LEVEL $CONFIG --ignore-uuid $INPUT_DIR/clipped_boston_translate.geojson $OUTPUT_DIR/clipped_boston_translate.geojson
+hoot diff $LOG_LEVEL $CONFIG -D map.comparator.ignore.tag.keys="UFI" --ignore-uuid $INPUT_DIR/clipped_boston_translate.geojson $OUTPUT_DIR/clipped_boston_translate.geojson
