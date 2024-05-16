@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
  */
 #include "Feature.h"
 
 // hoot
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
+#include <hoot/core/util/ConfigOptions.h>
+
 
 namespace hoot
 {
@@ -80,7 +82,11 @@ void Feature::validate(StrictChecking strict)
         _values[d->getName()] = d->getDefaultValue();
     }
     else
+    {
+      if (_values[d->getName()].isNull() && ConfigOptions().getOgrAppendData())
+        _values[d->getName()] = d->getDefaultValue();
       d->validate(_values[d->getName()], strict);
+    }
   }
 }
 

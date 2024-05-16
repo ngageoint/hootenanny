@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
@@ -531,6 +531,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     else
       throw HootException("Expected a value of 'true' or 'false' for allowNull.");
   }
+  else if (map["name"].toString() != "OSMTAGS" && ConfigOptions().getOgrAppendData())
+    result->setAllowNull(false);
 
   return result;
 }
