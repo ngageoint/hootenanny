@@ -29,6 +29,8 @@
 // hoot
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
+#include <hoot/core/util/ConfigOptions.h>
+
 
 namespace hoot
 {
@@ -81,7 +83,7 @@ void Feature::validate(StrictChecking strict)
     }
     else
     {
-      if (_values[d->getName()].isNull())
+      if (_values[d->getName()].isNull() && ConfigOptions().getOgrAppendData())
         _values[d->getName()] = d->getDefaultValue();
       d->validate(_values[d->getName()], strict);
     }
