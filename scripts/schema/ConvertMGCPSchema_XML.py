@@ -526,7 +526,6 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
             tSchema[rawfCode]['columns']['GlobalID'] = { 'name':'GlobalID','desc':'GlobalID','type':'String','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','defValue':'UNK'}
             tSchema[rawfCode]['columns']['GFID'] = { 'name':'GFID','desc':'Global Feature Identifier','type':'String','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','defValue':'UNK'}
-            tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'Integer','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':'0'}
 
 
             if rawfCode in thematicLookup:
@@ -553,10 +552,16 @@ def readFeatures(xmlDoc,funcList):
                 continue
 
             # The short version of the feature definition
-            if node.localName == 'typeName':
+            if node.localName == 'typeName' and processSingleNode(node,'gco:LocalName') == 'MGCP Feature':
+                continue
+            elif node.localName == 'typeName':
+
                 #print 'Feature Type: ', processSingleNode(node,'gco:LocalName')
                 tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
+
+                # Build the subtype now that the description is populated
                 tSchema[rawfCode]['fcsubtype'] = tSchema[rawfCode]['fcode'] + '_' + tSchema[rawfCode]['desc'].replace(' ','_') + '_' + tSchema[rawfCode]['geom']
+                tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':tSchema[rawfCode]['fcsubtype']}
                 continue
 
             # The long version of the feature definition
