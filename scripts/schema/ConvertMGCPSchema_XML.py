@@ -391,7 +391,7 @@ def addExtra(schema):
 
     # Add the common attributes to each feature
     for i in ['LCA010','PCA030','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045','AFA002','AFA003']:
-        schema[i]['columns']['F_CODE'] = {'name':'F_CODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
+        schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
         schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
         schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
 
