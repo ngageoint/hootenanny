@@ -349,6 +349,43 @@ void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<DoubleFieldD
   }
 }
 
+void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<StringFieldDefinition> fd, const QVariant& enumerations) const
+{
+  if (enumerations.canConvert(QVariant::List) == false)
+    throw HootException("Expected enumerations to be an array of maps.");
+
+  QVariantList vl = enumerations.toList();
+
+  for (const auto& variant : qAsConst(vl))
+  {
+    if (variant.canConvert(QVariant::Map) == false)
+      throw HootException("Expected enumerations to be an array of maps.");
+
+    QVariantMap vm = variant.toMap();
+    if (vm["name"].canConvert(QVariant::String) == false)
+      throw HootException("Expected each enumeration map to contain a valid value.");
+
+    QString v = vm["name"].toString();
+
+    LOG_DEBUG("Enumerated value: " << v);
+
+    if (fd->hasEnumeratedValue(v))
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
+    else
+      fd->addEnumeratedValue(v);
+  }
+}
+
 void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<IntegerFieldDefinition> fd,
                                                     const QVariant& enumerations) const
 {
@@ -379,6 +416,7 @@ void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<IntegerField
       logWarnCount++;
     }
     else
+      LOG_DEBUG("Parsing enumerated value: " << v);
       fd->addEnumeratedValue(v);
   }
 }
@@ -430,8 +468,11 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     throw HootException("Error parsing type in column.");
 
   QString type = map["type"].toString().toLower();
-  if (type == "string")
+  LOG_DEBUG("map name: " << map["name"].toString());
+  LOG_DEBUG("type: " << type);
+  if (type == "string" || (type == "enumeration" && !ConfigOptions().getOgrCodedValues()))
   {
+    LOG_DEBUG("ogr.coded.values: " << ConfigOptions().getOgrCodedValues());
     std::shared_ptr<StringFieldDefinition> fd = std::make_shared<StringFieldDefinition>();
 
     if (map.contains("defValue"))
@@ -444,6 +485,11 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     if (map.contains(MetadataTags::Length()))
       fd->setWidth(_toInt32(map[MetadataTags::Length()]));
 
+    if (map.contains("enumerations"))
+    {
+      LOG_DEBUG("Parsing string enumerations");
+      _parseEnumerations(fd, map["enumerations"]);
+    }
     result = fd;
   }
   else if (type == "double" || type == "real")
@@ -582,7 +628,6 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
     std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(variant);
     if (names.find(fd->getName()) != names.end())
       throw HootException("Found multiple fields with the same name. (" + fd->getName() + ")");
-
     dfd->addField(fd);
     names.insert(fd->getName());
   }

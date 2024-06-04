@@ -299,11 +299,21 @@ tds71 = {
       if (!(attrs[enumName])) continue;
 
       var attrValue = attrs[enumName];
+      print('enumName: ' + enumName);
+      print('attrValue: ' + attrValue);
       var enumList = feature.columns[i].enumerations;
       var enumValueList = [];
 
       // Pull all of the values out of the enumerated list to make life easier
-      for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
+      for (var j=0, elen = enumList.length; j < elen; j++) {
+        print('enumList: ' + enumList[j].name);
+        if (attrValue == enumList[j].value) 
+        {
+          attrValue = enumList[j].name;
+          print('new attrValue: ' + attrValue);
+        }
+        enumValueList.push(enumList[j].name);
+      }
 
       // If we DONT have the value in the list, add it to the OTH or MEMO field
       if (enumValueList.indexOf(attrValue) == -1)
@@ -311,7 +321,7 @@ tds71 = {
         var othVal = '(' + enumName + ':' + attrValue + ')';
 
         // No "Other" value. Push to the Memo field
-        if (enumValueList.indexOf('999') == -1)
+        if (enumValueList.indexOf('Other') == -1)
         {
           // Set the offending enumerated value to the default value
           attrs[enumName] = feature.columns[i].defValue;
@@ -323,7 +333,7 @@ tds71 = {
         else
         {
           // Set the offending enumerated value to the "other" value
-          attrs[enumName] = '999';
+          attrs[enumName] = 'Other';
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
@@ -331,6 +341,10 @@ tds71 = {
         }
 
       } // End attrValue in enumList
+      else
+      {
+        attrs[enumName] = attrValue;
+      }
 
     } // End Validate Enumerations
 

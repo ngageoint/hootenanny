@@ -658,6 +658,7 @@ if __name__ == "__main__":
     parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
     parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
     parser.add_argument('--intattr', help='Dump out all attributes that are integers',action='store_true')
+    parser.add_argument('--nocodedvalues', help='Generate a Thematic Schema with no coded values',action='store_true')
     parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
     parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
     parser.add_argument('--thematic', help='Generate a Thematic Schame',action='store_true')

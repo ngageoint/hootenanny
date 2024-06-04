@@ -45,11 +45,15 @@ public:
   bool hasDefaultValue() const override;
   QString toString() const override;
 
+  void addEnumeratedValue(QString v) {_enumeratedValues.insert(v); }
+  bool hasEnumeratedValue(QString v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
+
   void setDefaultValue(const QString& v) { _defaultValue = v; }
 
 private:
 
   QString _defaultValue;
+  std::set<QString> _enumeratedValues;
 };
 
 }
