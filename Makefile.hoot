@@ -12,7 +12,7 @@ SHELL=/bin/bash
 .PHONY: clean-ccache HOOT_VERSION_FILE
 
 # This list is for manually rebuilding the schema files.  The files have been commited to the main GitHub repo
-SCHEMA_FILES= translations/tds71_schema.js translations/tds70_schema.js translations/tds61_schema.js translations/tds40_schema.js translations/mgcp_schema.js translations/mgcp_thematic_schema.js translations/ggdm30_schema.js translations/tds71_thematic_schema.js translations/tds71_full_schema.js translations/tds61_full_schema.js translations/tds70_full_schema.js translations/tds40_full_schema.js translations/ggdm30_full_schema.js translations/etds71_rules.js translations/etds70_rules.js translations/etds61_rules.js translations/etds40_rules.js translations/emgcp_rules.js translations/eggdm30_rules.js translations/etds71_osm_rules.js translations/etds61_osm_rules.js translations/etds40_osm_rules.js translations/emgcp_osm_rules.js translations/eggdm30_osm_rules.js translations/etds70_osm_rules.js
+SCHEMA_FILES= translations/tds71_schema.js translations/tds70_schema.js translations/tds61_schema.js translations/tds40_schema.js translations/mgcp_schema.js translations/mgcp_thematic_schema.js translations/ggdm30_schema.js translations/tds71_thematic_schema.js translations/tds71_thematic_enum_schema.js translations/tds71_full_schema.js translations/tds61_full_schema.js translations/tds70_full_schema.js translations/tds40_full_schema.js translations/ggdm30_full_schema.js translations/etds71_rules.js translations/etds70_rules.js translations/etds61_rules.js translations/etds40_rules.js translations/emgcp_rules.js translations/eggdm30_rules.js translations/etds71_osm_rules.js translations/etds61_osm_rules.js translations/etds40_osm_rules.js translations/emgcp_osm_rules.js translations/eggdm30_osm_rules.js translations/etds70_osm_rules.js
 
 
 -include Makefile.inc
@@ -212,6 +212,11 @@ translations/tds71_full_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py con
 translations/tds71_thematic_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
 	mkdir -p $(@D)
 	$< --thematic  $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+# TDSv71 thematic schema with all of the text enumerations is built from and XML file made from a sample FGDB
+translations/tds71_thematic_enum_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$< --nocodedvalues $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # TDSv71 schema is built from an XML file made from a sample FGDB
 translations/tds71_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
