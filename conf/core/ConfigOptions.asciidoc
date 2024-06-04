@@ -3639,6 +3639,14 @@ new file/layer.
 When exporting, remove all non-spec attributes from the features. I.e. Do a "clean" export.
 NOTE: This is destructive. It will drop data that is usually kept - OSMTAGS etc
 
+=== ogr.coded.values
+
+* Data Type: bool
+* Default Value: `true`
+
+When exporting, interpret all values to their coded value counterpart. When this value is false,
+the value will be the human-readable value.
+
 === ogr.compare.output
 
 * Data Type: bool
