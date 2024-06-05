@@ -245,8 +245,9 @@ def processInheritance(schema,inheritance):
 # Add Additional features that are not specified in the TRD
 def addExtra(schema):
     schema['LCA010'] = {}
-    schema['LCA010'] = {'name':'LCA010','fcode':'CA010','desc':'Elevation Contour','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ContourL'}
+    schema['LCA010'] = {'name':'LCA010','fcode':'CA010','desc':'Elevation Contour','geom':'Line','fcsubtype':'CA010_Elevation_Contour_Line','fdname':'MGCP_Delta','thematic':'ContourL'}
     schema['LCA010']['columns'] = {}
+    schema['LCA010']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'CA010_Elevation_Contour_Line'}
     schema['LCA010']['columns']['ZVH'] = {'name':'ZVH','desc':'Highest Elevation','type':'Real','optional':'R','defValue':'-999999.0'}
     schema['LCA010']['columns']['ESC'] = {'name':'ESC','desc':'Elevation Surface Category','optional':'R','type':'enumeration','defValue':'1'}
     schema['LCA010']['columns']['ESC']['enum'] = [{'name':'Unknown','value':'0'},{'name':'Land','value':'1'},{'name':'Snow Field and/or Ice-field','value':'2'}]
@@ -260,9 +261,10 @@ def addExtra(schema):
     ]
 
     schema['PCA030'] = {}
-    schema['PCA030'] = {'name':'PCA030','fcode':'CA030','desc':'Spot Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PCA030'] = {'name':'PCA030','fcode':'CA030','desc':'Spot Elevation','geom':'Point','fcsubtype':'CA030_Spot_Elevation_Point','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PCA030']['columns'] = {}
     schema['PCA030']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
+    schema['PCA030']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'CA030_Spot_Elevation_Point'}
     schema['PCA030']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['PCA030']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['PCA030']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -274,12 +276,13 @@ def addExtra(schema):
      ]
 
     schema['PCA035'] = {}
-    schema['PCA035'] = {'name':'PCA035','fcode':'CA035','desc':'Inland Water Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PCA035'] = {'name':'PCA035','fcode':'CA035','desc':'Inland Water Elevation','geom':'Point','fcsubtype':'CA035_Inland_Water_Elevation_Point','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PCA035']['columns'] = {}
+    schema['PCA035']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'CA035_Inland_Water_Elevation_Point'}
     schema['PCA035']['columns']['ZVH'] = {'name':'ZVH','desc':'Highest Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
 
     schema['LFA000'] = {}
-    schema['LFA000'] = {'name':'LFA000','fcode':'FA000','desc':'Administrative Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFA000'] = {'name':'LFA000','fcode':'FA000','desc':'Administrative Boundary','geom':'Line','fcsubtype':'FA000_Administrative_Boundary_Line','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFA000']['columns'] = {}
     schema['LFA000']['columns']['NM3'] = {'name':'NM3','desc':'Boundary First Name','optional':'R','type':'String','defValue':'UNK'}
     schema['LFA000']['columns']['NM4'] = {'name':'NM4','desc':'Boundary Second Name','optional':'R','type':'String','defValue':'UNK'}
@@ -295,6 +298,7 @@ def addExtra(schema):
      {'name':"Meridian",'value':"16"}, {'name':"Median",'value':"17"}, {'name':"Parallel",'value':"18"},
      {'name':"Straight Segmented",'value':"19"}, {'name':"Straight",'value':"20"}, {'name':"Anthropogeographic",'value':"33"}
     ]
+    schema['LFA000']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'FA000_Administrative_Boundary_Line'}
     schema['LFA000']['columns']['LSP'] = {'name':"LSP",'desc':"Geopolitical Line Type",'optional':"R",'type':"enumeration",'defValue':"1"}
     schema['LFA000']['columns']['LSP']['enum'] = [
      {'name':"Generic Administrative Boundary",'value':"1"}, {'name':"Provisional Administrative Line",'value':"2"},
@@ -314,8 +318,9 @@ def addExtra(schema):
     ]
 
     schema['AFA002'] = {}
-    schema['AFA002'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA002'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'FA002_Geopolitical_Entity_Area','fdname':'MGCP_Delta','thematic':'PolbndA'}
     schema['AFA002']['columns'] = {}
+    schema['AFA002']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'FA002_Geopolitical_Entity_Area'}
     schema['AFA002']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['AFA002']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['AFA002']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -330,8 +335,9 @@ def addExtra(schema):
     ]
 
     schema['AFA003'] = {}
-    schema['AFA003'] = {'name':'AFA003','fcode':'FA003','desc':'Administrative Division','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA003'] = {'name':'AFA003','fcode':'FA003','desc':'Administrative Division','geom':'Area','fcsubtype':'FA003_Administrative_Division_Area','fdname':'MGCP_Delta','thematic':'PolbndA'}
     schema['AFA003']['columns'] = {}
+    schema['AFA003']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'FA003_Administrative_Division_Area'}
     schema['AFA003']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['AFA003']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['AFA003']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -344,19 +350,22 @@ def addExtra(schema):
     schema['AFA003']['columns']['COD']['enum'] = [{'name':'Limits and Information Known','value':'1'}, {'name':'Limits and Information Unknown','value':'2'} ]
 
     schema['LFA110'] = {}
-    schema['LFA110'] = {'name':'LFA110','fcode':'FA110','desc':'International Date Line','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFA110'] = {'name':'LFA110','fcode':'FA110','desc':'International Date Line','geom':'Line','fcsubtype':'FA110_International_Date_Line_Line','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFA110']['columns'] = {}
+    schema['LFA110']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'FA110_International_Date_Line_Line'}
 
     schema['LFC021'] = {}
-    schema['LFC021'] = {'name':'LFC021','fcode':'FC021','desc':'Maritime Limit Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFC021'] = {'name':'LFC021','fcode':'FC021','desc':'Maritime Limit Boundary','geom':'Line','fcsubtype':'FC021_Maritime_Limit_Boundary_Line','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFC021']['columns'] = {}
+    schema['LFC021']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'FC021_Maritime_Limit_Boundary_Line'}
     schema['LFC021']['columns']['NM3'] = {'name':'NM3','desc':'Boundary First Name','optional':'R','type':'String','defValue':'UNK'}
     schema['LFC021']['columns']['NM4'] = {'name':'NM4','desc':'Boundary Second Name','optional':'R','type':'String','defValue':'UNK'}
 
     schema['PZB050'] = {}
-    schema['PZB050'] = {'name':'PZB050','fcode':'ZB050','desc':'Survey','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PZB050'] = {'name':'PZB050','fcode':'ZB050','desc':'Survey','geom':'Point','fcsubtype':'ZB050_Survey_Point','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PZB050']['columns'] = {}
     schema['PZB050']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
+    schema['PZB050']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'ZB050_Survey_Point'}
     schema['PZB050']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['PZB050']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['PZB050']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -368,8 +377,9 @@ def addExtra(schema):
      ]
 
     schema['PZD045'] = {}
-    schema['PZD045'] = {'name':'PZD045','fcode':'ZD045','desc':'Annotated Location','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'AnnoP'}
+    schema['PZD045'] = {'name':'PZD045','fcode':'ZD045','desc':'Annotated Location','geom':'Point','fcsubtype':'ZD045_Annotated_Location_Point','fdname':'MGCP_Delta','thematic':'AnnoP'}
     schema['PZD045']['columns'] = {}
+    schema['PZD045']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':'ZD045_Annotated_Location_Point'}
     schema['PZD045']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['PZD045']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
     schema['PZD045']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -384,16 +394,18 @@ def addExtra(schema):
      {'name':'Boundaries','value':'9'}, {'name':'Waterbodies','value':'10'}, {'name':'Maritime','value':'11'}
      ]
 
+    # Add the missing attributes of features that had the default values being overwritten to null 
+    schema['PAL130']['columns']['AOO'] = {'name':"AOO",'desc':"Angle of Orientation",'optional':"R",'units':"Degree",'definition':"The angular distance in the horizontal plane measured from true north (0 degrees) clockwise to the major axis of the feature. ( If the feature is square, the axis 0 up to 90 degrees is recorded. If the feature is circular, 360 degrees is recorded. )",'type':"Real",'defValue':"-32767.0"}
+
+
 
     # Add the common attributes to each feature
     for i in ['LCA010','PCA030','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045','AFA002','AFA003']:
         schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
         schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
         schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
-        schema[i]['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'Integer','defValue':'0'}
         schema[i]['columns']['GFID'] = {'name':'GFID','desc':'Global Feature Identifier','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','type':'String','defValue':'UNK'}
         schema[i]['columns']['GlobalID'] = {'name':'GlobalID','desc':'GlobalID','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','type':'String','defValue':'UNK'}
-
         schema[i]['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
         schema[i]['columns']['SDP'] = {'name':'SDP','desc':'Source Description','type':'String','optional':'R','defValue':'N_A'}
         schema[i]['columns']['SDV'] = {'name':'SDV','desc':'Source Date and Time','type':'String','optional':'R','defValue':'N_A'}
@@ -526,8 +538,6 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
             tSchema[rawfCode]['columns']['GlobalID'] = { 'name':'GlobalID','desc':'GlobalID','type':'String','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','defValue':'UNK'}
             tSchema[rawfCode]['columns']['GFID'] = { 'name':'GFID','desc':'Global Feature Identifier','type':'String','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','defValue':'UNK'}
-            tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'Integer','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':'0'}
-
 
             if rawfCode in thematicLookup:
                 tSchema[rawfCode]['thematic'] = thematicLookup[rawfCode]
@@ -553,9 +563,16 @@ def readFeatures(xmlDoc,funcList):
                 continue
 
             # The short version of the feature definition
-            if node.localName == 'typeName':
+            if node.localName == 'typeName' and processSingleNode(node,'gco:LocalName') == 'MGCP Feature':
+                tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
+                continue
+            elif node.localName == 'typeName':
                 #print 'Feature Type: ', processSingleNode(node,'gco:LocalName')
                 tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
+
+                # Build the subtype now that the description is populated
+                tSchema[rawfCode]['fcsubtype'] = tSchema[rawfCode]['fcode'] + '_' + tSchema[rawfCode]['desc'].replace(' ','_') + '_' + tSchema[rawfCode]['geom']
+                tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':tSchema[rawfCode]['fcsubtype']}
                 continue
 
             # The long version of the feature definition
