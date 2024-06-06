@@ -216,7 +216,7 @@ translations/tds71_thematic_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py
 # TDSv71 thematic schema with all of the text enumerations is built from and XML file made from a sample FGDB
 translations/tds71_thematic_enum_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
 	mkdir -p $(@D)
-	$< --nocodedvalues $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+	$< --nocodedvalues --thematic $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # TDSv71 schema is built from an XML file made from a sample FGDB
 translations/tds71_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz

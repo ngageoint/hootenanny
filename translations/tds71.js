@@ -113,7 +113,18 @@ tds71 = {
     }
 
 
-  if (tds71.thematicSchema == undefined) hoot.require('tds71_thematic_schema');
+  if (tds71.thematicSchema == undefined) 
+  {
+    if (hoot.Settings.get('ogr.coded.values') == 'false')
+    {
+      hoot.require('tds71_thematic_enum_schema');
+      tds71.thematicSchema = tds71.thematicSchema.getDbSchema();
+    }
+    else
+    {
+      hoot.require('tds71_thematic_schema');
+    }
+  }
     // Debug:
     // print('New Schema:');
     // translate.dumpSchema(tds71.thematicSchema);
