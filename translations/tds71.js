@@ -310,45 +310,52 @@ tds71 = {
       if (!(attrs[enumName])) continue;
 
       var attrValue = attrs[enumName];
-      print('enumName: ' + enumName);
-      print('attrValue: ' + attrValue);
       var enumList = feature.columns[i].enumerations;
       var enumValueList = [];
 
       // Pull all of the values out of the enumerated list to make life easier
       for (var j=0, elen = enumList.length; j < elen; j++) {
-        print('enumList: ' + enumList[j].name);
-        if (attrValue == enumList[j].value) 
+        // If we don't want coded values, then validate the human-readable corresponding value
+        if (tds71.configOut.OgrCodedValues == 'false')
         {
-          attrValue = enumList[j].name;
-          print('new attrValue: ' + attrValue);
+          if (attrValue == enumList[j].value) 
+            {
+              attrValue = enumList[j].name;
+            }
+            enumValueList.push(enumList[j].name);
         }
-        enumValueList.push(enumList[j].name);
+        else
+        {
+          enumValueList.push(enumList[j].value)
+        }
       }
 
       // If we DONT have the value in the list, add it to the OTH or MEMO field
       if (enumValueList.indexOf(attrValue) == -1)
       {
-        var othVal = '(' + enumName + ':' + attrValue + ')';
+        var othValStr = '(' + enumName + ':' + attrValue + ')';
+        var othVal = '999';
+
+        if (tds71.configOut.OgrCodedValues == 'false') othVal = 'Other'; // change to human-readable value
 
         // No "Other" value. Push to the Memo field
-        if (enumValueList.indexOf('Other') == -1)
+        if (enumValueList.indexOf(othVal) == -1)
         {
           // Set the offending enumerated value to the default value
           attrs[enumName] = feature.columns[i].defValue;
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
-          attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
+          attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othValStr,';');
         }
         else
         {
           // Set the offending enumerated value to the "other" value
-          attrs[enumName] = 'Other';
+          attrs[enumName] = othVal;
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
-          attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+          attrs.OTH = translate.appendValue(attrs.OTH,othValStr,' ');
         }
 
       } // End attrValue in enumList
@@ -381,7 +388,14 @@ tds71 = {
       if (~attrList.indexOf(i)) continue;
 
       // If it is in the Thematic feature, just set a default value BUT only if we are not going to the UI
-      if (tds71.configOut.OgrFormat !== '' && (attrs[tds71.rules.closureList[i][0]] || attrs[tds71.rules.closureList[i][1]]))  attrs[i] = '5';
+      if (tds71.configOut.OgrFormat !== '' && tds71.configOut.OgrCodedValues && (attrs[tds71.rules.closureList[i][0]] || attrs[tds71.rules.closureList[i][1]]))  
+      {
+        attrs[i] = '5'; // Closed Interval
+      }
+      else if (tds71.configOut.OgrFormat !== '' && !tds71.configOut.OgrCodedValues && (attrs[tds71.rules.closureList[i][0]] || attrs[tds71.rules.closureList[i][1]]))
+      {
+        attrs[i] = 'Closed Interval';
+      }
     }
   }, // End validateThematicAttrs
 
@@ -418,7 +432,14 @@ tds71 = {
     case 'AN010': // Railway
     case 'AN050': // Railway Sidetrack
       delete nTags.railway;
-      newAttributes.TRS = '12'; // Transport Type = Railway
+      if (tds71.configOut.OgrCodedValues)
+      {
+        newAttributes.TRS = '12'; // Transport Type = Railway
+      }
+      else
+      {
+        newAttributes.TRS = 'Railway';
+      }
       break;
 
     case 'AP010': // Cart Track
@@ -431,23 +452,51 @@ tds71 = {
       case 'steps':
       case 'path':
       case 'bridleway':
-        newAttributes.TRS = '9'; // Transport Type = Pedestrian
+        if (tds71.configOut.OgrCodedValues)
+        {
+          newAttributes.TRS = '9'; // Transport Type = Pedestrian
+        }
+        else 
+        {
+          newAttributes.TRS = 'Pedestrian';
+        }
         break;
 
       default:
-        newAttributes.TRS = '13'; // Transport Type = Road
+        if (tds71.configOut.OgrCodedValues)
+        {
+          newAttributes.TRS = '13'; // Transport Type = Road
+        }
+        else 
+        {
+          newAttributes.TRS = 'Road';
+        }
       }
       delete nTags.highway;
       break;
 
     case 'AQ040': // Bridge
       delete nTags.bridge;
-      newAttributes.SBB = '1001'; // Supported By Bridge Span = True
+      if (tds71.configOut.OgrCodedValues)
+      {
+        newAttributes.SBB = '1001'; // Supported By Bridge Span = True
+      }
+      else 
+      {
+        newAttributes.SBB = 'True'; // Supported By Bridge Span = True
+      }
       break;
 
     case 'AQ130': // Tunnel
       delete nTags.tunnel;
-      newAttributes.CWT = '1001'; // Contained Within Tunnel = True
+      if (tds71.configOut.OgrCodedValues)
+      {
+        newAttributes.CWT = '1001'; // Contained Within Tunnel = True
+      }
+      else
+      {
+        newAttributes.CWT = 'True'; // Contained Within Tunnel = True
+      }
       break;
 
     case 'BH070': // Ford
@@ -476,7 +525,14 @@ tds71 = {
 
     if (nTags.highway)
     {
-      if (nTags.highway == 'track') newAttributes.TRS = '3'; // Cart Track TRS = Automotive
+      if (nTags.highway == 'track' && tds71.configOut.OgrCodedValues)
+      {
+        newAttributes.TRS = '3'; // Cart Track TRS = Automotive
+      }
+      else if (nTags.highway == 'track' && !tds71.configOut.OgrCodedValues)
+      {
+        newAttributes.TRS = 'Automotive';
+      }
       newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
       delete nTags.highway;
     }
@@ -3140,6 +3196,7 @@ tds71 = {
       tds71.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
       tds71.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
       tds71.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
+      tds71.configOut.OgrCodedValues = hoot.Settings.get('ogr.coded.values');
       tds71.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
 
       // Get any changes to OSM tags
