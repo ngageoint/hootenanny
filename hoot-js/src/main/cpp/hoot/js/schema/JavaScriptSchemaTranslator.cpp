@@ -367,8 +367,6 @@ void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<StringFieldD
 
     QString v = vm["name"].toString();
 
-    LOG_DEBUG("Enumerated value: " << v);
-
     if (fd->hasEnumeratedValue(v))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -468,11 +466,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     throw HootException("Error parsing type in column.");
 
   QString type = map["type"].toString().toLower();
-  LOG_DEBUG("map name: " << map["name"].toString());
-  LOG_DEBUG("type: " << type);
   if (type == "string" || (type == "enumeration" && !ConfigOptions().getOgrCodedValues()))
   {
-    LOG_DEBUG("ogr.coded.values: " << ConfigOptions().getOgrCodedValues());
     std::shared_ptr<StringFieldDefinition> fd = std::make_shared<StringFieldDefinition>();
 
     if (map.contains("defValue"))
@@ -487,7 +482,6 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
     if (map.contains("enumerations"))
     {
-      LOG_DEBUG("Parsing string enumerations");
       _parseEnumerations(fd, map["enumerations"]);
     }
     result = fd;

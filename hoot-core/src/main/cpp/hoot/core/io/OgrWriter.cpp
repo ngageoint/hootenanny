@@ -151,9 +151,7 @@ void OgrWriter::open(const QString& url)
   _numWritten = 0;
 
   // Initialize our translator - this will load the schema
-  LOG_DEBUG("Initializing the translator for output: " << url);
   initTranslator();
-  LOG_DEBUG("Done initializing translator.");
 
   // Open output dataset
   openOutput(url);
@@ -654,8 +652,8 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
     const QVariant& v = it.value();
     QByteArray ba = it.key().toUtf8();
 
-    LOG_DEBUG("Current field: " << ba.constData());
-    LOG_DEBUG("Current value: " << v.toString());
+    //LOG_DEBUG("Current field: " << ba.constData());
+    //LOG_DEBUG("Current value: " << v.toString());
 
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
@@ -670,7 +668,6 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
       poFeature->UnsetField(poFeature->GetFieldIndex(ba.constData()));
       break;
     case QVariant::Int:
-      LOG_DEBUG("Field is integer.");
       poFeature->SetField(ba.constData(), v.toInt());
       break;
     case QVariant::LongLong:
@@ -682,7 +679,6 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
     case QVariant::String:
     {
       QByteArray vba = v.toString().toUtf8();
-      LOG_DEBUG("Field is string.");
 
       int fieldWidth =
         poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
@@ -703,9 +699,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
 
         vba.truncate(fieldWidth);
       }
-      LOG_DEBUG("Setting field...");
       poFeature->SetField(ba.constData(), vba.constData());
-      LOG_DEBUG("Set field successfully.");
       break;
     }
     default:

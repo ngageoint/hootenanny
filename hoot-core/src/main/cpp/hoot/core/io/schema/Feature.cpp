@@ -66,8 +66,6 @@ void Feature::validate(StrictChecking strict)
   {
     // is
     std::shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
-    LOG_DEBUG("field definition is type: " << typeid(d).name());
-    LOG_DEBUG(QString("Field definition: (%1)").arg(d->getName()));
     if (_values.contains(d->getName()) == false)
     {
       if (d->hasDefaultValue() == false)
