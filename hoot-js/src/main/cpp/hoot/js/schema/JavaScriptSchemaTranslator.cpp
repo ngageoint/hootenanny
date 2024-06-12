@@ -414,7 +414,6 @@ void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<IntegerField
       logWarnCount++;
     }
     else
-      LOG_DEBUG("Parsing enumerated value: " << v);
       fd->addEnumeratedValue(v);
   }
 }
