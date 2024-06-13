@@ -91,6 +91,27 @@ def printJavascript(schema):
     print '];' # End of schema
 # End printJavascript
 
+# Modified printing function to print the Thematic Enum Header
+def printThematicEnumHeader(spec):
+    print
+    print "var _global = (0, eval)('this');"
+    print 'if (!_global.%s)' % (spec)
+    print '{'
+    print ' _global.%s = {};' % (spec)
+    print '}'
+    print
+    print '%s.thematicSchema = {' % (spec)
+    print 'getDbSchema: function()'
+    print '{'
+
+def printThematicEnumFooter(spec):
+    print '  return thematicSchema;'
+    print '} // End of getDbSchema'
+    print '} // End of %s.thematicSchema' % (spec)
+    print
+    print 'exports.getDbSchema = %s.thematicSchema.getDbSchema;' % (spec)
+    print
+
 
 # Modified printing function to print the Thematic Schema
 def printThematic(schema,spec):
@@ -153,6 +174,80 @@ def printThematic(schema,spec):
     print
 # End printThematic
 
+# Modified printing function to print the Thematic Enum Schema
+def printThematicEnum(schema, spec):
+    print 'var thematicSchema = ['  # And so it begins...
+
+    num_feat = len(schema.keys()) # How many features in the schema?
+    for f in sorted(schema.keys()):
+        # Skip all of the 'Table' features and features without geometry
+        if schema[f]['geom'] == 'Table' or schema[f]['geom'] == 'None':
+            continue
+
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom'])
+        if 'fcsubtype' in schema[f]:
+            pString += 'fcsubtype:"%s",' % (schema[f]['fcsubtype'])
+        if 'fdname' in schema[f]:
+            # print '  fdname:"%s",' % (schema[f]['fdname'])
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
+        if 'thematic' in schema[f]:
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+        if 'definition' in schema[f]:
+            pString += 'definition:"%s",' % (schema[f]['definition'])
+
+        print pString
+        print '  columns:['
+
+        num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
+        for k in sorted(schema[f]['columns'].keys()):
+            aString = '   {name:"%s",desc:"%s",optional:"%s",' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'])
+
+            if 'length' in schema[f]['columns'][k]:
+                aString += 'length:"%s",' % (schema[f]['columns'][k]['length'])
+
+            if 'definition' in schema[f]['columns'][k]:
+                aString += 'definition:"%s",' % (schema[f]['columns'][k]['definition'])
+
+            if 'func' in schema[f]['columns'][k]:
+                aString += 'type:"enumeration",defValue:"%s",enumerations: %s}' % (schema[f]['columns'][k]['defValue'],schema[f]['columns'][k]['func'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
+
+            elif schema[f]['columns'][k]['type'] == 'enumeration':
+                aString += 'type:"enumeration",defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
+                print aString
+                print '    enumerations:['
+                num_enum = len(schema[f]['columns'][k]['enum']) # How many attributes does the feature have?
+                for l in schema[f]['columns'][k]['enum']:
+                    if num_enum == 1:
+                        print '     {name:"%s",value:"%s"}' % (l['name'],l['value'])
+                    else:
+                        print '     {name:"%s",value:"%s"},' % (l['name'],l['value'])
+                        num_enum -= 1
+                print '    ]'
+                if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                    print '   }'
+                else:
+                    print '   },'
+                    num_attrib -= 1
+            else:
+                aString += 'type:"%s",defValue:"%s"}' % (schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
+
+        print '  ]' # End of the attributes
+
+        if num_feat == 1: # Are we at the last feature? yes = no trailing comma
+            print ' }'
+        else:
+            print ' },'
+            num_feat -= 1
+
+    print '];' # End of schema
 
 # Go through the schema and pull out all of the attributes that are to be replaced with
 # functions
@@ -241,11 +336,10 @@ def processInheritance(schema,inheritance):
     return schema
 # End processInheritance
 
-
 # Add Additional features that are not specified in the TRD
 def addExtra(schema):
     schema['LCA010'] = {}
-    schema['LCA010'] = {'name':'LCA010','fcode':'CA010','desc':'Elevation Contour','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ContourL'}
+    schema['LCA010'] = {'name':'LCA010','fcode':'CA010','desc':'Elevation Contour','geom':'Line','fcsubtype':'CA010_Elevation_Contour_Line','fdname':'MGCP_Delta','thematic':'ContourL'}
     schema['LCA010']['columns'] = {}
     schema['LCA010']['columns']['ZVH'] = {'name':'ZVH','desc':'Highest Elevation','type':'Real','optional':'R','defValue':'-999999.0'}
     schema['LCA010']['columns']['ESC'] = {'name':'ESC','desc':'Elevation Surface Category','optional':'R','type':'enumeration','defValue':'1'}
@@ -260,7 +354,7 @@ def addExtra(schema):
     ]
 
     schema['PCA030'] = {}
-    schema['PCA030'] = {'name':'PCA030','fcode':'CA030','desc':'Spot Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PCA030'] = {'name':'PCA030','fcode':'CA030','desc':'Spot Elevation','geom':'Point','fcsubtype':'CA030_Spot_Elevation_Point','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PCA030']['columns'] = {}
     schema['PCA030']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
     schema['PCA030']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
@@ -274,12 +368,12 @@ def addExtra(schema):
      ]
 
     schema['PCA035'] = {}
-    schema['PCA035'] = {'name':'PCA035','fcode':'CA035','desc':'Inland Water Elevation','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PCA035'] = {'name':'PCA035','fcode':'CA035','desc':'Inland Water Elevation','geom':'Point','fcsubtype':'CA035_Inland_Water_Elevation_Point','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PCA035']['columns'] = {}
     schema['PCA035']['columns']['ZVH'] = {'name':'ZVH','desc':'Highest Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
 
     schema['LFA000'] = {}
-    schema['LFA000'] = {'name':'LFA000','fcode':'FA000','desc':'Administrative Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFA000'] = {'name':'LFA000','fcode':'FA000','desc':'Administrative Boundary','geom':'Line','fcsubtype':'FA000_Administrative_Boundary_Line','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFA000']['columns'] = {}
     schema['LFA000']['columns']['NM3'] = {'name':'NM3','desc':'Boundary First Name','optional':'R','type':'String','defValue':'UNK'}
     schema['LFA000']['columns']['NM4'] = {'name':'NM4','desc':'Boundary Second Name','optional':'R','type':'String','defValue':'UNK'}
@@ -314,7 +408,7 @@ def addExtra(schema):
     ]
 
     schema['AFA002'] = {}
-    schema['AFA002'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA002'] = {'name':'AFA002','fcode':'FA002','desc':'Geopolitical Entity','geom':'Area','fcsubtype':'FA002_Geopolitical_Entity_Area','fdname':'MGCP_Delta','thematic':'PolbndA'}
     schema['AFA002']['columns'] = {}
     schema['AFA002']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['AFA002']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -330,7 +424,7 @@ def addExtra(schema):
     ]
 
     schema['AFA003'] = {}
-    schema['AFA003'] = {'name':'AFA003','fcode':'FA003','desc':'Administrative Division','geom':'Area','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndA'}
+    schema['AFA003'] = {'name':'AFA003','fcode':'FA003','desc':'Administrative Division','geom':'Area','fcsubtype':'FA003_Administrative_Division_Area','fdname':'MGCP_Delta','thematic':'PolbndA'}
     schema['AFA003']['columns'] = {}
     schema['AFA003']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['AFA003']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -344,17 +438,17 @@ def addExtra(schema):
     schema['AFA003']['columns']['COD']['enum'] = [{'name':'Limits and Information Known','value':'1'}, {'name':'Limits and Information Unknown','value':'2'} ]
 
     schema['LFA110'] = {}
-    schema['LFA110'] = {'name':'LFA110','fcode':'FA110','desc':'International Date Line','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFA110'] = {'name':'LFA110','fcode':'FA110','desc':'International Date Line','geom':'Line','fcsubtype':'FA110_International_Date_Line_Line','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFA110']['columns'] = {}
 
     schema['LFC021'] = {}
-    schema['LFC021'] = {'name':'LFC021','fcode':'FC021','desc':'Maritime Limit Boundary','geom':'Line','fcsubtype':'','fdname':'MGCP_Delta','thematic':'PolbndL'}
+    schema['LFC021'] = {'name':'LFC021','fcode':'FC021','desc':'Maritime Limit Boundary','geom':'Line','fcsubtype':'FC021_Maritime_Limit_Boundary_Line','fdname':'MGCP_Delta','thematic':'PolbndL'}
     schema['LFC021']['columns'] = {}
     schema['LFC021']['columns']['NM3'] = {'name':'NM3','desc':'Boundary First Name','optional':'R','type':'String','defValue':'UNK'}
     schema['LFC021']['columns']['NM4'] = {'name':'NM4','desc':'Boundary Second Name','optional':'R','type':'String','defValue':'UNK'}
 
     schema['PZB050'] = {}
-    schema['PZB050'] = {'name':'PZB050','fcode':'ZB050','desc':'Survey','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'ElevP'}
+    schema['PZB050'] = {'name':'PZB050','fcode':'ZB050','desc':'Survey','geom':'Point','fcsubtype':'ZB050_Survey_Point','fdname':'MGCP_Delta','thematic':'ElevP'}
     schema['PZB050']['columns'] = {}
     schema['PZB050']['columns']['BEL'] = {'name':'BEL','desc':'Base Elevation','optional':'R','type':'Real','defValue':'-999999.0'}
     schema['PZB050']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
@@ -368,7 +462,7 @@ def addExtra(schema):
      ]
 
     schema['PZD045'] = {}
-    schema['PZD045'] = {'name':'PZD045','fcode':'ZD045','desc':'Annotated Location','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'AnnoP'}
+    schema['PZD045'] = {'name':'PZD045','fcode':'ZD045','desc':'Annotated Location','geom':'Point','fcsubtype':'ZD045_Annotated_Location_Point','fdname':'MGCP_Delta','thematic':'AnnoP'}
     schema['PZD045']['columns'] = {}
     schema['PZD045']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
     schema['PZD045']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
@@ -384,15 +478,16 @@ def addExtra(schema):
      {'name':'Boundaries','value':'9'}, {'name':'Waterbodies','value':'10'}, {'name':'Maritime','value':'11'}
      ]
 
+    # Add the missing attributes of features that had the default values being overwritten to null 
+    schema['PAL130']['columns']['AOO'] = {'name':"AOO",'desc':"Angle of Orientation",'optional':"R",'units':"Degree",'definition':"The angular distance in the horizontal plane measured from true north (0 degrees) clockwise to the major axis of the feature. ( If the feature is square, the axis 0 up to 90 degrees is recorded. If the feature is circular, 360 degrees is recorded. )",'type':"Real",'defValue':"-32767.0"}
+
+
 
     # Add the common attributes to each feature
     for i in ['LCA010','PCA030','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045','AFA002','AFA003']:
-        schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
+        schema[i]['columns']['F_CODE'] = {'name':'F_CODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
         schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
         schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
-        schema[i]['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'Integer','defValue':'0'}
-        schema[i]['columns']['GFID'] = {'name':'GFID','desc':'Global Feature Identifier','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','type':'String','defValue':'UNK'}
-        schema[i]['columns']['GlobalID'] = {'name':'GlobalID','desc':'GlobalID','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','type':'String','defValue':'UNK'}
 
         schema[i]['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
         schema[i]['columns']['SDP'] = {'name':'SDP','desc':'Source Description','type':'String','optional':'R','defValue':'N_A'}
@@ -438,13 +533,19 @@ def addExtra(schema):
 def readFeatures(xmlDoc,funcList):
     itemList = xmlDoc.getElementsByTagName('gfc:FC_FeatureType')
 
+
     # Debug:
-    #print 'Features: Items: ', len(itemList)
+    #print('Features: Items: ', len(itemList))
 
     # Setup handy lists
     geoList = {'L':'Line', 'A':'Area', 'P':'Point','_':'None' }
     typeList = {'CodeList':'enumeration','CharacterString':'String','Real':'Real','Integer':'Integer',
                 'GM_Surface':'none', 'GM_Curve':'none','GM_Point':'none' }
+
+    # geoList = {'C':'Line','Crv':'Line','S':'Area','Srf':'Area','P':'Point','Pnt':'Point','_':'None'}
+    # typList = {'esriFieldTypeDouble':'Real','xs:double':'Real','esriFieldTypeString':'String','xs:string':'String',
+              # 'esriFieldTypeInteger':'Integer','xs:int':'Integer','esriFieldTypeGlobalID':'String'}
+
 
     thematicLookup = {'AGB005':'AerofacA','AGB035':'AerofacA','AGB065':'AerofacA','AGB230':'AerofacA','PGB030':'AerofacP',
         'PGB065':'AerofacP','PGB230':'AerofacP','AAM020':'AgristrA','AAM030':'AgristrA','PAM020':'AgristrP','PAM030':'AgristrP',
@@ -523,11 +624,10 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['fcode'] = fCode
             tSchema[rawfCode]['geom'] = fGeometry
             tSchema[rawfCode]['columns'] = {}
-            tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
+            tSchema[rawfCode]['columns']['F_CODE'] = { 'name':'F_CODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
             tSchema[rawfCode]['columns']['GlobalID'] = { 'name':'GlobalID','desc':'GlobalID','type':'String','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','defValue':'UNK'}
             tSchema[rawfCode]['columns']['GFID'] = { 'name':'GFID','desc':'Global Feature Identifier','type':'String','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','defValue':'UNK'}
-            tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'Integer','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':'0'}
-
+            
 
             if rawfCode in thematicLookup:
                 tSchema[rawfCode]['thematic'] = thematicLookup[rawfCode]
@@ -553,9 +653,17 @@ def readFeatures(xmlDoc,funcList):
                 continue
 
             # The short version of the feature definition
-            if node.localName == 'typeName':
+            if node.localName == 'typeName' and processSingleNode(node,'gco:LocalName') == 'MGCP Feature':
+                tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
+                continue
+            elif node.localName == 'typeName':
+
                 #print 'Feature Type: ', processSingleNode(node,'gco:LocalName')
                 tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
+
+                # Build the subtype now that the description is populated
+                tSchema[rawfCode]['fcsubtype'] = tSchema[rawfCode]['fcode'] + '_' + tSchema[rawfCode]['desc'].replace(' ','_') + '_' + tSchema[rawfCode]['geom']
+                tSchema[rawfCode]['columns']['FCSubtype'] = { 'name':'FCSubtype','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':tSchema[rawfCode]['fcsubtype']}
                 continue
 
             # The long version of the feature definition
@@ -686,6 +794,8 @@ def readFeatures(xmlDoc,funcList):
                                                             'defValue':aDefVal,
                                                             'optional':'R'
                                                           }
+                    if aName == 'FCSubtype':
+                        tSchema[rawfCode]['columns'][aName]['defValue'] = tSchema[rawfCode]['fcsubtype']
 
                     if aName in funcList:
                         tSchema[rawfCode]['columns'][aName]['func'] = 'full_' + aName
@@ -758,6 +868,7 @@ if __name__ == "__main__":
     parser.add_argument('--fieldvalues', help='Dump out the schema as a JSON object for the Translation Assistant',action='store_true')
     parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
     parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
+    parser.add_argument('--nocodedvalues', help='Generate a Thematic Schema with no coded values',action='store_true')
     parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
     parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
     parser.add_argument('--thematic', help='Generate a Thematic Schame',action='store_true')
@@ -781,6 +892,7 @@ if __name__ == "__main__":
 
     schema = {}
     thematicSchema = {}
+    thematicEnumSchema = {}
 
     # The list of attributes to make into functions in the schema. Used for enumerated lists that get
     # repeated a lot.
@@ -799,6 +911,7 @@ if __name__ == "__main__":
 
     # Now build a thematic schema
     thematicSchema = makeThematic(schema)
+    thematicEnumSchema = makeThematic(schema)
 
     # Now dump the schema out
     if args.rules:
@@ -829,7 +942,13 @@ if __name__ == "__main__":
         printFieldValues(schema)
     else:
         printCopyright()
-        if args.thematic:
+        if args.nocodedvalues and args.thematic:
+            printThematicEnumHeader('mgcp')
+            convertTextEnumerations(thematicEnumSchema)
+            printFuncList(thematicEnumSchema)
+            printThematicEnum(thematicEnumSchema,'mgcp')
+            printThematicEnumFooter('mgcp')
+        elif args.thematic:
             printThematic(thematicSchema,'mgcp')
         else:
             printJSHeader('mgcp')
