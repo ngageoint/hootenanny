@@ -91,8 +91,19 @@ mgcp = {
     } // End non-thematic
 
     // Thematic schema
-    if (mgcp.thematicSchema == undefined) hoot.require('mgcp_thematic_schema');
-
+    if (mgcp.thematicSchema == undefined) 
+    {
+      if (hoot.Settings.get('ogr.coded.values') == 'false')
+      {
+        hoot.require('mgcp_thematic_enum_schema');
+        mgcp.thematicSchema = mgcp.thematicSchema.getDbSchema();
+      }
+      else
+      {
+        hoot.require('mgcp_thematic_schema');
+      }
+    }
+    
     // This has been moved to mgcp.rules as a static list
     // Lookup table for F_CODE to Thematic layer name
     // var thematicGroupLookup = {}
@@ -173,7 +184,7 @@ mgcp = {
     }
 
     // If we can't find a feature then print an error and return.
-    if (feature === {})
+    if (feature == {})
     {
       hoot.logError('Validate: Could not find feature: '+ attrs.FCODE + ' ' + geometryType);
       return;
@@ -221,15 +232,35 @@ mgcp = {
       // Now make a list of the enumeration values to check what is valid. More loops.
       var attrValue = attrs[enumName];
       var enumValueList = [];
+      var enumList = feature.columns[i].enumerations;
       feature.columns[i].enumerations.forEach( function (eValue) { enumValueList.push(eValue.value); });
+
+      for (var j=0, elen = enumList.length; j < elen; j++) {
+        // if we don't want coded values, then validate the human-readable corresponding value
+        if (mgcp.configOut.OgrCodedValues == 'false')
+        {
+          if (attrValue == enumList[j].value)
+          {
+            attrValue = enumList[j].name;
+          }
+          enumValueList.push(enumList[j].name);
+        }
+        else
+        {
+          enumValueList.push(enumList[j].value);
+        }
+      }
 
       // Check if it is a valid enumerated value
       if (enumValueList.indexOf(attrValue) == -1)
       {
         hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+        var othVal = '999';
+
+        if (mgcp.configOut.OgrCodedValues == 'false') othVal = 'Other'; // change to human-readable value
 
         // Do we have an "Other" value?
-        if (enumValueList.indexOf('999') == -1)
+        if (enumValueList.indexOf(othVal) == -1)
         {
           // No: Set the offending enumerated value to the default value
           attrs[enumName] = feature.columns[i].defValue;
@@ -238,7 +269,7 @@ mgcp = {
         else
         {
           // Yes: Set the offending enumerated value to the "other" value
-          attrs[enumName] = '999';
+          attrs[enumName] = othVal;
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
         }
 
@@ -248,6 +279,10 @@ mgcp = {
           notUsed[transMap[enumName][1]] = transMap[enumName][2];
           hoot.logDebug('Validate: Re-Adding ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
         }
+      }
+      else
+      {
+        attrs[enumName] = attrValue;
       }
     } // End enumerations
   }, // End validateAttrs
@@ -296,7 +331,14 @@ mgcp = {
       case 'AN010': // Railway
       case 'AN050': // Railway Sidetrack
         delete nTags.railway;
-        newAttributes.TRS = '12'; // Transport Type = Railway
+        if (mgcp.configOut.OgrCodedValues)
+        {
+          newAttributes.TRS = '12'; // Transport Type = Railway
+        }
+        else
+        {
+          newAttributes.TRS = 'Railway';
+        }
         break;
 
       case 'AP010': // Cart Track
@@ -310,11 +352,25 @@ mgcp = {
           case 'path':
           case 'bridleway':
           case 'cycleway':
-            newAttributes.TRS = '9'; // Transport Type = Pedestrian
+            if (mgcp.configOut.OgrCodedValues)
+              {
+                newAttributes.TRS = '9'; // Transport Type = Pedestrian
+              }
+              else 
+              {
+                newAttributes.TRS = 'Pedestrian';
+              }
             break;
 
           default:
-            newAttributes.TRS = '13'; // Transport Type = Road
+            if (mgcp.configOut.OgrCodedValues)
+              {
+                newAttributes.TRS = '13'; // Transport Type = Road
+              }
+              else 
+              {
+                newAttributes.TRS = 'Road';
+              }
         }
         delete nTags.highway;
         break;
@@ -596,7 +652,7 @@ mgcp = {
         break;
 
       case 'AQ125': // Swap the F_CODE for a Ferry Terminal
-        if (attrs.TRS == '7') attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
+        if (attrs.TRS == '7' || attrs.TRS == 'Maritime') attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
         break;
     } // End F_CODE
 
@@ -2821,6 +2877,7 @@ mgcp = {
       mgcp.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
       mgcp.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
       mgcp.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
+      mgcp.configOut.OgrCodedValues = hoot.Settings.get('ogr.coded.values');
       mgcp.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
 
       // Get any changes to OSM tags
@@ -2916,6 +2973,7 @@ mgcp = {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
         returnData[i]['attrs']['FCODE'] = returnData[i]['attrs']['F_CODE'];
+        hoot.logDebug('F_CODE: ' + returnData[i]['attrs']['F_CODE']);
         delete returnData[i]['attrs']['F_CODE'];
 
         // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
