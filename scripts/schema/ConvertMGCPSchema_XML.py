@@ -498,6 +498,8 @@ def addExtra(schema):
         schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
         schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
         schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
+        schema[i]['columns']['GFID'] = {'name':'GFID','desc':'Global Feature Identifier','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','type':'String','defValue':'UNK'}
+        schema[i]['columns']['GlobalID'] = {'name':'GlobalID','desc':'GlobalID','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','type':'String','defValue':'UNK'}
         schema[i]['columns']['CCN'] = {'name':'CCN','desc':'Commercial Copyright','type':'String','optional':'R','defValue':'No copyright or restriction of rights of use is asserted by originator of this information.'}
         schema[i]['columns']['SDP'] = {'name':'SDP','desc':'Source Description','type':'String','optional':'R','defValue':'N_A'}
         schema[i]['columns']['SDV'] = {'name':'SDV','desc':'Source Date and Time','type':'String','optional':'R','defValue':'N_A'}
