@@ -166,18 +166,11 @@ def printThematic(schema,spec):
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
-            if 'length' in schema[f]['columns'][k]:
-                if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
-                else:
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
-                    num_attrib -= 1
+            if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
             else:
-                if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
-                else:
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
-                    num_attrib -= 1
+                print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
+                num_attrib -= 1
 
         print '  ]'
 
@@ -235,15 +228,9 @@ def printThematicEnum(schema, spec):
                     print '   },'
                     num_attrib -= 1
             elif num_attrib == 1: # Are we at the last attribute? yes = no trailing comma
-                if 'length' in schema[f]['columns'][k]:
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
-                else:
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
             else:
-                if 'length' in schema[f]['columns'][k]:
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
-                else:
-                    print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
                 num_attrib -= 1
         print '  ]'
 
@@ -420,8 +407,8 @@ def fixDefaults():
             thematicEnumSchema[feature]['columns'][field]['defValue'] = defList[aName]
 
         # Remove the default FCSUBTYPE from the thematic layers.  This gets populated from the individual F_CODES
-        #thematicSchema[feature]['columns']['FCSUBTYPE']['defValue'] = ''
-        #thematicEnumSchema[feature]['columns']['FCSUBTYPE']['defValue'] = ''
+        thematicSchema[feature]['columns']['FCSUBTYPE']['defValue'] = ''
+        thematicEnumSchema[feature]['columns']['FCSUBTYPE']['defValue'] = ''
 
     thematicSchema['MaximumElevationSrf']['columns']['MAX_TERRAIN']['defValue'] = '-999999'
     thematicSchema['MaximumElevationSrf']['columns']['MAX_ELEVATION']['defValue'] = '-999999'
@@ -751,8 +738,8 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema,tESchema
                             #fSchema[subName]['fcsubtype'] = defaultValueNode.firstChild.data.encode('utf8')
                             fSchema[subName]['fcsubtype'] = fSchema[subName]['fcode'] + '_' + fSchema[subName]['desc'].replace(' ','_') + '_' + fSchema[subName]['geom']
                             fSchema[subName]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
-                            tSchema[fSchema[subName]['thematic']]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
-                            tESchema[fSchema[subName]['thematic']]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
+                            #tSchema[fSchema[subName]['thematic']]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
+                            #tESchema[fSchema[subName]['thematic']]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
 
                         # Start filling in the domains
                         if field.getElementsByTagName('DomainName') and fieldName != 'F_CODE':
