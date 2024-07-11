@@ -65,7 +65,7 @@ if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
     echo "### Yum Upgrade ###" >> CentOS_upgrade.txt
     echo "yum upgrade"
-    sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+    sudo yum -q -y upgrade # >> CentOS_upgrade.txt 2>&1
     echo "yum worked"
 fi
 
