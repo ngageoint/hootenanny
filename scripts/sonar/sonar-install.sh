@@ -56,6 +56,7 @@ JAVA_HOME=$SONAR_JDK_PATH sonar-scanner --version
 echo "sonar jdk path: " $SONAR_JDK_PATH
 echo $SONAR_JDK_PATH sonar-scanner --version
 echo "sonar-scanner"
+echo "$($SONAR_JDK_PATH mvn --version)"
 JAVA_HOME=$SONAR_JDK_PATH mvn --version
 echo "Java Home: " $JAVA_HOME
 
