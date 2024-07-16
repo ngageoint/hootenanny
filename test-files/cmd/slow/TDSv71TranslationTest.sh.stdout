@@ -139,7 +139,7 @@ BC8D301F-0E78-43A3-B6EA-0FD0230C82B8
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'security:resource_owner', u'source', u'security:classification'])
   out - in: set([u'error:circular'])
