@@ -53,6 +53,9 @@ sudo ln -s /opt/$SONAR_MVN_VERSION /opt/maven
 # Display the installed sonar version
 echo "before java home"
 JAVA_HOME=$SONAR_JDK_PATH sonar-scanner --version
+echo "sonar jdk path: " $SONAR_JDK_PATH
+echo $SONAR_JDK_PATH sonar-scanner --version
+echo "sonar-scanner"
 JAVA_HOME=$SONAR_JDK_PATH mvn --version
 echo "Java Home: " $JAVA_HOME
 
