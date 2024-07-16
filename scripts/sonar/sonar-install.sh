@@ -51,6 +51,7 @@ sudo ln -s /opt/$SONAR_MVN_VERSION /opt/maven
 # Display the installed sonar version
 JAVA_HOME=$SONAR_JDK_PATH sonar-scanner --version
 JAVA_HOME=$SONAR_JDK_PATH mvn --version
+echo "Java Home: " $JAVA_HOME
 
 # In order to run correctly in sonar, pre-compiled headers need to be turned off
 # Remove when https://jira.sonarsource.com/browse/CPP-2897 is resolved
