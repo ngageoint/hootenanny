@@ -1342,7 +1342,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+  out - in: set([u'FCSUBTYPE', u'SGCC', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
