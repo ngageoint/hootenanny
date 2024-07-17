@@ -54,6 +54,7 @@ sudo ln -s /opt/$SONAR_MVN_VERSION /opt/maven
 echo "before java home"
 JAVA_HOME=$SONAR_JDK_PATH sonar-scanner --version
 echo "java home: " $JAVA_HOME
+echo "Command output: $(/usr/lib/jvm/jdk-17-oracle-x64 mvn --version)"
 JAVA_HOME=$SONAR_JDK_PATH mvn --version
 echo "after setting java home"
 
