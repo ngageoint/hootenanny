@@ -24,9 +24,9 @@ export SONAR_PROJECT_HOOT="hoot"
 export SONAR_PROJECT_SERVICES="hoot-services"
 
 # Sonar Maven properties
-export SONAR_MVN_VERSION=apache-maven-3.9.4
+export SONAR_MVN_VERSION=apache-maven-3.9.8
 export SONAR_MVN_TAR=${SONAR_MVN_VERSION}-bin.tar.gz
-export SONAR_MVN_URL=https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/${SONAR_MVN_TAR}
+export SONAR_MVN_URL=https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/${SONAR_MVN_TAR}
 
 export M2_HOME=/opt/maven
 export MAVEN_HOME=/opt/maven
