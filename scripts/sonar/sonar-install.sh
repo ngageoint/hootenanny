@@ -49,7 +49,6 @@ sudo tar xzf $SONAR_MVN_TAR -C /opt
 sudo ln -s /opt/$SONAR_MVN_VERSION /opt/maven
 
 # Display the installed sonar version
-echo "$(ls /usr/lib/jvm/)"
 JAVA_HOME=$SONAR_JDK_PATH sonar-scanner --version
 JAVA_HOME=$SONAR_JDK_PATH mvn --version
 
