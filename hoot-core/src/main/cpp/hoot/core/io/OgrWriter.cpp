@@ -652,6 +652,9 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
     const QVariant& v = it.value();
     QByteArray ba = it.key().toUtf8();
 
+    //LOG_DEBUG("Current field: " << ba.constData());
+    //LOG_DEBUG("Current value: " << v.toString());
+
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
     {
@@ -696,7 +699,6 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
 
         vba.truncate(fieldWidth);
       }
-
       poFeature->SetField(ba.constData(), vba.constData());
       break;
     }

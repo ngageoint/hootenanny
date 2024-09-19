@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
  */
 
 #ifndef JAVASCRIPT_SCHEMA_TRANSLATOR_H
@@ -45,6 +45,7 @@ namespace hoot
 
 class FieldDefinition;
 class Layer;
+class StringFieldDefinition;
 class DoubleFieldDefinition;
 class IntegerFieldDefinition;
 class LongIntegerFieldDefinition;
@@ -115,6 +116,7 @@ private:
   std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm) const;
   std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
+  void _parseEnumerations(std::shared_ptr<StringFieldDefinition> fd, const QVariant& enumerations) const;
   void _parseEnumerations(std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const;
   void _parseEnumerations(std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const;
   void _parseEnumerations(std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const;

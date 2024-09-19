@@ -139,7 +139,7 @@ BC8D301F-0E78-43A3-B6EA-0FD0230C82B8
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'security:resource_owner', u'source', u'security:classification'])
   out - in: set([u'error:circular'])
@@ -265,7 +265,7 @@ AF12E7C5-C4B9-4DB9-A11B-FE53910C9E0D
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -328,7 +328,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -400,7 +400,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source', u'highway', u'condition'])
   out - in: set([u'abandoned:highway', u'error:circular'])
@@ -535,7 +535,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'security:resource_owner', u'source', u'security:classification'])
   out - in: set([u'error:circular'])
@@ -598,7 +598,7 @@ C87F3ED7-5656-4F80-B556-5B85DF1CB9BE
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source', u'condition'])
   out - in: set([u'construction', u'error:circular'])
@@ -789,7 +789,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -852,7 +852,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -980,7 +980,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1115,7 +1115,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1288,7 +1288,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1342,7 +1342,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'FCSUBTYPE', u'SGCC', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1504,7 +1504,7 @@ DA1025EB-D540-4A47-900D-3687D3CD0E37
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'source'])
   out - in: set([u'error:circular'])
@@ -1549,7 +1549,7 @@ OSM:
 in: TransportationGroundCrv out: TransportationGroundCrv
 translated:
   in - out: set([u'ZSAX_RS0', u'ZSAX_RX4'])
-  out - in: set([u'FCSUBTYPE'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
 OSM:
   in - out: set([u'security:resource_owner', u'source', u'security:classification'])
   out - in: set([u'error:circular'])
