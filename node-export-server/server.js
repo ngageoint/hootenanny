@@ -390,6 +390,7 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
  */
 function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, ignoreConf) {
     var paramschema = params.schema;
+    var paramformat = params.format;
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
         if (queryOverrideTags === 'true') { //if it's true
@@ -434,6 +435,12 @@ function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, is
                 command += ' -D translation.script=' + hootHome  + '/translations/OSM_Ingest.js';
             }
             command += ' -D schema.translation.override=' + overrideTags;
+        }
+        if (paramschema === 'OSM' && paramformat === 'GeoPackage') {
+            convertOpts.push('SchemaTranslationOp')
+            command += ' -D schema.translation.script=' + hootHome + '/' + config.schemas[paramschema];
+            // Set per schema config options
+            if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
         }
         if (paramschema !== 'OSM' && config.schemas[paramschema] !== '') {
             convertOpts.push('SchemaTranslationOp')

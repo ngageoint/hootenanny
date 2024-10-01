@@ -2,7 +2,7 @@
 
 export SONAR_JDK_RPM=jdk-17_linux-x64_bin.rpm
 export SONAR_JDK_URL=https://download.oracle.com/java/17/latest/$SONAR_JDK_RPM
-export SONAR_JDK_PATH=/usr/lib/jvm/jdk-17-oracle-x64
+export SONAR_JDK_PATH=/usr/lib/jvm/jdk-17.0.12-oracle-x64
 
 # Main sonar scanner
 export SONAR_VERSION=5.0.1.3006 # Requires Java 17
