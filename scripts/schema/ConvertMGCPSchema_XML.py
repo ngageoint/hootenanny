@@ -91,6 +91,27 @@ def printJavascript(schema):
     print '];' # End of schema
 # End printJavascript
 
+# Modified printing function to print the Thematic Enum Header
+def printThematicEnumHeader(spec):
+    print
+    print "var _global = (0, eval)('this');"
+    print 'if (!_global.%s)' % (spec)
+    print '{'
+    print ' _global.%s = {};' % (spec)
+    print '}'
+    print
+    print '%s.thematicSchema = {' % (spec)
+    print 'getDbSchema: function()'
+    print '{'
+
+def printThematicEnumFooter(spec):
+    print '  return thematicSchema;'
+    print '} // End of getDbSchema'
+    print '} // End of %s.thematicSchema' % (spec)
+    print
+    print 'exports.getDbSchema = %s.thematicSchema.getDbSchema;' % (spec)
+    print
+
 
 # Modified printing function to print the Thematic Schema
 def printThematic(schema,spec):
@@ -153,6 +174,80 @@ def printThematic(schema,spec):
     print
 # End printThematic
 
+# Modified printing function to print the Thematic Enum Schema
+def printThematicEnum(schema, spec):
+    print 'var thematicSchema = ['  # And so it begins...
+
+    num_feat = len(schema.keys()) # How many features in the schema?
+    for f in sorted(schema.keys()):
+        # Skip all of the 'Table' features and features without geometry
+        if schema[f]['geom'] == 'Table' or schema[f]['geom'] == 'None':
+            continue
+
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom'])
+        if 'fcsubtype' in schema[f]:
+            pString += 'fcsubtype:"%s",' % (schema[f]['fcsubtype'])
+        if 'fdname' in schema[f]:
+            # print '  fdname:"%s",' % (schema[f]['fdname'])
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
+        if 'thematic' in schema[f]:
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+        if 'definition' in schema[f]:
+            pString += 'definition:"%s",' % (schema[f]['definition'])
+
+        print pString
+        print '  columns:['
+
+        num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
+        for k in sorted(schema[f]['columns'].keys()):
+            aString = '   {name:"%s",desc:"%s",optional:"%s",' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'])
+
+            if 'length' in schema[f]['columns'][k]:
+                aString += 'length:"%s",' % (schema[f]['columns'][k]['length'])
+
+            if 'definition' in schema[f]['columns'][k]:
+                aString += 'definition:"%s",' % (schema[f]['columns'][k]['definition'])
+
+            if 'func' in schema[f]['columns'][k]:
+                aString += 'type:"enumeration",defValue:"%s",enumerations: %s}' % (schema[f]['columns'][k]['defValue'],schema[f]['columns'][k]['func'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
+
+            elif schema[f]['columns'][k]['type'] == 'enumeration':
+                aString += 'type:"enumeration",defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
+                print aString
+                print '    enumerations:['
+                num_enum = len(schema[f]['columns'][k]['enum']) # How many attributes does the feature have?
+                for l in schema[f]['columns'][k]['enum']:
+                    if num_enum == 1:
+                        print '     {name:"%s",value:"%s"}' % (l['name'],l['value'])
+                    else:
+                        print '     {name:"%s",value:"%s"},' % (l['name'],l['value'])
+                        num_enum -= 1
+                print '    ]'
+                if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                    print '   }'
+                else:
+                    print '   },'
+                    num_attrib -= 1
+            else:
+                aString += 'type:"%s",defValue:"%s"}' % (schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
+
+        print '  ]' # End of the attributes
+
+        if num_feat == 1: # Are we at the last feature? yes = no trailing comma
+            print ' }'
+        else:
+            print ' },'
+            num_feat -= 1
+
+    print '];' # End of schema
 
 # Go through the schema and pull out all of the attributes that are to be replaced with
 # functions
@@ -240,7 +335,6 @@ def processInheritance(schema,inheritance):
 
     return schema
 # End processInheritance
-
 
 # Add Additional features that are not specified in the TRD
 def addExtra(schema):
@@ -450,13 +544,19 @@ def addExtra(schema):
 def readFeatures(xmlDoc,funcList):
     itemList = xmlDoc.getElementsByTagName('gfc:FC_FeatureType')
 
+
     # Debug:
-    #print 'Features: Items: ', len(itemList)
+    #print('Features: Items: ', len(itemList))
 
     # Setup handy lists
     geoList = {'L':'Line', 'A':'Area', 'P':'Point','_':'None' }
     typeList = {'CodeList':'enumeration','CharacterString':'String','Real':'Real','Integer':'Integer',
                 'GM_Surface':'none', 'GM_Curve':'none','GM_Point':'none' }
+
+    # geoList = {'C':'Line','Crv':'Line','S':'Area','Srf':'Area','P':'Point','Pnt':'Point','_':'None'}
+    # typList = {'esriFieldTypeDouble':'Real','xs:double':'Real','esriFieldTypeString':'String','xs:string':'String',
+              # 'esriFieldTypeInteger':'Integer','xs:int':'Integer','esriFieldTypeGlobalID':'String'}
+
 
     thematicLookup = {'AGB005':'AerofacA','AGB035':'AerofacA','AGB065':'AerofacA','AGB230':'AerofacA','PGB030':'AerofacP',
         'PGB065':'AerofacP','PGB230':'AerofacP','AAM020':'AgristrA','AAM030':'AgristrA','PAM020':'AgristrP','PAM030':'AgristrP',
@@ -538,6 +638,7 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
             tSchema[rawfCode]['columns']['GlobalID'] = { 'name':'GlobalID','desc':'GlobalID','type':'String','optional':'R','definition':'A global ID placeholder to avoid non-nullable field.','defValue':'UNK'}
             tSchema[rawfCode]['columns']['GFID'] = { 'name':'GFID','desc':'Global Feature Identifier','type':'String','optional':'R','definition':'A global feature identifier placeholder to avoid non-nullable field.','defValue':'UNK'}
+            
 
             if rawfCode in thematicLookup:
                 tSchema[rawfCode]['thematic'] = thematicLookup[rawfCode]
@@ -703,6 +804,8 @@ def readFeatures(xmlDoc,funcList):
                                                             'defValue':aDefVal,
                                                             'optional':'R'
                                                           }
+                    if aName == 'FCSubtype':
+                        tSchema[rawfCode]['columns'][aName]['defValue'] = tSchema[rawfCode]['fcsubtype']
 
                     if aName in funcList:
                         tSchema[rawfCode]['columns'][aName]['func'] = 'full_' + aName
@@ -775,6 +878,7 @@ if __name__ == "__main__":
     parser.add_argument('--fieldvalues', help='Dump out the schema as a JSON object for the Translation Assistant',action='store_true')
     parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
     parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
+    parser.add_argument('--nocodedvalues', help='Generate a Thematic Schema with no coded values',action='store_true')
     parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
     parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
     parser.add_argument('--thematic', help='Generate a Thematic Schame',action='store_true')
@@ -798,6 +902,7 @@ if __name__ == "__main__":
 
     schema = {}
     thematicSchema = {}
+    thematicEnumSchema = {}
 
     # The list of attributes to make into functions in the schema. Used for enumerated lists that get
     # repeated a lot.
@@ -816,6 +921,7 @@ if __name__ == "__main__":
 
     # Now build a thematic schema
     thematicSchema = makeThematic(schema)
+    thematicEnumSchema = makeThematic(schema)
 
     # Now dump the schema out
     if args.rules:
@@ -846,7 +952,13 @@ if __name__ == "__main__":
         printFieldValues(schema)
     else:
         printCopyright()
-        if args.thematic:
+        if args.nocodedvalues and args.thematic:
+            printThematicEnumHeader('mgcp')
+            convertTextEnumerations(thematicEnumSchema)
+            printFuncList(thematicEnumSchema)
+            printThematicEnum(thematicEnumSchema,'mgcp')
+            printThematicEnumFooter('mgcp')
+        elif args.thematic:
             printThematic(thematicSchema,'mgcp')
         else:
             printJSHeader('mgcp')

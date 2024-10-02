@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
  */
 #ifndef STRINGFIELDDEFINITION_H
 #define STRINGFIELDDEFINITION_H
@@ -45,11 +45,15 @@ public:
   bool hasDefaultValue() const override;
   QString toString() const override;
 
+  void addEnumeratedValue(QString v) {_enumeratedValues.insert(v); }
+  bool hasEnumeratedValue(QString v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
+
   void setDefaultValue(const QString& v) { _defaultValue = v; }
 
 private:
 
   QString _defaultValue;
+  std::set<QString> _enumeratedValues;
 };
 
 }
