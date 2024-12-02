@@ -620,7 +620,8 @@ mgcp = {
         ['GB030', ['gb030']], // Helipad
         ['GB040', ['gb040']], // Launch Pad
         ['SU001', ['su001']], // Military Installation
-        ['ZD040', ['zd040']], // Annotated Location
+        ['ZD040', ['zd040']], // Text
+        ['ZD045', ['zd045', 'annop', 'anno_p']] // Annotation
         ];
       // Funky but it makes life easier
       var llayerName = layerName.toString().toLowerCase();
@@ -682,6 +683,13 @@ mgcp = {
       {
         attrs.COD = '1000';
       }
+    }
+
+    // AnnoP (annotation points) may have Fcode ZD045 (a unique fcode) or ZD040 (an fcode redundant with TextP). The
+    // redundant fcode causes AnnoP to be converted to TextP, so it's better to use their unique fcode.
+    if (attrs.F_CODE == 'ZD040' && layerName == 'AnnoP')
+    {
+      attrs.F_CODE = 'ZD045'
     }
 
   }, // End of applyToOsmPreProcessing
@@ -3137,6 +3145,7 @@ mgcp = {
       }
       print('');
     }
+
 
     return returnData;
 
