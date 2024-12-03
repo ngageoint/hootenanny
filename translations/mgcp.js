@@ -685,12 +685,6 @@ mgcp = {
       }
     }
 
-    // AnnoP (annotation points) may have Fcode ZD045 (a unique fcode) or ZD040 (an fcode redundant with TextP). The
-    // redundant fcode causes AnnoP to be converted to TextP, so it's better to use their unique fcode.
-    if (attrs.F_CODE == 'ZD040' && layerName == 'AnnoP')
-    {
-      attrs.F_CODE = 'ZD045'
-    }
 
   }, // End of applyToOsmPreProcessing
 
@@ -1301,6 +1295,12 @@ mgcp = {
       tags.navigationaid = 'als';
       break;
 
+    case 'ZD040':
+      if (layerName.toLowerCase() == 'annop') {
+        // ArcMap supports an edge case where annotation points can have a ZD040 (normally text point) fcode
+        delete tags.named_location;
+        tags.annotated_location = 'yes';
+      }
     } // End switch FCODE
 
     // Content vs Product for storage tanks
@@ -1918,6 +1918,12 @@ mgcp = {
     {
       attrs.F_CODE = 'EC030'; // Wood
       delete tags.natural;
+    }
+
+    if (tags.annotated_location)
+    // We need to get an annotation point out of the schema, then change back to the text point fcode, ZD040, after the attributes are populated
+    {
+      attrs.F_CODE = 'ZD045';
     }
 
     // Keep looking for an FCODE
@@ -3134,6 +3140,11 @@ mgcp = {
 
       returnData.push({attrs: attrs, tableName: tableName});
     } // End We DON'T have a feature
+
+    if (tags.annotated_location)
+    {
+      attrs.FCODE = 'ZD040';
+    }
 
     // Debug:
     if (mgcp.configOut.OgrDebugDumptags == 'true')
