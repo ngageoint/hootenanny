@@ -27,7 +27,7 @@ pipeline {
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
-        booleanParam(name: 'Sonar', defaultValue: false)
+        // booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'hoot_centos7', description: 'Vagrant Box')
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
@@ -104,26 +104,26 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }'"
             }
         }
-        stage("Sonar Config") {
-            when {
-                anyOf {
-                    // Configure for sonar if user selected it, pull-request, or nightly run of master
-                    expression { return params.Sonar }
-                    changeRequest()
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
-                    }
-                }
-            }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
-                // Compile with build watcher to allow for sonar scanning in subsequent steps
-                sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
-                // Until PCH support is fixed in Sonar, run this to fix
-                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
-            }
-        }
+        // stage("Sonar Config") {
+        //     when {
+        //         anyOf {
+        //             // Configure for sonar if user selected it, pull-request, or nightly run of master
+        //             expression { return params.Sonar }
+        //             changeRequest()
+        //             allOf {
+        //                 triggeredBy 'TimerTrigger'
+        //                 branch 'master'
+        //             }
+        //         }
+        //     }
+        //     steps {
+        //         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
+        //         // Compile with build watcher to allow for sonar scanning in subsequent steps
+        //         sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
+        //         // Until PCH support is fixed in Sonar, run this to fix
+        //         sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
+        //     }
+        // }
         stage("Configure Coverage") {
             when {
                 anyOf {
