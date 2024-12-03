@@ -7449,7 +7449,7 @@ var schema = [
    {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",length:"36",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PZD040",fcode:"ZD040",desc:"Named Location",geom:"Point",fdname:"MGCP_Delta",thematic:"AnnoP",definition:"A location that normally does not appear as a specific, characterized object but that has a name that is required to be displayed in association with that location. ( For example, the name of the Alps or the Sahara. )",
+ {name:"PZD040",fcode:"ZD040",desc:"Named Location",geom:"Point",fdname:"MGCP_Delta",thematic:"TextP",definition:"A location that normally does not appear as a specific, characterized object but that has a name that is required to be displayed in association with that location. ( For example, the name of the Alps or the Sahara. )",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},

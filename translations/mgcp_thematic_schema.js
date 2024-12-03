@@ -106,6 +106,23 @@ mgcp.thematicSchema = [
    {name:"VOI",desc:"Vertical Obstruction Identifier",optional:"R",type:"String",defValue:"UNK",length:"36",definition:"Identification code that uniquely identifies a feature that is a vertical obstruction to low-level flight. ( Although parts of the identifier include digits it can also consist of non-numeric characters. )",}
   ]
  },
+ {name:"TextP",fcode:"",desc:"TextP",geom:"Point",fdname:"MGCP_Delta",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"Integer",defValue:"1"},
+   {name:"CCN",desc:"Commercial Copyright",optional:"R",type:"String",defValue:"No copyright or restriction of rights of use is asserted by originator of this information."},
+   {name:"FCODE",desc:"Feature Code",optional:"R",type:"String",defValue:""},
+   {name:"NAM",desc:"Name",optional:"R",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"NFN",desc:"Name Identifier",optional:"R",type:"String",defValue:"N_A"},
+   {name:"ORD",desc:"Relative Importance",optional:"R",type:"Integer",defValue:"1"},
+   {name:"SDP",desc:"Source Description",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SDV",desc:"Source Date and Time",optional:"R",type:"String",defValue:"N_A"},
+   {name:"SRT",desc:"Source Type",optional:"R",type:"Integer",defValue:"0"},
+   {name:"THC",desc:"Thematic Classification",optional:"R",type:"Integer",defValue:"1"},
+   {name:"TXT",desc:"Associated Text",optional:"R",type:"String",defValue:"N_A"},
+   {name:"UID",desc:"MGCP Feature universally unique identifier",optional:"R",type:"String",defValue:"UNK",length:"36"}
+  ]
+ },
  {name:"AnnoP",fcode:"",desc:"AnnoP",geom:"Point",fdname:"MGCP_Delta",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"Integer",defValue:"1"},
