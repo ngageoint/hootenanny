@@ -1,0 +1,9 @@
+{
+    "rules":
+    [
+        {
+            "name": "landuse",
+            "polyCriteriaFilter": "LanduseCriterion"
+        }
+    ]
+}

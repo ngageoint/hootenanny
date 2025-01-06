@@ -53,6 +53,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindHighwayIntersectionsOp)
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindRailwayIntersectionsOp)
+HOOT_FACTORY_REGISTER(OsmMapOperation, FindHighwayLanduseIntersectionsOp)
 
 void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
@@ -113,6 +114,11 @@ std::shared_ptr<FindIntersectionsVisitor> FindHighwayIntersectionsOp::createVisi
 std::shared_ptr<FindIntersectionsVisitor> FindRailwayIntersectionsOp::createVisitor()
 {
   return std::make_shared<FindRailwayIntersectionsVisitor>();
+}
+
+std::shared_ptr<FindIntersectionsVisitor> FindHighwayLanduseIntersectionsOp::createVisitor()
+{
+  return std::make_shared<FindHighwayLanduseIntersectionsVisitor>();
 }
 
 }
