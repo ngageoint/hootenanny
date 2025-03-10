@@ -115,26 +115,6 @@ public:
   ElementCriterionPtr createCriterion(ConstOsmMapPtr map) override;
 };
 
-/**
- * Finds all highway/landuse intersection nodes, adds some parameters to them and records their node ids
- */
-class FindHighwayLanduseIntersectionsVisitor : public FindIntersectionsVisitor
-{
-public:
-
-  static QString className() { return "FindHighwayLanduseIntersectionsVisitor"; }
-
-  FindHighwayLanduseIntersectionsVisitor() = default;
-  ~FindHighwayLanduseIntersectionsVisitor() override = default;
-
-  QString getDescription() const override { return "Identifies highway/landuse intersections"; }
-
-  QString getInitStatusMessage() const override { return "Finding highway/landuse intersections..."; }
-  QString getCompletedStatusMessage() const override { return "Found " + QString::number(_numAffected) + " highway/landuse intersections"; }
-
-  ElementCriterionPtr createCriterion(ConstOsmMapPtr map) override;
-};
-
 }
 
 #endif // FINDINTERSECTIONSVISITOR_H
