@@ -29,6 +29,7 @@
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/LanduseCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -41,6 +42,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FindHighwayIntersectionsVisitor)
 HOOT_FACTORY_REGISTER(ElementVisitor, FindRailwayIntersectionsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FindHighwayLanduseIntersectionsVisitor)
 
 void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
@@ -101,6 +103,11 @@ ElementCriterionPtr FindHighwayIntersectionsVisitor::createCriterion(ConstOsmMap
 ElementCriterionPtr FindRailwayIntersectionsVisitor::createCriterion(ConstOsmMapPtr /*map*/)
 {
   return std::make_shared<RailwayCriterion>();
+}
+
+ElementCriterionPtr FindHighwayLanduseIntersectionsVisitor::createCriterion(ConstOsmMapPtr map)
+{
+  return std::make_shared<LanduseCriterion>(map);
 }
 
 }

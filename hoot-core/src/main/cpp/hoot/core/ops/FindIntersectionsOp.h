@@ -100,6 +100,24 @@ public:
   QString getDescription() const override { return "Identifies railway intersections"; }
 };
 
+/**
+ *  Op that finds all highway/landuse intersections
+ */
+class FindHighwayLanduseIntersectionsOp : public FindIntersectionsOp
+{
+public:
+  FindHighwayLanduseIntersectionsOp() = default;
+  ~FindHighwayLanduseIntersectionsOp() override = default;
+
+  static QString className() { return "FindHighwayLanduseIntersectionsOp"; }
+
+  std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies highway/landuse intersections"; }
+};
+
 }
 
 #endif // FINDHIGHWAYINTERSECTIONSOP_H
