@@ -1894,8 +1894,8 @@ tds71 = {
       break;
 
     case 'brownfield':
-      tags.landuse = 'built_up_area';
-      tags.condition = 'destroyed';
+      tags.landuse = 'soil_surface_region';
+      attrs.F_CODE = 'DA010'
       break;
 
     case 'construction':
