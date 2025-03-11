@@ -47,7 +47,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/FindIntersectionsVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-
+ 
 namespace hoot
 {
 
