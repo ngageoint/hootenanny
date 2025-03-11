@@ -2908,7 +2908,10 @@ tds71 = {
       case 'engine_shed':
       case 'workshop':
         notUsedTags.railway = tags.railway; // Preserving thisjavascript ~ operator
+        break;
 
+      case 'razed':
+        attrs.PCF = '5'; // Dismantled
         break;
     }
 
