@@ -3629,7 +3629,7 @@ If true, translation files will add a UUID to features.
 * Default Value: `false`
 
 If the OGR output file/layer exists when exporting, append the data instead of trying to create a
-new file/layer.
+new file/layer. Schema templates to append to can be found in $HOOT_HOME/translations/templates/.
 
 === ogr.clean.export
 

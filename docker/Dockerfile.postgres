@@ -20,6 +20,10 @@ RUN --mount=type=cache,target=/var/cache/yum \
         --setopt=extras.repo_gpgcheck=1 \
         --setopt=updates.repo_gpgcheck=1 &> /dev/null
 
+RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
+    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
+    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+
 RUN yum -q -y install epel-release
 
 RUN /tmp/postgres-install.sh $postgresql_version && rm -f /tmp/*.sh

@@ -59,12 +59,17 @@ fi
 echo "### Add devtoolset repo and postgresql ${POSTGRESQL_VERSION} libraries ###"
 sudo yum install -y \
      centos-release-scl postgresql${POSTGRESQL_VERSION}-libs >> CentOS_upgrade.txt 2>&1
+sudo sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
+sudo sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
+sudo sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
     echo "### Yum Upgrade ###" >> CentOS_upgrade.txt
-    sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+    echo "yum upgrade"
+    sudo yum -q -y upgrade # >> CentOS_upgrade.txt 2>&1
+    echo "yum worked"
 fi
 
 # Install hootenanny dependencies
