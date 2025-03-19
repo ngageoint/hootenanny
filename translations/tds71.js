@@ -397,6 +397,50 @@ tds71 = {
         attrs[i] = 'Closed Interval';
       }
     }
+
+    // Fix default values of closure list attributes
+    if (tds71.configOut.OgrCodedValues)
+    {
+      if (['GB005','GB015','GB045'].includes(attrs['F_CODE']))
+      {
+        attrs['GSGCHC'] = '-999999';
+        attrs['GSGCLC'] = '-999999';
+      }
+      
+      // Custom Physiography rules
+      if (['BH150','DB170','DA010'].includes(attrs['F_CODE']))
+      {
+        attrs['SGCC'] = '-999999';
+      }
+
+      // Fix values of attributes that are not associated with subtype
+      if (['AP050','AQ040','AP010'].includes(attrs['F_CODE']))
+      {
+        attrs['SGCC'] = '-999999';
+        attrs['RMWC'] = '-999999';
+      }
+    }
+    else 
+    {
+      if (['GB005','GB015','GB045'].includes(attrs['F_CODE']))
+      {
+        attrs['GSGCHC'] = 'noInformation';
+        attrs['GSGCLC'] = 'noInformation';
+      }
+        
+      // Custom Physiography rules
+      if (['BH150','DB170','DA010'].includes(attrs['F_CODE']))
+      {
+        attrs['SGCC'] = 'noInformation';
+      }
+  
+      // Fix values of attributes that are not associated with subtype
+      if (['AP050','AQ040','AP010'].includes(attrs['F_CODE']))
+      {
+        attrs['SGCC'] = 'noInformation';
+        attrs['RMWC'] = 'noInformation';
+      }
+    }
   }, // End validateThematicAttrs
 
 
@@ -2672,6 +2716,19 @@ tds71 = {
       }
     }
 
+    // Custom Aeronautic rules
+    if (['GB005','GB015','GB045'].includes(attrs.F_CODE))
+    {
+      attrs.GSGCHC = '-999999';
+      attrs.GSGCLC = '-999999';
+    }
+
+    // Custom Physiography rules
+    if (['BH150','DB170','DA010'].includes(attrs.F_CODE))
+    {
+      attrs.SGCC = '-999999';
+    }
+
     // Custom Road rules
     // - Fix the "highway=" stuff that cant be done in the one2one rules
     if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
@@ -2752,6 +2809,13 @@ tds71 = {
       // Road condition
       // if (!attrs.PCF) attrs.PCF = '2'; // Intact
     } // End AP030 || AQ075
+
+    // Fix values of attributes that are not associated with subtype
+    if (['AP050','AQ040','AP010'].includes(attrs.F_CODE))
+    {
+      attrs.SGCC = '-999999';
+      attrs.RMWC = '-999999';
+    }
 
     // RLE vs LOC: Need to deconflict this for various features.
     // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
