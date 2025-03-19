@@ -1894,8 +1894,8 @@ tds71 = {
       break;
 
     case 'brownfield':
-      tags.landuse = 'built_up_area';
-      tags.condition = 'destroyed';
+      tags.landuse = 'soil_surface_region';
+      attrs.F_CODE = 'DA010'
       break;
 
     case 'construction':
@@ -2908,7 +2908,10 @@ tds71 = {
       case 'engine_shed':
       case 'workshop':
         notUsedTags.railway = tags.railway; // Preserving thisjavascript ~ operator
+        break;
 
+      case 'razed':
+        attrs.PCF = '5'; // Dismantled
         break;
     }
 
