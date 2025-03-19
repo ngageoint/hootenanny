@@ -620,7 +620,8 @@ mgcp = {
         ['GB030', ['gb030']], // Helipad
         ['GB040', ['gb040']], // Launch Pad
         ['SU001', ['su001']], // Military Installation
-        ['ZD040', ['zd040']], // Annotated Location
+        ['ZD040', ['zd040']], // Text
+        ['ZD045', ['zd045', 'annop', 'anno_p']] // Annotation
         ];
       // Funky but it makes life easier
       var llayerName = layerName.toString().toLowerCase();
@@ -683,6 +684,7 @@ mgcp = {
         attrs.COD = '1000';
       }
     }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -1293,6 +1295,12 @@ mgcp = {
       tags.navigationaid = 'als';
       break;
 
+    case 'ZD040':
+      if (layerName.toLowerCase() == 'annop') {
+        // ArcMap supports an edge case where annotation points can have a ZD040 (normally text point) fcode
+        delete tags.named_location;
+        tags.annotated_location = 'yes';
+      }
     } // End switch FCODE
 
     // Content vs Product for storage tanks
@@ -1910,6 +1918,12 @@ mgcp = {
     {
       attrs.F_CODE = 'EC030'; // Wood
       delete tags.natural;
+    }
+
+    if (tags.annotated_location)
+    // We need to get an annotation point out of the schema, then change back to the text point fcode, ZD040, after the attributes are populated
+    {
+      attrs.F_CODE = 'ZD045';
     }
 
     // Keep looking for an FCODE
@@ -3127,6 +3141,11 @@ mgcp = {
       returnData.push({attrs: attrs, tableName: tableName});
     } // End We DON'T have a feature
 
+    if (tags.annotated_location)
+    {
+      attrs.FCODE = 'ZD040';
+    }
+
     // Debug:
     if (mgcp.configOut.OgrDebugDumptags == 'true')
     {
@@ -3137,6 +3156,7 @@ mgcp = {
       }
       print('');
     }
+
 
     return returnData;
 

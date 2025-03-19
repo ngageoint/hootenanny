@@ -714,9 +714,6 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema,tESchema
                         if fieldName == 'F_CODE':
                             fSchema[subName]['fcode'] = defaultValueNode.firstChild.data.encode('utf8')
 
-                        if fieldName == 'FCSUBTYPE':
-                            fSchema[subName]['fcsubtype'] = defaultValueNode.firstChild.data.encode('utf8')
-
                         # print 'fieldName',fieldName
                         fType = defaultValueNode.getAttributeNS('http://www.w3.org/2001/XMLSchema-instance','type')
                         defValue = defaultValueNode.firstChild.data.encode('utf8')
@@ -736,6 +733,13 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema,tESchema
                                                                 'defValue':defValue,
                                                                 'optional':'R'
                                                               }
+                        
+                        if fieldName == 'FCSUBTYPE':
+                            #fSchema[subName]['fcsubtype'] = defaultValueNode.firstChild.data.encode('utf8')
+                            fSchema[subName]['fcsubtype'] = fSchema[subName]['fcode'] + '_' + fSchema[subName]['desc'].replace(' ','_') + '_' + fSchema[subName]['geom']
+                            fSchema[subName]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
+                            #tSchema[fSchema[subName]['thematic']]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
+                            #tESchema[fSchema[subName]['thematic']]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE','desc':'Feature Class Subtype','type':'String','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','defValue':fSchema[subName]['fcsubtype']}
 
                         # Start filling in the domains
                         if field.getElementsByTagName('DomainName') and fieldName != 'F_CODE':

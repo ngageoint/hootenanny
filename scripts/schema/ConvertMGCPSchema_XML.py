@@ -488,13 +488,31 @@ def addExtra(schema):
      {'name':'Boundaries','value':'9'}, {'name':'Waterbodies','value':'10'}, {'name':'Maritime','value':'11'}
      ]
 
+    schema['PZD040'] = {}
+    schema['PZD040'] = {'name':'PZD040','fcode':'ZD040','desc':'Text Point','geom':'Point','fcsubtype':'','fdname':'MGCP_Delta','thematic':'TextP'}
+    schema['PZD040']['columns'] = {}
+    schema['PZD040']['columns']['FCSubtype'] = {'name':'FCSubtype','desc':'Feature Class Subtype','optional':'R','definition':'A feature class subtype placeholder to avoid non-nullable field.','type':'String','defValue':''}
+    schema['PZD040']['columns']['NAM'] = {'name':'NAM','desc':'Name','optional':'R','type':'String','defValue':'UNK'}
+    schema['PZD040']['columns']['NFI'] = {'name':'NFI','desc':'Named Feature Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PZD040']['columns']['NFN'] = {'name':'NFN','desc':'Name Identifier','optional':'R','type':'String','defValue':'N_A'}
+    schema['PZD040']['columns']['ORD'] = {'name':'ORD','desc':'Relative Importance','optional':'R','type':'enumeration','defValue':'1'}
+    schema['PZD040']['columns']['ORD']['enum'] = [{'name':'First','value':'1'}, {'name':'Second','value':'2'},
+     {'name':'Third','value':'3'}, {'name':'Fourth','value':'4'}, {'name':'Fifth','value':'5'}
+     ]
+    schema['PZD040']['columns']['THC'] = {'name':'THC','desc':'Thematic Classification','optional':'R','type':'enumeration','defValue':'1'}
+    schema['PZD040']['columns']['THC']['enum'] = [{'name':'Aeronautical','value':'1'}, {'name':'Vegetation','value':'2'},
+     {'name':'Utilities','value':'3'}, {'name':'Population','value':'4'}, {'name':'Physiography','value':'5'},
+     {'name':'Industry','value':'6'}, {'name':'Ground Transportation','value':'7'}, {'name':'Elevation','value':'8'},
+     {'name':'Boundaries','value':'9'}, {'name':'Waterbodies','value':'10'}, {'name':'Maritime','value':'11'}
+     ]
+
     # Add the missing attributes of features that had the default values being overwritten to null 
     schema['PAL130']['columns']['AOO'] = {'name':"AOO",'desc':"Angle of Orientation",'optional':"R",'units':"Degree",'definition':"The angular distance in the horizontal plane measured from true north (0 degrees) clockwise to the major axis of the feature. ( If the feature is square, the axis 0 up to 90 degrees is recorded. If the feature is circular, 360 degrees is recorded. )",'type':"Real",'defValue':"-32767.0"}
 
 
 
     # Add the common attributes to each feature
-    for i in ['LCA010','PCA030','PCA035','LFA000','LFA110','LFC021','PZB050','PZD045','AFA002','AFA003']:
+    for i in ['LCA010','PCA030','PCA035','LFA000','LFA110','LFC021','PZB050','PZD040','PZD045','AFA002','AFA003']:
         schema[i]['columns']['FCODE'] = {'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':''}
         schema[i]['columns']['ACC'] = {'name':'ACC','desc':'Horizontal Accuracy Category','type':'enumeration','optional':'R','defValue':'1','func':'full_ACC'}
         schema[i]['columns']['ACC']['enum'] = [{'name':"Accurate",'value':"1"}, {'name':"Approximate",'value':"2"}]
@@ -602,7 +620,7 @@ def readFeatures(xmlDoc,funcList):
         'AEC030':'TreesA','LEA020':'TreesL','LEC030':'TreesL','PEC030':'TreesP','ABJ110':'TundraA','AAQ130':'TunnelA',
         'LAQ130':'TunnelL','PAJ051':'UtilP','PAT042':'UtilP','AZD020':'VoidA','ABH020':'WatrcrsA','ABH030':'WatrcrsA',
         'ABH140':'WatrcrsA','LBH020':'WatrcrsL','LBH030':'WatrcrsL','LBH140':'WatrcrsL','PAA050':'WellsprP',
-        'PBH170':'WellsprP','LZD040':'AnnoL','LZD045':'AnnoL','PZD045':'AnnoP','PZD040':'AnnoP','LCA010':'ContourL',
+        'PBH170':'WellsprP','LZD040':'AnnoL','LZD045':'AnnoL','PZD045':'AnnoP','LCA010':'ContourL',
         'PCA030':'ElevP','PCA035':'ElevP','PZB050':'ElevP','AFA002':'PolbndA','AFA003':'PolbndA','LFA000':'PolbndL',
         'LFA110':'PolbndL','LFC021':'PolbndL'}
 
