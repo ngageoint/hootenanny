@@ -17,7 +17,7 @@ jobs:
           name: 'Make Hootenanny Archive'
           command: |
             su-exec postgres pg_ctl -D $PGDATA -s start
-            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://hoot-maven.s3.amazonaws.com/m2-cache-2021-07-12.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
+            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://hoot-maven.s3.amazonaws.com/m2-cache.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
             su-exec rpmbuild ./scripts/ci/archive.sh
             su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
       - persist_to_workspace:
@@ -56,7 +56,7 @@ jobs:
       - run:
           name: 'Lint Python Runtime Errors'
           command: |
-            ./scripts/ci/python_lint.sh -a /tmp/hootenanny -p "--select=E9" 
+            ./scripts/ci/python_lint.sh -a /tmp/hootenanny -p "--select=E9"
             if [ $( cat lint.log | wc -l ) -gt 0 ]; then cat lint.log && exit 1; fi
 
 workflows:
