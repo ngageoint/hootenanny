@@ -970,7 +970,7 @@ tds71 = {
         ['t.cable =="yes" && t["cable:type"] == "transmission"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
-        ['t.terrain_surface','t.surface = t.terrain_surface; delete t.terrain_surface'],
+        //['t.terrain_surface','t.surface = t.terrain_surface; delete t.terrain_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
         // ["t['generator:source']","t.power = 'generator'"],
