@@ -1895,6 +1895,13 @@ tds71 = {
       }
     }
 
+    // Fix up beach features from OSM
+    if (tags.natural == 'beach')
+    {
+      attrs.TSM = '13';
+      attrs.SRD = '1';
+    }
+
     // Cutlines/Cleared Ways & Highways
     // This might need a cleanup
     if (tags.man_made == 'cutline' && tags.highway)

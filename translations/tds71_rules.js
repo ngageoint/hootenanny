@@ -64,6 +64,7 @@ tds71.rules = {
   fcodeOne2oneOut : [
     ['F_CODE','DA010','natural','desert'], // EE030 Desert - mapped to DA010 Soil Surface Region
     ['F_CODE','DA010','landuse','brownfield'], // DA010 Soil Surface Region
+    ['F_CODE','DA010','natural','beach'], // Beach
     ['F_CODE','FA091','geophysical_data_track','yes'], // Geophysical Data Track Line
     ['F_CODE','GA005','airspace','yes'], // Airspace
     ['F_CODE','GA035','navaid:aeronautical','yes'], // Aeronautical Navaids
