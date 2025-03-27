@@ -958,6 +958,7 @@ tds71 = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
+        ['t.facility && t.tourism == "resort_hotel" && t.use == "accommodation" && t["use:2"] == "short-term_accommodation"','delete t.facility; t.leisure = "beach_resort"; delete t.tourism'],
         ['t.barrier == "dragons_teeth" && !(t.tank_trap)','t.barrier = "tank_trap"; t.tank_trap = "dragons_teeth"'],
         ['t["bridge:movable"] && t["bridge:movable"] !== "no" && t["bridge:movable"] !== "unknown"','t.bridge = "movable"'],
         ['t.navigationaid && !(t.aeroway)','t.aeroway = "navigationaid"'],
@@ -1900,6 +1901,15 @@ tds71 = {
     {
       attrs.TSM = '13';
       attrs.SRD = '1';
+    }
+
+    // Fix up some leisure features
+    if (tags.leisure == 'beach_resort') {
+      attrs.F_CODE = 'AL010';
+      attrs.FFN = '550';
+      attrs.FFN2 = '548';
+      attrs.FFN3 = '552';
+      delete tags.leisure;
     }
 
     // Cutlines/Cleared Ways & Highways
