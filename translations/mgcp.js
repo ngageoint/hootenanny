@@ -1512,7 +1512,9 @@ mgcp = {
       ["t.tourism == 'information' && t.information","delete t.tourism"],
       ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
       ["t.waterway == 'riverbank'","t.waterway = 'river'"],
-      ["t.wetland && t.natural == 'wetland'","delete t.natural"]
+      ["t.wetland && t.natural == 'wetland'","delete t.natural"],
+      ["t.aeroway == 'hangar' && t.building == 'yes'", "t.building = 'hangar'"],
+      ["t.landuse == 'religious'", "t.amenity = 'religious_activities'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
