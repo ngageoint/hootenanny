@@ -1482,6 +1482,10 @@ mgcp = {
       attrs.F_CODE = 'AQ075';
       if (tags.highway == 'road') delete tags.highway;
     }
+    if (tags.barrier == 'fence' && tags.area == 'yes' && !(tags.military || tags.landuse))
+    {
+      delete tags.area;
+    }
 
     if (mgcp.mgcpPreRules == undefined)
     {
@@ -1491,6 +1495,7 @@ mgcp = {
       ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
       ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
       ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+      ["t.barrier == 'fence' && t.area == 'yes' && !(t.landuse || t.military)","delete t.area"],
       ["t.bus == 'yes'","t['transport:type'] = 'bus'"],
       ["t.communication == 'line'","t['cable:type'] = 'communication'"],
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
