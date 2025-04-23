@@ -1494,6 +1494,7 @@ mgcp = {
       // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
       ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
       ["t.amenity == 'prison' && t.barrier == 'wall'","delete t.barrier"],
+      ["t.tourism == 'attraction' && t.building == 'church'","delete t.tourism"],
       ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
       ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
       ["t.barrier == 'fence' && t.area == 'yes' && !(t.landuse || t.military)","delete t.area"],
