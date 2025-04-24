@@ -1923,7 +1923,11 @@ mgcp = {
     // Military buildings in MGCP TRD3 have a MFC tag that we need to account for
     if (tags.building && tags.military) attrs.F_CODE = 'AL015';
 
+    // Embassy buildings should also be coupled with a FFN value of 827 (Embassy)
     if (tags.building && (tags.embassy || tags.diplomatic == 'embassy')) attrs.FFN = '827';
+
+    // runway features should also be assigned a Load Bearing Surface Type = hardpaved (1)
+    if (tags.aeroway == 'runway') attrs.RST = '1';
 
     // Tree rows are a special case for EC030
     if (tags.natural == 'tree_row' && geometryType == 'Line')
