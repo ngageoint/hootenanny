@@ -1514,7 +1514,10 @@ mgcp = {
       ["t.waterway == 'riverbank'","t.waterway = 'river'"],
       ["t.wetland && t.natural == 'wetland'","delete t.natural"],
       ["t.aeroway == 'hangar' && t.building == 'yes'", "t.building = 'hangar'"],
-      ["t.landuse == 'religious'", "t.amenity = 'religious_activities'"]
+      ["t.landuse == 'religious'", "t.amenity = 'religious_activities'"],
+      ["t.industrial == 'depot' && t.depot == 'bus'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
+      ["t.water == 'moat'", "a.F_CODE = 'BH030'"],
+      ["t.building == 'hotel'", "a.F_CODE = 'AL015'; a.FFN = '550'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
