@@ -1482,6 +1482,10 @@ mgcp = {
       attrs.F_CODE = 'AQ075';
       if (tags.highway == 'road') delete tags.highway;
     }
+    if (tags.barrier == 'fence' && tags.area == 'yes' && !(tags.military || tags.landuse))
+    {
+      delete tags.area;
+    }
 
     if (mgcp.mgcpPreRules == undefined)
     {
@@ -1489,8 +1493,12 @@ mgcp = {
       var rulesList = [
       // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
       ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
+      ["t.amenity == 'prison' && t.barrier == 'wall'","delete t.barrier"],
+      ["t.tourism == 'attraction' && t.building == 'church'","delete t.tourism"],
+      ["t.tourism == 'attraction' && t.landuse == 'commercial'","delete t.tourism"],
       ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
       ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+      ["t.barrier == 'fence' && t.area == 'yes' && !(t.landuse || t.military)","delete t.area"],
       ["t.bus == 'yes'","t['transport:type'] = 'bus'"],
       ["t.communication == 'line'","t['cable:type'] = 'communication'"],
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
@@ -1917,6 +1925,8 @@ mgcp = {
 
     // Military buildings in MGCP TRD3 have a MFC tag that we need to account for
     if (tags.building && tags.military) attrs.F_CODE = 'AL015';
+
+    if (tags.building && (tags.embassy || tags.diplomatic == 'embassy')) attrs.FFN = '827';
 
     // Tree rows are a special case for EC030
     if (tags.natural == 'tree_row' && geometryType == 'Line')
