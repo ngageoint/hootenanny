@@ -6869,7 +6869,7 @@ var schema = [
    }
   ]
  },
- {name:"PBH170",fcode:"BH170",desc:"Natural Pool",geom:"Point",fdname:"MGCP",thematic:"WellsprP",definition:"A naturally formed pool of water. ( It is usually fed by surface drainage from the surrounding region and/or water arising from an underground source (for example: a spring or a resurgence). )",
+ {name:"ABH170",fcode:"BH170",desc:"Natural Pool",geom:"Area",fdname:"MGCP",thematic:"WellsprP",definition:"A naturally formed pool of water. ( It is usually fed by surface drainage from the surrounding region and/or water arising from an underground source (for example: a spring or a resurgence). )",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"1",enumerations: full_ACC},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",length:"254",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set. ( For example, '©2000 Space Imaging, Inc.', in which case the copyright information for use of such imagery needs to be stated; this generally includes restrictions on use and distribution. For non copyright data, for example 'Copyright 2004 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' )",type:"String",defValue:"UNK"},

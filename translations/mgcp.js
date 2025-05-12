@@ -1525,7 +1525,11 @@ mgcp = {
       ["t.landuse == 'religious'", "t.amenity = 'religious_activities'"],
       ["t.industrial == 'depot' && t.depot == 'bus'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
       ["t.water == 'moat'", "a.F_CODE = 'BH030'"],
-      ["t.building == 'hotel'", "a.F_CODE = 'AL015'; a.FFN = '550'"]
+      ["t.building == 'hotel'", "a.F_CODE = 'AL015'; a.FFN = '550'"],
+      ["t.amenity == 'language_school' && t.barrier == 'wall'", "delete t.barrier"],
+      ["t.amenity == 'language_school'", "a.FFN = '850'"],
+      ["t.depot == 'bus' && t.landuse == 'brownfield'", "delete t.landuse; a.F_CODE = 'AL010'; a.FFN = '480'"],
+      ["t.natural == 'water' && t.water == 'lagoon'", "a.F_CODE = 'BH080'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
