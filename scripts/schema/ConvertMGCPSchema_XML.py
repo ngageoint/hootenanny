@@ -620,7 +620,7 @@ def readFeatures(xmlDoc,funcList):
         'AEC030':'TreesA','LEA020':'TreesL','LEC030':'TreesL','PEC030':'TreesP','ABJ110':'TundraA','AAQ130':'TunnelA',
         'LAQ130':'TunnelL','PAJ051':'UtilP','PAT042':'UtilP','AZD020':'VoidA','ABH020':'WatrcrsA','ABH030':'WatrcrsA',
         'ABH140':'WatrcrsA','LBH020':'WatrcrsL','LBH030':'WatrcrsL','LBH140':'WatrcrsL','PAA050':'WellsprP',
-        'ABH170':'WellsprP','LZD040':'AnnoL','LZD045':'AnnoL','PZD045':'AnnoP','LCA010':'ContourL',
+        'PBH170':'WellsprP','LZD040':'AnnoL','LZD045':'AnnoL','PZD045':'AnnoP','LCA010':'ContourL',
         'PCA030':'ElevP','PCA035':'ElevP','PZB050':'ElevP','AFA002':'PolbndA','AFA003':'PolbndA','LFA000':'PolbndL',
         'LFA110':'PolbndL','LFC021':'PolbndL'}
 
