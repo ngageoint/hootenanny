@@ -1203,7 +1203,14 @@ mgcp = {
       break;
 
     case 'BB190': // Berthing Structure
-      if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
+      if (tags.waterway == 'dock' && tags.man_made == 'shoreline_construction')
+      {
+        delete tags.waterway;
+        delete tags.man_made;
+        tags['seamark:type'] = 'shoreline_construction';
+        tags['seamark:shoreline_construction:category'] = 'wharf';
+      }
+      
       break;
 
     case 'BD180': // Wreck
@@ -2378,6 +2385,10 @@ mgcp = {
       case 'BA040': // Tidal Water
         // It's tidal so we don't need to store this
         delete attrs.TID;
+        break;
+
+      case 'BB190': // Shoreline Construction
+        attrs.PWC = '2';  // Shoreline Construction Type = Wharf
         break;
 
       case 'BD180': // BA040 - Tidal Water

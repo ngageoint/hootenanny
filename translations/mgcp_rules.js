@@ -64,6 +64,7 @@ mgcp.rules = {
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081
     // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
+    ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
