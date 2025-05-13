@@ -170,6 +170,7 @@ mgcp.rules = {
     ['F_CODE','GB485','aeroway','navigation_aid'], // From OSM
     ['F_CODE','GB485','aeroway','papi'], // From OSM
     ['F_CODE','GB485','aeroway','vasi'], // From OSM
+    ['F_CODE','GB050','barrier','berm'], // Aircraft Revetment
     ['F_CODE','ZD040','natural','bay'], // From OSM
     ['F_CODE','ZD040','natural','cape'], // From OSM
     ['F_CODE','ZD040','natural','hill'], // From OSM
