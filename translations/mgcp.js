@@ -2388,7 +2388,22 @@ mgcp = {
         break;
 
       case 'BB190': // Shoreline Construction
-        attrs.PWC = '2';  // Shoreline Construction Type = Wharf
+        switch (tags.man_made) {
+          case 'pier':
+            attrs.PWC = '1';
+            break;
+          
+          case 'shoreline_construction':
+            attrs.PWC = '2';
+            break;
+
+          case 'quay':
+            attrs.PWC = '3';
+            break;
+        }
+
+        if (tags['seamark:type'] == 'shoreline_construction') attrs.PWC = '2';
+        
         break;
 
       case 'BD180': // BA040 - Tidal Water
