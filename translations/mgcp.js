@@ -311,7 +311,6 @@ mgcp = {
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
-
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
 
@@ -2324,7 +2323,13 @@ mgcp = {
       case 'AN010': // Railway
         if (tags.bridge) attrs.LOC = '45'; // Above Surface
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
-        if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+        if (tags.embankment == 'yes')
+        {
+          attrs.LOC = '45'; // Above Surface
+        } else if (tags.embankment || tags.man_made == 'causeway')
+        {
+          attrs.LOC = '44'; // On Surface
+        }
         if (tags.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
         break;
 
