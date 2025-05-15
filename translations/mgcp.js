@@ -912,6 +912,13 @@ mgcp = {
     // Railway vs Road
     // if (attrs.F_CODE == 'AN010' && attrs.RRC =='0') tags.railway = 'yes';
 
+    if (attrs.F_CODE == 'AL010' && attrs.FFN == '825')
+    {
+      tags.diplomatic = 'embassy';
+      tags.office = 'diplomatic';
+      delete tags.landuse;
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -1930,6 +1937,11 @@ mgcp = {
 
     // Military buildings in MGCP TRD3 have a MFC tag that we need to account for
     if (tags.building && tags.military) attrs.F_CODE = 'AL015';
+
+    if (tags.diplomatic == 'embassy' && tags.office == 'diplomatic') 
+    {
+      attrs.FFN = '825';
+    }
 
     // Embassy buildings should also be coupled with a FFN value of 827 (Embassy)
     if (tags.building && (tags.embassy || tags.diplomatic == 'embassy')) attrs.FFN = '827';

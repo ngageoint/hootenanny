@@ -99,6 +99,7 @@ mgcp.rules = {
     ['F_CODE','AK120','leisure','nature_reserve'], // Park
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
+    ['F_CODE','AL010','diplomatic','embassy'], // Embassy
     ['F_CODE','AL015','building','yes'], // To fix amenity etc
     ['F_CODE','AL015','information','office'], // Tourism Office
     ['F_CODE','AL015','man_made','depot'],
