@@ -10,6 +10,7 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["node","area"],
         "isA": "historic",
         "name": "historic=castle",
         "objectType": "tag",
