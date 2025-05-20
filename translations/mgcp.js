@@ -1834,7 +1834,12 @@ mgcp = {
         break;
 
       case 'pond':
-        delete tags.water
+        if (geometryType == 'Point') {
+          attrs.F_CODE = 'BH170'
+        }
+        else {
+          delete tags.water
+        }
         break;
 
       case 'lagoon':
