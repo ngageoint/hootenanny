@@ -64,6 +64,7 @@ mgcp.rules = {
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081
     // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
+    ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
@@ -95,9 +96,10 @@ mgcp.rules = {
     ['F_CODE','AK040','sport','soccer'], // From OSM
     ['F_CODE','AK120','landuse','recreation_ground'], // Park
     ['F_CODE','AK120','landuse','village_green'], // Park
-    ['F_CODE','AK120','leisure','nature_reserve'], // Park
+    // ['F_CODE','AK120','leisure','nature_reserve'], // Park (commenting out because it was translating over other features)
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
+    ['F_CODE','AL010','diplomatic','embassy'], // Embassy
     ['F_CODE','AL015','building','yes'], // To fix amenity etc
     ['F_CODE','AL015','information','office'], // Tourism Office
     ['F_CODE','AL015','man_made','depot'],
@@ -152,6 +154,7 @@ mgcp.rules = {
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH135','landuse','rice_field'], // Rice Field - tag change
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DA010','landuse','brownfield'], // area planned for development - Soil Surface Region
     ['F_CODE','DA010','natural','desert'], // EE030 Desert - mapped to DA010 Soil Surface Region
     ['F_CODE','DB090','embankment','berm'],
     ['F_CODE','DB090','embankment','divider'],
@@ -169,6 +172,7 @@ mgcp.rules = {
     ['F_CODE','GB485','aeroway','navigation_aid'], // From OSM
     ['F_CODE','GB485','aeroway','papi'], // From OSM
     ['F_CODE','GB485','aeroway','vasi'], // From OSM
+    ['F_CODE','GB050','barrier','berm'], // Aircraft Revetment
     ['F_CODE','ZD040','natural','bay'], // From OSM
     ['F_CODE','ZD040','natural','cape'], // From OSM
     ['F_CODE','ZD040','natural','hill'], // From OSM

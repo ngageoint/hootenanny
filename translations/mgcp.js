@@ -311,7 +311,6 @@ mgcp = {
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
-
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
 
@@ -913,6 +912,18 @@ mgcp = {
     // Railway vs Road
     // if (attrs.F_CODE == 'AN010' && attrs.RRC =='0') tags.railway = 'yes';
 
+    if (attrs.F_CODE == 'AL010' && attrs.FFN == '825')
+    {
+      tags.diplomatic = 'embassy';
+      tags.office = 'diplomatic';
+      delete tags.landuse;
+    }
+
+    if (attrs.F_CODE == 'AP030' && attrs.WTC == '0')
+    {
+      tags.highway = 'residential';
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -929,6 +940,7 @@ mgcp = {
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+      ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
       // ["t.public_transport == 'station'","t.bus = 'yes'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
@@ -1202,7 +1214,14 @@ mgcp = {
       break;
 
     case 'BB190': // Berthing Structure
-      if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
+      if (tags.waterway == 'dock' && tags.man_made == 'shoreline_construction')
+      {
+        delete tags.waterway;
+        delete tags.man_made;
+        tags['seamark:type'] = 'shoreline_construction';
+        tags['seamark:shoreline_construction:category'] = 'wharf';
+      }
+      
       break;
 
     case 'BD180': // Wreck
@@ -1508,6 +1527,7 @@ mgcp = {
       ["t.man_made && t.building == 'yes'","delete t.building"],
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
       ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
+      ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
       ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
       // ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
@@ -1930,7 +1950,16 @@ mgcp = {
     // Military buildings in MGCP TRD3 have a MFC tag that we need to account for
     if (tags.building && tags.military) attrs.F_CODE = 'AL015';
 
+    if (tags.diplomatic == 'embassy' && tags.office == 'diplomatic') 
+    {
+      attrs.FFN = '825';
+    }
+
+    // Embassy buildings should also be coupled with a FFN value of 827 (Embassy)
     if (tags.building && (tags.embassy || tags.diplomatic == 'embassy')) attrs.FFN = '827';
+
+    // runway features should also be assigned a Load Bearing Surface Type = hardpaved (1)
+    if (tags.aeroway == 'runway') attrs.RST = '1';
 
     // Tree rows are a special case for EC030
     if (tags.natural == 'tree_row' && geometryType == 'Line')
@@ -2217,6 +2246,10 @@ mgcp = {
     {
       switch (tags.highway)
       {
+        case 'residential':
+          attrs.WTC = '0';
+          break;
+          
         case 'motorway':
         case 'motorway_link':
         case 'trunk':
@@ -2227,7 +2260,6 @@ mgcp = {
         case 'secondary_link':
         case 'tertiary':
         case 'tertiary_link':
-        case 'residential':
         case 'unclassified':
           attrs.WTC = '1'; // All weather
           break;
@@ -2318,7 +2350,13 @@ mgcp = {
       case 'AN010': // Railway
         if (tags.bridge) attrs.LOC = '45'; // Above Surface
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
-        if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+        if (tags.embankment == 'yes')
+        {
+          attrs.LOC = '45'; // Above Surface
+        } else if (tags.embankment || tags.man_made == 'causeway')
+        {
+          attrs.LOC = '44'; // On Surface
+        }
         if (tags.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
         break;
 
@@ -2379,6 +2417,25 @@ mgcp = {
       case 'BA040': // Tidal Water
         // It's tidal so we don't need to store this
         delete attrs.TID;
+        break;
+
+      case 'BB190': // Shoreline Construction
+        switch (tags.man_made) {
+          case 'pier':
+            attrs.PWC = '1';
+            break;
+          
+          case 'shoreline_construction':
+            attrs.PWC = '2';
+            break;
+
+          case 'quay':
+            attrs.PWC = '3';
+            break;
+        }
+
+        if (tags['seamark:type'] == 'shoreline_construction') attrs.PWC = '2';
+        
         break;
 
       case 'BD180': // BA040 - Tidal Water

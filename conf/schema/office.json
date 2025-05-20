@@ -1,5 +1,6 @@
 [
     {
+        "geometries": ["node", "area"],
         "isA": "poi",
         "name": "office=*",
         "objectType": "tag",
