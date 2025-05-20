@@ -96,7 +96,7 @@ mgcp.rules = {
     ['F_CODE','AK040','sport','soccer'], // From OSM
     ['F_CODE','AK120','landuse','recreation_ground'], // Park
     ['F_CODE','AK120','landuse','village_green'], // Park
-    ['F_CODE','AK120','leisure','nature_reserve'], // Park
+    // ['F_CODE','AK120','leisure','nature_reserve'], // Park (commenting out because it was translating over other features)
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
     ['F_CODE','AL010','diplomatic','embassy'], // Embassy
@@ -154,6 +154,7 @@ mgcp.rules = {
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH135','landuse','rice_field'], // Rice Field - tag change
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DA010','landuse','brownfield'], // area planned for development - Soil Surface Region
     ['F_CODE','DA010','natural','desert'], // EE030 Desert - mapped to DA010 Soil Surface Region
     ['F_CODE','DB090','embankment','berm'],
     ['F_CODE','DB090','embankment','divider'],
