@@ -17,7 +17,6 @@ jobs:
           name: 'Make Hootenanny Archive'
           command: |
             su-exec postgres pg_ctl -D $PGDATA -s start
-            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://hoot-maven.s3.amazonaws.com/m2-cache.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
             su-exec rpmbuild ./scripts/ci/archive.sh
             su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
       - persist_to_workspace:
