@@ -919,6 +919,11 @@ mgcp = {
       delete tags.landuse;
     }
 
+    if (attrs.F_CODE == 'AP030' && attrs.WTC == '0')
+    {
+      tags.highway = 'residential';
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -2237,6 +2242,10 @@ mgcp = {
     {
       switch (tags.highway)
       {
+        case 'residential':
+          attrs.WTC = '0';
+          break;
+          
         case 'motorway':
         case 'motorway_link':
         case 'trunk':
@@ -2247,7 +2256,6 @@ mgcp = {
         case 'secondary_link':
         case 'tertiary':
         case 'tertiary_link':
-        case 'residential':
         case 'unclassified':
           attrs.WTC = '1'; // All weather
           break;
