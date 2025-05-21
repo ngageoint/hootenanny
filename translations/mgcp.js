@@ -2365,6 +2365,10 @@ mgcp = {
         if (attrs.FUC && ['0','4','8','19','999'].indexOf(attrs.FUC) < 0) attrs.FUC = '999';
         break;
 
+      case 'AL241': // 
+        if (tags.man_made == 'lighthouse') attrs.TTC = '5';
+        break;
+        
       case 'AN010': // Railway
         if (tags.bridge) attrs.LOC = '45'; // Above Surface
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface

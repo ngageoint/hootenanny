@@ -86,6 +86,13 @@
         "objectType": "tag"
     },
     {
+        "categories":[],
+        "geometries": ["node"],
+        "isA": "man_made",
+        "name": "man_made=lighthouse",
+        "objectType": "tag"
+    },
+    {
         "isA": "man_made",
         "name": "man_made=gantry",
         "objectType": "tag"

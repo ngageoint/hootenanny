@@ -115,6 +115,7 @@ mgcp.rules = {
     ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
+    ['F_CODE','AL241','man_made','lighthouse'], // Lighthouse
     ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AP020',undefined,undefined], // Road Interchange -Not valid MGCP
     // ['F_CODE','AP030','highway','living_street'],
