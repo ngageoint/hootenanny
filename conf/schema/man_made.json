@@ -79,6 +79,13 @@
         "objectType": "tag"
     },
     {
+        "categories":[],
+        "geometries":["linestring", "area"],
+        "isA": "man_made",
+        "name": "man_made=bridge",
+        "objectType": "tag"
+    },
+    {
         "isA": "man_made",
         "name": "man_made=gantry",
         "objectType": "tag"
