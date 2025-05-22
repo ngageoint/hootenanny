@@ -1,6 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 	http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hoot.josm</groupId>
@@ -11,27 +11,28 @@
 	<url>http://hootenanny.org</url>
 
 	<properties>
-	
+
 		<jdk.version>1.8</jdk.version>
-		
-		<!-- 
-		The hoot/JOSM integration is via JNI, which has no compile time checks and can be a fairly 
-		brittle interface that is difficult to debug. Upgrades may involve significant work. Think long 
-		and hard before you update the JOSM version here. 
+
+		<!--
+		The hoot/JOSM integration is via JNI, which has no compile time checks and can be a fairly
+		brittle interface that is difficult to debug. Upgrades may involve significant work. Think long
+		and hard before you update the JOSM version here.
 		-->
-		
+
     <josm.artifactId>josm</josm.artifactId>
 		<josm.version>18193</josm.version>
-		
+
 	  <!-- josm.artifactId>me-josm</josm.artifactId -->
 		<!-- josm.version>10.2.2</josm.version -->
-		
+
 	</properties>
 
   <repositories>
     <repository>
       <id>org.openstreetmap.josm</id>
-      <url>https://josm.openstreetmap.de/nexus/content/repositories/releases/</url>
+      <!-- <url>https://josm.openstreetmap.de/nexus/content/repositories/releases/</url> -->
+      <url>https://josm.openstreetmap.de/nexus3/service/rest/repository/browse/releases/org/openstreetmap/josm/josm/</url>
       <releases>
         <enabled>true</enabled>
         <updatePolicy>always</updatePolicy>
@@ -108,4 +109,3 @@
 	</build>
 
 </project>
-
