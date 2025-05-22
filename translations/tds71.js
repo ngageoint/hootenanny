@@ -370,7 +370,7 @@ tds71 = {
 
 
   // validateThematicAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
-  validateThematicAttrs: function(gFcode, attrs) {
+  validateThematicAttrs: function(gFcode, attrs, geometryType) {
     var tdsAttrList = tds71.thematicLookup[tds71.thematicGroupList[gFcode]];
     var attrList = tds71.attrLookup[gFcode];
 
@@ -401,7 +401,7 @@ tds71 = {
     // Fix default values of closure list attributes
     if (tds71.configOut.OgrCodedValues)
     {
-      if (['GB005','GB015','GB045'].includes(attrs['F_CODE']))
+      if (['GB005','GB015','GB045'].includes(attrs['F_CODE']) && geometryType == 'Area')
       {
         attrs['GSGCHC'] = '-999999';
         attrs['GSGCLC'] = '-999999';
@@ -414,7 +414,7 @@ tds71 = {
       }
 
       // Fix values of attributes that are not associated with subtype
-      if (['AP050','AQ040','AP010'].includes(attrs['F_CODE']))
+      if (['AP050','AQ040','AP010'].includes(attrs['F_CODE']) && geometryType == 'Line')
       {
         attrs['SGCC'] = '-999999';
         attrs['RMWC'] = '-999999';
@@ -422,7 +422,7 @@ tds71 = {
     }
     else 
     {
-      if (['GB005','GB015','GB045'].includes(attrs['F_CODE']))
+      if (['GB005','GB015','GB045'].includes(attrs['F_CODE']) && geometryType == 'Area')
       {
         attrs['GSGCHC'] = 'noInformation';
         attrs['GSGCLC'] = 'noInformation';
@@ -435,7 +435,7 @@ tds71 = {
       }
   
       // Fix values of attributes that are not associated with subtype
-      if (['AP050','AQ040','AP010'].includes(attrs['F_CODE']))
+      if (['AP050','AQ040','AP010'].includes(attrs['F_CODE']) && geometryType == 'Line')
       {
         attrs['SGCC'] = 'noInformation';
         attrs['RMWC'] = 'noInformation';
@@ -2734,7 +2734,7 @@ tds71 = {
     }
 
     // Custom Aeronautic rules
-    if (['GB005','GB015','GB045'].includes(attrs.F_CODE))
+    if (['GB005','GB015','GB045'].includes(attrs.F_CODE) && geometryType == 'Area')
     {
       attrs.GSGCHC = '-999999';
       attrs.GSGCLC = '-999999';
@@ -3450,7 +3450,7 @@ tds71 = {
           if (tds71.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds71.thematicGroupList[gFcode];
-            tds71.validateThematicAttrs(gFcode, returnData[i]['attrs']);
+            tds71.validateThematicAttrs(gFcode, returnData[i]['attrs'], geometryType);
           }
           else
           {
