@@ -684,6 +684,12 @@ mgcp = {
       }
     }
 
+    if (attrs.F_CODE == 'AJ010')
+    {
+      tags.landuse = 'farmland';
+      tags.irrigation = 'pivot';
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -1619,6 +1625,9 @@ mgcp = {
             attrs.F_CODE = 'EA055'; // Hop Field
             break;
         }
+
+        if (tags.irrigation == 'pivot') attrs.F_CODE = 'AJ010'; // Circular Irrigation System
+
         break;
 
       case 'farmyard': // NOTE: This is different to farm && farmland

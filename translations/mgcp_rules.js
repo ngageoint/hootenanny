@@ -52,7 +52,7 @@ mgcp.rules = {
     ['F_CODE','AL010','landuse','religious'], // Processing Facility - NFDD AL010
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
-    ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
+    //['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
