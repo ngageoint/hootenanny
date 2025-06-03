@@ -1320,6 +1320,11 @@ mgcp = {
         delete tags.named_location;
         tags.annotated_location = 'yes';
       }
+    
+    case 'EC010':
+      delete tags.natural;
+      tags.crop = 'sugarcane'
+      tags.landuse = 'orchard'
     } // End switch FCODE
 
     // Content vs Product for storage tanks
@@ -1549,7 +1554,8 @@ mgcp = {
       ["t.building == 'hotel'", "a.F_CODE = 'AL015'; a.FFN = '550'"],
       ["t.amenity == 'language_school' && t.barrier == 'wall'", "delete t.barrier"],
       ["t.amenity == 'language_school'", "a.FFN = '850'"],
-      ["t.depot == 'bus' && t.landuse == 'brownfield'", "delete t.landuse; a.F_CODE = 'AL010'; a.FFN = '480'"]
+      ["t.depot == 'bus' && t.landuse == 'brownfield'", "delete t.landuse; a.F_CODE = 'AL010'; a.FFN = '480'"],
+      ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"] // override the Orchard FCode with Cane when Cane is the relevant crop
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -1586,7 +1592,6 @@ mgcp = {
         tags.landuse = 'built_up_area';
         break;
 
-      case 'commercial':
       case 'retail':
         tags.use = 'commercial';
         tags.landuse = 'built_up_area';

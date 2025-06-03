@@ -80,6 +80,7 @@ mgcp.rules = {
     ['F_CODE','GA034','airmark','beacon'], // Aeronautical Radio Navigation Service - TDS GA033
     ['F_CODE','GB220','aeroway','obstacle'], // Aeronautical Obstacle - No replacement code
     ['F_CODE','GB485','aeroway','navigationaid'], // Approach Lighting System - Not in TDS
+    ['F_CODE','AI030','amenity','refugee_site']
     ], // End fcodeOne2oneV4
 
     // These are for finding an FCODE for export.
