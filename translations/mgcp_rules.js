@@ -112,7 +112,7 @@ mgcp.rules = {
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'],
-    ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
+    //['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
     ['F_CODE','AL241','man_made','lighthouse'], // Lighthouse

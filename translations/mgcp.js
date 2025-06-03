@@ -2215,7 +2215,7 @@ mgcp = {
       var fcodeMap = {
         'highway':'AP030','railway':'AN010','building':'AL015',
         'ford':'BH070','waterway':'BH140','bridge':'AQ040','tomb':'AL036',
-        'railway:in_road':'AN010','tourism':'AL015','mine:access':'AA010',
+        'railway:in_road':'AN010','mine:access':'AA010',
         'cutting':'DB070','shop':'AL015','office':'AL015'
       };
 
