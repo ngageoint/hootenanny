@@ -684,6 +684,12 @@ mgcp = {
       }
     }
 
+    if (attrs.F_CODE == 'AJ010')
+    {
+      tags.landuse = 'farmland';
+      tags.irrigation = 'pivot';
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -1624,6 +1630,9 @@ mgcp = {
             attrs.F_CODE = 'EA055'; // Hop Field
             break;
         }
+
+        if (tags.irrigation == 'pivot') attrs.F_CODE = 'AJ010'; // Circular Irrigation System
+
         break;
 
       case 'farmyard': // NOTE: This is different to farm && farmland
@@ -2211,7 +2220,7 @@ mgcp = {
       var fcodeMap = {
         'highway':'AP030','railway':'AN010','building':'AL015',
         'ford':'BH070','waterway':'BH140','bridge':'AQ040','tomb':'AL036',
-        'railway:in_road':'AN010','tourism':'AL015','mine:access':'AA010',
+        'railway:in_road':'AN010','mine:access':'AA010',
         'cutting':'DB070','shop':'AL015','office':'AL015'
       };
 

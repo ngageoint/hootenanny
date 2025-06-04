@@ -52,7 +52,7 @@ mgcp.rules = {
     ['F_CODE','AL010','landuse','religious'], // Processing Facility - NFDD AL010
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
-    ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
+    //['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
@@ -113,7 +113,7 @@ mgcp.rules = {
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'],
-    ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
+    //['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
     ['F_CODE','AL241','man_made','lighthouse'], // Lighthouse
