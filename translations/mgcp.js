@@ -930,6 +930,12 @@ mgcp = {
       tags.highway = 'residential';
     }
 
+    if (attrs.F_CODE == 'BH030' && tags.waterway == 'ditch')
+    {
+      delete tags.area;
+      tags.natural = 'water';
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
