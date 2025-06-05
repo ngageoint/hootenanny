@@ -164,6 +164,7 @@ mgcp.rules = {
     ['F_CODE','DB090','embankment','fill'],
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','man_made','embankment'], // Embankment
     ['F_CODE','DB090','man_made','dyke'],
     ['F_CODE','EB020','natural','heath'], // Thicket
     ['F_CODE','EC030','natural','wood'], // Trees
