@@ -1076,6 +1076,47 @@ mgcp = {
 
     case 'AK040': // Athletic Field, Sports Ground
     case 'BA050': // Beach
+    case 'AL010': // Facility
+      switch (attrs.FFN)
+      {
+        case '2':
+          tags.landuse = 'farmyard'
+          break;
+        case '99':
+          tags.man_made = 'works'
+          delete tags.landuse
+          break;
+        case '350':
+          tags.landuse = 'industrial'
+          tags.utilities = 'yes'
+          break;
+        case '440':
+          tags.landuse = 'commercial'
+          break;
+        case '480':
+          tags.public_transport = 'station'
+          delete tags.landuse
+          break;
+        case '550':
+          tags.tourism = 'hotel'
+          delete tags.landuse
+          break;
+        case '610':
+          tags.office = 'telecommunication'
+          delete tags.landuse
+          break;
+        case '810':
+          tags.landuse = 'civic_admin'
+          break;
+        case '811':
+          tags.office = 'government'
+          delete tags.landuse
+          break;
+        case '825':
+          tags.office = 'diplomatic'
+          delete tags.landuse
+          break;
+      }
     case 'DB070': // Cut
       if (tags.material && !tags.surface)
       {
@@ -1274,6 +1315,12 @@ mgcp = {
         tags.surface = tags.material;
         delete tags.material;
       }
+      break;
+
+    case 'DB100':
+      delete tags.landform;
+      tags.natural = 'ridge';
+      tags.ridge = 'esker';
       break;
 
     case 'EA010': // Crop Land
@@ -1561,7 +1608,11 @@ mgcp = {
       ["t.amenity == 'language_school' && t.barrier == 'wall'", "delete t.barrier"],
       ["t.amenity == 'language_school'", "a.FFN = '850'"],
       ["t.depot == 'bus' && t.landuse == 'brownfield'", "delete t.landuse; a.F_CODE = 'AL010'; a.FFN = '480'"],
-      ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"] // override the Orchard FCode with Cane when Cane is the relevant crop
+      ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
+      ["t.natural == 'ridge' && t.ridge == 'esker'", "a.F_CODE = 'DB100'"],
+      ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
+      ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
+      ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -1591,7 +1642,17 @@ mgcp = {
       case 'brownfield':
         tags.landuse = 'built_up_area';
         tags.condition = 'destroyed';
-        break
+        break;
+
+      case 'civic_admin':
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '810'
+        break;
+
+      case 'commercial':
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '440'
+        break;
 
       case 'construction':
         tags.condition = 'construction';
@@ -1636,9 +1697,8 @@ mgcp = {
         break;
 
       case 'farmyard': // NOTE: This is different to farm && farmland
-        tags.facility = 'yes';
-        tags.use = 'agriculture';
-        delete tags.landuse;
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '2'
         break;
 
       case 'grass':
@@ -1738,6 +1798,19 @@ mgcp = {
     {
       attrs.F_CODE = 'AL015';
       tags.use = 'power_generation';
+    }
+
+    switch (tags.office)
+    {
+      case 'telecommunication':
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '610'
+      case 'government':
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '811'
+      case 'diplomatic':
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '825'
     }
 
     // Going out on a limb and processing OSM specific tags:
@@ -2164,6 +2237,10 @@ mgcp = {
       case 'petroleum_well':
         if (!tags.product) tags.product = 'oil'; // Not great
         break;
+      
+      case 'works':
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '99'
     }
 
     // Fix up water features from OSM
