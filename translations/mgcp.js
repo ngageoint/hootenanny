@@ -1543,6 +1543,7 @@ mgcp = {
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
+      ["t.man_made == 'cut_edge'","t.cutting = 'yes'; a.F_CODE = 'DB070'"],
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
       ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
       ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
