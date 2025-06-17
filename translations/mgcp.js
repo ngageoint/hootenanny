@@ -2298,8 +2298,9 @@ mgcp = {
         break;
       
       case 'works':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '99'
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '99';
+        break;
     }
 
     // Fix up water features from OSM
