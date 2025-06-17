@@ -100,7 +100,7 @@ fcodeCommon = {
       ['F_CODE','AK061','tourism','picnic_site'], // Picnic Site
       ['F_CODE','AK070','drive_in','yes'], // Drive In Theater
       ['F_CODE','AK080','man_made','outdoor_theatre_screen'], // Outdoor Theatre Screen
-      ['F_CODE','AK090','leisure','fairground'], // Fairground
+      ['F_CODE','AK090','landuse','fairground'], // Fairground
       ['F_CODE','AK100','leisure','golf_course'], // Golf Course
       ['F_CODE','AK101','golf','driving_range'], // Golf Driving Range
       ['F_CODE','AK110','building','grandstand'], // Grandstand

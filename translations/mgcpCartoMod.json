@@ -15,7 +15,6 @@
     "collapse_poly": {"filter": {"must": [{"tag": "tourism=theme_park"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "leisure=pitch"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "tourism=camp_site"} ] }, "arguments": {"max_area_in_m": 15625 } },
-    "collapse_poly": {"filter": {"must": [{"tag": "leisure=fairground"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "leisure=statium"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "leisure=swimming_pool"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "historic=archaeological_site"} ] }, "arguments": {"max_area_in_m": 15625 } },
