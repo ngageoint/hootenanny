@@ -1080,41 +1080,67 @@ mgcp = {
       switch (attrs.FFN)
       {
         case '2':
-          tags.landuse = 'farmyard'
+          tags.landuse = 'farmyard';
           break;
         case '99':
-          tags.man_made = 'works'
-          delete tags.landuse
+          tags.man_made = 'works';
+          delete tags.landuse;
           break;
         case '350':
-          tags.landuse = 'industrial'
-          tags.utilities = 'yes'
+          tags.landuse = 'industrial';
+          tags.utilities = 'yes';
           break;
         case '440':
-          tags.landuse = 'commercial'
+          tags.landuse = 'commercial';
           break;
         case '480':
-          tags.public_transport = 'station'
-          delete tags.landuse
+          tags.public_transport = 'station';
+          delete tags.landuse;
           break;
         case '550':
-          tags.tourism = 'hotel'
-          delete tags.landuse
+          tags.tourism = 'hotel';
+          delete tags.landuse;
+          break;
+        case '563':
+          tags.landuse = 'residential';
           break;
         case '610':
-          tags.office = 'telecommunication'
-          delete tags.landuse
+          tags.office = 'telecommunication';
+          delete tags.landuse;
           break;
         case '810':
-          tags.landuse = 'civic_admin'
+          tags.landuse = 'civic_admin';
           break;
         case '811':
-          tags.office = 'government'
-          delete tags.landuse
+          tags.office = 'government';
+          delete tags.landuse;
           break;
         case '825':
-          tags.office = 'diplomatic'
-          delete tags.landuse
+          tags.office = 'diplomatic';
+          delete tags.landuse;
+          break;
+        case '835':
+          tags.landuse = 'military';
+          break;
+        case '843':
+          tags.amenity = 'prison';
+          delete tags.landuse;
+          break;
+        case '850':
+          tags.amenity = 'school';
+          delete tags.landuse;
+          break;
+        case '860':
+          tags.amenity = 'hospital';
+          delete tags.landuse;
+          break;
+        case '907':
+          tags.leisure = 'garden';
+          delete tags.landuse;
+          break;
+        case '907':
+          tags.leisure = 'sports_centre';
+          delete tags.landuse;
           break;
       }
     case 'DB070': // Cut
@@ -1612,7 +1638,9 @@ mgcp = {
       ["t.natural == 'ridge' && t.ridge == 'esker'", "a.F_CODE = 'DB100'"],
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
       ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
-      ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"]
+      ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
+      ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
+      ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -1645,18 +1673,23 @@ mgcp = {
         break;
 
       case 'civic_admin':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '810'
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '810';
         break;
 
       case 'commercial':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '440'
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '440';
         break;
 
       case 'construction':
         tags.condition = 'construction';
         tags.landuse = 'built_up_area';
+        break;
+
+      case 'residential':
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '563';
         break;
 
       case 'retail':
@@ -1739,8 +1772,8 @@ mgcp = {
         break;
 
       case 'military':
-        if (tags.military !== 'range') tags.military = 'installation';
-        delete tags.landuse;
+        attrs.F_CODE = 'AL010'
+        attrs.FFN = '835'
         break;
 
       case 'orchard':
@@ -1803,14 +1836,40 @@ mgcp = {
     switch (tags.office)
     {
       case 'telecommunication':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '610'
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '610';
+        break;
       case 'government':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '811'
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '811';
+        break;
       case 'diplomatic':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '825'
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '825';
+        break;
+      case 'educational_institution':
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '850';
+        break;
+    }
+
+    switch (tags.amenity)
+    {
+      case 'prison':
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '843';
+        break;
+      case 'school':
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '850';
+        break;
+      case 'hospital':
+      case 'clinic':
+      case 'doctors':
+      case 'dentist':
+        attrs.F_CODE = 'AL010';
+        attrs.FFN = '860';
+        break;
     }
 
     // Going out on a limb and processing OSM specific tags:

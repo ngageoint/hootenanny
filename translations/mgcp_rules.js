@@ -2404,11 +2404,11 @@ mgcp.rules = {
     // Office: Things that are not "commerce"
     ['FFN','720','office','research'], // Scientific R&D
     ['FFN','810','office','association'], // Administrative
-    ['FFN','810','office','educational_institution'], // Administrative
     ['FFN','810','office','religion'], // Administrative
     ['FFN','810','office','foundation'], // Administrative
     ['FFN','825','office','diplomatic'], // Diplomacy
     ['FFN','841','office','police'], // Law Enforcement
+    ['FFN','850','office','educational_institution'], // Administrative
     ['FFN','859','office','ngo'], // Institution
     ['FFN','859','office','charity'], // Institution
     ['FFN','860','office','physician'], // Human Health
