@@ -40,7 +40,6 @@ fcodeCommon = {
     // The fcodeXXX rules are for finding/setting an FCODE
     // Common rules: import and export with "unique" values
     one2one : [
-      ['F_CODE','AA010','landuse','surface_mining'], // Extraction Mine
       ['F_CODE','AA011','natural','shear_wall'], // Shear Wall
       ['F_CODE','AA020','mine:superstructure','yes'], // Mine Shaft Superstructure
       ['F_CODE','AA040','man_made','rig'], // Rig/Superstructure
@@ -101,7 +100,7 @@ fcodeCommon = {
       ['F_CODE','AK061','tourism','picnic_site'], // Picnic Site
       ['F_CODE','AK070','drive_in','yes'], // Drive In Theater
       ['F_CODE','AK080','man_made','outdoor_theatre_screen'], // Outdoor Theatre Screen
-      ['F_CODE','AK090','leisure','fairground'], // Fairground
+      ['F_CODE','AK090','landuse','fairground'], // Fairground
       ['F_CODE','AK100','leisure','golf_course'], // Golf Course
       ['F_CODE','AK101','golf','driving_range'], // Golf Driving Range
       ['F_CODE','AK110','building','grandstand'], // Grandstand

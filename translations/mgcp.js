@@ -690,6 +690,12 @@ mgcp = {
       tags.irrigation = 'pivot';
     }
 
+    if (attrs.F_CODE == 'AA010')
+    {
+      tags.landuse = 'industrial';
+      tags.industrial = 'mine';
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -930,6 +936,12 @@ mgcp = {
       tags.highway = 'residential';
     }
 
+    if (attrs.F_CODE == 'BH030' && tags.waterway == 'ditch')
+    {
+      delete tags.area;
+      tags.natural = 'water';
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -942,6 +954,7 @@ mgcp = {
       ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
       // ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
       ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
+      ["t.embankment == 'yes' && !(t.highway || t.railway)","delete t.embankment; t.man_made = 'embankment'"],
       ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.leisure == 'stadium'","t.building = 'yes'"],
@@ -1607,8 +1620,10 @@ mgcp = {
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
+      ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
+      ["t.man_made == 'cut_edge'","t.cutting = 'yes'; a.F_CODE = 'DB070'"],
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
       ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
       ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
