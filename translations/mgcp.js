@@ -690,6 +690,12 @@ mgcp = {
       tags.irrigation = 'pivot';
     }
 
+    if (attrs.F_CODE == 'AA010')
+    {
+      tags.landuse = 'industrial';
+      tags.industrial = 'mine';
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -1541,6 +1547,7 @@ mgcp = {
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
+      ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
       ["t.man_made == 'cut_edge'","t.cutting = 'yes'; a.F_CODE = 'DB070'"],
