@@ -4,7 +4,6 @@
     "way_to_poly": {"filter": {"must": [{"tag": "aeroway=taxiway"} ] }, "arguments": {"default_width_m": 15, "width_tag_m" : "width"} },
 
     "collapse_poly": {"filter": {"must": [{"tag": "building=*"} ] }, "arguments": {"max_area_in_m": 625 } },
-    "collapse_poly": {"filter": {"must": [{"tag": "landuse=surface_mining"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "landuse=quarry"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "facility=processing"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "water=settling_basin"} ] }, "arguments": {"max_area_in_m": 15625 } },
@@ -16,7 +15,6 @@
     "collapse_poly": {"filter": {"must": [{"tag": "tourism=theme_park"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "leisure=pitch"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "tourism=camp_site"} ] }, "arguments": {"max_area_in_m": 15625 } },
-    "collapse_poly": {"filter": {"must": [{"tag": "leisure=fairground"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "leisure=statium"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "leisure=swimming_pool"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "historic=archaeological_site"} ] }, "arguments": {"max_area_in_m": 15625 } },

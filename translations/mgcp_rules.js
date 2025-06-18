@@ -49,6 +49,7 @@ mgcp.rules = {
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
+    ['F_CODE','AH070','amenity','checkpoint'],
     ['F_CODE','AL010','landuse','religious'], // Processing Facility - NFDD AL010
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
@@ -164,7 +165,9 @@ mgcp.rules = {
     ['F_CODE','DB090','embankment','fill'],
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','man_made','embankment'], // Embankment
     ['F_CODE','DB090','man_made','dyke'],
+    ['F_CODE','DB100','natural','esker'],
     ['F_CODE','EB020','natural','heath'], // Thicket
     ['F_CODE','EC030','natural','wood'], // Trees
     ['F_CODE','ED010','natural','wetland'], // Marsh
@@ -2402,11 +2405,11 @@ mgcp.rules = {
     // Office: Things that are not "commerce"
     ['FFN','720','office','research'], // Scientific R&D
     ['FFN','810','office','association'], // Administrative
-    ['FFN','810','office','educational_institution'], // Administrative
     ['FFN','810','office','religion'], // Administrative
     ['FFN','810','office','foundation'], // Administrative
     ['FFN','825','office','diplomatic'], // Diplomacy
     ['FFN','841','office','police'], // Law Enforcement
+    ['FFN','850','office','educational_institution'], // Administrative
     ['FFN','859','office','ngo'], // Institution
     ['FFN','859','office','charity'], // Institution
     ['FFN','860','office','physician'], // Human Health
