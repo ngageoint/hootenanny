@@ -190,6 +190,12 @@ translations/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/tr
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
+##### MUVD
+# Build the MUVD schema from the TRD feature catalog
+translations/muvd_schema.js: scripts/schema/ConvertMUVDSchema_XML.py conf/translations/MUVD_Feature_Catalogue_UTRD1_v1.2_20230801.xml.gz
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
+
 #### TDSv71
 
 # Build the TDS71 "From English" rules
