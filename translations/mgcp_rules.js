@@ -170,6 +170,7 @@ mgcp.rules = {
     ['F_CODE','DB100','natural','esker'],
     ['F_CODE','EB020','natural','heath'], // Thicket
     ['F_CODE','EC030','natural','wood'], // Trees
+    ['F_CODE','EC060','man_made','clearcut'], // Forest clearing
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range

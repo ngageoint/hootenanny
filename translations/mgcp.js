@@ -924,6 +924,13 @@ mgcp = {
     // Railway vs Road
     // if (attrs.F_CODE == 'AN010' && attrs.RRC =='0') tags.railway = 'yes';
 
+    // EC060 = man_made:clearcut
+    if (attrs.F_CODE == 'EC060')
+    {
+      tags.man_made = 'clearcut';
+      delete tags.natural;
+    }
+
     if (attrs.F_CODE == 'AL010' && attrs.FFN == '825')
     {
       tags.diplomatic = 'embassy';
