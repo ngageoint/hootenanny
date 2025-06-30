@@ -168,6 +168,9 @@ mgcp.rules = {
     ['F_CODE','DB090','man_made','embankment'], // Embankment
     ['F_CODE','DB090','man_made','dyke'],
     ['F_CODE','DB100','natural','esker'],
+    ['F_CODE','DB115','natural','geyser'], // Geothermal Outlet
+    ['F_CODE','DB115','natural','fumarole'], // Geothermal Outlet
+    ['F_CODE','DB115','natural','hot_spring'], // Geothermal Outlet
     ['F_CODE','EB020','natural','heath'], // Thicket
     ['F_CODE','EC030','natural','wood'], // Trees
     ['F_CODE','EC060','man_made','clearcut'], // Forest clearing
