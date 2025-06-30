@@ -1620,6 +1620,7 @@ mgcp = {
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
+      ["t.landuse == 'aquaculture' && t.aquaculture == 'fish'","a.F_CODE = 'BH051'"],
       ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
