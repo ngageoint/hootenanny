@@ -107,7 +107,6 @@ def processSingleNode(node,text):
 # Read all of the features in an XML document
 def readFeatures(xmlDoc,funcList):
     itemList = xmlDoc.getElementsByTagName('FeatureType')
-    #print(itemList)
 
     # Setup handy lists
     geoList = {'C':'Curve', 'P':'Point', 'S':'Surface', '_':'None' }
@@ -197,7 +196,6 @@ def readFeatures(xmlDoc,funcList):
     for feature in itemList:
         fCode = ''
         geomChar = ''
-        #tmp = feature.getElementsByTagName('title').firstChild.data
 
         if feature.getElementsByTagName('name') and feature.getElementsByTagName('title'):
                 rawName = processSingleNode(feature,'name')
@@ -214,9 +212,6 @@ def readFeatures(xmlDoc,funcList):
             if feature.getElementsByTagName('definition'):
                 fDesc = processSingleNode(feature,'definition')
             
-            #print(rawFcode)
-            #print(fName)
-            #print(fGeom)
 
             # Build a feature
             if fCode not in tSchema:
@@ -236,7 +231,6 @@ def readFeatures(xmlDoc,funcList):
                     ref_id = u' ' + node.getAttribute('idref').encode('utf8').strip()
                     if ref_id in attribute_lookup:
                         tSchema[fCode]['columns'][attribute_lookup[ref_id]['name']] = attribute_lookup[ref_id]
-                        #print(tSchema[fCode]['columns'][attribute_lookup[ref_id]['name']])
                     continue
 
                 if node.localName == 'code':
@@ -271,9 +265,6 @@ def readFeatures(xmlDoc,funcList):
                 
                 # Debug: If we didn't process a value for a node, print what we missed
                 print('#### Node Missed ', node.localName)
-    
-    #from pprint import pprint
-    #pprint(tSchema, width=100)
 
     return tSchema
 
@@ -319,8 +310,6 @@ if __name__ == "__main__":
     # The list of attributes to make into functions in the schema. Used for enumerated lists that get
     # repeated a lot.
     funcList = []
-
-    #print(xmlDoc)
 
     schema = readFeatures(xmlDoc,funcList)
 
