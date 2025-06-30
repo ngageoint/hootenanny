@@ -938,6 +938,13 @@ mgcp = {
       delete tags.landuse;
     }
 
+    if (attrs.F_CODE == 'AM030')
+    {
+      tags.building = 'silo';
+      tags.content = 'grain';
+      delete tags.man_made;
+    }
+
     if (attrs.F_CODE == 'AP030' && attrs.WTC == '0')
     {
       tags.highway = 'residential';
@@ -1617,6 +1624,7 @@ mgcp = {
       // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
       ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
       ["t.amenity == 'prison' && t.barrier == 'wall'","delete t.barrier"],
+      ["t.building == 'silo' && t.content == 'grain'","a.F_CODE = 'AM030'"],
       ["t.tourism == 'attraction' && t.building == 'church'","delete t.tourism"],
       ["t.tourism == 'attraction' && t.landuse == 'commercial'","delete t.tourism"],
       ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
