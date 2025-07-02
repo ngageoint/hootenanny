@@ -12,7 +12,7 @@ SHELL=/bin/bash
 .PHONY: clean-ccache HOOT_VERSION_FILE
 
 # This list is for manually rebuilding the schema files.  The files have been commited to the main GitHub repo
-SCHEMA_FILES= translations/tds71_schema.js translations/tds70_schema.js translations/tds61_schema.js translations/tds40_schema.js translations/mgcp_schema.js translations/mgcp_thematic_schema.js translations/ggdm30_schema.js translations/tds71_thematic_schema.js translations/tds71_thematic_enum_schema.js translations/tds71_full_schema.js translations/tds61_full_schema.js translations/tds70_full_schema.js translations/tds40_full_schema.js translations/ggdm30_full_schema.js translations/etds71_rules.js translations/etds70_rules.js translations/etds61_rules.js translations/etds40_rules.js translations/emgcp_rules.js translations/eggdm30_rules.js translations/etds71_osm_rules.js translations/etds61_osm_rules.js translations/etds40_osm_rules.js translations/emgcp_osm_rules.js translations/eggdm30_osm_rules.js translations/etds70_osm_rules.js
+SCHEMA_FILES= translations/tds71_schema.js translations/tds70_schema.js translations/tds61_schema.js translations/tds40_schema.js translations/mgcp_schema.js translations/mgcp_thematic_schema.js translations/muvd_schema.js translations/ggdm30_schema.js translations/tds71_thematic_schema.js translations/tds71_thematic_enum_schema.js translations/tds71_full_schema.js translations/tds61_full_schema.js translations/tds70_full_schema.js translations/tds40_full_schema.js translations/ggdm30_full_schema.js translations/etds71_rules.js translations/etds70_rules.js translations/etds61_rules.js translations/etds40_rules.js translations/emgcp_rules.js translations/eggdm30_rules.js translations/etds71_osm_rules.js translations/etds61_osm_rules.js translations/etds40_osm_rules.js translations/emgcp_osm_rules.js translations/eggdm30_osm_rules.js translations/etds70_osm_rules.js
 
 
 -include Makefile.inc
@@ -189,6 +189,12 @@ translations/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/transl
 translations/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.6_20210129.xml.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+##### MUVD
+# Build the MUVD schema from the TRD feature catalog
+translations/muvd_schema.js: scripts/schema/ConvertMUVDSchema_XML.py conf/translations/MUVD_Feature_Catalogue_UTRD1_v1.2_20230801.xml.gz
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv71
 
