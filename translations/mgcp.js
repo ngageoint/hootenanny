@@ -696,6 +696,12 @@ mgcp = {
       tags.industrial = 'mine';
     }
 
+    if (attrs.F_CODE == 'AD050')
+    {
+      tags.landuse = 'industrial';
+      tags.industrial = 'heating';
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -971,6 +977,7 @@ mgcp = {
       ["t.embankment == 'yes' && !(t.highway || t.railway)","delete t.embankment; t.man_made = 'embankment'"],
       ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
+      ["t.landuse == 'industrial' && t.industrial == 'heating' && t.amenity","delete t.amenity"],
       ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
@@ -1637,6 +1644,7 @@ mgcp = {
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
       ["t.landuse == 'aquaculture' && t.aquaculture == 'fish'","a.F_CODE = 'BH051'"],
       ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
+      ["t.landuse == 'industrial' && t.industrial == 'heating'","a.F_CODE = 'AD050'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
       ["t.man_made == 'cut_edge'","t.cutting = 'yes'; a.F_CODE = 'DB070'"],
