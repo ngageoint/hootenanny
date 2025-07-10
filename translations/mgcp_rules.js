@@ -69,6 +69,8 @@ mgcp.rules = {
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
+    ['F_CODE','BD130','seamark:type','obstruction'], // Hazardous Rock Point - NFDD BD130
+    ['F_CODE','BD130','seamark:type','rock'], // Hazardous Rock Point - NFDD BD130
     ['F_CODE','BH060','water:race','flume'], // Flume - NFDD BH065
     ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082

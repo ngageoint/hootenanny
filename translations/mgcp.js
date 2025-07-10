@@ -1331,6 +1331,11 @@ mgcp = {
       
       break;
 
+    case 'BD130': // Hazardous Rock Point
+      tags['seamark:type'] = 'rock';
+      tags['seamark:rock:water_level'] = '*';
+      break;
+
     case 'BD180': // Wreck
       if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
       break;
@@ -2650,6 +2655,10 @@ mgcp = {
 
         if (tags['seamark:type'] == 'shoreline_construction') attrs.PWC = '2';
         
+        break;
+
+      case 'BD130': // Hazardous Rock Point
+        if (!attrs.WLE) attrs.WLE = '0'; // Unknown (for now)
         break;
 
       case 'BD180': // BA040 - Tidal Water
