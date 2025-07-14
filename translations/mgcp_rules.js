@@ -1427,14 +1427,15 @@ mgcp.rules = {
 
     // WLE - Water Level Effect
     // ['WLE','0',undefined,undefined], // Unknown
-    ['WLE','0','hydrographic_vertical_position','unknown'], // Unknown
-    ['WLE','1','hydrographic_vertical_position','partly_submerged'], // Partly Submerged
-    ['WLE','2','hydrographic_vertical_position','always_dry'], // Always Dry
-    ['WLE','3','hydrographic_vertical_position','always_submerged'], // Always Submerged
-    ['WLE','4','hydrographic_vertical_position','covers_and_uncovers'], // Covers and Uncovers
-    ['WLE','8','hydrographic_vertical_position','floating'], // Floating
-    ['WLE','998','hydrographic_vertical_position','not_applicable'], // Other
-    ['WLE','999','hydrographic_vertical_position','other'], // Other
+    ['WLE','0','seamark:rock:water_level','unknown'], // Unknown
+    ['WLE','1','seamark:rock:water_level','partly_submerged'], // Partly Submerged
+    ['WLE','2','seamark:rock:water_level','always_dry'], // Always Dry
+    ['WLE','2','seamark:rock:water_level','dry'], // Dry
+    ['WLE','3','seamark:rock:water_level','always_submerged'], // Always Submerged
+    ['WLE','4','seamark:rock:water_level','covers_and_uncovers'], // Covers and Uncovers
+    ['WLE','8','seamark:rock:water_level','floating'], // Floating
+    ['WLE','998','seamark:rock:water_level','not_applicable'], // Other
+    ['WLE','999','seamark:rock:water_level','other'], // Other
 
     // WST - Watercourse Sink Type: No OSM even close
     // ['WST','0',undefined,undefined],

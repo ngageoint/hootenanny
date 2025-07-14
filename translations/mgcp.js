@@ -1333,7 +1333,6 @@ mgcp = {
 
     case 'BD130': // Hazardous Rock Point
       tags['seamark:type'] = 'rock';
-      tags['seamark:rock:water_level'] = '*';
       break;
 
     case 'BD180': // Wreck
