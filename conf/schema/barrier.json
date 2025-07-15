@@ -38,5 +38,11 @@
         "isA": "barrier",
         "name": "barrier=fence",
         "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "barrier",
+        "name": "barrier=hedge",
+        "objectType": "tag"
     }
 ]
