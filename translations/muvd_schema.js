@@ -41,7 +41,7 @@ muvd.schema = {
 getDbSchema: function()
 {
 var schema = [
- {name:"CAA011",fcode:"CAA011",desc:"Shear Wall",geom:"Curve",definition:"The wall of the excavation within a quarry or extraction mine.",
+ {name:"CAA011",fcode:"CAA011",desc:"Shear Wall",geom:"Curve",thematic:"CulturalCrv",definition:"The wall of the excavation within a quarry or extraction mine.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -84,7 +84,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CAF020",fcode:"CAF020",desc:"Conveyor",geom:"Curve",definition:"A mechanical device for conveying articles or materials during manufacture or processing using an endless moving belt or series of rollers.",
+ {name:"CAF020",fcode:"CAF020",desc:"Conveyor",geom:"Curve",thematic:"CulturalCrv",definition:"A mechanical device for conveying articles or materials during manufacture or processing using an endless moving belt or series of rollers.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -161,7 +161,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAF040",fcode:"CAF040",desc:"Crane",geom:"Curve",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
+ {name:"CAF040",fcode:"CAF040",desc:"Crane",geom:"Curve",thematic:"CulturalCrv",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -247,7 +247,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAF050",fcode:"CAF050",desc:"Excavating Machine",geom:"Curve",definition:"A mechanical device for removing materials from the ground.",
+ {name:"CAF050",fcode:"CAF050",desc:"Excavating Machine",geom:"Curve",thematic:"CulturalCrv",definition:"A mechanical device for removing materials from the ground.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -311,7 +311,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAH050",fcode:"CAH050",desc:"Fortification",geom:"Curve",definition:"A structure constructed for the military defence of a site.",
+ {name:"CAH050",fcode:"CAH050",desc:"Fortification",geom:"Curve",thematic:"MilitaryInstallationsDefensiveStructuresCrv",definition:"A structure constructed for the military defence of a site.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -443,7 +443,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAK020",fcode:"CAK020",desc:"Amusement Park Attraction",geom:"Curve",definition:"A large structure located in an amusement park.",
+ {name:"CAK020",fcode:"CAK020",desc:"Amusement Park Attraction",geom:"Curve",thematic:"CulturalCrv",definition:"A large structure located in an amusement park.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -531,7 +531,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAK080",fcode:"CAK080",desc:"Outdoor Theatre Screen",geom:"Curve",definition:"A large outdoor screen for showing motion pictures.",
+ {name:"CAK080",fcode:"CAK080",desc:"Outdoor Theatre Screen",geom:"Curve",thematic:"CulturalCrv",definition:"A large outdoor screen for showing motion pictures.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -595,7 +595,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAK130",fcode:"CAK130",desc:"Racetrack",geom:"Curve",definition:"A ground or tract marked out for racing.",
+ {name:"CAK130",fcode:"CAK130",desc:"Racetrack",geom:"Curve",thematic:"CulturalCrv",definition:"A ground or tract marked out for racing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -666,7 +666,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAK150",fcode:"CAK150",desc:"Ski-jump",geom:"Curve",definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
+ {name:"CAK150",fcode:"CAK150",desc:"Ski-jump",geom:"Curve",thematic:"CulturalCrv",definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -731,7 +731,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL014",fcode:"CAL014",desc:"Non-building Structure",geom:"Curve",definition:"A free-standing self-supporting construction (for example: a large piece of equipment) designed to support human activities (for example: agriculture, manufacturing, or mining) but not intended for human occupancy and/or habitation (for example: a house, a bank, an office, or a stadium).",
+ {name:"CAL014",fcode:"CAL014",desc:"Non-building Structure",geom:"Curve",thematic:"CulturalCrv",definition:"A free-standing self-supporting construction (for example: a large piece of equipment) designed to support human activities (for example: agriculture, manufacturing, or mining) but not intended for human occupancy and/or habitation (for example: a house, a bank, an office, or a stadium).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -949,7 +949,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL018",fcode:"CAL018",desc:"Building Superstructure",geom:"Curve",definition:"A supplemental portion of a building which rises from the roof but is not considered to be a portion of the roof.",
+ {name:"CAL018",fcode:"CAL018",desc:"Building Superstructure",geom:"Curve",thematic:"CulturalCrv",definition:"A supplemental portion of a building which rises from the roof but is not considered to be a portion of the roof.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1050,7 +1050,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL050",fcode:"CAL050",desc:"Display Sign",geom:"Curve",definition:"An upright panel or similar structure used to convey visual information.",
+ {name:"CAL050",fcode:"CAL050",desc:"Display Sign",geom:"Curve",thematic:"CulturalCrv",definition:"An upright panel or similar structure used to convey visual information.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1101,7 +1101,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL070",fcode:"CAL070",desc:"Fence",geom:"Curve",definition:"A man-made barrier of relatively light structure used as an enclosure or boundary.",
+ {name:"CAL070",fcode:"CAL070",desc:"Fence",geom:"Curve",thematic:"CulturalCrv",definition:"A man-made barrier of relatively light structure used as an enclosure or boundary.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1204,7 +1204,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL080",fcode:"CAL080",desc:"Gantry",geom:"Curve",definition:"A permanent raised overhead bridge-like structure used to support equipment while spanning over or around an object (for example: over a road or railroad, or around a ship hull or rocket).",
+ {name:"CAL080",fcode:"CAL080",desc:"Gantry",geom:"Curve",thematic:"CulturalCrv",definition:"A permanent raised overhead bridge-like structure used to support equipment while spanning over or around an object (for example: over a road or railroad, or around a ship hull or rocket).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1279,7 +1279,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL110",fcode:"CAL110",desc:"Light Support Structure",geom:"Curve",definition:"A structure serving as a support for one or more lights.",
+ {name:"CAL110",fcode:"CAL110",desc:"Light Support Structure",geom:"Curve",thematic:"CulturalCrv",definition:"A structure serving as a support for one or more lights.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1361,7 +1361,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL131",fcode:"CAL131",desc:"Monument",geom:"Curve",definition:"A specific type of non-building structure that: was created to explicitly commemorate a person or event;  was created to express an aspect of cultural and/or individual creativity; and/or has become relevant to a social group as a part of their remembrance of historic times or cultural heritage, due to its artistic, historical, political, religious, technical or architectural importance.",
+ {name:"CAL131",fcode:"CAL131",desc:"Monument",geom:"Curve",thematic:"CulturalCrv",definition:"A specific type of non-building structure that: was created to explicitly commemorate a person or event;  was created to express an aspect of cultural and/or individual creativity; and/or has become relevant to a social group as a part of their remembrance of historic times or cultural heritage, due to its artistic, historical, political, religious, technical or architectural importance.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1497,7 +1497,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL155",fcode:"CAL155",desc:"Overhead Obstruction",geom:"Curve",definition:"An overhead obstruction (for example: an underpass, an overhead pipeline, and/or the overhang of a building) on a transportation route.",
+ {name:"CAL155",fcode:"CAL155",desc:"Overhead Obstruction",geom:"Curve",thematic:"CulturalCrv",definition:"An overhead obstruction (for example: an underpass, an overhead pipeline, and/or the overhang of a building) on a transportation route.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1574,7 +1574,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL211",fcode:"CAL211",desc:"Transportation Route Protection Structure",geom:"Curve",definition:"A structure built over and/or along a transportation route designed to prevent damage to, or blockage of, the route from rock slides, snow slides and/or weather phenomena.",
+ {name:"CAL211",fcode:"CAL211",desc:"Transportation Route Protection Structure",geom:"Curve",thematic:"TransportationCrv",definition:"A structure built over and/or along a transportation route designed to prevent damage to, or blockage of, the route from rock slides, snow slides and/or weather phenomena.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1657,7 +1657,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAL260",fcode:"CAL260",desc:"Wall",geom:"Curve",definition:"A solid man-made barrier of generally heavy material used as an enclosure, boundary, or for protection.",
+ {name:"CAL260",fcode:"CAL260",desc:"Wall",geom:"Curve",thematic:"CulturalCrv",definition:"A solid man-made barrier of generally heavy material used as an enclosure, boundary, or for protection.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1751,7 +1751,7 @@ var schema = [
    }
   ]
  },
- {name:"CAN010",fcode:"CAN010",desc:"Railway",geom:"Curve",definition:"One or more railway tracks that is operated for the conveyance of passengers and/or goods.",
+ {name:"CAN010",fcode:"CAN010",desc:"Railway",geom:"Curve",thematic:"TransportationCrv",definition:"One or more railway tracks that is operated for the conveyance of passengers and/or goods.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -1897,7 +1897,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAN050",fcode:"CAN050",desc:"Railway Sidetrack",geom:"Curve",definition:"A stretch of railway track connected to a main railway and used for temporary storage, passing, loading, and/or unloading.",
+ {name:"CAN050",fcode:"CAN050",desc:"Railway Sidetrack",geom:"Curve",thematic:"TransportationCrv",definition:"A stretch of railway track connected to a main railway and used for temporary storage, passing, loading, and/or unloading.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2012,7 +2012,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAP040",fcode:"CAP040",desc:"Gate",geom:"Curve",definition:"A barrier on a transportation route (for example: a road, a railway, a tunnel, or a bridge) that controls passage (may be opened and closed).",
+ {name:"CAP040",fcode:"CAP040",desc:"Gate",geom:"Curve",thematic:"TransportationCrv",definition:"A barrier on a transportation route (for example: a road, a railway, a tunnel, or a bridge) that controls passage (may be opened and closed).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2089,7 +2089,7 @@ var schema = [
    {name:"WD2",desc:"Route Total Usable Width",optional:"R",definition:"The total usable width of the travelled way of a route.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAP041",fcode:"CAP041",desc:"Vehicle Barrier",geom:"Curve",definition:"A obstruction placed across a transportation route (for example: a road, a railway, a tunnel, or a bridge) to prevent the passage of vehicles.",
+ {name:"CAP041",fcode:"CAP041",desc:"Vehicle Barrier",geom:"Curve",thematic:"TransportationCrv",definition:"A obstruction placed across a transportation route (for example: a road, a railway, a tunnel, or a bridge) to prevent the passage of vehicles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2155,7 +2155,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAP075",fcode:"CAP075",desc:"Land Transportation Way",geom:"Curve",definition:"A distinct strip of land or way used for the purpose of ground transit by vehicles, people and/or animals, with the exception of vehicles that travel along rails.",
+ {name:"CAP075",fcode:"CAP075",desc:"Land Transportation Way",geom:"Curve",thematic:"TransportationCrv",definition:"A distinct strip of land or way used for the purpose of ground transit by vehicles, people and/or animals, with the exception of vehicles that travel along rails.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2333,7 +2333,7 @@ var schema = [
    }
   ]
  },
- {name:"CAQ040",fcode:"CAQ040",desc:"Bridge",geom:"Curve",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road).",
+ {name:"CAQ040",fcode:"CAQ040",desc:"Bridge",geom:"Curve",thematic:"TransportationCrv",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2465,7 +2465,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAQ063",fcode:"CAQ063",desc:"Causeway Structure",geom:"Curve",definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway).",
+ {name:"CAQ063",fcode:"CAQ063",desc:"Causeway Structure",geom:"Curve",thematic:"TransportationCrv",definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2543,7 +2543,7 @@ var schema = [
    }
   ]
  },
- {name:"CAQ065",fcode:"CAQ065",desc:"Culvert",geom:"Curve",definition:"An enclosed channel for carrying a watercourse (for example: a stream, a sewer, or a drain) under a route (for example: a road, a railway, or an embankment).",
+ {name:"CAQ065",fcode:"CAQ065",desc:"Culvert",geom:"Curve",thematic:"TransportationCrv",definition:"An enclosed channel for carrying a watercourse (for example: a stream, a sewer, or a drain) under a route (for example: a road, a railway, or an embankment).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2627,7 +2627,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAQ068",fcode:"CAQ068",desc:"Transportation Block",geom:"Curve",definition:"A substantial semi-permanent assemblage of material, usually in the form of concrete blocks and/or cylinders, positioned alongside or above a land transportation route, ready to be activated as a potential barrier.",
+ {name:"CAQ068",fcode:"CAQ068",desc:"Transportation Block",geom:"Curve",thematic:"TransportationCrv",definition:"A substantial semi-permanent assemblage of material, usually in the form of concrete blocks and/or cylinders, positioned alongside or above a land transportation route, ready to be activated as a potential barrier.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2689,7 +2689,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAQ070",fcode:"CAQ070",desc:"Ferry Crossing",geom:"Curve",definition:"A route where a ferry crosses from one shore to another.",
+ {name:"CAQ070",fcode:"CAQ070",desc:"Ferry Crossing",geom:"Curve",thematic:"TransportationCrv",definition:"A route where a ferry crosses from one shore to another.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2753,7 +2753,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CAQ113",fcode:"CAQ113",desc:"Pipeline",geom:"Curve",definition:"A connected set of pipes for conveying liquids, slurries, or gases.",
+ {name:"CAQ113",fcode:"CAQ113",desc:"Pipeline",geom:"Curve",thematic:"TransportationCrv",definition:"A connected set of pipes for conveying liquids, slurries, or gases.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2879,7 +2879,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAQ130",fcode:"CAQ130",desc:"Tunnel",geom:"Curve",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway).",
+ {name:"CAQ130",fcode:"CAQ130",desc:"Tunnel",geom:"Curve",thematic:"TransportationCrv",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -2962,7 +2962,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAQ150",fcode:"CAQ150",desc:"Stair",geom:"Curve",definition:"A series of fixed steps leading from one level to another, especially such a series leading from one floor level to another inside a structure.",
+ {name:"CAQ150",fcode:"CAQ150",desc:"Stair",geom:"Curve",thematic:"CulturalCrv",definition:"A series of fixed steps leading from one level to another, especially such a series leading from one floor level to another inside a structure.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3028,7 +3028,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAQ151",fcode:"CAQ151",desc:"Arcade",geom:"Curve",definition:"A covered pedestrian route composed of arches and pillars, usually open along one or both sides.",
+ {name:"CAQ151",fcode:"CAQ151",desc:"Arcade",geom:"Curve",thematic:"TransportationCrv",definition:"A covered pedestrian route composed of arches and pillars, usually open along one or both sides.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3109,7 +3109,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAT005",fcode:"CAT005",desc:"Cable",geom:"Curve",definition:"A single continuous rope-like bundle consisting of multiple strands.",
+ {name:"CAT005",fcode:"CAT005",desc:"Cable",geom:"Curve",thematic:"CulturalCrv",definition:"A single continuous rope-like bundle consisting of multiple strands.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3198,7 +3198,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAT041",fcode:"CAT041",desc:"Cableway",geom:"Curve",definition:"A suspended transportation system consisting of one or more load cables, supporting pylons, carrier units (for example: cars or buckets intended to transport people, material, and/or equipment) and usually stations.",
+ {name:"CAT041",fcode:"CAT041",desc:"Cableway",geom:"Curve",thematic:"CulturalCrv",definition:"A suspended transportation system consisting of one or more load cables, supporting pylons, carrier units (for example: cars or buckets intended to transport people, material, and/or equipment) and usually stations.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3293,7 +3293,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CAT042",fcode:"CAT042",desc:"Pylon",geom:"Curve",definition:"A pylon or pole used to support one or more cables.",
+ {name:"CAT042",fcode:"CAT042",desc:"Pylon",geom:"Curve",thematic:"CulturalCrv",definition:"A pylon or pole used to support one or more cables.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3387,7 +3387,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBA010",fcode:"CBA010",desc:"Land Water Boundary",geom:"Curve",definition:"The line where a land mass is in contact with a body of water and the tide state or river stage are unspecified.",
+ {name:"CBA010",fcode:"CBA010",desc:"Land Water Boundary",geom:"Curve",thematic:"PhysiographyCrv",definition:"The line where a land mass is in contact with a body of water and the tide state or river stage are unspecified.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3452,7 +3452,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CBB030",fcode:"CBB030",desc:"Bollard",geom:"Curve",definition:"A small shaped post, mounted on the ground or pavement surface.",
+ {name:"CBB030",fcode:"CBB030",desc:"Bollard",geom:"Curve",thematic:"PortsHarboursCrv",definition:"A small shaped post, mounted on the ground or pavement surface.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3518,7 +3518,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBB081",fcode:"CBB081",desc:"Shoreline Construction",geom:"Curve",definition:"An artificial structure attached to land bordering a body of water and fixed in position.",
+ {name:"CBB081",fcode:"CBB081",desc:"Shoreline Construction",geom:"Curve",thematic:"OceanEnvironmentCrv",definition:"An artificial structure attached to land bordering a body of water and fixed in position.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3629,7 +3629,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBB082",fcode:"CBB082",desc:"Shoreline Ramp",geom:"Curve",definition:"A ramp-like structure on a shoreline that is intended to facilitate the movement of vessels and/or materials (for example: logs) into or out of the water.",
+ {name:"CBB082",fcode:"CBB082",desc:"Shoreline Ramp",geom:"Curve",thematic:"PortsHarboursCrv",definition:"A ramp-like structure on a shoreline that is intended to facilitate the movement of vessels and/or materials (for example: logs) into or out of the water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3716,7 +3716,7 @@ var schema = [
    }
   ]
  },
- {name:"CBB110",fcode:"CBB110",desc:"Fish Weir",geom:"Curve",definition:"A fence of stakes or wall of stones set in a river or along the shore to direct fish towards fish traps or nets.",
+ {name:"CBB110",fcode:"CBB110",desc:"Fish Weir",geom:"Curve",thematic:"OceanEnvironmentCrv",definition:"A fence of stakes or wall of stones set in a river or along the shore to direct fish towards fish traps or nets.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3771,7 +3771,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBD120",fcode:"CBD120",desc:"Reef",geom:"Curve",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
+ {name:"CBD120",fcode:"CBD120",desc:"Reef",geom:"Curve",thematic:"OceanEnvironmentCrv",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3833,7 +3833,7 @@ var schema = [
    }
   ]
  },
- {name:"CBD123",fcode:"CBD123",desc:"Floating Barrier",geom:"Curve",definition:"A floating barrier used to protect a region of a body of water or to create a sheltered area on a body of water for storage purposes.",
+ {name:"CBD123",fcode:"CBD123",desc:"Floating Barrier",geom:"Curve",thematic:"InlandWaterCrv",definition:"A floating barrier used to protect a region of a body of water or to create a sheltered area on a body of water for storage purposes.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -3911,7 +3911,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CBH010",fcode:"CBH010",desc:"Aqueduct",geom:"Curve",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use.",
+ {name:"CBH010",fcode:"CBH010",desc:"Aqueduct",geom:"Curve",thematic:"InlandWaterCrv",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4047,7 +4047,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBH020",fcode:"CBH020",desc:"Canal",geom:"Curve",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
+ {name:"CBH020",fcode:"CBH020",desc:"Canal",geom:"Curve",thematic:"TransportationCrv",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4162,7 +4162,7 @@ var schema = [
    }
   ]
  },
- {name:"CBH030",fcode:"CBH030",desc:"Ditch",geom:"Curve",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
+ {name:"CBH030",fcode:"CBH030",desc:"Ditch",geom:"Curve",thematic:"InlandWaterCrv",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4265,7 +4265,7 @@ var schema = [
    }
   ]
  },
- {name:"CBH065",fcode:"CBH065",desc:"Water Race",geom:"Curve",definition:"An artificial channel for a current of water, especially one built to provide water for industrial or agricultural purposes or for transporting water-borne materials.",
+ {name:"CBH065",fcode:"CBH065",desc:"Water Race",geom:"Curve",thematic:"InlandWaterCrv",definition:"An artificial channel for a current of water, especially one built to provide water for industrial or agricultural purposes or for transporting water-borne materials.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4341,7 +4341,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBH070",fcode:"CBH070",desc:"Ford",geom:"Curve",definition:"A shallow place in a body of water used as a crossing.",
+ {name:"CBH070",fcode:"CBH070",desc:"Ford",geom:"Curve",thematic:"TransportationCrv",definition:"A shallow place in a body of water used as a crossing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4413,7 +4413,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBH100",fcode:"CBH100",desc:"Moat",geom:"Curve",definition:"A trench surrounding a tract of land and serving as a barrier.",
+ {name:"CBH100",fcode:"CBH100",desc:"Moat",geom:"Curve",thematic:"InlandWaterCrv",definition:"A trench surrounding a tract of land and serving as a barrier.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4509,7 +4509,7 @@ var schema = [
    }
   ]
  },
- {name:"CBH110",fcode:"CBH110",desc:"Penstock",geom:"Curve",definition:"A pipeline that is used by hydroelectric plants to transport water by gravity from a reservoir to the turbine(s).",
+ {name:"CBH110",fcode:"CBH110",desc:"Penstock",geom:"Curve",thematic:"TransportationCrv",definition:"A pipeline that is used by hydroelectric plants to transport water by gravity from a reservoir to the turbine(s).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4591,7 +4591,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBH120",fcode:"CBH120",desc:"Rapids",geom:"Curve",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall.",
+ {name:"CBH120",fcode:"CBH120",desc:"Rapids",geom:"Curve",thematic:"InlandWaterCrv",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4634,7 +4634,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBH140",fcode:"CBH140",desc:"River",geom:"Curve",definition:"A natural flowing watercourse.",
+ {name:"CBH140",fcode:"CBH140",desc:"River",geom:"Curve",thematic:"InlandWaterCrv",definition:"A natural flowing watercourse.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4753,7 +4753,7 @@ var schema = [
    }
   ]
  },
- {name:"CBH165",fcode:"CBH165",desc:"Spillway",geom:"Curve",definition:"A passage for surplus water to run over or around a dam.",
+ {name:"CBH165",fcode:"CBH165",desc:"Spillway",geom:"Curve",thematic:"InlandWaterCrv",definition:"A passage for surplus water to run over or around a dam.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4821,7 +4821,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBH180",fcode:"CBH180",desc:"Waterfall",geom:"Curve",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice).",
+ {name:"CBH180",fcode:"CBH180",desc:"Waterfall",geom:"Curve",thematic:"InlandWaterCrv",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4866,7 +4866,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBI030",fcode:"CBI030",desc:"Lock",geom:"Curve",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
+ {name:"CBI030",fcode:"CBI030",desc:"Lock",geom:"Curve",thematic:"InlandWaterCrv",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -4936,7 +4936,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBI040",fcode:"CBI040",desc:"Sluice Gate",geom:"Curve",definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice).",
+ {name:"CBI040",fcode:"CBI040",desc:"Sluice Gate",geom:"Curve",thematic:"InlandWaterCrv",definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5009,7 +5009,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBI044",fcode:"CBI044",desc:"Flood Control Structure",geom:"Curve",definition:"An artificial structure or gate that is utilized as a defense against flooding or storm surges.",
+ {name:"CBI044",fcode:"CBI044",desc:"Flood Control Structure",geom:"Curve",thematic:"InlandWaterCrv",definition:"An artificial structure or gate that is utilized as a defense against flooding or storm surges.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5091,7 +5091,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBI045",fcode:"CBI045",desc:"Basin Gate",geom:"Curve",definition:"A gate that impounds water within a basin or chamber that is used by watercraft.",
+ {name:"CBI045",fcode:"CBI045",desc:"Basin Gate",geom:"Curve",thematic:"TransportationCrv",definition:"A gate that impounds water within a basin or chamber that is used by watercraft.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5167,7 +5167,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBJ031",fcode:"CBJ031",desc:"Crevasse",geom:"Curve",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
+ {name:"CBJ031",fcode:"CBJ031",desc:"Crevasse",geom:"Curve",thematic:"PhysiographyCrv",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5210,7 +5210,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CBJ040",fcode:"CBJ040",desc:"Ice Cliff",geom:"Curve",definition:"The vertical face of a glacier or ice shelf.",
+ {name:"CBJ040",fcode:"CBJ040",desc:"Ice Cliff",geom:"Curve",thematic:"PhysiographyCrv",definition:"The vertical face of a glacier or ice shelf.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5252,7 +5252,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CCA010",fcode:"CCA010",desc:"Elevation Contour",geom:"Curve",definition:"A line connecting points having the same elevation value relative to a vertical datum.",
+ {name:"CCA010",fcode:"CCA010",desc:"Elevation Contour",geom:"Curve",thematic:"ElevationCrv",definition:"A line connecting points having the same elevation value relative to a vertical datum.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5323,7 +5323,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CDB010",fcode:"CDB010",desc:"Steep Terrain Face",geom:"Curve",definition:"A steep, vertical, or overhanging face of rock and/or soil.",
+ {name:"CDB010",fcode:"CDB010",desc:"Steep Terrain Face",geom:"Curve",thematic:"PhysiographyCrv",definition:"A steep, vertical, or overhanging face of rock and/or soil.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5375,7 +5375,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CDB061",fcode:"CDB061",desc:"Crevice",geom:"Curve",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock.",
+ {name:"CDB061",fcode:"CDB061",desc:"Crevice",geom:"Curve",thematic:"PhysiographyCrv",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5418,7 +5418,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CDB070",fcode:"CDB070",desc:"Cut",geom:"Curve",definition:"An excavation in the terrain to provide passage for a land or water transportation route (for example: a road, a railway, and/or a canal).",
+ {name:"CDB070",fcode:"CDB070",desc:"Cut",geom:"Curve",thematic:"PhysiographyCrv",definition:"An excavation in the terrain to provide passage for a land or water transportation route (for example: a road, a railway, and/or a canal).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5478,7 +5478,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CDB071",fcode:"CDB071",desc:"Cut Line",geom:"Curve",definition:"The demarcation line between a cut and the surrounding land surface.",
+ {name:"CDB071",fcode:"CDB071",desc:"Cut Line",geom:"Curve",thematic:"PhysiographyCrv",definition:"The demarcation line between a cut and the surrounding land surface.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5520,7 +5520,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CDB090",fcode:"CDB090",desc:"Embankment",geom:"Curve",definition:"A man-made raised long mound of earth or other material.",
+ {name:"CDB090",fcode:"CDB090",desc:"Embankment",geom:"Curve",thematic:"PhysiographyCrv",definition:"A man-made raised long mound of earth or other material.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5627,7 +5627,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CDB100",fcode:"CDB100",desc:"Esker",geom:"Curve",definition:"A long, narrow ridge of sand and gravel deposited by a glacial stream.",
+ {name:"CDB100",fcode:"CDB100",desc:"Esker",geom:"Curve",thematic:"PhysiographyCrv",definition:"A long, narrow ridge of sand and gravel deposited by a glacial stream.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5670,7 +5670,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CDB110",fcode:"CDB110",desc:"Geologic Fault",geom:"Curve",definition:"A fracture or zone of fractures in a rock formation, marked by the relative displacement on either side of the plane of the fracture.",
+ {name:"CDB110",fcode:"CDB110",desc:"Geologic Fault",geom:"Curve",thematic:"PhysiographyCrv",definition:"A fracture or zone of fractures in a rock formation, marked by the relative displacement on either side of the plane of the fracture.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5732,7 +5732,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CEA020",fcode:"CEA020",desc:"Hedgerow",geom:"Curve",definition:"A continuous growth of shrubs planted as a fence, a boundary, and/or a windbreak.",
+ {name:"CEA020",fcode:"CEA020",desc:"Hedgerow",geom:"Curve",thematic:"AgriculturalCrv",definition:"A continuous growth of shrubs planted as a fence, a boundary, and/or a windbreak.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5784,7 +5784,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CEC015",fcode:"CEC015",desc:"Forest",geom:"Curve",definition:"A tract of land primarily covered by trees and undergrowth.",
+ {name:"CEC015",fcode:"CEC015",desc:"Forest",geom:"Curve",thematic:"VegetationCrv",definition:"A tract of land primarily covered by trees and undergrowth.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5889,7 +5889,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CFA000",fcode:"CFA000",desc:"Administrative Boundary",geom:"Curve",definition:"A boundary between administratively controlled regions.",
+ {name:"CFA000",fcode:"CFA000",desc:"Administrative Boundary",geom:"Curve",thematic:"BoundariesCrv",definition:"A boundary between administratively controlled regions.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5950,7 +5950,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CFA091",fcode:"CFA091",desc:"Geophysical Data Track Line",geom:"Curve",definition:"A track along which a series of geophysical data observations are distributed.",
+ {name:"CFA091",fcode:"CFA091",desc:"Geophysical Data Track Line",geom:"Curve",thematic:"GeodesyGeophysicsCrv",definition:"A track along which a series of geophysical data observations are distributed.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -5992,7 +5992,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"CGB025",fcode:"CGB025",desc:"Blast Barrier",geom:"Curve",definition:"A barrier used to divert and/or dissipate jet and/or propeller blast.",
+ {name:"CGB025",fcode:"CGB025",desc:"Blast Barrier",geom:"Curve",thematic:"AeronauticalFacilityCrv",definition:"A barrier used to divert and/or dissipate jet and/or propeller blast.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6068,7 +6068,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CGB485",fcode:"CGB485",desc:"Approach Lighting System",geom:"Curve",definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
+ {name:"CGB485",fcode:"CGB485",desc:"Approach Lighting System",geom:"Curve",thematic:"AeronauticalAidsNavigationCrv",definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6161,7 +6161,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CZD019",fcode:"CZD019",desc:"Miscellaneous Feature Type",geom:"Curve",definition:"Any feature type that falls within the scope of a feature type domain (for example: a feature coverage or a product specification) but is not explicitly specified in that domain.",
+ {name:"CZD019",fcode:"CZD019",desc:"Miscellaneous Feature Type",geom:"Curve",thematic:"FoundationCrv",definition:"Any feature type that falls within the scope of a feature type domain (for example: a feature coverage or a product specification) but is not explicitly specified in that domain.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6214,7 +6214,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"CZD050",fcode:"CZD050",desc:"General Location",geom:"Curve",definition:"A location that normally does not appear as a specific, characterized object but that has either a name that is required to be displayed or other specific information associated with that location.",
+ {name:"CZD050",fcode:"CZD050",desc:"General Location",geom:"Curve",thematic:"FoundationCrv",definition:"A location that normally does not appear as a specific, characterized object but that has either a name that is required to be displayed or other specific information associated with that location.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6281,7 +6281,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAA020",fcode:"PAA020",desc:"Mine Shaft Superstructure",geom:"Point",definition:"A structure over a vertical mine shaft containing machinery (for example: a winding head or hoist) used to transport minerals, equipment, and/or workers between the surface and various levels within the mine.",
+ {name:"PAA020",fcode:"PAA020",desc:"Mine Shaft Superstructure",geom:"Point",thematic:"CulturalPnt",definition:"A structure over a vertical mine shaft containing machinery (for example: a winding head or hoist) used to transport minerals, equipment, and/or workers between the surface and various levels within the mine.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6358,7 +6358,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAA040",fcode:"PAA040",desc:"Rig",geom:"Point",definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
+ {name:"PAA040",fcode:"PAA040",desc:"Rig",geom:"Point",thematic:"CulturalPnt",definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6424,7 +6424,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAA054",fcode:"PAA054",desc:"Non-water Well",geom:"Point",definition:"A shaft sunk into the ground to reach and tap a supply of liquids and/or gases other than water intended for use in agriculture or domestic consumption.",
+ {name:"PAA054",fcode:"PAA054",desc:"Non-water Well",geom:"Point",thematic:"CulturalPnt",definition:"A shaft sunk into the ground to reach and tap a supply of liquids and/or gases other than water intended for use in agriculture or domestic consumption.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6508,7 +6508,7 @@ var schema = [
    }
   ]
  },
- {name:"PAD020",fcode:"PAD020",desc:"Solar Panel",geom:"Point",definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
+ {name:"PAD020",fcode:"PAD020",desc:"Solar Panel",geom:"Point",thematic:"CulturalPnt",definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6572,7 +6572,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAD030",fcode:"PAD030",desc:"Power Substation",geom:"Point",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
+ {name:"PAD030",fcode:"PAD030",desc:"Power Substation",geom:"Point",thematic:"CulturalPnt",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6648,7 +6648,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAF010",fcode:"PAF010",desc:"Smokestack",geom:"Point",definition:"A vertical structure containing a passage or flue for discharging smoke and gases of combustion.",
+ {name:"PAF010",fcode:"PAF010",desc:"Smokestack",geom:"Point",thematic:"CulturalPnt",definition:"A vertical structure containing a passage or flue for discharging smoke and gases of combustion.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6724,7 +6724,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAF040",fcode:"PAF040",desc:"Crane",geom:"Point",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
+ {name:"PAF040",fcode:"PAF040",desc:"Crane",geom:"Point",thematic:"CulturalPnt",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6811,7 +6811,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAF050",fcode:"PAF050",desc:"Excavating Machine",geom:"Point",definition:"A mechanical device for removing materials from the ground.",
+ {name:"PAF050",fcode:"PAF050",desc:"Excavating Machine",geom:"Point",thematic:"CulturalPnt",definition:"A mechanical device for removing materials from the ground.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6877,7 +6877,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAF070",fcode:"PAF070",desc:"Flare Pipe",geom:"Point",definition:"An open-ended pipe at which waste gases are burned.",
+ {name:"PAF070",fcode:"PAF070",desc:"Flare Pipe",geom:"Point",thematic:"CulturalPnt",definition:"An open-ended pipe at which waste gases are burned.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -6949,7 +6949,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAF080",fcode:"PAF080",desc:"Hopper",geom:"Point",definition:"A top-loaded funnel-shaped structure for temporary holding of loose material which will be dispensed from its bottom.",
+ {name:"PAF080",fcode:"PAF080",desc:"Hopper",geom:"Point",thematic:"CulturalPnt",definition:"A top-loaded funnel-shaped structure for temporary holding of loose material which will be dispensed from its bottom.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7015,7 +7015,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAH050",fcode:"PAH050",desc:"Fortification",geom:"Point",definition:"A structure constructed for the military defence of a site.",
+ {name:"PAH050",fcode:"PAH050",desc:"Fortification",geom:"Point",thematic:"MilitaryInstallationsDefensiveStructuresPnt",definition:"A structure constructed for the military defence of a site.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7146,7 +7146,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAH060",fcode:"PAH060",desc:"Underground Bunker",geom:"Point",definition:"A reinforced underground shelter.",
+ {name:"PAH060",fcode:"PAH060",desc:"Underground Bunker",geom:"Point",thematic:"MilitaryInstallationsDefensiveStructuresPnt",definition:"A reinforced underground shelter.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7234,7 +7234,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAH070",fcode:"PAH070",desc:"Checkpoint",geom:"Point",definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
+ {name:"PAH070",fcode:"PAH070",desc:"Checkpoint",geom:"Point",thematic:"CulturalPnt",definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7306,7 +7306,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAI030",fcode:"PAI030",desc:"Camp",geom:"Point",definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
+ {name:"PAI030",fcode:"PAI030",desc:"Camp",geom:"Point",thematic:"PopulationPnt",definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7372,7 +7372,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAJ051",fcode:"PAJ051",desc:"Wind Turbine",geom:"Point",definition:"A tower and associated equipment that generates electrical power from wind.",
+ {name:"PAJ051",fcode:"PAJ051",desc:"Wind Turbine",geom:"Point",thematic:"CulturalPnt",definition:"A tower and associated equipment that generates electrical power from wind.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7454,7 +7454,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAK020",fcode:"PAK020",desc:"Amusement Park Attraction",geom:"Point",definition:"A large structure located in an amusement park.",
+ {name:"PAK020",fcode:"PAK020",desc:"Amusement Park Attraction",geom:"Point",thematic:"CulturalPnt",definition:"A large structure located in an amusement park.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7543,7 +7543,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAK121",fcode:"PAK121",desc:"Lookout",geom:"Point",definition:"A location, which is generally elevated, from which the surrounding area may be observed.",
+ {name:"PAK121",fcode:"PAK121",desc:"Lookout",geom:"Point",thematic:"CulturalPnt",definition:"A location, which is generally elevated, from which the surrounding area may be observed.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7599,7 +7599,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL014",fcode:"PAL014",desc:"Non-building Structure",geom:"Point",definition:"A free-standing self-supporting construction (for example: a large piece of equipment) designed to support human activities (for example: agriculture, manufacturing, or mining) but not intended for human occupancy and/or habitation (for example: a house, a bank, an office, or a stadium).",
+ {name:"PAL014",fcode:"PAL014",desc:"Non-building Structure",geom:"Point",thematic:"CulturalPnt",definition:"A free-standing self-supporting construction (for example: a large piece of equipment) designed to support human activities (for example: agriculture, manufacturing, or mining) but not intended for human occupancy and/or habitation (for example: a house, a bank, an office, or a stadium).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7818,7 +7818,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL018",fcode:"PAL018",desc:"Building Superstructure",geom:"Point",definition:"A supplemental portion of a building which rises from the roof but is not considered to be a portion of the roof.",
+ {name:"PAL018",fcode:"PAL018",desc:"Building Superstructure",geom:"Point",thematic:"CulturalPnt",definition:"A supplemental portion of a building which rises from the roof but is not considered to be a portion of the roof.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7920,7 +7920,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL025",fcode:"PAL025",desc:"Cairn",geom:"Point",definition:"A heap of stones piled up as a memorial or a landmark.",
+ {name:"PAL025",fcode:"PAL025",desc:"Cairn",geom:"Point",thematic:"CulturalPnt",definition:"A heap of stones piled up as a memorial or a landmark.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -7975,7 +7975,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL035",fcode:"PAL035",desc:"Grave",geom:"Point",definition:"A site where a human corpse is buried.",
+ {name:"PAL035",fcode:"PAL035",desc:"Grave",geom:"Point",thematic:"CulturalPnt",definition:"A site where a human corpse is buried.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8041,7 +8041,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL036",fcode:"PAL036",desc:"Tomb",geom:"Point",definition:"A structure within which a corpse is entombed.",
+ {name:"PAL036",fcode:"PAL036",desc:"Tomb",geom:"Point",thematic:"CulturalPnt",definition:"A structure within which a corpse is entombed.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8150,7 +8150,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL037",fcode:"PAL037",desc:"Mass Grave",geom:"Point",definition:"A grave containing multiple, usually unidentified, human corpses.",
+ {name:"PAL037",fcode:"PAL037",desc:"Mass Grave",geom:"Point",thematic:"CulturalPnt",definition:"A grave containing multiple, usually unidentified, human corpses.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8194,7 +8194,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL073",fcode:"PAL073",desc:"Flagpole",geom:"Point",definition:"A staff or pole on which a flag is raised.",
+ {name:"PAL073",fcode:"PAL073",desc:"Flagpole",geom:"Point",thematic:"CulturalPnt",definition:"A staff or pole on which a flag is raised.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8269,7 +8269,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL099",fcode:"PAL099",desc:"Hut",geom:"Point",definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room.",
+ {name:"PAL099",fcode:"PAL099",desc:"Hut",geom:"Point",thematic:"CulturalPnt",definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8342,7 +8342,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL110",fcode:"PAL110",desc:"Light Support Structure",geom:"Point",definition:"A structure serving as a support for one or more lights.",
+ {name:"PAL110",fcode:"PAL110",desc:"Light Support Structure",geom:"Point",thematic:"CulturalPnt",definition:"A structure serving as a support for one or more lights.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8424,7 +8424,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL131",fcode:"PAL131",desc:"Monument",geom:"Point",definition:"A specific type of non-building structure that: was created to explicitly commemorate a person or event;  was created to express an aspect of cultural and/or individual creativity; and/or has become relevant to a social group as a part of their remembrance of historic times or cultural heritage, due to its artistic, historical, political, religious, technical or architectural importance.",
+ {name:"PAL131",fcode:"PAL131",desc:"Monument",geom:"Point",thematic:"CulturalPnt",definition:"A specific type of non-building structure that: was created to explicitly commemorate a person or event;  was created to express an aspect of cultural and/or individual creativity; and/or has become relevant to a social group as a part of their remembrance of historic times or cultural heritage, due to its artistic, historical, political, religious, technical or architectural importance.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8561,7 +8561,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL155",fcode:"PAL155",desc:"Overhead Obstruction",geom:"Point",definition:"An overhead obstruction (for example: an underpass, an overhead pipeline, and/or the overhang of a building) on a transportation route.",
+ {name:"PAL155",fcode:"PAL155",desc:"Overhead Obstruction",geom:"Point",thematic:"CulturalPnt",definition:"An overhead obstruction (for example: an underpass, an overhead pipeline, and/or the overhang of a building) on a transportation route.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8639,7 +8639,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL165",fcode:"PAL165",desc:"Pipeline Crossing Point",geom:"Point",definition:"A traversable site extending across a pipeline that acts as a passageway for cross-country movement of vehicles or troops.",
+ {name:"PAL165",fcode:"PAL165",desc:"Pipeline Crossing Point",geom:"Point",thematic:"TransportationPnt",definition:"A traversable site extending across a pipeline that acts as a passageway for cross-country movement of vehicles or troops.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8693,7 +8693,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PAL241",fcode:"PAL241",desc:"Tower",geom:"Point",definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure.",
+ {name:"PAL241",fcode:"PAL241",desc:"Tower",geom:"Point",thematic:"CulturalPnt",definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8868,7 +8868,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL250",fcode:"PAL250",desc:"Underground Dwelling",geom:"Point",definition:"Underground living quarters.",
+ {name:"PAL250",fcode:"PAL250",desc:"Underground Dwelling",geom:"Point",thematic:"CulturalPnt",definition:"Underground living quarters.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8947,7 +8947,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAL510",fcode:"PAL510",desc:"Tethered Balloon",geom:"Point",definition:"A balloon that is tethered to the ground at an anchoring device (for example: a ring and pad) or substantial structure (for example: a mooring tower).",
+ {name:"PAL510",fcode:"PAL510",desc:"Tethered Balloon",geom:"Point",thematic:"AeronauticalFacilityPnt",definition:"A balloon that is tethered to the ground at an anchoring device (for example: a ring and pad) or substantial structure (for example: a mooring tower).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -8999,7 +8999,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAM080",fcode:"PAM080",desc:"Water Tower",geom:"Point",definition:"A tower supporting an elevated storage tank of water.",
+ {name:"PAM080",fcode:"PAM080",desc:"Water Tower",geom:"Point",thematic:"CulturalPnt",definition:"A tower supporting an elevated storage tank of water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9110,7 +9110,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ055",fcode:"PAQ055",desc:"Bridge Tower",geom:"Point",definition:"A tower and/or pylon from which the deck of a bridge is suspended.",
+ {name:"PAQ055",fcode:"PAQ055",desc:"Bridge Tower",geom:"Point",thematic:"TransportationPnt",definition:"A tower and/or pylon from which the deck of a bridge is suspended.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9187,7 +9187,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ056",fcode:"PAQ056",desc:"Bridge Pier",geom:"Point",definition:"A pillar or abutment that supports a bridge span.",
+ {name:"PAQ056",fcode:"PAQ056",desc:"Bridge Pier",geom:"Point",thematic:"TransportationPnt",definition:"A pillar or abutment that supports a bridge span.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9254,7 +9254,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ068",fcode:"PAQ068",desc:"Transportation Block",geom:"Point",definition:"A substantial semi-permanent assemblage of material, usually in the form of concrete blocks and/or cylinders, positioned alongside or above a land transportation route, ready to be activated as a potential barrier.",
+ {name:"PAQ068",fcode:"PAQ068",desc:"Transportation Block",geom:"Point",thematic:"TransportationPnt",definition:"A substantial semi-permanent assemblage of material, usually in the form of concrete blocks and/or cylinders, positioned alongside or above a land transportation route, ready to be activated as a potential barrier.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9317,7 +9317,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ095",fcode:"PAQ095",desc:"Tunnel Mouth",geom:"Point",definition:"The opening of a tunnel into a larger space (for example: onto the terrain surface).",
+ {name:"PAQ095",fcode:"PAQ095",desc:"Tunnel Mouth",geom:"Point",thematic:"TransportationPnt",definition:"The opening of a tunnel into a larger space (for example: onto the terrain surface).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9374,7 +9374,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ110",fcode:"PAQ110",desc:"Mooring Mast",geom:"Point",definition:"A mast used to secure an airship.",
+ {name:"PAQ110",fcode:"PAQ110",desc:"Mooring Mast",geom:"Point",thematic:"AeronauticalFacilityPnt",definition:"A mast used to secure an airship.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9464,7 +9464,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ116",fcode:"PAQ116",desc:"Pumping Station",geom:"Point",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
+ {name:"PAQ116",fcode:"PAQ116",desc:"Pumping Station",geom:"Point",thematic:"TransportationPnt",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9569,7 +9569,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAQ210",fcode:"PAQ210",desc:"Transportation Platform",geom:"Point",definition:"A permanent raised physical structure which serves as a surface for disembarking or taking on passengers or freight from a form of transport.",
+ {name:"PAQ210",fcode:"PAQ210",desc:"Transportation Platform",geom:"Point",thematic:"TransportationPnt",definition:"A permanent raised physical structure which serves as a surface for disembarking or taking on passengers or freight from a form of transport.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9623,7 +9623,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAT010",fcode:"PAT010",desc:"Dish Aerial",geom:"Point",definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy.",
+ {name:"PAT010",fcode:"PAT010",desc:"Dish Aerial",geom:"Point",thematic:"CulturalPnt",definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9679,7 +9679,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAT011",fcode:"PAT011",desc:"Aerial",geom:"Point",definition:"A device that is used for emitting and/or sensing electromagnetic energy.",
+ {name:"PAT011",fcode:"PAT011",desc:"Aerial",geom:"Point",thematic:"CulturalPnt",definition:"A device that is used for emitting and/or sensing electromagnetic energy.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9776,7 +9776,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PAT042",fcode:"PAT042",desc:"Pylon",geom:"Point",definition:"A pylon or pole used to support one or more cables.",
+ {name:"PAT042",fcode:"PAT042",desc:"Pylon",geom:"Point",thematic:"CulturalPnt",definition:"A pylon or pole used to support one or more cables.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9871,7 +9871,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBB030",fcode:"PBB030",desc:"Bollard",geom:"Point",definition:"A small shaped post, mounted on the ground or pavement surface.",
+ {name:"PBB030",fcode:"PBB030",desc:"Bollard",geom:"Point",thematic:"PortsHarboursPnt",definition:"A small shaped post, mounted on the ground or pavement surface.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -9938,7 +9938,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBD100",fcode:"PBD100",desc:"Structural Pile",geom:"Point",definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
+ {name:"PBD100",fcode:"PBD100",desc:"Structural Pile",geom:"Point",thematic:"InlandWaterPnt",definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10014,7 +10014,7 @@ var schema = [
    }
   ]
  },
- {name:"PBD115",fcode:"PBD115",desc:"Offshore Construction",geom:"Point",definition:"An artificial structure that is located offshore.",
+ {name:"PBD115",fcode:"PBD115",desc:"Offshore Construction",geom:"Point",thematic:"OceanEnvironmentPnt",definition:"An artificial structure that is located offshore.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10151,7 +10151,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBD130",fcode:"PBD130",desc:"Hazardous Rock",geom:"Point",definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation.",
+ {name:"PBD130",fcode:"PBD130",desc:"Hazardous Rock",geom:"Point",thematic:"OceanEnvironmentPnt",definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10215,7 +10215,7 @@ var schema = [
    }
   ]
  },
- {name:"PBD180",fcode:"PBD180",desc:"Wreck",geom:"Point",definition:"The ruined remains of a stranded or sunken vessel that has been rendered useless.",
+ {name:"PBD180",fcode:"PBD180",desc:"Wreck",geom:"Point",thematic:"OceanEnvironmentPnt",definition:"The ruined remains of a stranded or sunken vessel that has been rendered useless.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10281,7 +10281,7 @@ var schema = [
    }
   ]
  },
- {name:"PBH012",fcode:"PBH012",desc:"Qanat Shaft",geom:"Point",definition:"A vertical shaft that provides access to an underground aqueduct and which is part of a qanat system.",
+ {name:"PBH012",fcode:"PBH012",desc:"Qanat Shaft",geom:"Point",thematic:"InlandWaterPnt",definition:"A vertical shaft that provides access to an underground aqueduct and which is part of a qanat system.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10336,7 +10336,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBH070",fcode:"PBH070",desc:"Ford",geom:"Point",definition:"A shallow place in a body of water used as a crossing.",
+ {name:"PBH070",fcode:"PBH070",desc:"Ford",geom:"Point",thematic:"TransportationPnt",definition:"A shallow place in a body of water used as a crossing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10409,7 +10409,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBH075",fcode:"PBH075",desc:"Fountain",geom:"Point",definition:"A monumental and/or ornamental structure containing moving water, often including jets, falls, or other decorative features.",
+ {name:"PBH075",fcode:"PBH075",desc:"Fountain",geom:"Point",thematic:"CulturalPnt",definition:"A monumental and/or ornamental structure containing moving water, often including jets, falls, or other decorative features.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10499,7 +10499,7 @@ var schema = [
    }
   ]
  },
- {name:"PBH145",fcode:"PBH145",desc:"Vanishing Point",geom:"Point",definition:"The location at which a watercourse disappears into the terrain.",
+ {name:"PBH145",fcode:"PBH145",desc:"Vanishing Point",geom:"Point",thematic:"InlandWaterPnt",definition:"The location at which a watercourse disappears into the terrain.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10551,7 +10551,7 @@ var schema = [
    }
   ]
  },
- {name:"PBH165",fcode:"PBH165",desc:"Spillway",geom:"Point",definition:"A passage for surplus water to run over or around a dam.",
+ {name:"PBH165",fcode:"PBH165",desc:"Spillway",geom:"Point",thematic:"InlandWaterPnt",definition:"A passage for surplus water to run over or around a dam.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10620,7 +10620,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBH172",fcode:"PBH172",desc:"Spring",geom:"Point",definition:"A flow of water rising or welling naturally from the earth.",
+ {name:"PBH172",fcode:"PBH172",desc:"Spring",geom:"Point",thematic:"InlandWaterPnt",definition:"A flow of water rising or welling naturally from the earth.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10695,7 +10695,7 @@ var schema = [
    }
   ]
  },
- {name:"PBH180",fcode:"PBH180",desc:"Waterfall",geom:"Point",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice).",
+ {name:"PBH180",fcode:"PBH180",desc:"Waterfall",geom:"Point",thematic:"InlandWaterPnt",definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10740,7 +10740,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBH230",fcode:"PBH230",desc:"Water Well",geom:"Point",definition:"A shaft sunk into the ground to reach and tap a supply of water intended for uses other than power generation, heating or the extraction of minerals.",
+ {name:"PBH230",fcode:"PBH230",desc:"Water Well",geom:"Point",thematic:"InlandWaterPnt",definition:"A shaft sunk into the ground to reach and tap a supply of water intended for uses other than power generation, heating or the extraction of minerals.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10838,7 +10838,7 @@ var schema = [
    }
   ]
  },
- {name:"PBI010",fcode:"PBI010",desc:"Cistern",geom:"Point",definition:"A man-made container used for the collection and/or storage of water.",
+ {name:"PBI010",fcode:"PBI010",desc:"Cistern",geom:"Point",thematic:"CulturalPnt",definition:"A man-made container used for the collection and/or storage of water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -10928,7 +10928,7 @@ var schema = [
    }
   ]
  },
- {name:"PBI045",fcode:"PBI045",desc:"Basin Gate",geom:"Point",definition:"A gate that impounds water within a basin or chamber that is used by watercraft.",
+ {name:"PBI045",fcode:"PBI045",desc:"Basin Gate",geom:"Point",thematic:"TransportationPnt",definition:"A gate that impounds water within a basin or chamber that is used by watercraft.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11005,7 +11005,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBI050",fcode:"PBI050",desc:"Water Intake Tower",geom:"Point",definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
+ {name:"PBI050",fcode:"PBI050",desc:"Water Intake Tower",geom:"Point",thematic:"InlandWaterPnt",definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11082,7 +11082,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PBJ060",fcode:"PBJ060",desc:"Ice Peak",geom:"Point",definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
+ {name:"PBJ060",fcode:"PBJ060",desc:"Ice Peak",geom:"Point",thematic:"PhysiographyPnt",definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11124,7 +11124,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"PCA030",fcode:"PCA030",desc:"Spot Elevation",geom:"Point",definition:"A designated location with an elevation value relative to a vertical datum.",
+ {name:"PCA030",fcode:"PCA030",desc:"Spot Elevation",geom:"Point",thematic:"ElevationPnt",definition:"A designated location with an elevation value relative to a vertical datum.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11174,7 +11174,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PDB029",fcode:"PDB029",desc:"Cave Mouth",geom:"Point",definition:"The entrance to an interconnected series of naturally occurring subterranean chambers.",
+ {name:"PDB029",fcode:"PDB029",desc:"Cave Mouth",geom:"Point",thematic:"PhysiographyPnt",definition:"The entrance to an interconnected series of naturally occurring subterranean chambers.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11239,7 +11239,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PDB115",fcode:"PDB115",desc:"Geothermal Outlet",geom:"Point",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior.",
+ {name:"PDB115",fcode:"PDB115",desc:"Geothermal Outlet",geom:"Point",thematic:"PhysiographyPnt",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11307,7 +11307,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PDB150",fcode:"PDB150",desc:"Mountain Pass",geom:"Point",definition:"A narrow route through a mountainous region or over a mountain range.",
+ {name:"PDB150",fcode:"PDB150",desc:"Mountain Pass",geom:"Point",thematic:"PhysiographyPnt",definition:"A narrow route through a mountainous region or over a mountain range.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11350,7 +11350,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PDB180",fcode:"PDB180",desc:"Volcano",geom:"Point",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
+ {name:"PDB180",fcode:"PDB180",desc:"Volcano",geom:"Point",thematic:"PhysiographyPnt",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11414,7 +11414,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PEC005",fcode:"PEC005",desc:"Tree",geom:"Point",definition:"An individual woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground.",
+ {name:"PEC005",fcode:"PEC005",desc:"Tree",geom:"Point",thematic:"VegetationPnt",definition:"An individual woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11510,7 +11510,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGA033",fcode:"PGA033",desc:"Aeronautical Radio Navigation Installation",geom:"Point",definition:"A ground based piece of electronic equipment that provides aeronautical navigation guidance information or position data.",
+ {name:"PGA033",fcode:"PGA033",desc:"Aeronautical Radio Navigation Installation",geom:"Point",thematic:"AeronauticalAidsNavigationPnt",definition:"A ground based piece of electronic equipment that provides aeronautical navigation guidance information or position data.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11593,7 +11593,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGA036",fcode:"PGA036",desc:"VHF Omnidirectional Radio (VOR) Beacon",geom:"Point",definition:"A Very High Frequency (VHF) radio navigation service which uses phase comparisons of a ground transmitted signal to determine bearing.",
+ {name:"PGA036",fcode:"PGA036",desc:"VHF Omnidirectional Radio (VOR) Beacon",geom:"Point",thematic:"AeronauticalAidsNavigationPnt",definition:"A Very High Frequency (VHF) radio navigation service which uses phase comparisons of a ground transmitted signal to determine bearing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11676,7 +11676,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGA037",fcode:"PGA037",desc:"Tactical Air Navigation Aid (TACAN) Beacon",geom:"Point",definition:"A military Ultra High Frequency (UHF) radio navigation service able to provide continuous bearing and Distance Measuring Equipment (DME) distance to a selected station.",
+ {name:"PGA037",fcode:"PGA037",desc:"Tactical Air Navigation Aid (TACAN) Beacon",geom:"Point",thematic:"AeronauticalAidsNavigationPnt",definition:"A military Ultra High Frequency (UHF) radio navigation service able to provide continuous bearing and Distance Measuring Equipment (DME) distance to a selected station.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11759,7 +11759,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGB013",fcode:"PGB013",desc:"Aerodrome Beacon",geom:"Point",definition:"A beacon used to indicate the location of an aerodrome from the air.",
+ {name:"PGB013",fcode:"PGB013",desc:"Aerodrome Beacon",geom:"Point",thematic:"AeronauticalFacilityPnt",definition:"A beacon used to indicate the location of an aerodrome from the air.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11817,7 +11817,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGB030",fcode:"PGB030",desc:"Helipad",geom:"Point",definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters.",
+ {name:"PGB030",fcode:"PGB030",desc:"Helipad",geom:"Point",thematic:"AeronauticalFacilityPnt",definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -11938,7 +11938,7 @@ var schema = [
    {name:"WID",desc:"Width",optional:"R",definition:"The dimension of a feature taken perpendicular to its primary alignment of use and generally in the horizontal plane.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PGB040",fcode:"PGB040",desc:"Launch Pad",geom:"Point",definition:"A designated site or structure from which a rocket or missile is launched.",
+ {name:"PGB040",fcode:"PGB040",desc:"Launch Pad",geom:"Point",thematic:"AeronauticalFacilityPnt",definition:"A designated site or structure from which a rocket or missile is launched.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12015,7 +12015,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PZB030",fcode:"PZB030",desc:"Boundary Monument",geom:"Point",definition:"A marker identifying the location of a surveyed boundary line.",
+ {name:"PZB030",fcode:"PZB030",desc:"Boundary Monument",geom:"Point",thematic:"BoundariesPnt",definition:"A marker identifying the location of a surveyed boundary line.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12088,7 +12088,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PZD019",fcode:"PZD019",desc:"Miscellaneous Feature Type",geom:"Point",definition:"Any feature type that falls within the scope of a feature type domain (for example: a feature coverage or a product specification) but is not explicitly specified in that domain.",
+ {name:"PZD019",fcode:"PZD019",desc:"Miscellaneous Feature Type",geom:"Point",thematic:"FoundationPnt",definition:"Any feature type that falls within the scope of a feature type domain (for example: a feature coverage or a product specification) but is not explicitly specified in that domain.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12142,7 +12142,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"PZD050",fcode:"PZD050",desc:"General Location",geom:"Point",definition:"A location that normally does not appear as a specific, characterized object but that has either a name that is required to be displayed or other specific information associated with that location.",
+ {name:"PZD050",fcode:"PZD050",desc:"General Location",geom:"Point",thematic:"FoundationPnt",definition:"A location that normally does not appear as a specific, characterized object but that has either a name that is required to be displayed or other specific information associated with that location.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12209,7 +12209,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAA010",fcode:"SAA010",desc:"Extraction Mine",geom:"Surface",definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
+ {name:"SAA010",fcode:"SAA010",desc:"Extraction Mine",geom:"Surface",thematic:"CulturalSrf",definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12385,7 +12385,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAA020",fcode:"SAA020",desc:"Mine Shaft Superstructure",geom:"Surface",definition:"A structure over a vertical mine shaft containing machinery (for example: a winding head or hoist) used to transport minerals, equipment, and/or workers between the surface and various levels within the mine.",
+ {name:"SAA020",fcode:"SAA020",desc:"Mine Shaft Superstructure",geom:"Surface",thematic:"CulturalSrf",definition:"A structure over a vertical mine shaft containing machinery (for example: a winding head or hoist) used to transport minerals, equipment, and/or workers between the surface and various levels within the mine.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12460,7 +12460,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAA040",fcode:"SAA040",desc:"Rig",geom:"Surface",definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
+ {name:"SAA040",fcode:"SAA040",desc:"Rig",geom:"Surface",thematic:"CulturalSrf",definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12524,7 +12524,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAA052",fcode:"SAA052",desc:"Hydrocarbons Field",geom:"Surface",definition:"An area where the presence of recoverable petroleum, oil, and/or natural gas has been identified.",
+ {name:"SAA052",fcode:"SAA052",desc:"Hydrocarbons Field",geom:"Surface",thematic:"CulturalSrf",definition:"An area where the presence of recoverable petroleum, oil, and/or natural gas has been identified.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12574,7 +12574,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAB000",fcode:"SAB000",desc:"Disposal Site",geom:"Surface",definition:"A prepared or reserved site on land for the collection and/or deposition of waste, refuse or discarded material.",
+ {name:"SAB000",fcode:"SAB000",desc:"Disposal Site",geom:"Surface",thematic:"CulturalSrf",definition:"A prepared or reserved site on land for the collection and/or deposition of waste, refuse or discarded material.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12648,7 +12648,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAB010",fcode:"SAB010",desc:"Recycling Site",geom:"Surface",definition:"A site engaged in the wrecking, dismantling, storage, recycling, and/or disposal of discarded or scrap products.",
+ {name:"SAB010",fcode:"SAB010",desc:"Recycling Site",geom:"Surface",thematic:"CulturalSrf",definition:"A site engaged in the wrecking, dismantling, storage, recycling, and/or disposal of discarded or scrap products.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12704,7 +12704,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAB040",fcode:"SAB040",desc:"Aeration Basin",geom:"Surface",definition:"A basin, usually artificial, in which air is mixed with partially treated wastewater.",
+ {name:"SAB040",fcode:"SAB040",desc:"Aeration Basin",geom:"Surface",thematic:"CulturalSrf",definition:"A basin, usually artificial, in which air is mixed with partially treated wastewater.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12768,7 +12768,7 @@ var schema = [
    }
   ]
  },
- {name:"SAC010",fcode:"SAC010",desc:"Blast-furnace",geom:"Surface",definition:"A smelting furnace in which a blast of air is used, especially one for iron-smelting using a compressed hot air blast.",
+ {name:"SAC010",fcode:"SAC010",desc:"Blast-furnace",geom:"Surface",thematic:"CulturalSrf",definition:"A smelting furnace in which a blast of air is used, especially one for iron-smelting using a compressed hot air blast.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12832,7 +12832,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAC020",fcode:"SAC020",desc:"Catalytic Cracker",geom:"Surface",definition:"A device in which the separation of petroleum is carried out in the presence of a catalyst.",
+ {name:"SAC020",fcode:"SAC020",desc:"Catalytic Cracker",geom:"Surface",thematic:"CulturalSrf",definition:"A device in which the separation of petroleum is carried out in the presence of a catalyst.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12896,7 +12896,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAC030",fcode:"SAC030",desc:"Settling Pond",geom:"Surface",definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
+ {name:"SAC030",fcode:"SAC030",desc:"Settling Pond",geom:"Surface",thematic:"CulturalSrf",definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -12959,7 +12959,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAC040",fcode:"SAC040",desc:"Hydrocarbon Products Facility",geom:"Surface",definition:"A facility involved in the production or distribution of petroleum, oil and/or natural gas products.",
+ {name:"SAC040",fcode:"SAC040",desc:"Hydrocarbon Products Facility",geom:"Surface",thematic:"CulturalSrf",definition:"A facility involved in the production or distribution of petroleum, oil and/or natural gas products.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13054,7 +13054,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAC060",fcode:"SAC060",desc:"Industrial Furnace",geom:"Surface",definition:"A structure used in material processing that employs heating to harden (for example: to fire brick or ceramic), pyrolyse (for example: convert coal to coke, or limestone to lime), burn (for example: to incinerate waste), or dry (for example: lumber).",
+ {name:"SAC060",fcode:"SAC060",desc:"Industrial Furnace",geom:"Surface",thematic:"CulturalSrf",definition:"A structure used in material processing that employs heating to harden (for example: to fire brick or ceramic), pyrolyse (for example: convert coal to coke, or limestone to lime), burn (for example: to incinerate waste), or dry (for example: lumber).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13141,7 +13141,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAC507",fcode:"SAC507",desc:"Sewage Treatment Plant",geom:"Surface",definition:"An operational area with buildings and other facilities for the purification of wastewater.",
+ {name:"SAC507",fcode:"SAC507",desc:"Sewage Treatment Plant",geom:"Surface",thematic:"CulturalSrf",definition:"An operational area with buildings and other facilities for the purification of wastewater.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13196,7 +13196,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAD010",fcode:"SAD010",desc:"Electric Power Station",geom:"Surface",definition:"A facility including one or more buildings and equipment used for electric power generation.",
+ {name:"SAD010",fcode:"SAD010",desc:"Electric Power Station",geom:"Surface",thematic:"CulturalSrf",definition:"A facility including one or more buildings and equipment used for electric power generation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13274,7 +13274,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAD020",fcode:"SAD020",desc:"Solar Panel",geom:"Surface",definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
+ {name:"SAD020",fcode:"SAD020",desc:"Solar Panel",geom:"Surface",thematic:"CulturalSrf",definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13336,7 +13336,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAD025",fcode:"SAD025",desc:"Solar Farm",geom:"Surface",definition:"An extensive collection of solar panels that are collocated and serve a common purpose (for example: the generation of electricity or the generation of heating steam and/or water).",
+ {name:"SAD025",fcode:"SAD025",desc:"Solar Farm",geom:"Surface",thematic:"CulturalSrf",definition:"An extensive collection of solar panels that are collocated and serve a common purpose (for example: the generation of electricity or the generation of heating steam and/or water).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13409,7 +13409,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAD030",fcode:"SAD030",desc:"Power Substation",geom:"Surface",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
+ {name:"SAD030",fcode:"SAD030",desc:"Power Substation",geom:"Surface",thematic:"CulturalSrf",definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13483,7 +13483,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAD041",fcode:"SAD041",desc:"Nuclear Reactor Containment",geom:"Surface",definition:"A building-like structure intended to create a barrier against the release of radioactivity generated during nuclear power operations.",
+ {name:"SAD041",fcode:"SAD041",desc:"Nuclear Reactor Containment",geom:"Surface",thematic:"CulturalSrf",definition:"A building-like structure intended to create a barrier against the release of radioactivity generated during nuclear power operations.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13560,7 +13560,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAD050",fcode:"SAD050",desc:"Heating Facility",geom:"Surface",definition:"A facility for the generation of thermal energy for heating purposes.",
+ {name:"SAD050",fcode:"SAD050",desc:"Heating Facility",geom:"Surface",thematic:"CulturalSrf",definition:"A facility for the generation of thermal energy for heating purposes.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13625,7 +13625,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAD055",fcode:"SAD055",desc:"Cooling Facility",geom:"Surface",definition:"A facility for the removal of thermal energy (for example: by generating and circulating chilled water) for cooling purposes.",
+ {name:"SAD055",fcode:"SAD055",desc:"Cooling Facility",geom:"Surface",thematic:"CulturalSrf",definition:"A facility for the removal of thermal energy (for example: by generating and circulating chilled water) for cooling purposes.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13690,7 +13690,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAD060",fcode:"SAD060",desc:"Wind Farm",geom:"Surface",definition:"A collection of windmotors that are collocated and are organized as a single power generation unit.",
+ {name:"SAD060",fcode:"SAD060",desc:"Wind Farm",geom:"Surface",thematic:"CulturalSrf",definition:"A collection of windmotors that are collocated and are organized as a single power generation unit.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13755,7 +13755,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAF030",fcode:"SAF030",desc:"Cooling Tower",geom:"Surface",definition:"A tall tower for cooling hot water from an industrial process before reuse.",
+ {name:"SAF030",fcode:"SAF030",desc:"Cooling Tower",geom:"Surface",thematic:"CulturalSrf",definition:"A tall tower for cooling hot water from an industrial process before reuse.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13830,7 +13830,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAF040",fcode:"SAF040",desc:"Crane",geom:"Surface",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
+ {name:"SAF040",fcode:"SAF040",desc:"Crane",geom:"Surface",thematic:"CulturalSrf",definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13916,7 +13916,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAF050",fcode:"SAF050",desc:"Excavating Machine",geom:"Surface",definition:"A mechanical device for removing materials from the ground.",
+ {name:"SAF050",fcode:"SAF050",desc:"Excavating Machine",geom:"Surface",thematic:"CulturalSrf",definition:"A mechanical device for removing materials from the ground.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -13980,7 +13980,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAF080",fcode:"SAF080",desc:"Hopper",geom:"Surface",definition:"A top-loaded funnel-shaped structure for temporary holding of loose material which will be dispensed from its bottom.",
+ {name:"SAF080",fcode:"SAF080",desc:"Hopper",geom:"Surface",thematic:"CulturalSrf",definition:"A top-loaded funnel-shaped structure for temporary holding of loose material which will be dispensed from its bottom.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14044,7 +14044,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAG030",fcode:"SAG030",desc:"Shopping Complex",geom:"Surface",definition:"A commercial facility tenanted by multiple retail stores (for example: household goods, clothing, or books), restaurants (for example: a food court), entertainment venues (for example: a movie theatre or electronic games arcade), and/or other businesses (for example: professional services), that is completely enclosed, climate controlled, has a common public arcade (for example: furnished with decorative plantings, benches, and/or fountains) and a common vehicle parking area (for example: a parking lot or parking garage).",
+ {name:"SAG030",fcode:"SAG030",desc:"Shopping Complex",geom:"Surface",thematic:"CulturalSrf",definition:"A commercial facility tenanted by multiple retail stores (for example: household goods, clothing, or books), restaurants (for example: a food court), entertainment venues (for example: a movie theatre or electronic games arcade), and/or other businesses (for example: professional services), that is completely enclosed, climate controlled, has a common public arcade (for example: furnished with decorative plantings, benches, and/or fountains) and a common vehicle parking area (for example: a parking lot or parking garage).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14109,7 +14109,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAG040",fcode:"SAG040",desc:"Office Park",geom:"Surface",definition:"A commercial facility consisting of multiple office buildings tenanted by one or more non-retail businesses (for example: corporate management, consulting services, or research and development) and supportive businesses (for example: a restaurant serving mid-day meals or a post office) that share a common park-like setting consisting of landscaping (for example: lawns, ornamental plantings, or ponds), parking facilities, and common entrances from adjacent roads.",
+ {name:"SAG040",fcode:"SAG040",desc:"Office Park",geom:"Surface",thematic:"CulturalSrf",definition:"A commercial facility consisting of multiple office buildings tenanted by one or more non-retail businesses (for example: corporate management, consulting services, or research and development) and supportive businesses (for example: a restaurant serving mid-day meals or a post office) that share a common park-like setting consisting of landscaping (for example: lawns, ornamental plantings, or ponds), parking facilities, and common entrances from adjacent roads.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14166,7 +14166,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAG060",fcode:"SAG060",desc:"Market",geom:"Surface",definition:"A meeting together of people, at a stated time and place, for the purpose of buying and selling (as cattle, provisions, wares, etc.) by private purchase and sale, and not by auction.",
+ {name:"SAG060",fcode:"SAG060",desc:"Market",geom:"Surface",thematic:"CulturalSrf",definition:"A meeting together of people, at a stated time and place, for the purpose of buying and selling (as cattle, provisions, wares, etc.) by private purchase and sale, and not by auction.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14208,7 +14208,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAH050",fcode:"SAH050",desc:"Fortification",geom:"Surface",definition:"A structure constructed for the military defence of a site.",
+ {name:"SAH050",fcode:"SAH050",desc:"Fortification",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"A structure constructed for the military defence of a site.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14339,7 +14339,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAH060",fcode:"SAH060",desc:"Underground Bunker",geom:"Surface",definition:"A reinforced underground shelter.",
+ {name:"SAH060",fcode:"SAH060",desc:"Underground Bunker",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"A reinforced underground shelter.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14425,7 +14425,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAH070",fcode:"SAH070",desc:"Checkpoint",geom:"Surface",definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
+ {name:"SAH070",fcode:"SAH070",desc:"Checkpoint",geom:"Surface",thematic:"CulturalSrf",definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14495,7 +14495,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAI030",fcode:"SAI030",desc:"Camp",geom:"Surface",definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
+ {name:"SAI030",fcode:"SAI030",desc:"Camp",geom:"Surface",thematic:"PopulationSrf",definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14561,7 +14561,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAI040",fcode:"SAI040",desc:"Area Of Displaced Persons",geom:"Surface",definition:"An area providing shelter for displaced persons.  Displaced persons can refer to Internally Displaced Persons (IDP), refugees and/or evacuees.",
+ {name:"SAI040",fcode:"SAI040",desc:"Area Of Displaced Persons",geom:"Surface",thematic:"PopulationSrf",definition:"An area providing shelter for displaced persons.  Displaced persons can refer to Internally Displaced Persons (IDP), refugees and/or evacuees.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14623,7 +14623,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAJ030",fcode:"SAJ030",desc:"Holding Pen",geom:"Surface",definition:"An enclosed tract on which livestock are temporarily kept.",
+ {name:"SAJ030",fcode:"SAJ030",desc:"Holding Pen",geom:"Surface",thematic:"AgriculturalSrf",definition:"An enclosed tract on which livestock are temporarily kept.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14677,7 +14677,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAJ050",fcode:"SAJ050",desc:"Windmill",geom:"Surface",definition:"A system of vanes attached to a tower and driven by wind (excluding wind turbines).",
+ {name:"SAJ050",fcode:"SAJ050",desc:"Windmill",geom:"Surface",thematic:"AgriculturalSrf",definition:"A system of vanes attached to a tower and driven by wind (excluding wind turbines).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14768,7 +14768,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAJ055",fcode:"SAJ055",desc:"Water Mill",geom:"Surface",definition:"A structure that uses a water wheel or turbine to drive a mechanical process (for example: grinding grain into flour, cutting timber into lumber, or stripping bark from trees for use in tanning).",
+ {name:"SAJ055",fcode:"SAJ055",desc:"Water Mill",geom:"Surface",thematic:"CulturalSrf",definition:"A structure that uses a water wheel or turbine to drive a mechanical process (for example: grinding grain into flour, cutting timber into lumber, or stripping bark from trees for use in tanning).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14880,7 +14880,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAJ060",fcode:"SAJ060",desc:"Farm",geom:"Surface",definition:"A tract of land, including buildings and structures, whose primary use is the production of food (for example: crops or livestock).",
+ {name:"SAJ060",fcode:"SAJ060",desc:"Farm",geom:"Surface",thematic:"AgriculturalSrf",definition:"A tract of land, including buildings and structures, whose primary use is the production of food (for example: crops or livestock).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -14955,7 +14955,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAJ085",fcode:"SAJ085",desc:"Barn",geom:"Surface",definition:"A roofed farm building designed for sheltering harvested crops (for example: hay), livestock (for example: cattle), and/or farm machinery (for example: tractors and plows).",
+ {name:"SAJ085",fcode:"SAJ085",desc:"Barn",geom:"Surface",thematic:"AgriculturalSrf",definition:"A roofed farm building designed for sheltering harvested crops (for example: hay), livestock (for example: cattle), and/or farm machinery (for example: tractors and plows).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15068,7 +15068,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAJ110",fcode:"SAJ110",desc:"Greenhouse",geom:"Surface",definition:"A structure, sometimes recognized as a building, constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
+ {name:"SAJ110",fcode:"SAJ110",desc:"Greenhouse",geom:"Surface",thematic:"AgriculturalSrf",definition:"A structure, sometimes recognized as a building, constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15166,7 +15166,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAK015",fcode:"SAK015",desc:"Bandshell",geom:"Surface",definition:"An outdoor band-stand in the form of a large concave shell with special acoustical properties.",
+ {name:"SAK015",fcode:"SAK015",desc:"Bandshell",geom:"Surface",thematic:"CulturalSrf",definition:"An outdoor band-stand in the form of a large concave shell with special acoustical properties.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15238,7 +15238,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAK020",fcode:"SAK020",desc:"Amusement Park Attraction",geom:"Surface",definition:"A large structure located in an amusement park.",
+ {name:"SAK020",fcode:"SAK020",desc:"Amusement Park Attraction",geom:"Surface",thematic:"CulturalSrf",definition:"A large structure located in an amusement park.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15325,7 +15325,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAK030",fcode:"SAK030",desc:"Amusement Park",geom:"Surface",definition:"A predominantly man-made facility equipped with recreational devices.",
+ {name:"SAK030",fcode:"SAK030",desc:"Amusement Park",geom:"Surface",thematic:"CulturalSrf",definition:"A predominantly man-made facility equipped with recreational devices.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15380,7 +15380,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK040",fcode:"SAK040",desc:"Sports Ground",geom:"Surface",definition:"An open area where sporting events, exercises, and/or games occur.",
+ {name:"SAK040",fcode:"SAK040",desc:"Sports Ground",geom:"Surface",thematic:"CulturalSrf",definition:"An open area where sporting events, exercises, and/or games occur.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15448,7 +15448,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK060",fcode:"SAK060",desc:"Camp-site",geom:"Surface",definition:"A designated place for recreational camping.",
+ {name:"SAK060",fcode:"SAK060",desc:"Camp-site",geom:"Surface",thematic:"CulturalSrf",definition:"A designated place for recreational camping.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15502,62 +15502,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK070",fcode:"SAK070",desc:"Drive-in Theatre",geom:"Surface",definition:"A place where motion pictures are shown while viewers remain in their vehicles.",
-  columns:[
-   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
-    enumerations:[
-     {name:"accurate",value:"1"},
-     {name:"approximate",value:"2"}
-    ]
-   },
-   {name:"ADR",desc:"Address",optional:"R",definition:"The postal address and/or electronic contact information for a facility, organisation or person.",type:"String",defValue:"UNK"},
-   {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set.",type:"String",defValue:"UNK"},
-   {name:"CUD",desc:"Currency Date and Time",optional:"R",definition:"The date and, optionally, time assigned to a data set (for example: the digital representation of a single feature or a set of features) as a whole that provides an overall assessment of its currency.",type:"String",defValue:"UNK"},
-   {name:"DSC",desc:"Data Set Citation",optional:"R",definition:"An identification of a data set and a means of communication with person(s) and/or organisation(s) associated with that data set.",type:"String",defValue:"UNK"},
-   {name:"ELA",desc:"Elevation Accuracy Category",optional:"R",definition:"A general evaluation of the accuracy of the vertical position of a feature, as a category.",type:"enumeration",defValue:"0",
-    enumerations:[
-     {name:"accurate",value:"1"},
-     {name:"approximate",value:"2"},
-     {name:"notApplicable",value:"998"}
-    ]
-   },
-   {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
-   {name:"FNA",desc:"Full Name",optional:"R",definition:"A complete name that is used to designate the entity as that designation would normally be written by the originating culture on a map or chart.",type:"String",defValue:"UNK"},
-   {name:"NFI",desc:"Named Feature Identifier",optional:"R",definition:"The unique named feature identifier element in the NGA Geographic Names Data Base (GNDB).",type:"String",defValue:"UNK"},
-   {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",definition:"One or more intended attribute domain values for one or more enumeration or codelist attributes that are not currently valid members of their respective attribute ranges.",type:"String",defValue:"UNK"},
-   {name:"PCF",desc:"Physical Condition",optional:"R",definition:"The physical condition of a man-made structure, as a whole, including the inside and/or outside of the structure and any contained and/or associated equipment.",type:"enumeration",defValue:"0",
-    enumerations:[
-     {name:"construction",value:"1"},
-     {name:"damaged",value:"4"},
-     {name:"destroyed",value:"6"},
-     {name:"dismantled",value:"5"},
-     {name:"intact",value:"2"},
-     {name:"unmaintained",value:"3"},
-     {name:"noInformation",value:"-999999"},
-     {name:"other",value:"999"}
-    ]
-   },
-   {name:"SDP",desc:"Source Description",optional:"R",definition:"A description of the data set that was used to define the digital representation of the feature or data set.",type:"String",defValue:"UNK"},
-   {name:"SSD",desc:"Spatial Source Date and Time",optional:"R",definition:"The date and, optionally, time of collection of the data that was used to define the spatial representation of the digital feature or data set.",type:"String",defValue:"UNK"},
-   {name:"STC",desc:"Source Category",optional:"R",definition:"The type(s) of dataset(s) and associated process(es) that were used to define the digital representation of the feature or data set.",type:"enumeration",defValue:"0",
-    enumerations:[
-     {name:"landSurveyData",value:"1"},
-     {name:"stereoscopicImagery",value:"2"},
-     {name:"monoscopicImagery",value:"3"},
-     {name:"cartographicSource",value:"4"},
-     {name:"reportedInformation",value:"5"},
-     {name:"multispectralImagery",value:"6"},
-     {name:"hyperspectralImagery",value:"7"},
-     {name:"sarImagery",value:"8"},
-     {name:"noInformation",value:"-999999"},
-     {name:"other",value:"999"}
-    ]
-   },
-   {name:"UFI",desc:"Unique Entity Identifier",optional:"R",definition:"The globally unique and persistent identifier of an entity (for example: feature or event) instance as specified by a Uniform Resource Name (URN) in accordance with the Internet Engineering Task Force (IETF) RFC2396 and RFC2141.",type:"String",defValue:"UNK"},
-   {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
-  ]
- },
- {name:"SAK100",fcode:"SAK100",desc:"Golf Course",geom:"Surface",definition:"A tract of land on which golf is played.",
+ {name:"SAK070",fcode:"SAK070",desc:"Drive-in Theatre",geom:"Surface",thematic:"CulturalSrf",definition:"A place where motion pictures are shown while viewers remain in their vehicles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15612,7 +15557,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK101",fcode:"SAK101",desc:"Golf Driving Range",geom:"Surface",definition:"A parcel of land used for practicing golf shots.",
+ {name:"SAK100",fcode:"SAK100",desc:"Golf Course",geom:"Surface",thematic:"CulturalSrf",definition:"A tract of land on which golf is played.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15667,7 +15612,62 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK110",fcode:"SAK110",desc:"Grandstand",geom:"Surface",definition:"A structure for special viewing of outdoor events, usually roofed, that has tiers of seats or standing room for spectators.",
+ {name:"SAK101",fcode:"SAK101",desc:"Golf Driving Range",geom:"Surface",thematic:"CulturalSrf",definition:"A parcel of land used for practicing golf shots.",
+  columns:[
+   {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"accurate",value:"1"},
+     {name:"approximate",value:"2"}
+    ]
+   },
+   {name:"ADR",desc:"Address",optional:"R",definition:"The postal address and/or electronic contact information for a facility, organisation or person.",type:"String",defValue:"UNK"},
+   {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",definition:"A description of any commercial (or similar) copyright notice applicable to information regarding the feature or data set.",type:"String",defValue:"UNK"},
+   {name:"CUD",desc:"Currency Date and Time",optional:"R",definition:"The date and, optionally, time assigned to a data set (for example: the digital representation of a single feature or a set of features) as a whole that provides an overall assessment of its currency.",type:"String",defValue:"UNK"},
+   {name:"DSC",desc:"Data Set Citation",optional:"R",definition:"An identification of a data set and a means of communication with person(s) and/or organisation(s) associated with that data set.",type:"String",defValue:"UNK"},
+   {name:"ELA",desc:"Elevation Accuracy Category",optional:"R",definition:"A general evaluation of the accuracy of the vertical position of a feature, as a category.",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"accurate",value:"1"},
+     {name:"approximate",value:"2"},
+     {name:"notApplicable",value:"998"}
+    ]
+   },
+   {name:"FCODE",desc:"Feature Code",optional:"R",length:"5",type:"String",defValue:""},
+   {name:"FNA",desc:"Full Name",optional:"R",definition:"A complete name that is used to designate the entity as that designation would normally be written by the originating culture on a map or chart.",type:"String",defValue:"UNK"},
+   {name:"NFI",desc:"Named Feature Identifier",optional:"R",definition:"The unique named feature identifier element in the NGA Geographic Names Data Base (GNDB).",type:"String",defValue:"UNK"},
+   {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",definition:"One or more intended attribute domain values for one or more enumeration or codelist attributes that are not currently valid members of their respective attribute ranges.",type:"String",defValue:"UNK"},
+   {name:"PCF",desc:"Physical Condition",optional:"R",definition:"The physical condition of a man-made structure, as a whole, including the inside and/or outside of the structure and any contained and/or associated equipment.",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"construction",value:"1"},
+     {name:"damaged",value:"4"},
+     {name:"destroyed",value:"6"},
+     {name:"dismantled",value:"5"},
+     {name:"intact",value:"2"},
+     {name:"unmaintained",value:"3"},
+     {name:"noInformation",value:"-999999"},
+     {name:"other",value:"999"}
+    ]
+   },
+   {name:"SDP",desc:"Source Description",optional:"R",definition:"A description of the data set that was used to define the digital representation of the feature or data set.",type:"String",defValue:"UNK"},
+   {name:"SSD",desc:"Spatial Source Date and Time",optional:"R",definition:"The date and, optionally, time of collection of the data that was used to define the spatial representation of the digital feature or data set.",type:"String",defValue:"UNK"},
+   {name:"STC",desc:"Source Category",optional:"R",definition:"The type(s) of dataset(s) and associated process(es) that were used to define the digital representation of the feature or data set.",type:"enumeration",defValue:"0",
+    enumerations:[
+     {name:"landSurveyData",value:"1"},
+     {name:"stereoscopicImagery",value:"2"},
+     {name:"monoscopicImagery",value:"3"},
+     {name:"cartographicSource",value:"4"},
+     {name:"reportedInformation",value:"5"},
+     {name:"multispectralImagery",value:"6"},
+     {name:"hyperspectralImagery",value:"7"},
+     {name:"sarImagery",value:"8"},
+     {name:"noInformation",value:"-999999"},
+     {name:"other",value:"999"}
+    ]
+   },
+   {name:"UFI",desc:"Unique Entity Identifier",optional:"R",definition:"The globally unique and persistent identifier of an entity (for example: feature or event) instance as specified by a Uniform Resource Name (URN) in accordance with the Internet Engineering Task Force (IETF) RFC2396 and RFC2141.",type:"String",defValue:"UNK"},
+   {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
+  ]
+ },
+ {name:"SAK110",fcode:"SAK110",desc:"Grandstand",geom:"Surface",thematic:"CulturalSrf",definition:"A structure for special viewing of outdoor events, usually roofed, that has tiers of seats or standing room for spectators.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15747,7 +15747,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAK120",fcode:"SAK120",desc:"Park",geom:"Surface",definition:"An area of defined limits which is set aside for human recreation and enjoyment and/or for historic preservation purposes, and is usually maintained in a natural, semi-natural, or ornamentally planted state.",
+ {name:"SAK120",fcode:"SAK120",desc:"Park",geom:"Surface",thematic:"CulturalSrf",definition:"An area of defined limits which is set aside for human recreation and enjoyment and/or for historic preservation purposes, and is usually maintained in a natural, semi-natural, or ornamentally planted state.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15802,7 +15802,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK130",fcode:"SAK130",desc:"Racetrack",geom:"Surface",definition:"A ground or tract marked out for racing.",
+ {name:"SAK130",fcode:"SAK130",desc:"Racetrack",geom:"Surface",thematic:"CulturalSrf",definition:"A ground or tract marked out for racing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15872,7 +15872,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK160",fcode:"SAK160",desc:"Stadium",geom:"Surface",definition:"A field and/or stage partly or completely surrounded by a structure designed to allow spectators to stand or sit while viewing an event.",
+ {name:"SAK160",fcode:"SAK160",desc:"Stadium",geom:"Surface",thematic:"CulturalSrf",definition:"A field and/or stage partly or completely surrounded by a structure designed to allow spectators to stand or sit while viewing an event.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -15987,7 +15987,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAK164",fcode:"SAK164",desc:"Amphitheatre",geom:"Surface",definition:"A small tract of level ground serving as a stage that is surrounded by rising slopes (either naturally occurring or artificially constructed) supporting tiered seating (for example: benches).",
+ {name:"SAK164",fcode:"SAK164",desc:"Amphitheatre",geom:"Surface",thematic:"CulturalSrf",definition:"A small tract of level ground serving as a stage that is surrounded by rising slopes (either naturally occurring or artificially constructed) supporting tiered seating (for example: benches).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -16060,7 +16060,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAK170",fcode:"SAK170",desc:"Swimming Pool",geom:"Surface",definition:"A man-made pool used for swimming outdoors.",
+ {name:"SAK170",fcode:"SAK170",desc:"Swimming Pool",geom:"Surface",thematic:"CulturalSrf",definition:"A man-made pool used for swimming outdoors.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -16115,7 +16115,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAK180",fcode:"SAK180",desc:"Zoo",geom:"Surface",definition:"A site where wild animals are kept for exhibition to the public, that may also support breeding and/or study.",
+ {name:"SAK180",fcode:"SAK180",desc:"Zoo",geom:"Surface",thematic:"CulturalSrf",definition:"A site where wild animals are kept for exhibition to the public, that may also support breeding and/or study.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -16170,7 +16170,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL010",fcode:"SAL010",desc:"Facility",geom:"Surface",definition:"An area that has been developed to perform a specific principal function, consisting of one or more vertical constructions (for example: structures or buildings), horizontal constructions (for example: pavements, roads, rail tracks, or bridges), and/or supporting utilities (for example: power lines, water supply, or sewerage), plus the underlying land.",
+ {name:"SAL010",fcode:"SAL010",desc:"Facility",geom:"Surface",thematic:"CulturalSrf",definition:"An area that has been developed to perform a specific principal function, consisting of one or more vertical constructions (for example: structures or buildings), horizontal constructions (for example: pavements, roads, rail tracks, or bridges), and/or supporting utilities (for example: power lines, water supply, or sewerage), plus the underlying land.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -17046,7 +17046,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL012",fcode:"SAL012",desc:"Archeological Site",geom:"Surface",definition:"A site where remains of past civilizations or human activity have been discovered.",
+ {name:"SAL012",fcode:"SAL012",desc:"Archeological Site",geom:"Surface",thematic:"CulturalSrf",definition:"A site where remains of past civilizations or human activity have been discovered.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -17151,7 +17151,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL013",fcode:"SAL013",desc:"Building",geom:"Surface",definition:"A free-standing self-supporting construction that is roofed, usually walled, and is intended for human occupancy (for example: a place of work or recreation) and/or habitation.",
+ {name:"SAL013",fcode:"SAL013",desc:"Building",geom:"Surface",thematic:"CulturalSrf",definition:"A free-standing self-supporting construction that is roofed, usually walled, and is intended for human occupancy (for example: a place of work or recreation) and/or habitation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18121,7 +18121,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL014",fcode:"SAL014",desc:"Non-building Structure",geom:"Surface",definition:"A free-standing self-supporting construction (for example: a large piece of equipment) designed to support human activities (for example: agriculture, manufacturing, or mining) but not intended for human occupancy and/or habitation (for example: a house, a bank, an office, or a stadium).",
+ {name:"SAL014",fcode:"SAL014",desc:"Non-building Structure",geom:"Surface",thematic:"CulturalSrf",definition:"A free-standing self-supporting construction (for example: a large piece of equipment) designed to support human activities (for example: agriculture, manufacturing, or mining) but not intended for human occupancy and/or habitation (for example: a house, a bank, an office, or a stadium).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18338,7 +18338,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL018",fcode:"SAL018",desc:"Building Superstructure",geom:"Surface",definition:"A supplemental portion of a building which rises from the roof but is not considered to be a portion of the roof.",
+ {name:"SAL018",fcode:"SAL018",desc:"Building Superstructure",geom:"Surface",thematic:"CulturalSrf",definition:"A supplemental portion of a building which rises from the roof but is not considered to be a portion of the roof.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18438,7 +18438,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL019",fcode:"SAL019",desc:"Shed",geom:"Surface",definition:"A small building, generally of light construction, that usually has one or more open sides.",
+ {name:"SAL019",fcode:"SAL019",desc:"Shed",geom:"Surface",thematic:"CulturalSrf",definition:"A small building, generally of light construction, that usually has one or more open sides.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18531,7 +18531,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL020",fcode:"SAL020",desc:"Built-up Area",geom:"Surface",definition:"A tract containing a concentration of buildings and/or other structures.",
+ {name:"SAL020",fcode:"SAL020",desc:"Built-up Area",geom:"Surface",thematic:"PopulationSrf",definition:"A tract containing a concentration of buildings and/or other structures.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18632,7 +18632,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL022",fcode:"SAL022",desc:"Populated Place",geom:"Surface",definition:"A named area where people live and/or work.",
+ {name:"SAL022",fcode:"SAL022",desc:"Populated Place",geom:"Surface",thematic:"PopulationSrf",definition:"A named area where people live and/or work.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18685,7 +18685,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL030",fcode:"SAL030",desc:"Cemetery",geom:"Surface",definition:"A site and associated structures devoted to the burial of the dead.",
+ {name:"SAL030",fcode:"SAL030",desc:"Cemetery",geom:"Surface",thematic:"CulturalSrf",definition:"A site and associated structures devoted to the burial of the dead.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18762,7 +18762,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL036",fcode:"SAL036",desc:"Tomb",geom:"Surface",definition:"A structure within which a corpse is entombed.",
+ {name:"SAL036",fcode:"SAL036",desc:"Tomb",geom:"Surface",thematic:"CulturalSrf",definition:"A structure within which a corpse is entombed.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18869,7 +18869,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL037",fcode:"SAL037",desc:"Mass Grave",geom:"Surface",definition:"A grave containing multiple, usually unidentified, human corpses.",
+ {name:"SAL037",fcode:"SAL037",desc:"Mass Grave",geom:"Surface",thematic:"CulturalSrf",definition:"A grave containing multiple, usually unidentified, human corpses.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18911,7 +18911,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL065",fcode:"SAL065",desc:"Minefield",geom:"Surface",definition:"A site laid with explosive mines.",
+ {name:"SAL065",fcode:"SAL065",desc:"Minefield",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"A site laid with explosive mines.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -18965,7 +18965,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL099",fcode:"SAL099",desc:"Hut",geom:"Surface",definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room.",
+ {name:"SAL099",fcode:"SAL099",desc:"Hut",geom:"Surface",thematic:"CulturalSrf",definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19036,7 +19036,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL120",fcode:"SAL120",desc:"Missile Site",geom:"Surface",definition:"A site and related facilities for storing and launching missiles.",
+ {name:"SAL120",fcode:"SAL120",desc:"Missile Site",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"A site and related facilities for storing and launching missiles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19129,7 +19129,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL121",fcode:"SAL121",desc:"Anti-aircraft Artillery Site",geom:"Surface",definition:"A site and related facilities (for example: buildings and/or radar equipment) for storing and launching anti-aircraft artillery.",
+ {name:"SAL121",fcode:"SAL121",desc:"Anti-aircraft Artillery Site",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"A site and related facilities (for example: buildings and/or radar equipment) for storing and launching anti-aircraft artillery.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19182,7 +19182,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL131",fcode:"SAL131",desc:"Monument",geom:"Surface",definition:"A specific type of non-building structure that: was created to explicitly commemorate a person or event;  was created to express an aspect of cultural and/or individual creativity; and/or has become relevant to a social group as a part of their remembrance of historic times or cultural heritage, due to its artistic, historical, political, religious, technical or architectural importance.",
+ {name:"SAL131",fcode:"SAL131",desc:"Monument",geom:"Surface",thematic:"CulturalSrf",definition:"A specific type of non-building structure that: was created to explicitly commemorate a person or event;  was created to express an aspect of cultural and/or individual creativity; and/or has become relevant to a social group as a part of their remembrance of historic times or cultural heritage, due to its artistic, historical, political, religious, technical or architectural importance.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19317,7 +19317,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL140",fcode:"SAL140",desc:"Particle Accelerator",geom:"Surface",definition:"An apparatus for imparting high velocities to charged particles.",
+ {name:"SAL140",fcode:"SAL140",desc:"Particle Accelerator",geom:"Surface",thematic:"CulturalSrf",definition:"An apparatus for imparting high velocities to charged particles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19371,7 +19371,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL142",fcode:"SAL142",desc:"Astronomical Observatory",geom:"Surface",definition:"A building designed and equipped (for example: with a telescope) for making observations of celestial objects (including the earth in relation to them), of space, and of the universe as a whole.",
+ {name:"SAL142",fcode:"SAL142",desc:"Astronomical Observatory",geom:"Surface",thematic:"CulturalSrf",definition:"A building designed and equipped (for example: with a telescope) for making observations of celestial objects (including the earth in relation to them), of space, and of the universe as a whole.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19480,7 +19480,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL155",fcode:"SAL155",desc:"Overhead Obstruction",geom:"Surface",definition:"An overhead obstruction (for example: an underpass, an overhead pipeline, and/or the overhang of a building) on a transportation route.",
+ {name:"SAL155",fcode:"SAL155",desc:"Overhead Obstruction",geom:"Surface",thematic:"CulturalSrf",definition:"An overhead obstruction (for example: an underpass, an overhead pipeline, and/or the overhang of a building) on a transportation route.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19556,7 +19556,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL170",fcode:"SAL170",desc:"Public Square",geom:"Surface",definition:"An open site that serves as a public meeting location in a built-up area.",
+ {name:"SAL170",fcode:"SAL170",desc:"Public Square",geom:"Surface",thematic:"CulturalSrf",definition:"An open site that serves as a public meeting location in a built-up area.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19611,7 +19611,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL200",fcode:"SAL200",desc:"Ruins",geom:"Surface",definition:"The deteriorated remains of an unspecified structure.",
+ {name:"SAL200",fcode:"SAL200",desc:"Ruins",geom:"Surface",thematic:"CulturalSrf",definition:"The deteriorated remains of an unspecified structure.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19655,7 +19655,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL211",fcode:"SAL211",desc:"Transportation Route Protection Structure",geom:"Surface",definition:"A structure built over and/or along a transportation route designed to prevent damage to, or blockage of, the route from rock slides, snow slides and/or weather phenomena.",
+ {name:"SAL211",fcode:"SAL211",desc:"Transportation Route Protection Structure",geom:"Surface",thematic:"TransportationSrf",definition:"A structure built over and/or along a transportation route designed to prevent damage to, or blockage of, the route from rock slides, snow slides and/or weather phenomena.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19737,7 +19737,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL241",fcode:"SAL241",desc:"Tower",geom:"Surface",definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure.",
+ {name:"SAL241",fcode:"SAL241",desc:"Tower",geom:"Surface",thematic:"CulturalSrf",definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19910,7 +19910,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAL250",fcode:"SAL250",desc:"Underground Dwelling",geom:"Surface",definition:"Underground living quarters.",
+ {name:"SAL250",fcode:"SAL250",desc:"Underground Dwelling",geom:"Surface",thematic:"CulturalSrf",definition:"Underground living quarters.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -19987,7 +19987,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL270",fcode:"SAL270",desc:"Industrial Farm",geom:"Surface",definition:"An estate or large farm operating on the plantation economy model in which the farm operates as a single economic unit whose operations are based on agricultural mass production of a few staple crops (for example: cotton, tobacco, sugar cane, bananas, and/or rubber) that are typically not indigenous to the region.",
+ {name:"SAL270",fcode:"SAL270",desc:"Industrial Farm",geom:"Surface",thematic:"AgriculturalSrf",definition:"An estate or large farm operating on the plantation economy model in which the farm operates as a single economic unit whose operations are based on agricultural mass production of a few staple crops (for example: cotton, tobacco, sugar cane, bananas, and/or rubber) that are typically not indigenous to the region.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20058,7 +20058,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAL351",fcode:"SAL351",desc:"Space Facility",geom:"Surface",definition:"A facility that is used to support space related activities (for example: services such as assembly, launching or recovery of spacecraft or managing flight operations).",
+ {name:"SAL351",fcode:"SAL351",desc:"Space Facility",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A facility that is used to support space related activities (for example: services such as assembly, launching or recovery of spacecraft or managing flight operations).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20122,7 +20122,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAM010",fcode:"SAM010",desc:"Storage Depot",geom:"Surface",definition:"A tract used for the storage of products and/or supplies.",
+ {name:"SAM010",fcode:"SAM010",desc:"Storage Depot",geom:"Surface",thematic:"CulturalSrf",definition:"A tract used for the storage of products and/or supplies.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20245,7 +20245,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM011",fcode:"SAM011",desc:"Shipping Container",geom:"Surface",definition:"A moveable container used for the shipping of solid, liquid, or gaseous materials.",
+ {name:"SAM011",fcode:"SAM011",desc:"Shipping Container",geom:"Surface",thematic:"CulturalSrf",definition:"A moveable container used for the shipping of solid, liquid, or gaseous materials.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20314,7 +20314,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM020",fcode:"SAM020",desc:"Grain Storage Structure",geom:"Surface",definition:"An enclosed container, used for storing grain or fodder.",
+ {name:"SAM020",fcode:"SAM020",desc:"Grain Storage Structure",geom:"Surface",thematic:"AgriculturalSrf",definition:"An enclosed container, used for storing grain or fodder.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20403,7 +20403,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM030",fcode:"SAM030",desc:"Grain Elevator",geom:"Surface",definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
+ {name:"SAM030",fcode:"SAM030",desc:"Grain Elevator",geom:"Surface",thematic:"AgriculturalSrf",definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20492,7 +20492,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM040",fcode:"SAM040",desc:"Mineral Pile",geom:"Surface",definition:"A man-made heap of mining or quarrying products that does not contain waste materials.",
+ {name:"SAM040",fcode:"SAM040",desc:"Mineral Pile",geom:"Surface",thematic:"CulturalSrf",definition:"A man-made heap of mining or quarrying products that does not contain waste materials.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20558,7 +20558,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM060",fcode:"SAM060",desc:"Surface Bunker",geom:"Surface",definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance.",
+ {name:"SAM060",fcode:"SAM060",desc:"Surface Bunker",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20665,7 +20665,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM065",fcode:"SAM065",desc:"Munition Storage Facility",geom:"Surface",definition:"A facility for the storage of munitions (for example: bombs, missiles, warheads, mines or ammunition).",
+ {name:"SAM065",fcode:"SAM065",desc:"Munition Storage Facility",geom:"Surface",thematic:"CulturalSrf",definition:"A facility for the storage of munitions (for example: bombs, missiles, warheads, mines or ammunition).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20738,7 +20738,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM070",fcode:"SAM070",desc:"Storage Tank",geom:"Surface",definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
+ {name:"SAM070",fcode:"SAM070",desc:"Storage Tank",geom:"Surface",thematic:"CulturalSrf",definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20890,7 +20890,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAM071",fcode:"SAM071",desc:"Tank Farm",geom:"Surface",definition:"A tract of land occupied by large-capacity tanks in which petroleum, natural gas, or liquid petrochemicals are stored.",
+ {name:"SAM071",fcode:"SAM071",desc:"Tank Farm",geom:"Surface",thematic:"CulturalSrf",definition:"A tract of land occupied by large-capacity tanks in which petroleum, natural gas, or liquid petrochemicals are stored.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -20986,7 +20986,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAM075",fcode:"SAM075",desc:"Fuel Storage Facility",geom:"Surface",definition:"A facility for the storage of fuel (for example: jet fuel, gasoline, or diesel oil).",
+ {name:"SAM075",fcode:"SAM075",desc:"Fuel Storage Facility",geom:"Surface",thematic:"CulturalSrf",definition:"A facility for the storage of fuel (for example: jet fuel, gasoline, or diesel oil).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21057,7 +21057,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAM080",fcode:"SAM080",desc:"Water Tower",geom:"Surface",definition:"A tower supporting an elevated storage tank of water.",
+ {name:"SAM080",fcode:"SAM080",desc:"Water Tower",geom:"Surface",thematic:"CulturalSrf",definition:"A tower supporting an elevated storage tank of water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21166,7 +21166,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAN060",fcode:"SAN060",desc:"Railway Yard",geom:"Surface",definition:"A system of railway tracks and associated structures that are located within defined limits and that provide for loading, unloading, and/or assembling trains.",
+ {name:"SAN060",fcode:"SAN060",desc:"Railway Yard",geom:"Surface",thematic:"TransportationSrf",definition:"A system of railway tracks and associated structures that are located within defined limits and that provide for loading, unloading, and/or assembling trains.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21221,7 +21221,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAN075",fcode:"SAN075",desc:"Railway Turntable",geom:"Surface",definition:"A rotating platform with railway tracks used for turning locomotives and/or railway carriages.",
+ {name:"SAN075",fcode:"SAN075",desc:"Railway Turntable",geom:"Surface",thematic:"TransportationSrf",definition:"A rotating platform with railway tracks used for turning locomotives and/or railway carriages.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21283,7 +21283,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAN076",fcode:"SAN076",desc:"Roundhouse",geom:"Surface",definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives.",
+ {name:"SAN076",fcode:"SAN076",desc:"Roundhouse",geom:"Surface",thematic:"TransportationSrf",definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21415,7 +21415,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAN077",fcode:"SAN077",desc:"Railway Traverser",geom:"Surface",definition:"A sideways-moving platform for shifting a railway carriage or engine from one set of rails to another parallel set.",
+ {name:"SAN077",fcode:"SAN077",desc:"Railway Traverser",geom:"Surface",thematic:"TransportationSrf",definition:"A sideways-moving platform for shifting a railway carriage or engine from one set of rails to another parallel set.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21467,7 +21467,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAN078",fcode:"SAN078",desc:"Bogie Exchange Site",geom:"Surface",definition:"A site where bogie on railway wagons are exchanged to overcome difference in the track gauge.",
+ {name:"SAN078",fcode:"SAN078",desc:"Bogie Exchange Site",geom:"Surface",thematic:"TransportationSrf",definition:"A site where bogie on railway wagons are exchanged to overcome difference in the track gauge.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21519,7 +21519,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAQ040",fcode:"SAQ040",desc:"Bridge",geom:"Surface",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road).",
+ {name:"SAQ040",fcode:"SAQ040",desc:"Bridge",geom:"Surface",thematic:"TransportationSrf",definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21650,7 +21650,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ055",fcode:"SAQ055",desc:"Bridge Tower",geom:"Surface",definition:"A tower and/or pylon from which the deck of a bridge is suspended.",
+ {name:"SAQ055",fcode:"SAQ055",desc:"Bridge Tower",geom:"Surface",thematic:"TransportationSrf",definition:"A tower and/or pylon from which the deck of a bridge is suspended.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21725,7 +21725,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ056",fcode:"SAQ056",desc:"Bridge Pier",geom:"Surface",definition:"A pillar or abutment that supports a bridge span.",
+ {name:"SAQ056",fcode:"SAQ056",desc:"Bridge Pier",geom:"Surface",thematic:"TransportationSrf",definition:"A pillar or abutment that supports a bridge span.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21790,7 +21790,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAQ060",fcode:"SAQ060",desc:"Control Tower",geom:"Surface",definition:"A structure that houses personnel and equipment used to control the flow of traffic within a specified range of an installation.",
+ {name:"SAQ060",fcode:"SAQ060",desc:"Control Tower",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A structure that houses personnel and equipment used to control the flow of traffic within a specified range of an installation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21909,7 +21909,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ063",fcode:"SAQ063",desc:"Causeway Structure",geom:"Surface",definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway).",
+ {name:"SAQ063",fcode:"SAQ063",desc:"Causeway Structure",geom:"Surface",thematic:"TransportationSrf",definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -21986,7 +21986,7 @@ var schema = [
    }
   ]
  },
- {name:"SAQ068",fcode:"SAQ068",desc:"Transportation Block",geom:"Surface",definition:"A substantial semi-permanent assemblage of material, usually in the form of concrete blocks and/or cylinders, positioned alongside or above a land transportation route, ready to be activated as a potential barrier.",
+ {name:"SAQ068",fcode:"SAQ068",desc:"Transportation Block",geom:"Surface",thematic:"TransportationSrf",definition:"A substantial semi-permanent assemblage of material, usually in the form of concrete blocks and/or cylinders, positioned alongside or above a land transportation route, ready to be activated as a potential barrier.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22047,7 +22047,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAQ080",fcode:"SAQ080",desc:"Ferry Station",geom:"Surface",definition:"A location where a ferry takes on or discharges its load.",
+ {name:"SAQ080",fcode:"SAQ080",desc:"Ferry Station",geom:"Surface",thematic:"TransportationSrf",definition:"A location where a ferry takes on or discharges its load.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22147,7 +22147,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ116",fcode:"SAQ116",desc:"Pumping Station",geom:"Surface",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
+ {name:"SAQ116",fcode:"SAQ116",desc:"Pumping Station",geom:"Surface",thematic:"TransportationSrf",definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22250,7 +22250,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ125",fcode:"SAQ125",desc:"Transportation Station",geom:"Surface",definition:"A station that serves as a stopping place along a transportation route.",
+ {name:"SAQ125",fcode:"SAQ125",desc:"Transportation Station",geom:"Surface",thematic:"TransportationSrf",definition:"A station that serves as a stopping place along a transportation route.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22369,7 +22369,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ130",fcode:"SAQ130",desc:"Tunnel",geom:"Surface",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway).",
+ {name:"SAQ130",fcode:"SAQ130",desc:"Tunnel",geom:"Surface",thematic:"TransportationSrf",definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22451,7 +22451,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAQ135",fcode:"SAQ135",desc:"Roadside Rest Area",geom:"Surface",definition:"A roadside place usually having facilities for people and/or vehicles.",
+ {name:"SAQ135",fcode:"SAQ135",desc:"Roadside Rest Area",geom:"Surface",thematic:"TransportationSrf",definition:"A roadside place usually having facilities for people and/or vehicles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22539,7 +22539,7 @@ var schema = [
    }
   ]
  },
- {name:"SAQ140",fcode:"SAQ140",desc:"Vehicle Lot",geom:"Surface",definition:"A tract used for storing and/or parking vehicles (for example: recreational vehicles) and/or vessels.",
+ {name:"SAQ140",fcode:"SAQ140",desc:"Vehicle Lot",geom:"Surface",thematic:"CulturalSrf",definition:"A tract used for storing and/or parking vehicles (for example: recreational vehicles) and/or vessels.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22641,7 +22641,7 @@ var schema = [
    }
   ]
  },
- {name:"SAQ141",fcode:"SAQ141",desc:"Parking Garage",geom:"Surface",definition:"A designated, multi-level, structure used for parking and/or storing vehicles.",
+ {name:"SAQ141",fcode:"SAQ141",desc:"Parking Garage",geom:"Surface",thematic:"CulturalSrf",definition:"A designated, multi-level, structure used for parking and/or storing vehicles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22755,7 +22755,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ150",fcode:"SAQ150",desc:"Stair",geom:"Surface",definition:"A series of fixed steps leading from one level to another, especially such a series leading from one floor level to another inside a structure.",
+ {name:"SAQ150",fcode:"SAQ150",desc:"Stair",geom:"Surface",thematic:"CulturalSrf",definition:"A series of fixed steps leading from one level to another, especially such a series leading from one floor level to another inside a structure.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22820,7 +22820,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAQ151",fcode:"SAQ151",desc:"Arcade",geom:"Surface",definition:"A covered pedestrian route composed of arches and pillars, usually open along one or both sides.",
+ {name:"SAQ151",fcode:"SAQ151",desc:"Arcade",geom:"Surface",thematic:"TransportationSrf",definition:"A covered pedestrian route composed of arches and pillars, usually open along one or both sides.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -22900,7 +22900,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ170",fcode:"SAQ170",desc:"Motor Vehicle Station",geom:"Surface",definition:"A building at, or in which, motor vehicles are refuelled, serviced, and sometimes repaired.",
+ {name:"SAQ170",fcode:"SAQ170",desc:"Motor Vehicle Station",geom:"Surface",thematic:"TransportationSrf",definition:"A building at, or in which, motor vehicles are refuelled, serviced, and sometimes repaired.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23017,7 +23017,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAQ180",fcode:"SAQ180",desc:"Weigh Station",geom:"Surface",definition:"A facility and associated equipment and structures that is used to inspect and weigh motor vehicles.",
+ {name:"SAQ180",fcode:"SAQ180",desc:"Weigh Station",geom:"Surface",thematic:"TransportationSrf",definition:"A facility and associated equipment and structures that is used to inspect and weigh motor vehicles.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23069,7 +23069,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAQ210",fcode:"SAQ210",desc:"Transportation Platform",geom:"Surface",definition:"A permanent raised physical structure which serves as a surface for disembarking or taking on passengers or freight from a form of transport.",
+ {name:"SAQ210",fcode:"SAQ210",desc:"Transportation Platform",geom:"Surface",thematic:"TransportationSrf",definition:"A permanent raised physical structure which serves as a surface for disembarking or taking on passengers or freight from a form of transport.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23121,7 +23121,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAT010",fcode:"SAT010",desc:"Dish Aerial",geom:"Surface",definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy.",
+ {name:"SAT010",fcode:"SAT010",desc:"Dish Aerial",geom:"Surface",thematic:"CulturalSrf",definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23175,7 +23175,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SAT011",fcode:"SAT011",desc:"Aerial",geom:"Surface",definition:"A device that is used for emitting and/or sensing electromagnetic energy.",
+ {name:"SAT011",fcode:"SAT011",desc:"Aerial",geom:"Surface",thematic:"CulturalSrf",definition:"A device that is used for emitting and/or sensing electromagnetic energy.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23272,7 +23272,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SAT012",fcode:"SAT012",desc:"Aerial Farm",geom:"Surface",definition:"A collection of aerials that are collocated and serve a common purpose.",
+ {name:"SAT012",fcode:"SAT012",desc:"Aerial Farm",geom:"Surface",thematic:"CulturalSrf",definition:"A collection of aerials that are collocated and serve a common purpose.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23361,7 +23361,7 @@ var schema = [
    }
   ]
  },
- {name:"SAT045",fcode:"SAT045",desc:"Radar Station",geom:"Surface",definition:"A facility utilizing radar to detect and analyze objects (for example: aircraft, artificial satellites, asteroids, and/or missiles) and/or environmental phenomena (for example: tornadoes).",
+ {name:"SAT045",fcode:"SAT045",desc:"Radar Station",geom:"Surface",thematic:"CulturalSrf",definition:"A facility utilizing radar to detect and analyze objects (for example: aircraft, artificial satellites, asteroids, and/or missiles) and/or environmental phenomena (for example: tornadoes).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23473,7 +23473,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBA030",fcode:"SBA030",desc:"Island",geom:"Surface",definition:"A land mass, other than a continent, surrounded by water.",
+ {name:"SBA030",fcode:"SBA030",desc:"Island",geom:"Surface",thematic:"PhysiographySrf",definition:"A land mass, other than a continent, surrounded by water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23515,7 +23515,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBA040",fcode:"SBA040",desc:"Tidal Water",geom:"Surface",definition:"Any water the level of which changes periodically due to tidal action.",
+ {name:"SBA040",fcode:"SBA040",desc:"Tidal Water",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"Any water the level of which changes periodically due to tidal action.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23557,7 +23557,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBA050",fcode:"SBA050",desc:"Beach",geom:"Surface",definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate.",
+ {name:"SBA050",fcode:"SBA050",desc:"Beach",geom:"Surface",thematic:"PhysiographySrf",definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23623,7 +23623,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBB005",fcode:"SBB005",desc:"Harbour",geom:"Surface",definition:"A natural or artificial improved body of water providing protection for vessels and generally anchorage and docking facilities.",
+ {name:"SBB005",fcode:"SBB005",desc:"Harbour",geom:"Surface",thematic:"PortsHarboursSrf",definition:"A natural or artificial improved body of water providing protection for vessels and generally anchorage and docking facilities.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23711,7 +23711,7 @@ var schema = [
    {name:"WPI",desc:"World Port Index Identifier",optional:"R",definition:"The unique identifier element in the NGA World Port Index (Publication 150).",type:"Integer",defValue:"-32767"}
   ]
  },
- {name:"SBB009",fcode:"SBB009",desc:"Port",geom:"Surface",definition:"A place provided with terminal and transfer facilities for loading and/or discharging cargo or passengers, usually located in a harbour.",
+ {name:"SBB009",fcode:"SBB009",desc:"Port",geom:"Surface",thematic:"PortsHarboursSrf",definition:"A place provided with terminal and transfer facilities for loading and/or discharging cargo or passengers, usually located in a harbour.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23818,7 +23818,7 @@ var schema = [
    {name:"WPI",desc:"World Port Index Identifier",optional:"R",definition:"The unique identifier element in the NGA World Port Index (Publication 150).",type:"Integer",defValue:"-32767"}
   ]
  },
- {name:"SBB081",fcode:"SBB081",desc:"Shoreline Construction",geom:"Surface",definition:"An artificial structure attached to land bordering a body of water and fixed in position.",
+ {name:"SBB081",fcode:"SBB081",desc:"Shoreline Construction",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"An artificial structure attached to land bordering a body of water and fixed in position.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -23928,7 +23928,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBB082",fcode:"SBB082",desc:"Shoreline Ramp",geom:"Surface",definition:"A ramp-like structure on a shoreline that is intended to facilitate the movement of vessels and/or materials (for example: logs) into or out of the water.",
+ {name:"SBB082",fcode:"SBB082",desc:"Shoreline Ramp",geom:"Surface",thematic:"PortsHarboursSrf",definition:"A ramp-like structure on a shoreline that is intended to facilitate the movement of vessels and/or materials (for example: logs) into or out of the water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24014,7 +24014,7 @@ var schema = [
    }
   ]
  },
- {name:"SBB090",fcode:"SBB090",desc:"Dry Dock",geom:"Surface",definition:"An artificial basin fitted with a gate or caisson into which vessels can be floated and the water pumped out to expose the bottom of the vessel.",
+ {name:"SBB090",fcode:"SBB090",desc:"Dry Dock",geom:"Surface",thematic:"PortsHarboursSrf",definition:"An artificial basin fitted with a gate or caisson into which vessels can be floated and the water pumped out to expose the bottom of the vessel.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24081,7 +24081,7 @@ var schema = [
    {name:"WDU",desc:"Usable Width",optional:"R",definition:"The interior width of a structure.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBB110",fcode:"SBB110",desc:"Fish Weir",geom:"Surface",definition:"A fence of stakes or wall of stones set in a river or along the shore to direct fish towards fish traps or nets.",
+ {name:"SBB110",fcode:"SBB110",desc:"Fish Weir",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"A fence of stakes or wall of stones set in a river or along the shore to direct fish towards fish traps or nets.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24135,7 +24135,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBB199",fcode:"SBB199",desc:"Floating Dry Dock",geom:"Surface",definition:"A form of dry dock consisting of a floating structure of one or more sections which can be partly submerged by controlled flooding to receive a vessel, then raised by pumping out the water so that the vessel's bottom can be exposed.",
+ {name:"SBB199",fcode:"SBB199",desc:"Floating Dry Dock",geom:"Surface",thematic:"PortsHarboursSrf",definition:"A form of dry dock consisting of a floating structure of one or more sections which can be partly submerged by controlled flooding to receive a vessel, then raised by pumping out the water so that the vessel's bottom can be exposed.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24200,7 +24200,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBB241",fcode:"SBB241",desc:"Shipyard",geom:"Surface",definition:"A large enclosed area adjoining the sea or a major river, including facilities in which ships are built or repaired.",
+ {name:"SBB241",fcode:"SBB241",desc:"Shipyard",geom:"Surface",thematic:"PortsHarboursSrf",definition:"A large enclosed area adjoining the sea or a major river, including facilities in which ships are built or repaired.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24272,7 +24272,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBC050",fcode:"SBC050",desc:"Lighthouse",geom:"Surface",definition:"A distinctive structure on or off a coast exhibiting a major light designed to serve as an aid to navigation.",
+ {name:"SBC050",fcode:"SBC050",desc:"Lighthouse",geom:"Surface",thematic:"HydrographicAidsNavigationSrf",definition:"A distinctive structure on or off a coast exhibiting a major light designed to serve as an aid to navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24385,7 +24385,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBC070",fcode:"SBC070",desc:"Light Vessel",geom:"Surface",definition:"A distinctively marked vessel anchored or moored at a charted point, to serve as an aid to navigation.",
+ {name:"SBC070",fcode:"SBC070",desc:"Light Vessel",geom:"Surface",thematic:"HydrographicAidsNavigationSrf",definition:"A distinctively marked vessel anchored or moored at a charted point, to serve as an aid to navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24449,7 +24449,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBD115",fcode:"SBD115",desc:"Offshore Construction",geom:"Surface",definition:"An artificial structure that is located offshore.",
+ {name:"SBD115",fcode:"SBD115",desc:"Offshore Construction",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"An artificial structure that is located offshore.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24584,7 +24584,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBD120",fcode:"SBD120",desc:"Reef",geom:"Surface",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
+ {name:"SBD120",fcode:"SBD120",desc:"Reef",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24645,7 +24645,7 @@ var schema = [
    }
   ]
  },
- {name:"SBD130",fcode:"SBD130",desc:"Hazardous Rock",geom:"Surface",definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation.",
+ {name:"SBD130",fcode:"SBD130",desc:"Hazardous Rock",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24707,7 +24707,7 @@ var schema = [
    }
   ]
  },
- {name:"SBD181",fcode:"SBD181",desc:"Hulk",geom:"Surface",definition:"A vessel, either stranded aground or permanently moored, that is no longer seaworthy due to an inoperable propulsion plant or compromised vessel integrity.",
+ {name:"SBD181",fcode:"SBD181",desc:"Hulk",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"A vessel, either stranded aground or permanently moored, that is no longer seaworthy due to an inoperable propulsion plant or compromised vessel integrity.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24788,7 +24788,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBH010",fcode:"SBH010",desc:"Aqueduct",geom:"Surface",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use.",
+ {name:"SBH010",fcode:"SBH010",desc:"Aqueduct",geom:"Surface",thematic:"InlandWaterSrf",definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24923,7 +24923,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBH015",fcode:"SBH015",desc:"Bog",geom:"Surface",definition:"A permanently wet area of land consisting of incompletely decayed organic material and mainly stagnant fresh water.",
+ {name:"SBH015",fcode:"SBH015",desc:"Bog",geom:"Surface",thematic:"VegetationSrf",definition:"A permanently wet area of land consisting of incompletely decayed organic material and mainly stagnant fresh water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -24991,7 +24991,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH020",fcode:"SBH020",desc:"Canal",geom:"Surface",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
+ {name:"SBH020",fcode:"SBH020",desc:"Canal",geom:"Surface",thematic:"TransportationSrf",definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25105,7 +25105,7 @@ var schema = [
    }
   ]
  },
- {name:"SBH030",fcode:"SBH030",desc:"Ditch",geom:"Surface",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
+ {name:"SBH030",fcode:"SBH030",desc:"Ditch",geom:"Surface",thematic:"InlandWaterSrf",definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25207,7 +25207,7 @@ var schema = [
    }
   ]
  },
- {name:"SBH040",fcode:"SBH040",desc:"Water Treatment Bed",geom:"Surface",definition:"A tract for the treatment of water that consists of a bed of material where water is aerated or filtered.",
+ {name:"SBH040",fcode:"SBH040",desc:"Water Treatment Bed",geom:"Surface",thematic:"CulturalSrf",definition:"A tract for the treatment of water that consists of a bed of material where water is aerated or filtered.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25261,7 +25261,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH050",fcode:"SBH050",desc:"Mariculture Site",geom:"Surface",definition:"A site where marine organisms are cultivated for food and other products in either the open ocean, in an enclosed section of the ocean, or in tanks, ponds or raceways that are filled with seawater (for example: the farming of marine fish, prawns, or oysters in saltwater ponds).",
+ {name:"SBH050",fcode:"SBH050",desc:"Mariculture Site",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"A site where marine organisms are cultivated for food and other products in either the open ocean, in an enclosed section of the ocean, or in tanks, ponds or raceways that are filled with seawater (for example: the farming of marine fish, prawns, or oysters in saltwater ponds).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25346,7 +25346,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH051",fcode:"SBH051",desc:"Fish Farm Facility",geom:"Surface",definition:"A facility involved in the breeding (hatching and associated activities) and cultivation (raising for release or harvesting) of fish in tanks or landlocked enclosures.",
+ {name:"SBH051",fcode:"SBH051",desc:"Fish Farm Facility",geom:"Surface",thematic:"AgriculturalSrf",definition:"A facility involved in the breeding (hatching and associated activities) and cultivation (raising for release or harvesting) of fish in tanks or landlocked enclosures.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25438,7 +25438,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH065",fcode:"SBH065",desc:"Water Race",geom:"Surface",definition:"An artificial channel for a current of water, especially one built to provide water for industrial or agricultural purposes or for transporting water-borne materials.",
+ {name:"SBH065",fcode:"SBH065",desc:"Water Race",geom:"Surface",thematic:"InlandWaterSrf",definition:"An artificial channel for a current of water, especially one built to provide water for industrial or agricultural purposes or for transporting water-borne materials.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25513,7 +25513,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH075",fcode:"SBH075",desc:"Fountain",geom:"Surface",definition:"A monumental and/or ornamental structure containing moving water, often including jets, falls, or other decorative features.",
+ {name:"SBH075",fcode:"SBH075",desc:"Fountain",geom:"Surface",thematic:"CulturalSrf",definition:"A monumental and/or ornamental structure containing moving water, often including jets, falls, or other decorative features.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25601,7 +25601,7 @@ var schema = [
    }
   ]
  },
- {name:"SBH082",fcode:"SBH082",desc:"Inland Waterbody",geom:"Surface",definition:"A body of water that is entirely surrounded by land.",
+ {name:"SBH082",fcode:"SBH082",desc:"Inland Waterbody",geom:"Surface",thematic:"InlandWaterSrf",definition:"A body of water that is entirely surrounded by land.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25708,7 +25708,7 @@ var schema = [
    }
   ]
  },
- {name:"SBH090",fcode:"SBH090",desc:"Land Subject to Inundation",geom:"Surface",definition:"A tract periodically covered by flood water, excluding tidal waters.",
+ {name:"SBH090",fcode:"SBH090",desc:"Land Subject to Inundation",geom:"Surface",thematic:"InlandWaterSrf",definition:"A tract periodically covered by flood water, excluding tidal waters.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25757,7 +25757,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH100",fcode:"SBH100",desc:"Moat",geom:"Surface",definition:"A trench surrounding a tract of land and serving as a barrier.",
+ {name:"SBH100",fcode:"SBH100",desc:"Moat",geom:"Surface",thematic:"InlandWaterSrf",definition:"A trench surrounding a tract of land and serving as a barrier.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25852,7 +25852,7 @@ var schema = [
    }
   ]
  },
- {name:"SBH120",fcode:"SBH120",desc:"Rapids",geom:"Surface",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall.",
+ {name:"SBH120",fcode:"SBH120",desc:"Rapids",geom:"Surface",thematic:"InlandWaterSrf",definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25894,7 +25894,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH135",fcode:"SBH135",desc:"Rice Field",geom:"Surface",definition:"A tract that is periodically covered with water and is used for growing rice.",
+ {name:"SBH135",fcode:"SBH135",desc:"Rice Field",geom:"Surface",thematic:"InlandWaterSrf",definition:"A tract that is periodically covered with water and is used for growing rice.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -25951,7 +25951,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH140",fcode:"SBH140",desc:"River",geom:"Surface",definition:"A natural flowing watercourse.",
+ {name:"SBH140",fcode:"SBH140",desc:"River",geom:"Surface",thematic:"InlandWaterSrf",definition:"A natural flowing watercourse.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26069,7 +26069,7 @@ var schema = [
    }
   ]
  },
- {name:"SBH150",fcode:"SBH150",desc:"Salt Flat",geom:"Surface",definition:"A flat area of natural surface salt deposits.",
+ {name:"SBH150",fcode:"SBH150",desc:"Salt Flat",geom:"Surface",thematic:"PhysiographySrf",definition:"A flat area of natural surface salt deposits.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26111,7 +26111,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH155",fcode:"SBH155",desc:"Salt Evaporator",geom:"Surface",definition:"Shallow pools, normally man-made, used for the natural evaporation of water for the collection of salt.",
+ {name:"SBH155",fcode:"SBH155",desc:"Salt Evaporator",geom:"Surface",thematic:"CulturalSrf",definition:"Shallow pools, normally man-made, used for the natural evaporation of water for the collection of salt.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26165,7 +26165,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH160",fcode:"SBH160",desc:"Sabkha",geom:"Surface",definition:"A natural depression in arid or semi-arid regions whose bed is covered with salt encrusted clayey soil.",
+ {name:"SBH160",fcode:"SBH160",desc:"Sabkha",geom:"Surface",thematic:"PhysiographySrf",definition:"A natural depression in arid or semi-arid regions whose bed is covered with salt encrusted clayey soil.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26207,7 +26207,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH165",fcode:"SBH165",desc:"Spillway",geom:"Surface",definition:"A passage for surplus water to run over or around a dam.",
+ {name:"SBH165",fcode:"SBH165",desc:"Spillway",geom:"Surface",thematic:"InlandWaterSrf",definition:"A passage for surplus water to run over or around a dam.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26274,7 +26274,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH190",fcode:"SBH190",desc:"Lagoon",geom:"Surface",definition:"An enclosed area of salt or brackish water separated from the open sea by some more or less effective, but not complete, obstacle (for example: a sand bank).",
+ {name:"SBH190",fcode:"SBH190",desc:"Lagoon",geom:"Surface",thematic:"OceanEnvironmentSrf",definition:"An enclosed area of salt or brackish water separated from the open sea by some more or less effective, but not complete, obstacle (for example: a sand bank).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26329,7 +26329,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBH220",fcode:"SBH220",desc:"Waterwork",geom:"Surface",definition:"An establishment for storing, purifying, and supplying an area or town with water.",
+ {name:"SBH220",fcode:"SBH220",desc:"Waterwork",geom:"Surface",thematic:"CulturalSrf",definition:"An establishment for storing, purifying, and supplying an area or town with water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26409,7 +26409,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBH230",fcode:"SBH230",desc:"Water Well",geom:"Surface",definition:"A shaft sunk into the ground to reach and tap a supply of water intended for uses other than power generation, heating or the extraction of minerals.",
+ {name:"SBH230",fcode:"SBH230",desc:"Water Well",geom:"Surface",thematic:"InlandWaterSrf",definition:"A shaft sunk into the ground to reach and tap a supply of water intended for uses other than power generation, heating or the extraction of minerals.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26506,7 +26506,7 @@ var schema = [
    }
   ]
  },
- {name:"SBI005",fcode:"SBI005",desc:"Vessel Lift",geom:"Surface",definition:"A mechanical device for lifting vessels from the water.",
+ {name:"SBI005",fcode:"SBI005",desc:"Vessel Lift",geom:"Surface",thematic:"TransportationSrf",definition:"A mechanical device for lifting vessels from the water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26581,7 +26581,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBI006",fcode:"SBI006",desc:"Ship Elevator",geom:"Surface",definition:"A device used to raise ships vertically between water bodies with different elevations.",
+ {name:"SBI006",fcode:"SBI006",desc:"Ship Elevator",geom:"Surface",thematic:"InlandWaterSrf",definition:"A device used to raise ships vertically between water bodies with different elevations.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26658,7 +26658,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBI010",fcode:"SBI010",desc:"Cistern",geom:"Surface",definition:"A man-made container used for the collection and/or storage of water.",
+ {name:"SBI010",fcode:"SBI010",desc:"Cistern",geom:"Surface",thematic:"CulturalSrf",definition:"A man-made container used for the collection and/or storage of water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26746,7 +26746,7 @@ var schema = [
    }
   ]
  },
- {name:"SBI020",fcode:"SBI020",desc:"Dam",geom:"Surface",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
+ {name:"SBI020",fcode:"SBI020",desc:"Dam",geom:"Surface",thematic:"InlandWaterSrf",definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26862,7 +26862,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBI030",fcode:"SBI030",desc:"Lock",geom:"Surface",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
+ {name:"SBI030",fcode:"SBI030",desc:"Lock",geom:"Surface",thematic:"InlandWaterSrf",definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -26931,7 +26931,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBI044",fcode:"SBI044",desc:"Flood Control Structure",geom:"Surface",definition:"An artificial structure or gate that is utilized as a defense against flooding or storm surges.",
+ {name:"SBI044",fcode:"SBI044",desc:"Flood Control Structure",geom:"Surface",thematic:"InlandWaterSrf",definition:"An artificial structure or gate that is utilized as a defense against flooding or storm surges.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27012,7 +27012,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBI050",fcode:"SBI050",desc:"Water Intake Tower",geom:"Surface",definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
+ {name:"SBI050",fcode:"SBI050",desc:"Water Intake Tower",geom:"Surface",thematic:"InlandWaterSrf",definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27087,7 +27087,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SBJ020",fcode:"SBJ020",desc:"Moraine",geom:"Surface",definition:"An accumulation of soil and stone debris deposited by a glacier.",
+ {name:"SBJ020",fcode:"SBJ020",desc:"Moraine",geom:"Surface",thematic:"PhysiographySrf",definition:"An accumulation of soil and stone debris deposited by a glacier.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27129,7 +27129,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ030",fcode:"SBJ030",desc:"Glacier",geom:"Surface",definition:"A large mass or river of ice formed by accumulation and compaction of snow on higher ground that is moving slowly down a slope or valley from above the snowline.",
+ {name:"SBJ030",fcode:"SBJ030",desc:"Glacier",geom:"Surface",thematic:"PhysiographySrf",definition:"A large mass or river of ice formed by accumulation and compaction of snow on higher ground that is moving slowly down a slope or valley from above the snowline.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27171,7 +27171,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ031",fcode:"SBJ031",desc:"Crevasse",geom:"Surface",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
+ {name:"SBJ031",fcode:"SBJ031",desc:"Crevasse",geom:"Surface",thematic:"PhysiographySrf",definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27213,7 +27213,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ060",fcode:"SBJ060",desc:"Ice Peak",geom:"Surface",definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
+ {name:"SBJ060",fcode:"SBJ060",desc:"Ice Peak",geom:"Surface",thematic:"PhysiographySrf",definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27255,7 +27255,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ065",fcode:"SBJ065",desc:"Ice Shelf",geom:"Surface",definition:"A floating ice sheet of considerable thickness that is normally attached to the land along its landward edge.",
+ {name:"SBJ065",fcode:"SBJ065",desc:"Ice Shelf",geom:"Surface",thematic:"PhysiographySrf",definition:"A floating ice sheet of considerable thickness that is normally attached to the land along its landward edge.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27297,7 +27297,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ099",fcode:"SBJ099",desc:"Ice-cap",geom:"Surface",definition:"A permanent layer of ice covering a tract of land (especially a polar region) or the top of a mountain.",
+ {name:"SBJ099",fcode:"SBJ099",desc:"Ice-cap",geom:"Surface",thematic:"PhysiographySrf",definition:"A permanent layer of ice covering a tract of land (especially a polar region) or the top of a mountain.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27339,7 +27339,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ100",fcode:"SBJ100",desc:"Snow Field and/or Ice-field",geom:"Surface",definition:"A large area permanently covered by snow and/or ice.",
+ {name:"SBJ100",fcode:"SBJ100",desc:"Snow Field and/or Ice-field",geom:"Surface",thematic:"PhysiographySrf",definition:"A large area permanently covered by snow and/or ice.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27412,7 +27412,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SBJ110",fcode:"SBJ110",desc:"Tundra",geom:"Surface",definition:"A vast, nearly level, treeless arctic region usually with a marshy surface and underlying permafrost.",
+ {name:"SBJ110",fcode:"SBJ110",desc:"Tundra",geom:"Surface",thematic:"VegetationSrf",definition:"A vast, nearly level, treeless arctic region usually with a marshy surface and underlying permafrost.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27454,7 +27454,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDA005",fcode:"SDA005",desc:"Asphalt Lake",geom:"Surface",definition:"A natural accumulation of liquid asphalt.",
+ {name:"SDA005",fcode:"SDA005",desc:"Asphalt Lake",geom:"Surface",thematic:"PhysiographySrf",definition:"A natural accumulation of liquid asphalt.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27496,7 +27496,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDA010",fcode:"SDA010",desc:"Soil Surface Region",geom:"Surface",definition:"A region of the land that is homogeneous with respect to a soil characteristic.",
+ {name:"SDA010",fcode:"SDA010",desc:"Soil Surface Region",geom:"Surface",thematic:"PhysiographySrf",definition:"A region of the land that is homogeneous with respect to a soil characteristic.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27629,7 +27629,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDB061",fcode:"SDB061",desc:"Crevice",geom:"Surface",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock.",
+ {name:"SDB061",fcode:"SDB061",desc:"Crevice",geom:"Surface",thematic:"PhysiographySrf",definition:"A narrow opening or fissure produced by a crack in the land, especially in rock.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27671,7 +27671,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDB090",fcode:"SDB090",desc:"Embankment",geom:"Surface",definition:"A man-made raised long mound of earth or other material.",
+ {name:"SDB090",fcode:"SDB090",desc:"Embankment",geom:"Surface",thematic:"PhysiographySrf",definition:"A man-made raised long mound of earth or other material.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27777,7 +27777,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SDB115",fcode:"SDB115",desc:"Geothermal Outlet",geom:"Surface",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior.",
+ {name:"SDB115",fcode:"SDB115",desc:"Geothermal Outlet",geom:"Surface",thematic:"PhysiographySrf",definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27843,7 +27843,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDB160",fcode:"SDB160",desc:"Rock Formation",geom:"Surface",definition:"A significant outcropping of exposed bedrock.",
+ {name:"SDB160",fcode:"SDB160",desc:"Rock Formation",geom:"Surface",thematic:"PhysiographySrf",definition:"A significant outcropping of exposed bedrock.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27916,7 +27916,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDB170",fcode:"SDB170",desc:"Sand Dunes",geom:"Surface",definition:"One or more mounds or ridges of sand usually formed by the wind.",
+ {name:"SDB170",fcode:"SDB170",desc:"Sand Dunes",geom:"Surface",thematic:"PhysiographySrf",definition:"One or more mounds or ridges of sand usually formed by the wind.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -27980,7 +27980,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SDB180",fcode:"SDB180",desc:"Volcano",geom:"Surface",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
+ {name:"SDB180",fcode:"SDB180",desc:"Volcano",geom:"Surface",thematic:"PhysiographySrf",definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28042,7 +28042,7 @@ var schema = [
    }
   ]
  },
- {name:"SEA010",fcode:"SEA010",desc:"Crop Land",geom:"Surface",definition:"An area that has been tilled for the planting of crops.",
+ {name:"SEA010",fcode:"SEA010",desc:"Crop Land",geom:"Surface",thematic:"AgriculturalSrf",definition:"An area that has been tilled for the planting of crops.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28155,7 +28155,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEA030",fcode:"SEA030",desc:"Plant Nursery",geom:"Surface",definition:"A tract where plants (for example: shrubs, flowers, and/or trees) are grown for transplanting, seed, and/or grafting.",
+ {name:"SEA030",fcode:"SEA030",desc:"Plant Nursery",geom:"Surface",thematic:"AgriculturalSrf",definition:"A tract where plants (for example: shrubs, flowers, and/or trees) are grown for transplanting, seed, and/or grafting.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28205,7 +28205,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEA031",fcode:"SEA031",desc:"Botanic Garden",geom:"Surface",definition:"A culturally designated tract where plants are displayed.",
+ {name:"SEA031",fcode:"SEA031",desc:"Botanic Garden",geom:"Surface",thematic:"CulturalSrf",definition:"A culturally designated tract where plants are displayed.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28257,7 +28257,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEA040",fcode:"SEA040",desc:"Orchard",geom:"Surface",definition:"A tract covered by systematic plantings of trees that yield fruits (including nuts).",
+ {name:"SEA040",fcode:"SEA040",desc:"Orchard",geom:"Surface",thematic:"AgriculturalSrf",definition:"A tract covered by systematic plantings of trees that yield fruits (including nuts).",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28351,7 +28351,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEA050",fcode:"SEA050",desc:"Vineyard",geom:"Surface",definition:"A tract covered by the systematic planting of grape vines.",
+ {name:"SEA050",fcode:"SEA050",desc:"Vineyard",geom:"Surface",thematic:"AgriculturalSrf",definition:"A tract covered by the systematic planting of grape vines.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28412,7 +28412,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEA055",fcode:"SEA055",desc:"Hop Field",geom:"Surface",definition:"A tract covered by the systematic planting of hop vines.",
+ {name:"SEA055",fcode:"SEA055",desc:"Hop Field",geom:"Surface",thematic:"AgriculturalSrf",definition:"A tract covered by the systematic planting of hop vines.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28474,7 +28474,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEA060",fcode:"SEA060",desc:"Allotment Area",geom:"Surface",definition:"Area of land that is divided into plots for individual, non-commercial gardening or growing food plants.",
+ {name:"SEA060",fcode:"SEA060",desc:"Allotment Area",geom:"Surface",thematic:"AgriculturalSrf",definition:"Area of land that is divided into plots for individual, non-commercial gardening or growing food plants.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28524,7 +28524,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEB010",fcode:"SEB010",desc:"Grassland",geom:"Surface",definition:"A tract covered mainly by grasses that have little or no woody tissue.",
+ {name:"SEB010",fcode:"SEB010",desc:"Grassland",geom:"Surface",thematic:"VegetationSrf",definition:"A tract covered mainly by grasses that have little or no woody tissue.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28577,7 +28577,7 @@ var schema = [
    }
   ]
  },
- {name:"SEB020",fcode:"SEB020",desc:"Thicket",geom:"Surface",definition:"A tract covered mainly by low-growing, uncultured, woody plants that are thickly tangled together.",
+ {name:"SEB020",fcode:"SEB020",desc:"Thicket",geom:"Surface",thematic:"VegetationSrf",definition:"A tract covered mainly by low-growing, uncultured, woody plants that are thickly tangled together.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28621,7 +28621,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEC015",fcode:"SEC015",desc:"Forest",geom:"Surface",definition:"A tract of land primarily covered by trees and undergrowth.",
+ {name:"SEC015",fcode:"SEC015",desc:"Forest",geom:"Surface",thematic:"VegetationSrf",definition:"A tract of land primarily covered by trees and undergrowth.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28725,7 +28725,7 @@ var schema = [
    }
   ]
  },
- {name:"SEC020",fcode:"SEC020",desc:"Oasis",geom:"Surface",definition:"A fertile tract of land that occurs in a desert wherever a permanent supply of fresh water is available.",
+ {name:"SEC020",fcode:"SEC020",desc:"Oasis",geom:"Surface",thematic:"PhysiographySrf",definition:"A fertile tract of land that occurs in a desert wherever a permanent supply of fresh water is available.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28767,7 +28767,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SEC040",fcode:"SEC040",desc:"Cleared Way",geom:"Surface",definition:"A man-made cleared strip through a vegetated region.",
+ {name:"SEC040",fcode:"SEC040",desc:"Cleared Way",geom:"Surface",thematic:"VegetationSrf",definition:"A man-made cleared strip through a vegetated region.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28809,7 +28809,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SED010",fcode:"SED010",desc:"Marsh",geom:"Surface",definition:"A soft, poorly drained wetland that is characterized by the growth of only non-woody plants (for example: grasses) and often forms a transition region between a waterbody and land.",
+ {name:"SED010",fcode:"SED010",desc:"Marsh",geom:"Surface",thematic:"VegetationSrf",definition:"A soft, poorly drained wetland that is characterized by the growth of only non-woody plants (for example: grasses) and often forms a transition region between a waterbody and land.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28858,7 +28858,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SED020",fcode:"SED020",desc:"Swamp",geom:"Surface",definition:"A seasonally flooded, poorly drained wetland with more woody plants than a marsh and better drainage than a bog.",
+ {name:"SED020",fcode:"SED020",desc:"Swamp",geom:"Surface",thematic:"VegetationSrf",definition:"A seasonally flooded, poorly drained wetland with more woody plants than a marsh and better drainage than a bog.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28935,7 +28935,7 @@ var schema = [
    }
   ]
  },
- {name:"SFA002",fcode:"SFA002",desc:"Geopolitical Entity",geom:"Surface",definition:"A region controlled by a political community having an organized government and possessing internal and external sovereignty, most often as a State but sometimes having a dependent relationship on another political authority or a special sovereignty status.",
+ {name:"SFA002",fcode:"SFA002",desc:"Geopolitical Entity",geom:"Surface",thematic:"BoundariesSrf",definition:"A region controlled by a political community having an organized government and possessing internal and external sovereignty, most often as a State but sometimes having a dependent relationship on another political authority or a special sovereignty status.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -28977,7 +28977,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA003",fcode:"SFA003",desc:"Administrative Division",geom:"Surface",definition:"An administratively subordinate division of a geopolitical entity.",
+ {name:"SFA003",fcode:"SFA003",desc:"Administrative Division",geom:"Surface",thematic:"BoundariesSrf",definition:"An administratively subordinate division of a geopolitical entity.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29019,7 +29019,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA012",fcode:"SFA012",desc:"Contaminated Region",geom:"Surface",definition:"A region whose prevailing natural conditions have been degraded through contamination by harmful or objectionable substances.",
+ {name:"SFA012",fcode:"SFA012",desc:"Contaminated Region",geom:"Surface",thematic:"BoundariesSrf",definition:"A region whose prevailing natural conditions have been degraded through contamination by harmful or objectionable substances.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29085,7 +29085,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA015",fcode:"SFA015",desc:"Firing Range",geom:"Surface",definition:"A site designated for the purpose of discharging firearms or detonating munitions.",
+ {name:"SFA015",fcode:"SFA015",desc:"Firing Range",geom:"Surface",thematic:"CulturalSrf",definition:"A site designated for the purpose of discharging firearms or detonating munitions.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29169,7 +29169,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA100",fcode:"SFA100",desc:"Test Site",geom:"Surface",definition:"A site for the testing of technical products and equipment.",
+ {name:"SFA100",fcode:"SFA100",desc:"Test Site",geom:"Surface",thematic:"CulturalSrf",definition:"A site for the testing of technical products and equipment.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29223,7 +29223,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA165",fcode:"SFA165",desc:"Training Site",geom:"Surface",definition:"A site reserved for training.",
+ {name:"SFA165",fcode:"SFA165",desc:"Training Site",geom:"Surface",thematic:"CulturalSrf",definition:"A site reserved for training.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29300,7 +29300,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA210",fcode:"SFA210",desc:"Conservation Area",geom:"Surface",definition:"An area of land and/or sea especially dedicated to the protection and maintenance of biological diversity, and of natural and associated cultural resources, and managed through legal or other effective means.",
+ {name:"SFA210",fcode:"SFA210",desc:"Conservation Area",geom:"Surface",thematic:"BoundariesSrf",definition:"An area of land and/or sea especially dedicated to the protection and maintenance of biological diversity, and of natural and associated cultural resources, and managed through legal or other effective means.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29359,7 +29359,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SFA220",fcode:"SFA220",desc:"Cultural Conservation Area",geom:"Surface",definition:"An area that is protected (for example: designated as World Heritage Site) because of its cultural (for example: historical) importance.",
+ {name:"SFA220",fcode:"SFA220",desc:"Cultural Conservation Area",geom:"Surface",thematic:"CulturalSrf",definition:"An area that is protected (for example: designated as World Heritage Site) because of its cultural (for example: historical) importance.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29408,7 +29408,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SGA033",fcode:"SGA033",desc:"Aeronautical Radio Navigation Installation",geom:"Surface",definition:"A ground based piece of electronic equipment that provides aeronautical navigation guidance information or position data.",
+ {name:"SGA033",fcode:"SGA033",desc:"Aeronautical Radio Navigation Installation",geom:"Surface",thematic:"AeronauticalAidsNavigationSrf",definition:"A ground based piece of electronic equipment that provides aeronautical navigation guidance information or position data.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29489,7 +29489,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB005",fcode:"SGB005",desc:"Land Aerodrome",geom:"Surface",definition:"An aerodrome on land intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft.",
+ {name:"SGB005",fcode:"SGB005",desc:"Land Aerodrome",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"An aerodrome on land intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29595,7 +29595,7 @@ var schema = [
    {name:"ZVA",desc:"Aerodrome Elevation",optional:"R",definition:"The vertical distance above Mean Sea Level (MSL) of the highest point of the landing area.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB013",fcode:"SGB013",desc:"Aerodrome Beacon",geom:"Surface",definition:"A beacon used to indicate the location of an aerodrome from the air.",
+ {name:"SGB013",fcode:"SGB013",desc:"Aerodrome Beacon",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A beacon used to indicate the location of an aerodrome from the air.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29651,7 +29651,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB015",fcode:"SGB015",desc:"Apron",geom:"Surface",definition:"A defined area, on a land aerodrome/heliport, intended to accommodate aircraft/helicopters for purposes of loading and unloading passengers, mail or cargo, and for fuelling, parking or maintenance.",
+ {name:"SGB015",fcode:"SGB015",desc:"Apron",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A defined area, on a land aerodrome/heliport, intended to accommodate aircraft/helicopters for purposes of loading and unloading passengers, mail or cargo, and for fuelling, parking or maintenance.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29769,7 +29769,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SGB025",fcode:"SGB025",desc:"Blast Barrier",geom:"Surface",definition:"A barrier used to divert and/or dissipate jet and/or propeller blast.",
+ {name:"SGB025",fcode:"SGB025",desc:"Blast Barrier",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A barrier used to divert and/or dissipate jet and/or propeller blast.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29844,7 +29844,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB030",fcode:"SGB030",desc:"Helipad",geom:"Surface",definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters.",
+ {name:"SGB030",fcode:"SGB030",desc:"Helipad",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -29963,7 +29963,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SGB035",fcode:"SGB035",desc:"Heliport",geom:"Surface",definition:"An aerodrome intended to be used for the arrival, landing, takeoff or departure of vertical takeoff and landing aircraft/helicopters.",
+ {name:"SGB035",fcode:"SGB035",desc:"Heliport",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"An aerodrome intended to be used for the arrival, landing, takeoff or departure of vertical takeoff and landing aircraft/helicopters.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30041,7 +30041,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB040",fcode:"SGB040",desc:"Launch Pad",geom:"Surface",definition:"A designated site or structure from which a rocket or missile is launched.",
+ {name:"SGB040",fcode:"SGB040",desc:"Launch Pad",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A designated site or structure from which a rocket or missile is launched.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30116,7 +30116,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB045",fcode:"SGB045",desc:"Stopway",geom:"Surface",definition:"A defined rectangular area on the ground at the end of the take-off run available that has been prepared as a suitable area in which an aircraft can be stopped in the case of an abandoned take-off.",
+ {name:"SGB045",fcode:"SGB045",desc:"Stopway",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A defined rectangular area on the ground at the end of the take-off run available that has been prepared as a suitable area in which an aircraft can be stopped in the case of an abandoned take-off.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30221,7 +30221,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SGB055",fcode:"SGB055",desc:"Runway",geom:"Surface",definition:"A defined rectangular area on a land aerodrome prepared for the landing and take-off of aircraft.",
+ {name:"SGB055",fcode:"SGB055",desc:"Runway",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A defined rectangular area on a land aerodrome prepared for the landing and take-off of aircraft.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30339,7 +30339,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB065",fcode:"SGB065",desc:"Water Aerodrome",geom:"Surface",definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
+ {name:"SGB065",fcode:"SGB065",desc:"Water Aerodrome",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30419,7 +30419,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB070",fcode:"SGB070",desc:"Seaplane Run",geom:"Surface",definition:"A designated portion of water that is outlined by visual surface markings and used by seaplanes to land and take-off.",
+ {name:"SGB070",fcode:"SGB070",desc:"Seaplane Run",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A designated portion of water that is outlined by visual surface markings and used by seaplanes to land and take-off.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30482,7 +30482,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SGB075",fcode:"SGB075",desc:"Taxiway",geom:"Surface",definition:"A defined path at an aerodrome established for the taxiing of aircraft and intended to provide a ground movement link between one part of the aerodrome and another.",
+ {name:"SGB075",fcode:"SGB075",desc:"Taxiway",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A defined path at an aerodrome established for the taxiing of aircraft and intended to provide a ground movement link between one part of the aerodrome and another.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30606,7 +30606,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SGB230",fcode:"SGB230",desc:"Aircraft Hangar",geom:"Surface",definition:"A building for housing aircraft.",
+ {name:"SGB230",fcode:"SGB230",desc:"Aircraft Hangar",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A building for housing aircraft.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30752,7 +30752,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB250",fcode:"SGB250",desc:"Hardened Aircraft Shelter",geom:"Surface",definition:"A hardened structure built above or partially above ground that encloses aircraft to provide protection from enemy attack.",
+ {name:"SGB250",fcode:"SGB250",desc:"Hardened Aircraft Shelter",geom:"Surface",thematic:"AeronauticalFacilitySrf",definition:"A hardened structure built above or partially above ground that encloses aircraft to provide protection from enemy attack.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30897,7 +30897,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SGB485",fcode:"SGB485",desc:"Approach Lighting System",geom:"Surface",definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
+ {name:"SGB485",fcode:"SGB485",desc:"Approach Lighting System",geom:"Surface",thematic:"AeronauticalAidsNavigationSrf",definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -30989,7 +30989,7 @@ var schema = [
    {name:"UUI",desc:"Universal Unique Identifier",optional:"R",definition:"The Universal Unique Identifier (UUID) that is assigned to a feature in order to uniquely identify it for the purpose of maintaining relationships between features (relational database) and version control.",type:"String",defValue:"UNK"}
   ]
  },
- {name:"SSU001",fcode:"SSU001",desc:"Military Installation",geom:"Surface",definition:"An installation designed for military use.",
+ {name:"SSU001",fcode:"SSU001",desc:"Military Installation",geom:"Surface",thematic:"MilitaryInstallationsDefensiveStructuresSrf",definition:"An installation designed for military use.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -31058,7 +31058,7 @@ var schema = [
    }
   ]
  },
- {name:"SZD019",fcode:"SZD019",desc:"Miscellaneous Feature Type",geom:"Surface",definition:"Any feature type that falls within the scope of a feature type domain (for example: a feature coverage or a product specification) but is not explicitly specified in that domain.",
+ {name:"SZD019",fcode:"SZD019",desc:"Miscellaneous Feature Type",geom:"Surface",thematic:"FoundationSrf",definition:"Any feature type that falls within the scope of a feature type domain (for example: a feature coverage or a product specification) but is not explicitly specified in that domain.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
@@ -31110,7 +31110,7 @@ var schema = [
    {name:"ZVH",desc:"Highest Elevation",optional:"R",definition:"The elevation from a specified vertical datum to the highest point on a feature.",type:"Real",defValue:"-32767.0"}
   ]
  },
- {name:"SZD020",fcode:"SZD020",desc:"Void Collection Area",geom:"Surface",definition:"A data collection region lacking suitable source coverage and/or where data is not required.",
+ {name:"SZD020",fcode:"SZD020",desc:"Void Collection Area",geom:"Surface",thematic:"FoundationSrf",definition:"A data collection region lacking suitable source coverage and/or where data is not required.",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",definition:"A general evaluation of the horizontal accuracy of the geographic position of a feature, as a category.",type:"enumeration",defValue:"0",
     enumerations:[
