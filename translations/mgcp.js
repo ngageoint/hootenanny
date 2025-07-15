@@ -944,6 +944,12 @@ mgcp = {
       delete tags.landuse;
     }
 
+    if (attrs.F_CODE == 'AJ030')
+    {
+      tags.landuse = 'farmyard';
+      tags.farmyard = 'stockyard';
+    }
+
     if (attrs.F_CODE == 'AM030')
     {
       tags.building = 'silo';
@@ -1646,6 +1652,7 @@ mgcp = {
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
+      ["t.landuse == 'farmyard' && t.farmyard == 'stockyard'","a.F_CODE = 'AJ030'"],
       ["t.landuse == 'aquaculture' && t.aquaculture == 'fish'","a.F_CODE = 'BH051'"],
       ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
       ["t.landuse == 'industrial' && t.industrial == 'heating'","a.F_CODE = 'AD050'"],
@@ -1773,9 +1780,16 @@ mgcp = {
         break;
 
       case 'farmyard': // NOTE: This is different to farm && farmland
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '2'
-        break;
+        if (tags.farmyard == 'stockyard')
+        {
+          attrs.F_CODE = 'AJ030';
+          break;
+        } else {
+          attrs.F_CODE = 'AL010';
+          attrs.FFN = '2';
+          break;
+        }
+        
 
       case 'grass':
       case 'meadow':
