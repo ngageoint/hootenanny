@@ -2251,7 +2251,7 @@ mgcp = {
       }
     }
 
-    if (tags.flood_prone = 'yes')
+    if (tags.flood_prone == 'yes')
     {
       attrs.F_CODE = 'BH090';
     }
