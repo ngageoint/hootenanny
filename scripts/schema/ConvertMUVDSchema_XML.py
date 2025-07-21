@@ -79,6 +79,64 @@ def printJavascript(schema):
     print '];' # End of schema
 # End printJavascript
 
+# Modified printing function to print the Thematic Schema
+def printThematic(schema,spec):
+    print
+    print "var _global = (0, eval)('this');"
+    print 'if (!_global.%s)' % (spec)
+    print '{'
+    print ' _global.%s = {};' % (spec)
+    print '}'
+    print
+    print '%s.thematicSchema = [' % (spec)
+    num_feat = len(schema.keys()) # How many features in the schema?
+    for f in sorted(schema.keys()):
+
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom']); # name = geom + FCODE
+        if 'fdname' in schema[f]:
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
+        if 'thematic' in schema[f]:
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+        if 'definition' in schema[f]:
+            pString += 'definition:"%s",' % (schema[f]['definition'])
+
+        print pString
+        print '  columns:['
+
+        num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
+        for k in sorted(schema[f]['columns'].keys()):
+            if schema[f]['columns'][k]['type'] == 'enumeration':
+                aType = 'Integer'
+            else:
+                aType = schema[f]['columns'][k]['type']
+
+            aString = '   {name:"%s",desc:"%s",optional:"%s",type:"%s",defValue:"%s"' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],aType,schema[f]['columns'][k]['defValue'])
+
+            if 'length' in schema[f]['columns'][k]:
+                aString += ',length:"%s"' % (schema[f]['columns'][k]['length'])
+
+            if 'definition' in schema[f]['columns'][k]:
+                aString += ',definition:"%s",' % (schema[f]['columns'][k]['definition'])
+
+            if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                aString += '}'
+            else:
+                aString += '},'
+                num_attrib -= 1
+            print aString
+        print '  ]'
+
+        if num_feat == 1: # Are we at the last feature? yes = no trailing comma
+            print ' }'
+        else:
+            print ' },'
+            num_feat -= 1
+    print '] // End of %s.thematicSchema' % (spec)
+    print
+    # print 'exports.getthematicSchema = %s.schema.getThematicSchema;' % (spec)
+    print
+# End printThematic
+
 # XML Functions
 def processFeatureGeom(node):
     return node.firstChild.nodeValue[-2] == '_'
@@ -110,9 +168,34 @@ def readFeatures(xmlDoc,funcList):
 
     # Setup handy lists
     geoList = {'C':'Curve', 'P':'Point', 'S':'Surface', '_':'None' }
+    themAppndList = {'Curve':'Crv','Point':'Pnt','Surface':'Srf'}
     typeList = {'enumeration':'enumeration','CharacterString':'String','Integer':'Integer','Real':'Real'}
 
     tSchema = {}
+
+    # Parse and index the thematic feature classes
+    thematicLookup = {}
+    for val in xmlDoc.getElementsByTagName('Package'):
+        pName = ''
+        parentId = ''
+
+        package_id = u' ' + val.getAttribute('id').encode('utf8').strip()
+
+        for node in val.childNodes:
+
+            if node.localName == 'name':
+                pName = processSingleNode(val,'name')
+                thematicLookup[package_id] = {'name':pName}
+
+                continue
+
+            if node.localName == 'parent':
+                parentId = u' ' + node.getAttribute('idref').encode('utf8').strip()
+                if parentId in thematicLookup:
+                    thematicLookup[package_id]['parent'] = thematicLookup[parentId]['name']
+
+                    continue
+
 
     # Parse and index the enumerated values
     enumValue_lookup = {}
@@ -219,7 +302,7 @@ def readFeatures(xmlDoc,funcList):
                 tSchema[fCode]['fcode'] = fCode
                 tSchema[fCode]['columns'] = {}
                 tSchema[fCode]['columns']['FCODE'] = { 'name':'FCODE','desc':'Feature Code','type':'String','optional':'R','defValue':'','length':'5'}
-
+                tSchema[fCode]['thematic'] = ''
             # Process each node of the feature
             for node in feature.childNodes:
 
@@ -250,6 +333,11 @@ def readFeatures(xmlDoc,funcList):
                     geomChar = rawName[-1]
                     tSchema[fCode]['geom'] = fGeom
                     continue
+
+                if node.localName == 'package':
+                    package_id = u' ' + node.getAttribute('idref').encode('utf8').strip()
+                    tSchema[fCode]['thematic'] = thematicLookup[package_id]['parent'] + themAppndList[tSchema[fCode]['geom']]
+                    continue
                 
                 if node.localName == 'title':
                     continue
@@ -260,7 +348,7 @@ def readFeatures(xmlDoc,funcList):
                     tSchema[fCode]['name'] = fName.replace('_S','').replace('_P','').replace('_C','')
                     continue
                 
-                if node.localName == 'package' or node.localName == 'type':
+                if node.localName == 'type':
                     continue
                 
                 # Debug: If we didn't process a value for a node, print what we missed
@@ -268,6 +356,28 @@ def readFeatures(xmlDoc,funcList):
 
     return tSchema
 
+# Convert a schema to Thematic schema
+def makeThematic(schema):
+    tSchema = {}
+    for feature in schema:
+        thematicName = schema[feature]['thematic']
+
+        # Build a feature
+        if thematicName not in tSchema:
+            tSchema[thematicName] = {}
+            tSchema[thematicName]['name'] = thematicName
+            tSchema[thematicName]['fcode'] = ''
+            tSchema[thematicName]['geom'] = schema[feature]['geom']
+            tSchema[thematicName]['desc'] = thematicName
+            tSchema[thematicName]['columns'] = {}
+
+        for attr in schema[feature]['columns']:
+            if attr not in tSchema[thematicName]['columns']:
+                tSchema[thematicName]['columns'][attr] = {}
+                tSchema[thematicName]['columns'][attr] = schema[feature]['columns'][attr]
+
+    return tSchema
+# End of makeThematic
 
 ###########
 # Main Starts Here
@@ -313,13 +423,19 @@ if __name__ == "__main__":
 
     schema = readFeatures(xmlDoc,funcList)
 
+    # Now build a thematic schema
+    thematicSchema = makeThematic(schema)
+
     # Now dump the schema out
     if args.rules:
         printRules(schema)
     else:
         printCopyright()
-        printJSHeader('muvd')
-        printJavascript(schema)
-        printJSFooter('muvd')
+        if args.thematic:
+            printThematic(thematicSchema,'muvd')
+        else:
+            printJSHeader('muvd')
+            printJavascript(schema)
+            printJSFooter('muvd')
 
 # End
