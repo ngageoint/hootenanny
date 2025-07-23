@@ -1078,6 +1078,7 @@ mgcp = {
 
     case 'AA052': // Hydrocarbons Field
       tags.landuse = 'industrial';
+      tags.industrial = 'oil';
       break;
 
     case 'AD010': // Electric Power Plant
@@ -1184,6 +1185,18 @@ mgcp = {
           delete tags.landuse;
           break;
       }
+    case 'AM020': // Grain Storage Structure
+      tags.content = 'grain';
+      break;
+    case 'BB005': // Harbour
+      tags.harbour = 'yes';
+      tags['seamark:type'] = 'harbour';
+      tags.industrial = 'port';
+      break;
+    case 'BJ040': // Ice cliff
+      tags.natural = 'cliff';
+      tags.surface = 'ice';
+      break;
     case 'DB070': // Cut
       if (tags.material && !tags.surface)
       {
@@ -1691,7 +1704,8 @@ mgcp = {
       ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
-      ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"]
+      ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
+      ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -1799,7 +1813,7 @@ mgcp = {
         delete tags.landuse;
         break;
 
-      case 'industrial': // Deconflict with AA052 Hydrocarbons Field
+      case 'industrial':
         switch (tags.industrial)
         {
           case undefined: // Built up Area
@@ -1813,17 +1827,17 @@ mgcp = {
 
           case 'oil':
             tags.product = 'petroleum';
-            tags.industrial = 'hydrocarbons_field';
             delete tags.landuse;
+            attrs.F_CODE = 'AA052';
             break;
 
           case 'gas':
             tags.product = 'gas';
-            tags.industrial = 'hydrocarbons_field';
             delete tags.landuse;
+            attrs.F_CODE = 'AA052';
             break;
 
-          case 'hydrocarbons_field':
+          case 'hydrocarbons_field': // Unsupported tag in OSM, included here for legacy reasons
             delete tags.landuse;
             break;
         }
