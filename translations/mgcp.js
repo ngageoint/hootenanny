@@ -1223,6 +1223,13 @@ mgcp = {
           delete tags.landuse;
           break;
       }
+    case 'AL140':
+      tags.amenity = 'research_institute';
+      tags.research = 'particle_physics';
+      if (attrs.NAM) tags.operator = attrs.NAM;
+      delete tags.man_made;
+      delete tags.name;
+      break;
     case 'AM020': // Grain Storage Structure
       tags.content = 'grain';
       break;
@@ -2046,6 +2053,16 @@ mgcp = {
         delete tags.amenity;
         break;
     } // End switch Amenity
+
+    if (tags.amenity == 'research_institute' && tags.research == 'particle_physics')
+    {
+      attrs.F_CODE = 'AL140';
+      delete tags.amenity;
+      if (tags.operator)
+      {
+        attrs.NAM = tags.operator;
+      }
+    }
 
     // Cutlines and Highways
     // In OSM, a cutline is a cleared way, if it is a polygon then drop the highway info
