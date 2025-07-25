@@ -1153,6 +1153,8 @@ mgcp = {
     case 'AQ110': // Mooring airship
       tags.man_made = 'tower';
       tags.mooring = 'yes';
+      delete tags['seamark:type']
+      break;
 
     case 'AK040': // Athletic Field, Sports Ground
     case 'BA050': // Beach
@@ -1755,7 +1757,8 @@ mgcp = {
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
-      ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"]
+      ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
+      ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
