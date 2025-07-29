@@ -2344,6 +2344,29 @@ mgcp = {
       }
     }
 
+    if (!tags.arrangement && tags.man_made == 'pipeline')
+    {
+        switch (tags.count)
+        {
+          case undefined:
+            tags.arrangement = 'unknown';
+            break;
+          
+          case '1':
+            tags.arrangement = 'single';
+            break;
+          
+          case '2':
+            tags.arrangement = 'double';
+            break;
+
+          case '3':
+            tags.arrangement = 'multiple';
+            break;
+        }
+        delete tags.count;
+    }
+
     // We don't have BH220 in MGCP
     switch (tags.man_made)
     {
