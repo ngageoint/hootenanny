@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2025 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_TO_GEOMETRY_CONVERTER_H
@@ -106,7 +106,7 @@ public:
    * @return a geometry ID
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e, bool throwError = false, const bool statsFlag = false,
-                                                    const bool requireAreaForPolygonConversion = true);
+                                                    const bool requireAreaForPolygonConversion = false);
 
   void setRequireAreaForPolygonConversion(bool require)
   { _requireAreaForPolygonConversion = require; }

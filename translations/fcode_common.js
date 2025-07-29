@@ -253,7 +253,7 @@ fcodeCommon = {
       ['F_CODE','BB110','man_made','fish_traps'], // Fish Traps/Fish Weirs
       ['F_CODE','BB115','seamark:type','gridiron'], // GGDM3/NAS7 NAUTICAL_GRIDIRON
       ['F_CODE','BB150','beach_landing_site','yes'], // GGDM3/NAS7 BEACH_LANDING_SITE
-      ['F_CODE','BB155','seamark:type','signal_station'], // GGDM3/NAS7 Maritime Signal Station
+      ['F_CODE','BB155','seamark:type','signal_station_warning'], // GGDM3/NAS7 Maritime Signal Station
       ['F_CODE','BB199','dock','floating'], // Floating Dry Dock
       ['F_CODE','BB201','amenity','small_craft_facility'], // Small Craft Facility
       ['F_CODE','BB241','seamark:harbour:category','shipyard'], // Shipyard

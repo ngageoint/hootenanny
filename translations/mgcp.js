@@ -990,6 +990,7 @@ mgcp = {
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
       // ["t.public_transport == 'station'","t.bus = 'yes'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
+      ["t['subject_to_inundation'] == 'yes'","delete t['subject_to_inundation']; t.flood_prone = 'yes'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
       ["t.water && !(t.natural)","t.natural = 'water'"],
       ["t.wetland && !(t.natural)","t.natural = 'wetland'"]
@@ -2326,6 +2327,11 @@ mgcp = {
         tags.material = tags.surface;
         delete tags.surface;
       }
+    }
+
+    if (tags.flood_prone == 'yes')
+    {
+      attrs.F_CODE = 'BH090';
     }
 
     // Soil Surface Regions
