@@ -968,6 +968,13 @@ mgcp = {
       tags.natural = 'water';
     }
 
+    if (attrs.F_CODE == 'AC000')
+    {
+      delete tags.facility;
+      tags.landuse = 'industrial';
+      tags.industrial = 'factory';
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -1671,6 +1678,7 @@ mgcp = {
       ["t.landuse == 'farmyard' && t.farmyard == 'stockyard'","a.F_CODE = 'AJ030'"],
       ["t.landuse == 'aquaculture' && t.aquaculture == 'fish'","a.F_CODE = 'BH051'"],
       ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
+      ["t.landuse == 'industrial' && t.industrial == 'factory'","a.F_CODE = 'AC000'"],
       ["t.landuse == 'industrial' && t.industrial == 'heating'","a.F_CODE = 'AD050'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
@@ -2405,6 +2413,10 @@ mgcp = {
         attrs.F_CODE = 'AL010';
         attrs.FFN = '99';
         break;
+    }
+    if (tags.man_made == 'works')
+    {
+      attrs.F_CODE = 'AC000';
     }
 
     // Fix up water features from OSM
