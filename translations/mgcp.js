@@ -1064,6 +1064,41 @@ mgcp = {
     // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
     // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
+    if (attrs.F_CODE == 'AM040')
+    {
+      tags.man_made = 'heap';
+      switch (attrs.PPO) { // MGCP doesn't support as many options for ore type as OSM does, so we may not always get
+                           // the same result going back.
+        case '0':
+          break;
+        case '18':
+          tags.resource = 'coal';
+          break;
+        case '21':
+          tags.resource = 'coke';
+          break;
+        case '53':
+          tags.resource = 'gravel';
+          break;
+        case '69':
+          tags.resource = 'gold';
+          break;
+        case '95':
+          tags.resource = 'salt';
+          break;
+        case '96':
+          tags.resource = 'sand';
+          break;
+        case '110':
+          tags.resource = 'dimension_stone';
+          break;
+        default: // 999 or 996
+          tags.resource = 'other';
+          break;
+      }
+      delete tags.product;
+    }
+
     // Some FCODE specific rules
     switch (attrs.F_CODE)
     {
@@ -1123,6 +1158,12 @@ mgcp = {
       {
         tags.building = 'bunker';
       }
+      break;
+    
+    case 'AQ110': // Mooring airship
+      tags.man_made = 'tower';
+      tags.mooring = 'yes';
+      delete tags['seamark:type']
       break;
 
     case 'AK040': // Athletic Field, Sports Ground
@@ -1194,6 +1235,13 @@ mgcp = {
           delete tags.landuse;
           break;
       }
+    case 'AL140':
+      tags.amenity = 'research_institute';
+      tags.research = 'particle_physics';
+      if (attrs.NAM) tags.operator = attrs.NAM;
+      delete tags.man_made;
+      delete tags.name;
+      break;
     case 'AM020': // Grain Storage Structure
       tags.content = 'grain';
       break;
@@ -1204,6 +1252,10 @@ mgcp = {
       break;
     case 'BJ040': // Ice cliff
       tags.natural = 'cliff';
+      tags.surface = 'ice';
+      break;
+    case 'BJ060': // Ice peak
+      tags.natural = 'peak';
       tags.surface = 'ice';
       break;
     case 'DB070': // Cut
@@ -1694,7 +1746,7 @@ mgcp = {
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
       ["t.power == 'minor_line'","t.spower = 'minor_line'"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
-      ["t.resource","t.product = t.resource; delete t.resource"],
+      ["t.resource && t.man_made != 'heap'","t.product = t.resource; delete t.resource"],
       ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
       // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
       ["t.tourism == 'information' && t.information","delete t.tourism"],
@@ -1717,7 +1769,9 @@ mgcp = {
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
-      ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"]
+      ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
+      ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
+      ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -2015,6 +2069,16 @@ mgcp = {
         delete tags.amenity;
         break;
     } // End switch Amenity
+
+    if (tags.amenity == 'research_institute' && tags.research == 'particle_physics')
+    {
+      attrs.F_CODE = 'AL140';
+      delete tags.amenity;
+      if (tags.operator)
+      {
+        attrs.NAM = tags.operator;
+      }
+    }
 
     // Cutlines and Highways
     // In OSM, a cutline is a cleared way, if it is a polygon then drop the highway info
@@ -2339,6 +2403,59 @@ mgcp = {
       }
     } // End loading
 
+    if (tags.man_made == 'heap' || tags.landuse == 'mineral_pile') { // landuse = mineral_pile is not supported by OSM
+      switch (tags.resource) {
+        case undefined:
+          attrs.PPO = '0';
+          break;
+        case 'coal':
+          attrs.PPO = '18';
+          break;
+        case 'coke':
+          attrs.PPO = '21';
+          break;
+        case 'gravel':
+          attrs.PPO = '53';
+          break;
+        case 'gold':
+        case 'silver':
+        case 'copper':
+        case 'iron_ore':
+        case 'aluminum':
+        case 'lead':
+        case 'nickel':
+        case 'tin':
+        case 'zinc':
+        case 'cobalt':
+        case 'zirconium':
+        case 'bronze':
+        case 'brass':
+        case 'titanium':
+          attrs.PPO = '69';
+          break;
+        case 'salt':
+          attrs.PPO = '95';
+          break;
+        case 'sand':
+          attrs.PPO = '96';
+          break;
+        case 'granite':
+        case 'slate':
+        case 'limestone':
+        case 'dimension_stone':
+          attrs.PPO = '110';
+          break;
+        default:
+          if (tags.resource && tags.resource.includes(';')) { // multiple ore types
+            attrs.PPO = '996'
+          }
+          else {
+            attrs.PPO = '999';
+          }
+          break;
+      }
+    }
+
     // Product vs substance vs resource.  Sigh...
     if (!tags.product)
     {
@@ -2399,6 +2516,17 @@ mgcp = {
         delete tags.man_made;
         attrs.F_CODE = 'AM070'; // Storage Tank
         tags.product = 'gas';
+        break;
+
+      case 'mast':
+      case 'tower':
+        if (tags.mooring = 'yes') { // This combination of tags is specifically for a mooring airship
+          attrs.F_CODE = 'AQ110';
+        }
+        break;
+
+      case 'offshore_construction': // Legacy support for a non-OSM tag
+        attrs.F_CODE = 'BD110';
         break;
 
       case 'water_well': // Fixing these since it is convenient

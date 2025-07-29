@@ -57,6 +57,7 @@ mgcp.rules = {
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
+    ['F_CODE','AM040','man_made','heap'],
     ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
     ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
     ['F_CODE','AT060','communication','line'], // Communication Line - NFDD AT005
@@ -68,7 +69,7 @@ mgcp.rules = {
     ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
-    ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
+    ['F_CODE','BD110','man_made','offshore_platform'], // Offshore Platform - NFDD BD115
     ['F_CODE','BD130','seamark:type','obstruction'], // Hazardous Rock Point - NFDD BD130
     ['F_CODE','BD130','seamark:type','rock'], // Hazardous Rock Point - NFDD BD130
     ['F_CODE','BH060','water:race','flume'], // Flume - NFDD BH065
@@ -83,7 +84,8 @@ mgcp.rules = {
     ['F_CODE','GA034','airmark','beacon'], // Aeronautical Radio Navigation Service - TDS GA033
     ['F_CODE','GB220','aeroway','obstacle'], // Aeronautical Obstacle - No replacement code
     ['F_CODE','GB485','aeroway','navigationaid'], // Approach Lighting System - Not in TDS
-    ['F_CODE','AI030','amenity','refugee_site']
+    ['F_CODE','AI030','amenity','refugee_site'],
+    ['F_CODE','SU001','military','base']
     ], // End fcodeOne2oneV4
 
     // These are for finding an FCODE for export.
@@ -188,7 +190,6 @@ mgcp.rules = {
     ['F_CODE','ZD040','natural','bay'], // From OSM
     ['F_CODE','ZD040','natural','cape'], // From OSM
     ['F_CODE','ZD040','natural','hill'], // From OSM
-    ['F_CODE','ZD040','natural','peak'], // From OSM
     ['F_CODE','ZD040','natural','valley'], // From GeoNames
     // ['F_CODE','ZD040','place','county'], // From OSM
     // ['F_CODE','ZD040','place','neighbourhood'], // From OSM
