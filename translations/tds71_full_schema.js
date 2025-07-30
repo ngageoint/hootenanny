@@ -867,7 +867,7 @@ var full_HZD = [
 ];
 
 var schema = [
- {name:"ADMINISTRATIVE_BOUNDARY_C",fcode:"FA000",desc:"Administrative Boundary",geom:"Line",fcsubtype:"100405",fdname:"TDS_CARTO",thematic:"AdministrativeBoundaryCrv",
+ {name:"ADMINISTRATIVE_BOUNDARY_C",fcode:"FA000",desc:"Administrative Boundary",geom:"Line",fcsubtype:"FA000_Administrative_Boundary_Line",fdname:"TDS_CARTO",thematic:"AdministrativeBoundaryCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -924,7 +924,7 @@ var schema = [
      {name:"De Jure",value:"4"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100405"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA000_Administrative_Boundary_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA000"},
    {name:"LSP",desc:"Geopolitical Line Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -1014,7 +1014,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ADMINISTRATIVE_SUBDIVISION_S",fcode:"FA003",desc:"Administrative Subdivision",geom:"Area",fcsubtype:"100407",fdname:"TDS_CARTO",thematic:"AdministrativeBoundarySrf",
+ {name:"ADMINISTRATIVE_SUBDIVISION_S",fcode:"FA003",desc:"Administrative Subdivision",geom:"Area",fcsubtype:"FA003_Administrative_Subdivision_Area",fdname:"TDS_CARTO",thematic:"AdministrativeBoundarySrf",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -1078,7 +1078,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100407"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA003_Administrative_Subdivision_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA003"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -1116,13 +1116,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AERATION_BASIN_S",fcode:"AB040",desc:"Aeration Basin",geom:"Area",fcsubtype:"100010",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"AERATION_BASIN_S",fcode:"AB040",desc:"Aeration Basin",geom:"Area",fcsubtype:"AB040_Aeration_Basin_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100010"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB040_Aeration_Basin_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB040"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1179,7 +1179,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AERIAL_FARM_P",fcode:"AT012",desc:"Aerial Farm",geom:"Point",fcsubtype:"100202",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"AERIAL_FARM_P",fcode:"AT012",desc:"Aerial Farm",geom:"Point",fcsubtype:"AT012_Aerial_Farm_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1197,7 +1197,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100202"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT012_Aerial_Farm_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -1301,7 +1301,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AERIAL_FARM_S",fcode:"AT012",desc:"Aerial Farm",geom:"Area",fcsubtype:"100202",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"AERIAL_FARM_S",fcode:"AT012",desc:"Aerial Farm",geom:"Area",fcsubtype:"AT012_Aerial_Farm_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1319,7 +1319,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100202"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT012_Aerial_Farm_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -1423,7 +1423,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AERODROME_BEACON_P",fcode:"GB013",desc:"Aerodrome Beacon",geom:"Point",fcsubtype:"114580",fdname:"TDS_CARTO",thematic:"AerodromeBeaconPnt",
+ {name:"AERODROME_BEACON_P",fcode:"GB013",desc:"Aerodrome Beacon",geom:"Point",fcsubtype:"GB013_Aerodrome_Beacon_Point",fdname:"TDS_CARTO",thematic:"AerodromeBeaconPnt",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -1466,7 +1466,7 @@ var schema = [
      {name:"Fixed with Alternating Flashing",value:"60"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"114580"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB013_Aerodrome_Beacon_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB013"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -1500,13 +1500,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AERONAUTICAL_NAVAIDS_P",fcode:"GA035",desc:"Aeronautical Navaids",geom:"Point",fcsubtype:"100497",fdname:"TDS_CARTO",thematic:"NavaidsPnt",
+ {name:"AERONAUTICAL_NAVAIDS_P",fcode:"GA035",desc:"Aeronautical Navaids",geom:"Point",fcsubtype:"GA035_Aeronautical_Navaids_Point",fdname:"TDS_CARTO",thematic:"NavaidsPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CHAN",desc:"CHAN",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100497"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA035_Aeronautical_Navaids_Point"},
    {name:"FREQ",desc:"FREQ",optional:"R",type:"String",defValue:"noInformation"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA035"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1563,7 +1563,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AERONAUTICAL_RADIO_NAVIGATION_INSTALLATION_P",fcode:"GA033",desc:"Aeronautical Radio Navigation Installation",geom:"Point",fcsubtype:"500002",fdname:"TDS_CARTO",thematic:"AeroRadioNavInstallationPnt",
+ {name:"AERONAUTICAL_RADIO_NAVIGATION_INSTALLATION_P",fcode:"GA033",desc:"Aeronautical Radio Navigation Installation",geom:"Point",fcsubtype:"GA033_Aeronautical_Radio_Navigation_Installation_Point",fdname:"TDS_CARTO",thematic:"AeroRadioNavInstallationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1621,7 +1621,7 @@ var schema = [
     ]
    },
    {name:"EEI",desc:"External Entity Identifier",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"500002"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA033_Aeronautical_Radio_Navigation_Installation_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA033"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
@@ -1724,7 +1724,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AIRCRAFT_HANGAR_P",fcode:"GB230",desc:"Aircraft Hangar",geom:"Point",fcsubtype:"100456",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"AIRCRAFT_HANGAR_P",fcode:"GB230",desc:"Aircraft Hangar",geom:"Point",fcsubtype:"GB230_Aircraft_Hangar_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1742,7 +1742,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100456"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB230_Aircraft_Hangar_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -1946,7 +1946,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AIRCRAFT_HANGAR_S",fcode:"GB230",desc:"Aircraft Hangar",geom:"Area",fcsubtype:"100456",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"AIRCRAFT_HANGAR_S",fcode:"GB230",desc:"Aircraft Hangar",geom:"Area",fcsubtype:"GB230_Aircraft_Hangar_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -1964,7 +1964,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100456"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB230_Aircraft_Hangar_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -2168,7 +2168,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AIRSPACE_S",fcode:"GA005",desc:"Airspace",geom:"Area",fcsubtype:"800078",fdname:"TDS_CARTO",thematic:"AirspaceSrf",
+ {name:"AIRSPACE_S",fcode:"GA005",desc:"Airspace",geom:"Area",fcsubtype:"GA005_Airspace_Area",fdname:"TDS_CARTO",thematic:"AirspaceSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AIA",desc:"Airspace Identifier",optional:"R",type:"String",defValue:"noInformation"},
@@ -2219,7 +2219,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"COUNTRY_CODE",desc:"Country Code",optional:"R",type:"textEnumeration",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"800078"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA005_Airspace_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA005"},
    {name:"NAA",desc:"Airspace Name",optional:"R",type:"String",defValue:"noInformation"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
@@ -2258,7 +2258,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMPHITHEATRE_P",fcode:"AK164",desc:"Amphitheatre",geom:"Point",fcsubtype:"100074",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"AMPHITHEATRE_P",fcode:"AK164",desc:"Amphitheatre",geom:"Point",fcsubtype:"AK164_Amphitheatre_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -2266,7 +2266,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100074"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK164_Amphitheatre_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK164"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -2325,7 +2325,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMPHITHEATRE_S",fcode:"AK164",desc:"Amphitheatre",geom:"Area",fcsubtype:"100074",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"AMPHITHEATRE_S",fcode:"AK164",desc:"Amphitheatre",geom:"Area",fcsubtype:"AK164_Amphitheatre_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -2333,7 +2333,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100074"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK164_Amphitheatre_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK164"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -2392,7 +2392,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMUSEMENT_PARK_ATTRACTION_C",fcode:"AK020",desc:"Amusement Park Attraction",geom:"Line",fcsubtype:"100053",fdname:"TDS",thematic:"RecreationCrv",
+ {name:"AMUSEMENT_PARK_ATTRACTION_C",fcode:"AK020",desc:"Amusement Park Attraction",geom:"Line",fcsubtype:"AK020_Amusement_Park_Attraction_Line",fdname:"TDS",thematic:"RecreationCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AMA",desc:"Amusement Attraction Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -2422,7 +2422,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100053"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK020_Amusement_Park_Attraction_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -2482,7 +2482,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMUSEMENT_PARK_ATTRACTION_P",fcode:"AK020",desc:"Amusement Park Attraction",geom:"Point",fcsubtype:"100053",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"AMUSEMENT_PARK_ATTRACTION_P",fcode:"AK020",desc:"Amusement Park Attraction",geom:"Point",fcsubtype:"AK020_Amusement_Park_Attraction_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AMA",desc:"Amusement Attraction Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -2512,7 +2512,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100053"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK020_Amusement_Park_Attraction_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -2572,7 +2572,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMUSEMENT_PARK_ATTRACTION_S",fcode:"AK020",desc:"Amusement Park Attraction",geom:"Area",fcsubtype:"100053",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"AMUSEMENT_PARK_ATTRACTION_S",fcode:"AK020",desc:"Amusement Park Attraction",geom:"Area",fcsubtype:"AK020_Amusement_Park_Attraction_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AMA",desc:"Amusement Attraction Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -2602,7 +2602,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100053"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK020_Amusement_Park_Attraction_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -2662,7 +2662,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMUSEMENT_PARK_P",fcode:"AK030",desc:"Amusement Park",geom:"Point",fcsubtype:"100054",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"AMUSEMENT_PARK_P",fcode:"AK030",desc:"Amusement Park",geom:"Point",fcsubtype:"AK030_Amusement_Park_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -2681,7 +2681,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100054"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK030_Amusement_Park_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -2854,7 +2854,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AMUSEMENT_PARK_S",fcode:"AK030",desc:"Amusement Park",geom:"Area",fcsubtype:"100054",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"AMUSEMENT_PARK_S",fcode:"AK030",desc:"Amusement Park",geom:"Area",fcsubtype:"AK030_Amusement_Park_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -2873,7 +2873,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100054"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK030_Amusement_Park_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -3046,13 +3046,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ANCHORAGE_P",fcode:"BB010",desc:"Anchorage",geom:"Point",fcsubtype:"100224",fdname:"TDS_CARTO",thematic:"AnchoragePnt",
+ {name:"ANCHORAGE_P",fcode:"BB010",desc:"Anchorage",geom:"Point",fcsubtype:"BB010_Anchorage_Point",fdname:"TDS_CARTO",thematic:"AnchoragePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100224"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB010_Anchorage_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB010"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -3088,13 +3088,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ANCHORAGE_S",fcode:"BB010",desc:"Anchorage",geom:"Area",fcsubtype:"100224",fdname:"TDS_CARTO",thematic:"AnchorageSrf",
+ {name:"ANCHORAGE_S",fcode:"BB010",desc:"Anchorage",geom:"Area",fcsubtype:"BB010_Anchorage_Area",fdname:"TDS_CARTO",thematic:"AnchorageSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100224"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB010_Anchorage_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB010"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -3130,12 +3130,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ANNOTATED_LOCATION_C",fcode:"ZD045",desc:"Annotated Location",geom:"Line",fcsubtype:"100476",fdname:"TDS",thematic:"InformationCrv",
+ {name:"ANNOTATED_LOCATION_C",fcode:"ZD045",desc:"Annotated Location",geom:"Line",fcsubtype:"ZD045_Annotated_Location_Line",fdname:"TDS",thematic:"InformationCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100476"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZD045_Annotated_Location_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZD045"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -3176,12 +3176,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ANNOTATED_LOCATION_P",fcode:"ZD045",desc:"Annotated Location",geom:"Point",fcsubtype:"100476",fdname:"TDS",thematic:"InformationPnt",
+ {name:"ANNOTATED_LOCATION_P",fcode:"ZD045",desc:"Annotated Location",geom:"Point",fcsubtype:"ZD045_Annotated_Location_Point",fdname:"TDS",thematic:"InformationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100476"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZD045_Annotated_Location_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZD045"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -3222,12 +3222,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ANNOTATED_LOCATION_S",fcode:"ZD045",desc:"Annotated Location",geom:"Area",fcsubtype:"100476",fdname:"TDS",thematic:"InformationSrf",
+ {name:"ANNOTATED_LOCATION_S",fcode:"ZD045",desc:"Annotated Location",geom:"Area",fcsubtype:"ZD045_Annotated_Location_Area",fdname:"TDS",thematic:"InformationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100476"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZD045_Annotated_Location_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZD045"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -3268,7 +3268,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"APRON_S",fcode:"GB015",desc:"Apron",geom:"Area",fcsubtype:"100438",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"APRON_S",fcode:"GB015",desc:"Apron",geom:"Area",fcsubtype:"GB015_Apron_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"APU",desc:"Apron Usage",optional:"R",type:"enumeration",defValue:"-999999",
@@ -3357,7 +3357,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100438"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB015_Apron_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB015"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -3562,12 +3562,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AQUATIC_VEGETATION_S",fcode:"BD061",desc:"Aquatic Vegetation",geom:"Area",fcsubtype:"100692",fdname:"TDS_CARTO",thematic:"AquaticVegetationSrf",
+ {name:"AQUATIC_VEGETATION_S",fcode:"BD061",desc:"Aquatic Vegetation",geom:"Area",fcsubtype:"BD061_Aquatic_Vegetation_Area",fdname:"TDS_CARTO",thematic:"AquaticVegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100692"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD061_Aquatic_Vegetation_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD061"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -3640,7 +3640,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AQUEDUCT_C",fcode:"BH010",desc:"Aqueduct",geom:"Line",fcsubtype:"100295",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"AQUEDUCT_C",fcode:"BH010",desc:"Aqueduct",geom:"Line",fcsubtype:"BH010_Aqueduct_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -3699,7 +3699,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100295"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH010_Aqueduct_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -3800,7 +3800,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"AQUEDUCT_S",fcode:"BH010",desc:"Aqueduct",geom:"Area",fcsubtype:"100295",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"AQUEDUCT_S",fcode:"BH010",desc:"Aqueduct",geom:"Area",fcsubtype:"BH010_Aqueduct_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -3859,7 +3859,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100295"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH010_Aqueduct_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -3960,7 +3960,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ARCADE_C",fcode:"AQ151",desc:"Arcade",geom:"Line",fcsubtype:"100192",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"ARCADE_C",fcode:"AQ151",desc:"Arcade",geom:"Line",fcsubtype:"AQ151_Arcade_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -3978,7 +3978,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100192"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ151_Arcade_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ151"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -4037,7 +4037,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ARCADE_S",fcode:"AQ151",desc:"Arcade",geom:"Area",fcsubtype:"100192",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"ARCADE_S",fcode:"AQ151",desc:"Arcade",geom:"Area",fcsubtype:"AQ151_Arcade_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -4055,7 +4055,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100192"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ151_Arcade_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ151"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -4114,14 +4114,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ARCHAEOLOGICAL_SITE_P",fcode:"AL012",desc:"Archaeological Site",geom:"Point",fcsubtype:"100082",fdname:"TDS",thematic:"CulturePnt",
+ {name:"ARCHAEOLOGICAL_SITE_P",fcode:"AL012",desc:"Archaeological Site",geom:"Point",fcsubtype:"AL012_Archaeological_Site_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100082"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL012_Archaeological_Site_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL012"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -4181,14 +4181,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ARCHAEOLOGICAL_SITE_S",fcode:"AL012",desc:"Archaeological Site",geom:"Area",fcsubtype:"100082",fdname:"TDS",thematic:"CultureSrf",
+ {name:"ARCHAEOLOGICAL_SITE_S",fcode:"AL012",desc:"Archaeological Site",geom:"Area",fcsubtype:"AL012_Archaeological_Site_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100082"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL012_Archaeological_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL012"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -4248,13 +4248,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ASPHALT_LAKE_S",fcode:"DA005",desc:"Asphalt Lake",geom:"Area",fcsubtype:"100356",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"ASPHALT_LAKE_S",fcode:"DA005",desc:"Asphalt Lake",geom:"Area",fcsubtype:"DA005_Asphalt_Lake_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100356"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DA005_Asphalt_Lake_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DA005"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -4300,7 +4300,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ASTRONOMICAL_OBSERVATORY_P",fcode:"AL142",desc:"Astronomical Observatory",geom:"Point",fcsubtype:"100111",fdname:"TDS",thematic:"StructurePnt",
+ {name:"ASTRONOMICAL_OBSERVATORY_P",fcode:"AL142",desc:"Astronomical Observatory",geom:"Point",fcsubtype:"AL142_Astronomical_Observatory_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -4319,7 +4319,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100111"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL142_Astronomical_Observatory_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -4466,7 +4466,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ASTRONOMICAL_OBSERVATORY_S",fcode:"AL142",desc:"Astronomical Observatory",geom:"Area",fcsubtype:"100111",fdname:"TDS",thematic:"StructureSrf",
+ {name:"ASTRONOMICAL_OBSERVATORY_S",fcode:"AL142",desc:"Astronomical Observatory",geom:"Area",fcsubtype:"AL142_Astronomical_Observatory_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -4485,7 +4485,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100111"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL142_Astronomical_Observatory_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -4632,7 +4632,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BARN_P",fcode:"AJ085",desc:"Barn",geom:"Point",fcsubtype:"100691",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"BARN_P",fcode:"AJ085",desc:"Barn",geom:"Point",fcsubtype:"AJ085_Barn_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -4650,7 +4650,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100691"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ085_Barn_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -4850,7 +4850,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BARN_S",fcode:"AJ085",desc:"Barn",geom:"Area",fcsubtype:"100691",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"BARN_S",fcode:"AJ085",desc:"Barn",geom:"Area",fcsubtype:"AJ085_Barn_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -4868,7 +4868,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100691"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ085_Barn_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -5068,7 +5068,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BASIN_GATE_C",fcode:"BI045",desc:"Basin Gate",geom:"Line",fcsubtype:"131206",fdname:"TDS",thematic:"TransportationWaterCrv",
+ {name:"BASIN_GATE_C",fcode:"BI045",desc:"Basin Gate",geom:"Line",fcsubtype:"BI045_Basin_Gate_Line",fdname:"TDS",thematic:"TransportationWaterCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5083,7 +5083,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131206"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI045_Basin_Gate_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI045"},
    {name:"HEI",desc:"Height of Object",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5183,7 +5183,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BASIN_GATE_P",fcode:"BI045",desc:"Basin Gate",geom:"Point",fcsubtype:"131206",fdname:"TDS",thematic:"TransportationWaterPnt",
+ {name:"BASIN_GATE_P",fcode:"BI045",desc:"Basin Gate",geom:"Point",fcsubtype:"BI045_Basin_Gate_Point",fdname:"TDS",thematic:"TransportationWaterPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5198,7 +5198,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131206"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI045_Basin_Gate_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI045"},
    {name:"HEI",desc:"Height of Object",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5298,7 +5298,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BILLBOARD_P",fcode:"AG050",desc:"Billboard",geom:"Point",fcsubtype:"121638",fdname:"TDS_CARTO",thematic:"BillboardPnt",
+ {name:"BILLBOARD_P",fcode:"AG050",desc:"Billboard",geom:"Point",fcsubtype:"AG050_Billboard_Point",fdname:"TDS_CARTO",thematic:"BillboardPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5317,7 +5317,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"121638"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AG050_Billboard_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -5464,7 +5464,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BLAST_FURNACE_P",fcode:"AC010",desc:"Blast Furnace",geom:"Point",fcsubtype:"100012",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"BLAST_FURNACE_P",fcode:"AC010",desc:"Blast Furnace",geom:"Point",fcsubtype:"AC010_Blast_Furnace_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5482,7 +5482,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100012"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC010_Blast_Furnace_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -5542,7 +5542,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BLAST_FURNACE_S",fcode:"AC010",desc:"Blast Furnace",geom:"Area",fcsubtype:"100012",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"BLAST_FURNACE_S",fcode:"AC010",desc:"Blast Furnace",geom:"Area",fcsubtype:"AC010_Blast_Furnace_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5560,7 +5560,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100012"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC010_Blast_Furnace_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -5620,7 +5620,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BOG_S",fcode:"BH015",desc:"Bog",geom:"Area",fcsubtype:"100296",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"BOG_S",fcode:"BH015",desc:"Bog",geom:"Area",fcsubtype:"BH015_Bog_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5699,7 +5699,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100296"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH015_Bog_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH015"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -5744,12 +5744,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BOUNDARY_MONUMENT_P",fcode:"ZB030",desc:"Boundary Monument",geom:"Point",fcsubtype:"100465",fdname:"TDS",thematic:"BoundaryPnt",
+ {name:"BOUNDARY_MONUMENT_P",fcode:"ZB030",desc:"Boundary Monument",geom:"Point",fcsubtype:"ZB030_Boundary_Monument_Point",fdname:"TDS",thematic:"BoundaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100465"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZB030_Boundary_Monument_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZB030"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -5841,7 +5841,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_C",fcode:"AQ040",desc:"Bridge",geom:"Line",fcsubtype:"100161",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"BRIDGE_C",fcode:"AQ040",desc:"Bridge",geom:"Line",fcsubtype:"AQ040_Bridge_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -5950,7 +5950,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DZC",desc:"Deck Count",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100161"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ040_Bridge_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ040"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6116,7 +6116,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_P",fcode:"AQ040",desc:"Bridge",geom:"Point",fcsubtype:"100161",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"BRIDGE_P",fcode:"AQ040",desc:"Bridge",geom:"Point",fcsubtype:"AQ040_Bridge_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6225,7 +6225,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DZC",desc:"Deck Count",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100161"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ040_Bridge_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ040"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6391,7 +6391,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_S",fcode:"AQ040",desc:"Bridge",geom:"Area",fcsubtype:"100161",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"BRIDGE_S",fcode:"AQ040",desc:"Bridge",geom:"Area",fcsubtype:"AQ040_Bridge_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6500,7 +6500,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DZC",desc:"Deck Count",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100161"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ040_Bridge_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ040"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6666,7 +6666,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_SPAN_C",fcode:"AQ045",desc:"Bridge Span",geom:"Line",fcsubtype:"100162",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"BRIDGE_SPAN_C",fcode:"AQ045",desc:"Bridge Span",geom:"Line",fcsubtype:"AQ045_Bridge_Span_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6751,7 +6751,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100162"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ045_Bridge_Span_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ045"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LC1",desc:"Load Class Type 1",optional:"R",type:"Integer",defValue:"-999999"},
@@ -6868,7 +6868,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_SPAN_P",fcode:"AQ045",desc:"Bridge Span",geom:"Point",fcsubtype:"100162",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"BRIDGE_SPAN_P",fcode:"AQ045",desc:"Bridge Span",geom:"Point",fcsubtype:"AQ045_Bridge_Span_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -6953,7 +6953,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100162"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ045_Bridge_Span_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ045"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LC1",desc:"Load Class Type 1",optional:"R",type:"Integer",defValue:"-999999"},
@@ -7070,7 +7070,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_SPAN_S",fcode:"AQ045",desc:"Bridge Span",geom:"Area",fcsubtype:"100162",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"BRIDGE_SPAN_S",fcode:"AQ045",desc:"Bridge Span",geom:"Area",fcsubtype:"AQ045_Bridge_Span_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -7155,7 +7155,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100162"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ045_Bridge_Span_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ045"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LC1",desc:"Load Class Type 1",optional:"R",type:"Integer",defValue:"-999999"},
@@ -7272,7 +7272,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_SUPERSTRUCTURE_P",fcode:"AQ050",desc:"Bridge Superstructure",geom:"Point",fcsubtype:"100163",fdname:"TDS_CARTO",thematic:"BridgeSuperStructurePnt",
+ {name:"BRIDGE_SUPERSTRUCTURE_P",fcode:"AQ050",desc:"Bridge Superstructure",geom:"Point",fcsubtype:"AQ050_Bridge_Superstructure_Point",fdname:"TDS_CARTO",thematic:"BridgeSuperStructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -7281,7 +7281,7 @@ var schema = [
    {name:"BRN",desc:"Bridge Reference Number",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100163"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ050_Bridge_Superstructure_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ050"},
    {name:"HEI",desc:"Height of Object",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -7340,14 +7340,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRIDGE_TOWER_P",fcode:"AQ055",desc:"Bridge Tower",geom:"Point",fcsubtype:"100164",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"BRIDGE_TOWER_P",fcode:"AQ055",desc:"Bridge Tower",geom:"Point",fcsubtype:"AQ055_Bridge_Tower_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"BRN",desc:"Bridge Reference Number",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100164"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ055_Bridge_Tower_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ055"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -7419,14 +7419,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BRUSH_S",fcode:"EB070",desc:"Brush",geom:"Area",fcsubtype:"100390",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"BRUSH_S",fcode:"EB070",desc:"Brush",geom:"Area",fcsubtype:"EB070_Brush_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100390"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EB070_Brush_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EB070"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -7473,7 +7473,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILDING_P",fcode:"AL013",desc:"Building",geom:"Point",fcsubtype:"100083",fdname:"TDS",thematic:"StructurePnt",
+ {name:"BUILDING_P",fcode:"AL013",desc:"Building",geom:"Point",fcsubtype:"AL013_Building_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -7493,7 +7493,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100083"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL013_Building_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -9163,7 +9163,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILDING_S",fcode:"AL013",desc:"Building",geom:"Area",fcsubtype:"100083",fdname:"TDS",thematic:"StructureSrf",
+ {name:"BUILDING_S",fcode:"AL013",desc:"Building",geom:"Area",fcsubtype:"AL013_Building_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -9183,7 +9183,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100083"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL013_Building_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -10853,7 +10853,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILDING_SUPERSTRUCTURE_C",fcode:"AL018",desc:"Building Superstructure",geom:"Line",fcsubtype:"100087",fdname:"TDS",thematic:"StructureCrv",
+ {name:"BUILDING_SUPERSTRUCTURE_C",fcode:"AL018",desc:"Building Superstructure",geom:"Line",fcsubtype:"AL018_Building_Superstructure_Line",fdname:"TDS",thematic:"StructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -10883,7 +10883,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100087"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL018_Building_Superstructure_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL018"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -10956,7 +10956,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILDING_SUPERSTRUCTURE_P",fcode:"AL018",desc:"Building Superstructure",geom:"Point",fcsubtype:"100087",fdname:"TDS",thematic:"StructurePnt",
+ {name:"BUILDING_SUPERSTRUCTURE_P",fcode:"AL018",desc:"Building Superstructure",geom:"Point",fcsubtype:"AL018_Building_Superstructure_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -10986,7 +10986,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100087"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL018_Building_Superstructure_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL018"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -11059,7 +11059,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILDING_SUPERSTRUCTURE_S",fcode:"AL018",desc:"Building Superstructure",geom:"Area",fcsubtype:"100087",fdname:"TDS",thematic:"StructureSrf",
+ {name:"BUILDING_SUPERSTRUCTURE_S",fcode:"AL018",desc:"Building Superstructure",geom:"Area",fcsubtype:"AL018_Building_Superstructure_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -11089,7 +11089,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100087"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL018_Building_Superstructure_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL018"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -11162,7 +11162,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILT_UP_AREA_P",fcode:"AL020",desc:"Built Up Area",geom:"Point",fcsubtype:"100089",fdname:"TDS",thematic:"SettlementPnt",
+ {name:"BUILT_UP_AREA_P",fcode:"AL020",desc:"Built Up Area",geom:"Point",fcsubtype:"AL020_Built_Up_Area_Point",fdname:"TDS",thematic:"SettlementPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -11188,7 +11188,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100089"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL020_Built_Up_Area_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -11285,7 +11285,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"BUILT_UP_AREA_S",fcode:"AL020",desc:"Built Up Area",geom:"Area",fcsubtype:"100089",fdname:"TDS",thematic:"SettlementSrf",
+ {name:"BUILT_UP_AREA_S",fcode:"AL020",desc:"Built Up Area",geom:"Area",fcsubtype:"AL020_Built_Up_Area_Area",fdname:"TDS",thematic:"SettlementSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -11311,7 +11311,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100089"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL020_Built_Up_Area_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -11408,7 +11408,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CABLEWAY_C",fcode:"AT041",desc:"Cableway",geom:"Line",fcsubtype:"100206",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"CABLEWAY_C",fcode:"AT041",desc:"Cableway",geom:"Line",fcsubtype:"AT041_Cableway_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CAT",desc:"Cableway Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -11426,7 +11426,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100206"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT041_Cableway_Line"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -11524,7 +11524,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CABLE_C",fcode:"AT005",desc:"Cable",geom:"Line",fcsubtype:"100199",fdname:"TDS",thematic:"UtilityInfrastructureCrv",
+ {name:"CABLE_C",fcode:"AT005",desc:"Cable",geom:"Line",fcsubtype:"AT005_Cable_Line",fdname:"TDS",thematic:"UtilityInfrastructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CAA",desc:"Controlling Authority",optional:"R",type:"enumeration",defValue:"-999999",
@@ -11601,7 +11601,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CST",desc:"Contained within Service Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100199"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT005_Cable_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AT005"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"KVA",desc:"Power Line Maximum Voltage",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -11698,12 +11698,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAIRN_P",fcode:"AL025",desc:"Cairn",geom:"Point",fcsubtype:"100091",fdname:"TDS",thematic:"CulturePnt",
+ {name:"CAIRN_P",fcode:"AL025",desc:"Cairn",geom:"Point",fcsubtype:"AL025_Cairn_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100091"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL025_Cairn_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL025"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -11762,7 +11762,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAMP_P",fcode:"AI030",desc:"Camp",geom:"Point",fcsubtype:"100041",fdname:"TDS_CARTO",thematic:"CampPnt",
+ {name:"CAMP_P",fcode:"AI030",desc:"Camp",geom:"Point",fcsubtype:"AI030_Camp_Point",fdname:"TDS_CARTO",thematic:"CampPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -11780,7 +11780,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100041"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AI030_Camp_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -11902,7 +11902,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAMP_S",fcode:"AI030",desc:"Camp",geom:"Area",fcsubtype:"100041",fdname:"TDS_CARTO",thematic:"CampSrf",
+ {name:"CAMP_S",fcode:"AI030",desc:"Camp",geom:"Area",fcsubtype:"AI030_Camp_Area",fdname:"TDS_CARTO",thematic:"CampSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -11920,7 +11920,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100041"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AI030_Camp_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -12042,13 +12042,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAMP_SITE_P",fcode:"AK060",desc:"Camp Site",geom:"Point",fcsubtype:"100057",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"CAMP_SITE_P",fcode:"AK060",desc:"Camp Site",geom:"Point",fcsubtype:"AK060_Camp_Site_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100057"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK060_Camp_Site_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK060"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12105,13 +12105,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAMP_SITE_S",fcode:"AK060",desc:"Camp Site",geom:"Area",fcsubtype:"100057",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"CAMP_SITE_S",fcode:"AK060",desc:"Camp Site",geom:"Area",fcsubtype:"AK060_Camp_Site_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100057"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK060_Camp_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK060"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12168,13 +12168,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CANE_S",fcode:"EC010",desc:"Cane",geom:"Area",fcsubtype:"100393",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"CANE_S",fcode:"EC010",desc:"Cane",geom:"Area",fcsubtype:"EC010_Cane_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100393"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC010_Cane_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12220,7 +12220,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CARAVAN_PARK_P",fcode:"AI020",desc:"Caravan Park",geom:"Point",fcsubtype:"100040",fdname:"TDS_CARTO",thematic:"CaravanParkPnt",
+ {name:"CARAVAN_PARK_P",fcode:"AI020",desc:"Caravan Park",geom:"Point",fcsubtype:"AI020_Caravan_Park_Point",fdname:"TDS_CARTO",thematic:"CaravanParkPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12238,7 +12238,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100040"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AI020_Caravan_Park_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -12348,7 +12348,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CARAVAN_PARK_S",fcode:"AI020",desc:"Caravan Park",geom:"Area",fcsubtype:"100040",fdname:"TDS",thematic:"SettlementSrf",
+ {name:"CARAVAN_PARK_S",fcode:"AI020",desc:"Caravan Park",geom:"Area",fcsubtype:"AI020_Caravan_Park_Area",fdname:"TDS",thematic:"SettlementSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12366,7 +12366,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100040"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AI020_Caravan_Park_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -12476,7 +12476,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CART_TRACK_C",fcode:"AP010",desc:"Cart Track",geom:"Line",fcsubtype:"100150",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"CART_TRACK_C",fcode:"AP010",desc:"Cart Track",geom:"Line",fcsubtype:"AP010_Cart_Track_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -12493,7 +12493,7 @@ var schema = [
    {name:"CIW",desc:"Closed in Winter",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100150"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP010_Cart_Track_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP010"},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -12614,7 +12614,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CASTLE_COMPLEX_P",fcode:"AL376",desc:"Castle Complex",geom:"Point",fcsubtype:"132642",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"CASTLE_COMPLEX_P",fcode:"AL376",desc:"Castle Complex",geom:"Point",fcsubtype:"AL376_Castle_Complex_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12633,7 +12633,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132642"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL376_Castle_Complex_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -12764,7 +12764,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CASTLE_COMPLEX_S",fcode:"AL376",desc:"Castle Complex",geom:"Area",fcsubtype:"132642",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"CASTLE_COMPLEX_S",fcode:"AL376",desc:"Castle Complex",geom:"Area",fcsubtype:"AL376_Castle_Complex_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12783,7 +12783,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132642"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL376_Castle_Complex_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -12914,7 +12914,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CASTLE_P",fcode:"AL375",desc:"Castle",geom:"Point",fcsubtype:"100128",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"CASTLE_P",fcode:"AL375",desc:"Castle",geom:"Point",fcsubtype:"AL375_Castle_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -12933,7 +12933,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100128"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL375_Castle_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -13065,7 +13065,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CASTLE_S",fcode:"AL375",desc:"Castle",geom:"Area",fcsubtype:"100128",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"CASTLE_S",fcode:"AL375",desc:"Castle",geom:"Area",fcsubtype:"AL375_Castle_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13084,7 +13084,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100128"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL375_Castle_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -13216,7 +13216,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CATALYTIC_CRACKER_P",fcode:"AC020",desc:"Catalytic Cracker",geom:"Point",fcsubtype:"100013",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"CATALYTIC_CRACKER_P",fcode:"AC020",desc:"Catalytic Cracker",geom:"Point",fcsubtype:"AC020_Catalytic_Cracker_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13234,7 +13234,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100013"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC020_Catalytic_Cracker_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -13336,7 +13336,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CATALYTIC_CRACKER_S",fcode:"AC020",desc:"Catalytic Cracker",geom:"Area",fcsubtype:"100013",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"CATALYTIC_CRACKER_S",fcode:"AC020",desc:"Catalytic Cracker",geom:"Area",fcsubtype:"AC020_Catalytic_Cracker_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13354,7 +13354,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100013"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC020_Catalytic_Cracker_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -13456,7 +13456,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAUSEWAY_STRUCTURE_C",fcode:"AQ063",desc:"Causeway Structure",geom:"Line",fcsubtype:"130381",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"CAUSEWAY_STRUCTURE_C",fcode:"AQ063",desc:"Causeway Structure",geom:"Line",fcsubtype:"AQ063_Causeway_Structure_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13473,7 +13473,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130381"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ063_Causeway_Structure_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ063"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -13618,7 +13618,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAUSEWAY_STRUCTURE_S",fcode:"AQ063",desc:"Causeway Structure",geom:"Area",fcsubtype:"130381",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"CAUSEWAY_STRUCTURE_S",fcode:"AQ063",desc:"Causeway Structure",geom:"Area",fcsubtype:"AQ063_Causeway_Structure_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13635,7 +13635,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130381"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ063_Causeway_Structure_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ063"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -13780,7 +13780,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CAVE_MOUTH_P",fcode:"DB029",desc:"Cave Mouth",geom:"Point",fcsubtype:"154961",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"CAVE_MOUTH_P",fcode:"DB029",desc:"Cave Mouth",geom:"Point",fcsubtype:"DB029_Cave_Mouth_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13797,7 +13797,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"154961"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB029_Cave_Mouth_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB029"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13883,7 +13883,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CEMETERY_P",fcode:"AL030",desc:"Cemetery",geom:"Point",fcsubtype:"100092",fdname:"TDS",thematic:"CulturePnt",
+ {name:"CEMETERY_P",fcode:"AL030",desc:"Cemetery",geom:"Point",fcsubtype:"AL030_Cemetery_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -13902,7 +13902,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100092"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL030_Cemetery_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -13981,7 +13981,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CEMETERY_S",fcode:"AL030",desc:"Cemetery",geom:"Area",fcsubtype:"100092",fdname:"TDS",thematic:"CultureSrf",
+ {name:"CEMETERY_S",fcode:"AL030",desc:"Cemetery",geom:"Area",fcsubtype:"AL030_Cemetery_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -14000,7 +14000,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100092"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL030_Cemetery_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -14079,13 +14079,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CHECKPOINT_P",fcode:"AH070",desc:"Checkpoint",geom:"Point",fcsubtype:"100039",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"CHECKPOINT_P",fcode:"AH070",desc:"Checkpoint",geom:"Point",fcsubtype:"AH070_Checkpoint_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100039"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH070_Checkpoint_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -14206,7 +14206,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CISTERN_P",fcode:"BI010",desc:"Cistern",geom:"Point",fcsubtype:"100329",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"CISTERN_P",fcode:"BI010",desc:"Cistern",geom:"Point",fcsubtype:"BI010_Cistern_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -14224,7 +14224,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100329"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI010_Cistern_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -14326,13 +14326,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CLEARED_WAY_C",fcode:"EC040",desc:"Cleared Way",geom:"Line",fcsubtype:"100396",fdname:"TDS",thematic:"VegetationCrv",
+ {name:"CLEARED_WAY_C",fcode:"EC040",desc:"Cleared Way",geom:"Line",fcsubtype:"EC040_Cleared_Way_Line",fdname:"TDS",thematic:"VegetationCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100396"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC040_Cleared_Way_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC040"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -14378,13 +14378,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CLEARED_WAY_S",fcode:"EC040",desc:"Cleared Way",geom:"Area",fcsubtype:"100396",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"CLEARED_WAY_S",fcode:"EC040",desc:"Cleared Way",geom:"Area",fcsubtype:"EC040_Cleared_Way_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100396"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC040_Cleared_Way_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC040"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -14430,7 +14430,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CONSERVATION_AREA_S",fcode:"FA210",desc:"Conservation Area",geom:"Area",fcsubtype:"100417",fdname:"TDS",thematic:"CultureSrf",
+ {name:"CONSERVATION_AREA_S",fcode:"FA210",desc:"Conservation Area",geom:"Area",fcsubtype:"FA210_Conservation_Area_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -14465,7 +14465,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100417"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA210_Conservation_Area_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA210"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -14510,7 +14510,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CONTROL_TOWER_P",fcode:"AQ060",desc:"Control Tower",geom:"Point",fcsubtype:"100167",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"CONTROL_TOWER_P",fcode:"AQ060",desc:"Control Tower",geom:"Point",fcsubtype:"AQ060_Control_Tower_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -14528,7 +14528,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100167"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ060_Control_Tower_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -14774,7 +14774,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CONTROL_TOWER_S",fcode:"AQ060",desc:"Control Tower",geom:"Area",fcsubtype:"100167",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"CONTROL_TOWER_S",fcode:"AQ060",desc:"Control Tower",geom:"Area",fcsubtype:"AQ060_Control_Tower_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -14792,7 +14792,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100167"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ060_Control_Tower_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -15038,7 +15038,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CONVEYOR_C",fcode:"AF020",desc:"Conveyor",geom:"Line",fcsubtype:"100026",fdname:"TDS",thematic:"IndustryCrv",
+ {name:"CONVEYOR_C",fcode:"AF020",desc:"Conveyor",geom:"Line",fcsubtype:"AF020_Conveyor_Line",fdname:"TDS",thematic:"IndustryCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -15095,7 +15095,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100026"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF020_Conveyor_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -15191,7 +15191,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CONVEYOR_P",fcode:"AF020",desc:"Conveyor",geom:"Point",fcsubtype:"100026",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"CONVEYOR_P",fcode:"AF020",desc:"Conveyor",geom:"Point",fcsubtype:"AF020_Conveyor_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -15248,7 +15248,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100026"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF020_Conveyor_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -15344,7 +15344,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"COOLING_TOWER_P",fcode:"AF030",desc:"Cooling Tower",geom:"Point",fcsubtype:"100028",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"COOLING_TOWER_P",fcode:"AF030",desc:"Cooling Tower",geom:"Point",fcsubtype:"AF030_Cooling_Tower_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -15362,7 +15362,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100028"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF030_Cooling_Tower_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -15464,7 +15464,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"COOLING_TOWER_S",fcode:"AF030",desc:"Cooling Tower",geom:"Area",fcsubtype:"100028",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"COOLING_TOWER_S",fcode:"AF030",desc:"Cooling Tower",geom:"Area",fcsubtype:"AF030_Cooling_Tower_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -15482,7 +15482,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100028"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF030_Cooling_Tower_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -15584,13 +15584,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"COURTYARD_S",fcode:"AL175",desc:"Courtyard",geom:"Area",fcsubtype:"100688",fdname:"TDS",thematic:"CultureSrf",
+ {name:"COURTYARD_S",fcode:"AL175",desc:"Courtyard",geom:"Area",fcsubtype:"AL175_Courtyard_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100688"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL175_Courtyard_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL175"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -15694,7 +15694,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CRANE_P",fcode:"AF040",desc:"Crane",geom:"Point",fcsubtype:"100029",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"CRANE_P",fcode:"AF040",desc:"Crane",geom:"Point",fcsubtype:"AF040_Crane_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -15732,7 +15732,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100029"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF040_Crane_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -15860,13 +15860,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CREVASSE_C",fcode:"BJ031",desc:"Crevasse",geom:"Line",fcsubtype:"100342",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"CREVASSE_C",fcode:"BJ031",desc:"Crevasse",geom:"Line",fcsubtype:"BJ031_Crevasse_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100342"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ031_Crevasse_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ031"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -15911,13 +15911,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CREVASSE_S",fcode:"BJ031",desc:"Crevasse",geom:"Area",fcsubtype:"100342",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"CREVASSE_S",fcode:"BJ031",desc:"Crevasse",geom:"Area",fcsubtype:"BJ031_Crevasse_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100342"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ031_Crevasse_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ031"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -15962,13 +15962,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CREVICE_C",fcode:"DB061",desc:"Crevice",geom:"Line",fcsubtype:"100365",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"CREVICE_C",fcode:"DB061",desc:"Crevice",geom:"Line",fcsubtype:"DB061_Crevice_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100365"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB061_Crevice_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB061"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -16037,13 +16037,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CREVICE_S",fcode:"DB061",desc:"Crevice",geom:"Area",fcsubtype:"100365",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"CREVICE_S",fcode:"DB061",desc:"Crevice",geom:"Area",fcsubtype:"DB061_Crevice_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100365"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB061_Crevice_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB061"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -16112,13 +16112,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CROP_LAND_S",fcode:"EA010",desc:"Crop Land",geom:"Area",fcsubtype:"100380",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"CROP_LAND_S",fcode:"EA010",desc:"Crop Land",geom:"Area",fcsubtype:"EA010_Crop_Land_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100380"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EA010_Crop_Land_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EA010"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16344,7 +16344,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CULVERT_C",fcode:"AQ065",desc:"Culvert",geom:"Line",fcsubtype:"100170",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"CULVERT_C",fcode:"AQ065",desc:"Culvert",geom:"Line",fcsubtype:"AQ065_Culvert_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16360,7 +16360,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100170"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ065_Culvert_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ065"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -16450,7 +16450,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CULVERT_P",fcode:"AQ065",desc:"Culvert",geom:"Point",fcsubtype:"100170",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"CULVERT_P",fcode:"AQ065",desc:"Culvert",geom:"Point",fcsubtype:"AQ065_Culvert_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16466,7 +16466,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100170"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ065_Culvert_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ065"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -16556,7 +16556,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CUT_C",fcode:"DB070",desc:"Cut",geom:"Line",fcsubtype:"100366",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"CUT_C",fcode:"DB070",desc:"Cut",geom:"Line",fcsubtype:"DB070_Cut_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16572,7 +16572,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100366"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB070_Cut_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB070"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16666,12 +16666,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"CUT_LINE_C",fcode:"DB071",desc:"Cut Line",geom:"Line",fcsubtype:"192101",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"CUT_LINE_C",fcode:"DB071",desc:"Cut Line",geom:"Line",fcsubtype:"DB071_Cut_Line_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"192101"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB071_Cut_Line_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB071"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -16750,7 +16750,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DAM_C",fcode:"BI020",desc:"Dam",geom:"Line",fcsubtype:"100330",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"DAM_C",fcode:"BI020",desc:"Dam",geom:"Line",fcsubtype:"BI020_Dam_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16789,7 +16789,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100330"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI020_Dam_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI020"},
    {name:"HGS",desc:"Spillway Height",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16928,7 +16928,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DAM_P",fcode:"BI020",desc:"Dam",geom:"Point",fcsubtype:"100330",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"DAM_P",fcode:"BI020",desc:"Dam",geom:"Point",fcsubtype:"BI020_Dam_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -16967,7 +16967,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100330"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI020_Dam_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI020"},
    {name:"HGS",desc:"Spillway Height",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17106,7 +17106,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DAM_S",fcode:"BI020",desc:"Dam",geom:"Area",fcsubtype:"100330",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"DAM_S",fcode:"BI020",desc:"Dam",geom:"Area",fcsubtype:"BI020_Dam_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17145,7 +17145,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100330"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI020_Dam_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI020"},
    {name:"HGS",desc:"Spillway Height",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17284,7 +17284,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DATASET_S",fcode:"ZI031",desc:"Dataset",geom:"Area",fcsubtype:"121591",fdname:"TDS",thematic:"ResourceSrf",
+ {name:"DATASET_S",fcode:"ZI031",desc:"Dataset",geom:"Area",fcsubtype:"ZI031_Dataset_Area",fdname:"TDS",thematic:"ResourceSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AVA",desc:"Absolute Vertical Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17296,7 +17296,7 @@ var schema = [
    {name:"ETS",desc:"Extraction Specification",optional:"R",type:"enumeration",defValue:"-999999",enumerations: full_ETS},
    {name:"ETZ",desc:"Extraction Specification Version",optional:"R",type:"String",defValue:"noInformation"},
    {name:"EVA",desc:"Elevation Vertical Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"121591"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZI031_Dataset_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZI031"},
    {name:"HVA",desc:"Height Vertical Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HZD",desc:"Geodetic Datum",optional:"R",type:"enumeration",defValue:"-999999",enumerations: full_HZD},
@@ -17420,13 +17420,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DEFENSIVE_REVETMENT_C",fcode:"GB050",desc:"Defensive Revetment",geom:"Line",fcsubtype:"100446",fdname:"TDS",thematic:"MilitaryCrv",
+ {name:"DEFENSIVE_REVETMENT_C",fcode:"GB050",desc:"Defensive Revetment",geom:"Line",fcsubtype:"GB050_Defensive_Revetment_Line",fdname:"TDS",thematic:"MilitaryCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100446"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB050_Defensive_Revetment_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17535,7 +17535,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DEPTH_CURVE_C",fcode:"BE010",desc:"Depth Curve",geom:"Line",fcsubtype:"100310",fdname:"TDS_CARTO",thematic:"DepthCurveCrv",
+ {name:"DEPTH_CURVE_C",fcode:"BE010",desc:"Depth Curve",geom:"Line",fcsubtype:"BE010_Depth_Curve_Line",fdname:"TDS_CARTO",thematic:"DepthCurveCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -17549,7 +17549,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CRV",desc:"Depth Curve or Contour value",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100310"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BE010_Depth_Curve_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BE010"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -17587,7 +17587,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DISH_AERIAL_P",fcode:"AT010",desc:"Dish Aerial",geom:"Point",fcsubtype:"100200",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"DISH_AERIAL_P",fcode:"AT010",desc:"Dish Aerial",geom:"Point",fcsubtype:"AT010_Dish_Aerial_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17604,7 +17604,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100200"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT010_Dish_Aerial_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AT010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -17687,14 +17687,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DISPOSAL_SITE_P",fcode:"AB000",desc:"Disposal Site",geom:"Point",fcsubtype:"100007",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"DISPOSAL_SITE_P",fcode:"AB000",desc:"Disposal Site",geom:"Point",fcsubtype:"AB000_Disposal_Site_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100007"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB000_Disposal_Site_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB000"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -17784,14 +17784,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DISPOSAL_SITE_S",fcode:"AB000",desc:"Disposal Site",geom:"Area",fcsubtype:"100007",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"DISPOSAL_SITE_S",fcode:"AB000",desc:"Disposal Site",geom:"Area",fcsubtype:"AB000_Disposal_Site_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100007"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB000_Disposal_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB000"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -17881,12 +17881,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DISTANCE_MEASURING_EQUIPMENT_P",fcode:"GA041",desc:"Distance Measuring Equipment",geom:"Point",fcsubtype:"800291",fdname:"TDS_CARTO",thematic:"DistanceMeasuringEquipmentPnt",
+ {name:"DISTANCE_MEASURING_EQUIPMENT_P",fcode:"GA041",desc:"Distance Measuring Equipment",geom:"Point",fcsubtype:"GA041_Distance_Measuring_Equipment_Point",fdname:"TDS_CARTO",thematic:"DistanceMeasuringEquipmentPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"800291"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA041_Distance_Measuring_Equipment_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA041"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
@@ -17921,7 +17921,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DITCH_C",fcode:"BH030",desc:"Ditch",geom:"Line",fcsubtype:"100298",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"DITCH_C",fcode:"BH030",desc:"Ditch",geom:"Line",fcsubtype:"BH030_Ditch_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -17969,7 +17969,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDA",desc:"Covered Drain",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100298"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH030_Ditch_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH030"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18046,7 +18046,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DITCH_S",fcode:"BH030",desc:"Ditch",geom:"Area",fcsubtype:"100298",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"DITCH_S",fcode:"BH030",desc:"Ditch",geom:"Area",fcsubtype:"BH030_Ditch_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18094,7 +18094,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDA",desc:"Covered Drain",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100298"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH030_Ditch_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH030"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18171,12 +18171,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DOLPHIN_P",fcode:"BB080",desc:"Dolphin",geom:"Point",fcsubtype:"100230",fdname:"TDS_CARTO",thematic:"DolphinPnt",
+ {name:"DOLPHIN_P",fcode:"BB080",desc:"Dolphin",geom:"Point",fcsubtype:"BB080_Dolphin_Point",fdname:"TDS_CARTO",thematic:"DolphinPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100230"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB080_Dolphin_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB080"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -18210,13 +18210,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DRAGONS_TEETH_C",fcode:"AL060",desc:"Dragons Teeth",geom:"Line",fcsubtype:"100096",fdname:"TDS",thematic:"MilitaryCrv",
+ {name:"DRAGONS_TEETH_C",fcode:"AL060",desc:"Dragons Teeth",geom:"Line",fcsubtype:"AL060_Dragons_Teeth_Line",fdname:"TDS",thematic:"MilitaryCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100096"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL060_Dragons_Teeth_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18298,13 +18298,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DRAGONS_TEETH_S",fcode:"AL060",desc:"Dragons Teeth",geom:"Area",fcsubtype:"100096",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"DRAGONS_TEETH_S",fcode:"AL060",desc:"Dragons Teeth",geom:"Area",fcsubtype:"AL060_Dragons_Teeth_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100096"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL060_Dragons_Teeth_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18386,7 +18386,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DRIVE_IN_THEATRE_P",fcode:"AK070",desc:"Drive In Theatre",geom:"Point",fcsubtype:"100059",fdname:"TDS_CARTO",thematic:"DriveInTheatrePnt",
+ {name:"DRIVE_IN_THEATRE_P",fcode:"AK070",desc:"Drive In Theatre",geom:"Point",fcsubtype:"AK070_Drive_In_Theatre_Point",fdname:"TDS_CARTO",thematic:"DriveInTheatrePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18405,7 +18405,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100059"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK070_Drive_In_Theatre_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -18506,7 +18506,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DRIVE_IN_THEATRE_S",fcode:"AK070",desc:"Drive In Theatre",geom:"Area",fcsubtype:"100059",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"DRIVE_IN_THEATRE_S",fcode:"AK070",desc:"Drive In Theatre",geom:"Area",fcsubtype:"AK070_Drive_In_Theatre_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18525,7 +18525,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100059"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK070_Drive_In_Theatre_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -18626,7 +18626,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"DRY_DOCK_S",fcode:"BB090",desc:"Dry Dock",geom:"Area",fcsubtype:"100233",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"DRY_DOCK_S",fcode:"BB090",desc:"Dry Dock",geom:"Area",fcsubtype:"BB090_Dry_Dock_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18644,7 +18644,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100233"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB090_Dry_Dock_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB090"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -18757,7 +18757,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ELECTRIC_POWER_STATION_P",fcode:"AD010",desc:"Electric Power Station",geom:"Point",fcsubtype:"100018",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"ELECTRIC_POWER_STATION_P",fcode:"AD010",desc:"Electric Power Station",geom:"Point",fcsubtype:"AD010_Electric_Power_Station_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18777,7 +18777,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"EPW",desc:"Electrical Power Generation Capacity",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100018"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD010_Electric_Power_Station_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -18917,7 +18917,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ELECTRIC_POWER_STATION_S",fcode:"AD010",desc:"Electric Power Station",geom:"Area",fcsubtype:"100018",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"ELECTRIC_POWER_STATION_S",fcode:"AD010",desc:"Electric Power Station",geom:"Area",fcsubtype:"AD010_Electric_Power_Station_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -18937,7 +18937,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"EPW",desc:"Electrical Power Generation Capacity",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100018"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD010_Electric_Power_Station_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -19077,7 +19077,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ELEVATION_CONTOUR_C",fcode:"CA010",desc:"Elevation Contour",geom:"Line",fcsubtype:"100353",fdname:"TDS_CARTO",thematic:"HypsographyCrv",
+ {name:"ELEVATION_CONTOUR_C",fcode:"CA010",desc:"Elevation Contour",geom:"Line",fcsubtype:"CA010_Elevation_Contour_Line",fdname:"TDS_CARTO",thematic:"HypsographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
@@ -19092,7 +19092,7 @@ var schema = [
      {name:"Tidal Water",value:"6"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100353"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"CA010_Elevation_Contour_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"CA010"},
    {name:"HQC",desc:"Hypsography Portrayal Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -19162,7 +19162,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"EMBANKMENT_C",fcode:"DB090",desc:"Embankment",geom:"Line",fcsubtype:"100368",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"EMBANKMENT_C",fcode:"DB090",desc:"Embankment",geom:"Line",fcsubtype:"DB090_Embankment_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19189,7 +19189,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100368"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB090_Embankment_Line"},
    {name:"FIC",desc:"Embankment Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -19353,7 +19353,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"EMBANKMENT_S",fcode:"DB090",desc:"Embankment",geom:"Area",fcsubtype:"100368",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"EMBANKMENT_S",fcode:"DB090",desc:"Embankment",geom:"Area",fcsubtype:"DB090_Embankment_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19380,7 +19380,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100368"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB090_Embankment_Area"},
    {name:"FIC",desc:"Embankment Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -19544,7 +19544,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ENGINEERED_EARTHWORK_C",fcode:"AH025",desc:"Engineered Earthwork",geom:"Line",fcsubtype:"132596",fdname:"TDS",thematic:"MilitaryCrv",
+ {name:"ENGINEERED_EARTHWORK_C",fcode:"AH025",desc:"Engineered Earthwork",geom:"Line",fcsubtype:"AH025_Engineered_Earthwork_Line",fdname:"TDS",thematic:"MilitaryCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19561,7 +19561,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132596"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH025_Engineered_Earthwork_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AH025"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19619,7 +19619,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ENGINEERED_EARTHWORK_S",fcode:"AH025",desc:"Engineered Earthwork",geom:"Area",fcsubtype:"132596",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"ENGINEERED_EARTHWORK_S",fcode:"AH025",desc:"Engineered Earthwork",geom:"Area",fcsubtype:"AH025_Engineered_Earthwork_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19636,7 +19636,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132596"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH025_Engineered_Earthwork_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AH025"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19694,14 +19694,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ENGINEERED_TURNAROUND_SITE_P",fcode:"AP033",desc:"Engineered Turnaround Site",geom:"Point",fcsubtype:"179969",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"ENGINEERED_TURNAROUND_SITE_P",fcode:"AP033",desc:"Engineered Turnaround Site",geom:"Point",fcsubtype:"AP033_Engineered_Turnaround_Site_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CIW",desc:"Closed in Winter",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"179969"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP033_Engineered_Turnaround_Site_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP033"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MES",desc:"Median Present",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -19792,7 +19792,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ENGINE_TEST_CELL_P",fcode:"AF060",desc:"Engine Test Cell",geom:"Point",fcsubtype:"100031",fdname:"TDS_CARTO",thematic:"EngineTestCellPnt",
+ {name:"ENGINE_TEST_CELL_P",fcode:"AF060",desc:"Engine Test Cell",geom:"Point",fcsubtype:"AF060_Engine_Test_Cell_Point",fdname:"TDS_CARTO",thematic:"EngineTestCellPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19821,7 +19821,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100031"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF060_Engine_Test_Cell_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -19889,7 +19889,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ENGINE_TEST_CELL_S",fcode:"AF060",desc:"Engine Test Cell",geom:"Area",fcsubtype:"100031",fdname:"TDS_CARTO",thematic:"EngineTestCellSrf",
+ {name:"ENGINE_TEST_CELL_S",fcode:"AF060",desc:"Engine Test Cell",geom:"Area",fcsubtype:"AF060_Engine_Test_Cell_Area",fdname:"TDS_CARTO",thematic:"EngineTestCellSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -19918,7 +19918,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100031"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF060_Engine_Test_Cell_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -19986,9 +19986,9 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ENTITY_COLLECTION_METADATA_S",fcode:"ZI039",desc:"Entity Collection Metadata",geom:"Area",fcsubtype:"132721",fdname:"TDS",thematic:"MetadataSrf",
+ {name:"ENTITY_COLLECTION_METADATA_S",fcode:"ZI039",desc:"Entity Collection Metadata",geom:"Area",fcsubtype:"ZI039_Entity_Collection_Metadata_Area",fdname:"TDS",thematic:"MetadataSrf",
   columns:[
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132721"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZI039_Entity_Collection_Metadata_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZI039"},
    {name:"MDE",desc:"Maintenance Date and Time",optional:"R",type:"String",defValue:"noInformation"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -20118,13 +20118,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ESKER_C",fcode:"DB100",desc:"Esker",geom:"Line",fcsubtype:"100369",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"ESKER_C",fcode:"DB100",desc:"Esker",geom:"Line",fcsubtype:"DB100_Esker_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100369"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB100_Esker_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB100"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -20172,7 +20172,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"EXCAVATING_MACHINE_P",fcode:"AF050",desc:"Excavating Machine",geom:"Point",fcsubtype:"100030",fdname:"TDS_CARTO",thematic:"ExcavatingMachinePnt",
+ {name:"EXCAVATING_MACHINE_P",fcode:"AF050",desc:"Excavating Machine",geom:"Point",fcsubtype:"AF050_Excavating_Machine_Point",fdname:"TDS_CARTO",thematic:"ExcavatingMachinePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -20191,7 +20191,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100030"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF050_Excavating_Machine_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -20251,14 +20251,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"EXTRACTION_MINE_P",fcode:"AA010",desc:"Extraction Mine",geom:"Point",fcsubtype:"100001",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"EXTRACTION_MINE_P",fcode:"AA010",desc:"Extraction Mine",geom:"Point",fcsubtype:"AA010_Extraction_Mine_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100001"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA010_Extraction_Mine_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -20514,14 +20514,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"EXTRACTION_MINE_S",fcode:"AA010",desc:"Extraction Mine",geom:"Area",fcsubtype:"100001",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"EXTRACTION_MINE_S",fcode:"AA010",desc:"Extraction Mine",geom:"Area",fcsubtype:"AA010_Extraction_Mine_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100001"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA010_Extraction_Mine_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -20777,7 +20777,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FACILITY_P",fcode:"AL010",desc:"Facility",geom:"Point",fcsubtype:"100080",fdname:"TDS",thematic:"FacilityPnt",
+ {name:"FACILITY_P",fcode:"AL010",desc:"Facility",geom:"Point",fcsubtype:"AL010_Facility_Point",fdname:"TDS",thematic:"FacilityPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -20796,7 +20796,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100080"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL010_Facility_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -22409,7 +22409,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FACILITY_S",fcode:"AL010",desc:"Facility",geom:"Area",fcsubtype:"100080",fdname:"TDS",thematic:"FacilitySrf",
+ {name:"FACILITY_S",fcode:"AL010",desc:"Facility",geom:"Area",fcsubtype:"AL010_Facility_Area",fdname:"TDS",thematic:"FacilitySrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -22428,7 +22428,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100080"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL010_Facility_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -24041,7 +24041,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FAIRGROUND_P",fcode:"AK090",desc:"Fairground",geom:"Point",fcsubtype:"100061",fdname:"TDS_CARTO",thematic:"FairGroundPnt",
+ {name:"FAIRGROUND_P",fcode:"AK090",desc:"Fairground",geom:"Point",fcsubtype:"AK090_Fairground_Point",fdname:"TDS_CARTO",thematic:"FairGroundPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -24060,7 +24060,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100061"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK090_Fairground_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -24200,7 +24200,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FAIRGROUND_S",fcode:"AK090",desc:"Fairground",geom:"Area",fcsubtype:"100061",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"FAIRGROUND_S",fcode:"AK090",desc:"Fairground",geom:"Area",fcsubtype:"AK090_Fairground_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -24219,7 +24219,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100061"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK090_Fairground_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -24359,7 +24359,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FENCE_C",fcode:"AL070",desc:"Fence",geom:"Line",fcsubtype:"100098",fdname:"TDS",thematic:"StructureCrv",
+ {name:"FENCE_C",fcode:"AL070",desc:"Fence",geom:"Line",fcsubtype:"AL070_Fence_Line",fdname:"TDS",thematic:"StructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"BAT",desc:"Barrier Top Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -24386,7 +24386,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100098"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL070_Fence_Line"},
    {name:"FTI",desc:"Fence Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -24492,7 +24492,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FERRY_CROSSING_C",fcode:"AQ070",desc:"Ferry Crossing",geom:"Line",fcsubtype:"100172",fdname:"TDS",thematic:"TransportationWaterCrv",
+ {name:"FERRY_CROSSING_C",fcode:"AQ070",desc:"Ferry Crossing",geom:"Line",fcsubtype:"AQ070_Ferry_Crossing_Line",fdname:"TDS",thematic:"TransportationWaterCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -24509,7 +24509,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100172"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ070_Ferry_Crossing_Line"},
    {name:"FER",desc:"Ferry Crossing Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -24640,7 +24640,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FERRY_CROSSING_P",fcode:"AQ070",desc:"Ferry Crossing",geom:"Point",fcsubtype:"100172",fdname:"TDS_CARTO",thematic:"FerryCrossingPnt",
+ {name:"FERRY_CROSSING_P",fcode:"AQ070",desc:"Ferry Crossing",geom:"Point",fcsubtype:"AQ070_Ferry_Crossing_Point",fdname:"TDS_CARTO",thematic:"FerryCrossingPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -24657,7 +24657,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100172"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ070_Ferry_Crossing_Point"},
    {name:"FER",desc:"Ferry Crossing Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -24788,7 +24788,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FERRY_STATION_P",fcode:"AQ080",desc:"Ferry Station",geom:"Point",fcsubtype:"100174",fdname:"TDS",thematic:"TransportationWaterPnt",
+ {name:"FERRY_STATION_P",fcode:"AQ080",desc:"Ferry Station",geom:"Point",fcsubtype:"AQ080_Ferry_Station_Point",fdname:"TDS",thematic:"TransportationWaterPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -24806,7 +24806,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100174"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ080_Ferry_Station_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -25004,7 +25004,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FERRY_STATION_S",fcode:"AQ080",desc:"Ferry Station",geom:"Area",fcsubtype:"100174",fdname:"TDS",thematic:"TransportationWaterSrf",
+ {name:"FERRY_STATION_S",fcode:"AQ080",desc:"Ferry Station",geom:"Area",fcsubtype:"AQ080_Ferry_Station_Area",fdname:"TDS",thematic:"TransportationWaterSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25022,7 +25022,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100174"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ080_Ferry_Station_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -25220,7 +25220,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FIRING_RANGE_P",fcode:"FA015",desc:"Firing Range",geom:"Point",fcsubtype:"100410",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"FIRING_RANGE_P",fcode:"FA015",desc:"Firing Range",geom:"Point",fcsubtype:"FA015_Firing_Range_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25238,7 +25238,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100410"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA015_Firing_Range_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -25375,7 +25375,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FIRING_RANGE_S",fcode:"FA015",desc:"Firing Range",geom:"Area",fcsubtype:"100410",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"FIRING_RANGE_S",fcode:"FA015",desc:"Firing Range",geom:"Area",fcsubtype:"FA015_Firing_Range_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25393,7 +25393,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100410"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA015_Firing_Range_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -25530,7 +25530,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FISH_FARM_FACILITY_P",fcode:"BH051",desc:"Fish Farm Facility",geom:"Point",fcsubtype:"191951",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"FISH_FARM_FACILITY_P",fcode:"BH051",desc:"Fish Farm Facility",geom:"Point",fcsubtype:"BH051_Fish_Farm_Facility_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25548,7 +25548,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"191951"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH051_Fish_Farm_Facility_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH051"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25641,7 +25641,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FISH_FARM_FACILITY_S",fcode:"BH051",desc:"Fish Farm Facility",geom:"Area",fcsubtype:"191951",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"FISH_FARM_FACILITY_S",fcode:"BH051",desc:"Fish Farm Facility",geom:"Area",fcsubtype:"BH051_Fish_Farm_Facility_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25659,7 +25659,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"191951"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH051_Fish_Farm_Facility_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH051"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25752,7 +25752,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FISH_WEIR_C",fcode:"BB110",desc:"Fish Weir",geom:"Line",fcsubtype:"100236",fdname:"TDS_CARTO",thematic:"FishWeirCrv",
+ {name:"FISH_WEIR_C",fcode:"BB110",desc:"Fish Weir",geom:"Line",fcsubtype:"BB110_Fish_Weir_Line",fdname:"TDS_CARTO",thematic:"FishWeirCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25766,7 +25766,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100236"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB110_Fish_Weir_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB110"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -25822,7 +25822,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FISH_WEIR_P",fcode:"BB110",desc:"Fish Weir",geom:"Point",fcsubtype:"100236",fdname:"TDS_CARTO",thematic:"FishWeirPnt",
+ {name:"FISH_WEIR_P",fcode:"BB110",desc:"Fish Weir",geom:"Point",fcsubtype:"BB110_Fish_Weir_Point",fdname:"TDS_CARTO",thematic:"FishWeirPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25836,7 +25836,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100236"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB110_Fish_Weir_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB110"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -25892,13 +25892,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLAGPOLE_P",fcode:"AL073",desc:"Flagpole",geom:"Point",fcsubtype:"100099",fdname:"TDS_CARTO",thematic:"FlagpolePnt",
+ {name:"FLAGPOLE_P",fcode:"AL073",desc:"Flagpole",geom:"Point",fcsubtype:"AL073_Flagpole_Point",fdname:"TDS_CARTO",thematic:"FlagpolePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AWP",desc:"Aeronautical Obstacle Light Present",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100099"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL073_Flagpole_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL073"},
    {name:"HEI",desc:"Height of Object",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25957,7 +25957,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLARE_PIPE_P",fcode:"AF070",desc:"Flare Pipe",geom:"Point",fcsubtype:"100032",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"FLARE_PIPE_P",fcode:"AF070",desc:"Flare Pipe",geom:"Point",fcsubtype:"AF070_Flare_Pipe_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -25974,7 +25974,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100032"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF070_Flare_Pipe_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF070"},
    {name:"GUG",desc:"Guyed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26071,7 +26071,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLOATING_DRY_DOCK_S",fcode:"BB199",desc:"Floating Dry Dock",geom:"Area",fcsubtype:"100243",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"FLOATING_DRY_DOCK_S",fcode:"BB199",desc:"Floating Dry Dock",geom:"Area",fcsubtype:"BB199_Floating_Dry_Dock_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26089,7 +26089,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100243"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB199_Floating_Dry_Dock_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB199"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -26164,7 +26164,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLOOD_CONTROL_STRUCTURE_C",fcode:"BI044",desc:"Flood Control Structure",geom:"Line",fcsubtype:"131207",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"FLOOD_CONTROL_STRUCTURE_C",fcode:"BI044",desc:"Flood Control Structure",geom:"Line",fcsubtype:"BI044_Flood_Control_Structure_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26182,7 +26182,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131207"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI044_Flood_Control_Structure_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI044"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26291,7 +26291,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLOOD_CONTROL_STRUCTURE_P",fcode:"BI044",desc:"Flood Control Structure",geom:"Point",fcsubtype:"131207",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"FLOOD_CONTROL_STRUCTURE_P",fcode:"BI044",desc:"Flood Control Structure",geom:"Point",fcsubtype:"BI044_Flood_Control_Structure_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26309,7 +26309,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131207"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI044_Flood_Control_Structure_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI044"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26418,7 +26418,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLOOD_CONTROL_STRUCTURE_S",fcode:"BI044",desc:"Flood Control Structure",geom:"Area",fcsubtype:"131207",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"FLOOD_CONTROL_STRUCTURE_S",fcode:"BI044",desc:"Flood Control Structure",geom:"Area",fcsubtype:"BI044_Flood_Control_Structure_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26436,7 +26436,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131207"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI044_Flood_Control_Structure_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI044"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26545,12 +26545,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FLOW_ARROW_P",fcode:"FLWAR",desc:"Flow Arrow",geom:"Point",fcsubtype:"999999",fdname:"TDS_CARTO",thematic:"FlowArrowPnt",
+ {name:"FLOW_ARROW_P",fcode:"FLWAR",desc:"Flow Arrow",geom:"Point",fcsubtype:"_Flow_Arrow_Point",fdname:"TDS_CARTO",thematic:"FlowArrowPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"999999"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"_Flow_Arrow_Point"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
    {name:"ZI001_SDP",desc:"Source Information : Source Description",optional:"R",type:"String",defValue:"noInformation"},
@@ -26586,13 +26586,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FORD_C",fcode:"BH070",desc:"Ford",geom:"Line",fcsubtype:"100302",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"FORD_C",fcode:"BH070",desc:"Ford",geom:"Line",fcsubtype:"BH070_Ford_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100302"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH070_Ford_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH070"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -26715,13 +26715,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FORD_P",fcode:"BH070",desc:"Ford",geom:"Point",fcsubtype:"100302",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"FORD_P",fcode:"BH070",desc:"Ford",geom:"Point",fcsubtype:"BH070_Ford_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100302"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH070_Ford_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH070"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -26844,7 +26844,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FORESHORE_S",fcode:"BA023",desc:"Foreshore",geom:"Area",fcsubtype:"100215",fdname:"TDS_CARTO",thematic:"ForeshoreSrf",
+ {name:"FORESHORE_S",fcode:"BA023",desc:"Foreshore",geom:"Area",fcsubtype:"BA023_Foreshore_Area",fdname:"TDS_CARTO",thematic:"ForeshoreSrf",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -26857,7 +26857,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100215"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BA023_Foreshore_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BA023"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -26905,7 +26905,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FOREST_C",fcode:"EC015",desc:"Forest",geom:"Line",fcsubtype:"130380",fdname:"TDS",thematic:"VegetationCrv",
+ {name:"FOREST_C",fcode:"EC015",desc:"Forest",geom:"Line",fcsubtype:"EC015_Forest_Line",fdname:"TDS",thematic:"VegetationCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -26913,7 +26913,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130380"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC015_Forest_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC015"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -26972,13 +26972,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FOREST_CLEARING_S",fcode:"EC060",desc:"Forest Clearing",geom:"Area",fcsubtype:"100398",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"FOREST_CLEARING_S",fcode:"EC060",desc:"Forest Clearing",geom:"Area",fcsubtype:"EC060_Forest_Clearing_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100398"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC060_Forest_Clearing_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC060"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -27023,7 +27023,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FOREST_S",fcode:"EC015",desc:"Forest",geom:"Area",fcsubtype:"130380",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"FOREST_S",fcode:"EC015",desc:"Forest",geom:"Area",fcsubtype:"EC015_Forest_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -27031,7 +27031,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130380"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC015_Forest_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC015"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -27090,7 +27090,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FORTIFIED_BUILDING_P",fcode:"AH055",desc:"Fortified Building",geom:"Point",fcsubtype:"132626",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"FORTIFIED_BUILDING_P",fcode:"AH055",desc:"Fortified Building",geom:"Point",fcsubtype:"AH055_Fortified_Building_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -27109,7 +27109,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132626"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH055_Fortified_Building_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -28756,7 +28756,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FORTIFIED_BUILDING_S",fcode:"AH055",desc:"Fortified Building",geom:"Area",fcsubtype:"132626",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"FORTIFIED_BUILDING_S",fcode:"AH055",desc:"Fortified Building",geom:"Area",fcsubtype:"AH055_Fortified_Building_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -28775,7 +28775,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132626"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH055_Fortified_Building_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -30422,13 +30422,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FOUNTAIN_P",fcode:"BH075",desc:"Fountain",geom:"Point",fcsubtype:"100303",fdname:"TDS",thematic:"CulturePnt",
+ {name:"FOUNTAIN_P",fcode:"BH075",desc:"Fountain",geom:"Point",fcsubtype:"BH075_Fountain_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100303"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH075_Fountain_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH075"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -30497,13 +30497,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FOUNTAIN_S",fcode:"BH075",desc:"Fountain",geom:"Area",fcsubtype:"100303",fdname:"TDS",thematic:"CultureSrf",
+ {name:"FOUNTAIN_S",fcode:"BH075",desc:"Fountain",geom:"Area",fcsubtype:"BH075_Fountain_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100303"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH075_Fountain_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH075"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -30572,7 +30572,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FUEL_STORAGE_FACILITY_P",fcode:"AM075",desc:"Fuel Storage Facility",geom:"Point",fcsubtype:"100141",fdname:"TDS",thematic:"StoragePnt",
+ {name:"FUEL_STORAGE_FACILITY_P",fcode:"AM075",desc:"Fuel Storage Facility",geom:"Point",fcsubtype:"AM075_Fuel_Storage_Facility_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -30590,7 +30590,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100141"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM075_Fuel_Storage_Facility_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -30710,7 +30710,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"FUEL_STORAGE_FACILITY_S",fcode:"AM075",desc:"Fuel Storage Facility",geom:"Area",fcsubtype:"100141",fdname:"TDS",thematic:"StorageSrf",
+ {name:"FUEL_STORAGE_FACILITY_S",fcode:"AM075",desc:"Fuel Storage Facility",geom:"Area",fcsubtype:"AM075_Fuel_Storage_Facility_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -30728,7 +30728,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100141"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM075_Fuel_Storage_Facility_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -30848,7 +30848,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GANTRY_P",fcode:"AL080",desc:"Gantry",geom:"Point",fcsubtype:"100101",fdname:"TDS",thematic:"StructurePnt",
+ {name:"GANTRY_P",fcode:"AL080",desc:"Gantry",geom:"Point",fcsubtype:"AL080_Gantry_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -30875,7 +30875,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100101"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL080_Gantry_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -30999,7 +30999,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GATE_C",fcode:"AP040",desc:"Gate",geom:"Line",fcsubtype:"100154",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"GATE_C",fcode:"AP040",desc:"Gate",geom:"Line",fcsubtype:"AP040_Gate_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31016,7 +31016,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100154"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP040_Gate_Line"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -31158,7 +31158,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GATE_P",fcode:"AP040",desc:"Gate",geom:"Point",fcsubtype:"100154",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"GATE_P",fcode:"AP040",desc:"Gate",geom:"Point",fcsubtype:"AP040_Gate_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31175,7 +31175,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100154"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP040_Gate_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -31317,13 +31317,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GEOLOGIC_FAULT_C",fcode:"DB110",desc:"Geologic Fault",geom:"Line",fcsubtype:"100370",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"GEOLOGIC_FAULT_C",fcode:"DB110",desc:"Geologic Fault",geom:"Line",fcsubtype:"DB110_Geologic_Fault_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100370"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB110_Geologic_Fault_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB110"},
    {name:"GFT",desc:"Geologic Fault Trace Visible",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31369,12 +31369,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GEOPHYSICAL_DATA_TRACK_LINE_C",fcode:"FA091",desc:"Geophysical Data Track Line",geom:"Line",fcsubtype:"100413",fdname:"TDS_CARTO",thematic:"GeophysicalDataTrackLineCrv",
+ {name:"GEOPHYSICAL_DATA_TRACK_LINE_C",fcode:"FA091",desc:"Geophysical Data Track Line",geom:"Line",fcsubtype:"FA091_Geophysical_Data_Track_Line_Line",fdname:"TDS_CARTO",thematic:"GeophysicalDataTrackLineCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100413"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA091_Geophysical_Data_Track_Line_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA091"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -31408,13 +31408,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GEOPOLITICAL_ENTITY_S",fcode:"FA002",desc:"Geopolitical Entity",geom:"Area",fcsubtype:"100406",fdname:"TDS_CARTO",thematic:"GeopoliticalEntitySrf",
+ {name:"GEOPOLITICAL_ENTITY_S",fcode:"FA002",desc:"Geopolitical Entity",geom:"Area",fcsubtype:"FA002_Geopolitical_Entity_Area",fdname:"TDS_CARTO",thematic:"GeopoliticalEntitySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100406"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA002_Geopolitical_Entity_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA002"},
    {name:"GEC",desc:"Geopolitical Entity Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -31470,14 +31470,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GEOTHERMAL_OUTLET_P",fcode:"DB115",desc:"Geothermal Outlet",geom:"Point",fcsubtype:"100371",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"GEOTHERMAL_OUTLET_P",fcode:"DB115",desc:"Geothermal Outlet",geom:"Point",fcsubtype:"DB115_Geothermal_Outlet_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DOF",desc:"Direction of Flow",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100371"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB115_Geothermal_Outlet_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB115"},
    {name:"GOT",desc:"Geothermal Outlet Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -31534,14 +31534,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GEOTHERMAL_OUTLET_S",fcode:"DB115",desc:"Geothermal Outlet",geom:"Area",fcsubtype:"100371",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"GEOTHERMAL_OUTLET_S",fcode:"DB115",desc:"Geothermal Outlet",geom:"Area",fcsubtype:"DB115_Geothermal_Outlet_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DOF",desc:"Direction of Flow",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100371"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB115_Geothermal_Outlet_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB115"},
    {name:"GOT",desc:"Geothermal Outlet Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -31598,13 +31598,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GLACIER_S",fcode:"BJ030",desc:"Glacier",geom:"Area",fcsubtype:"100341",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"GLACIER_S",fcode:"BJ030",desc:"Glacier",geom:"Area",fcsubtype:"BJ030_Glacier_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100341"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ030_Glacier_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ030"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -31650,7 +31650,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GOLF_COURSE_P",fcode:"AK100",desc:"Golf Course",geom:"Point",fcsubtype:"100062",fdname:"TDS_CARTO",thematic:"GolfCoursePnt",
+ {name:"GOLF_COURSE_P",fcode:"AK100",desc:"Golf Course",geom:"Point",fcsubtype:"AK100_Golf_Course_Point",fdname:"TDS_CARTO",thematic:"GolfCoursePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31669,7 +31669,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100062"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK100_Golf_Course_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK100"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31726,7 +31726,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GOLF_COURSE_S",fcode:"AK100",desc:"Golf Course",geom:"Area",fcsubtype:"100062",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"GOLF_COURSE_S",fcode:"AK100",desc:"Golf Course",geom:"Area",fcsubtype:"AK100_Golf_Course_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31745,7 +31745,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100062"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK100_Golf_Course_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK100"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31802,14 +31802,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GOLF_DRIVING_RANGE_S",fcode:"AK101",desc:"Golf Driving Range",geom:"Area",fcsubtype:"100063",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"GOLF_DRIVING_RANGE_S",fcode:"AK101",desc:"Golf Driving Range",geom:"Area",fcsubtype:"AK101_Golf_Driving_Range_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100063"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK101_Golf_Driving_Range_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK101"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31866,7 +31866,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRAIN_ELEVATOR_P",fcode:"AM030",desc:"Grain Elevator",geom:"Point",fcsubtype:"100134",fdname:"TDS",thematic:"StoragePnt",
+ {name:"GRAIN_ELEVATOR_P",fcode:"AM030",desc:"Grain Elevator",geom:"Point",fcsubtype:"AM030_Grain_Elevator_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -31884,7 +31884,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100134"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM030_Grain_Elevator_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -32025,7 +32025,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRAIN_ELEVATOR_S",fcode:"AM030",desc:"Grain Elevator",geom:"Area",fcsubtype:"100134",fdname:"TDS",thematic:"StorageSrf",
+ {name:"GRAIN_ELEVATOR_S",fcode:"AM030",desc:"Grain Elevator",geom:"Area",fcsubtype:"AM030_Grain_Elevator_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32043,7 +32043,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100134"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM030_Grain_Elevator_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -32184,7 +32184,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRAIN_STORAGE_STRUCTURE_P",fcode:"AM020",desc:"Grain Storage Structure",geom:"Point",fcsubtype:"100133",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"GRAIN_STORAGE_STRUCTURE_P",fcode:"AM020",desc:"Grain Storage Structure",geom:"Point",fcsubtype:"AM020_Grain_Storage_Structure_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32202,7 +32202,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100133"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM020_Grain_Storage_Structure_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -32343,7 +32343,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRAIN_STORAGE_STRUCTURE_S",fcode:"AM020",desc:"Grain Storage Structure",geom:"Area",fcsubtype:"100133",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"GRAIN_STORAGE_STRUCTURE_S",fcode:"AM020",desc:"Grain Storage Structure",geom:"Area",fcsubtype:"AM020_Grain_Storage_Structure_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32361,7 +32361,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100133"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM020_Grain_Storage_Structure_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -32502,7 +32502,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRANDSTAND_P",fcode:"AK110",desc:"Grandstand",geom:"Point",fcsubtype:"100064",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"GRANDSTAND_P",fcode:"AK110",desc:"Grandstand",geom:"Point",fcsubtype:"AK110_Grandstand_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32520,7 +32520,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100064"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK110_Grandstand_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK110"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -32580,7 +32580,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRANDSTAND_S",fcode:"AK110",desc:"Grandstand",geom:"Area",fcsubtype:"100064",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"GRANDSTAND_S",fcode:"AK110",desc:"Grandstand",geom:"Area",fcsubtype:"AK110_Grandstand_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32598,7 +32598,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100064"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK110_Grandstand_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK110"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -32658,13 +32658,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GRASSLAND_S",fcode:"EB010",desc:"Grassland",geom:"Area",fcsubtype:"100387",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"GRASSLAND_S",fcode:"EB010",desc:"Grassland",geom:"Area",fcsubtype:"EB010_Grassland_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100387"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EB010_Grassland_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -32747,7 +32747,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GREENHOUSE_P",fcode:"AJ110",desc:"Greenhouse",geom:"Point",fcsubtype:"100052",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"GREENHOUSE_P",fcode:"AJ110",desc:"Greenhouse",geom:"Point",fcsubtype:"AJ110_Greenhouse_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32765,7 +32765,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100052"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ110_Greenhouse_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -32905,7 +32905,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"GREENHOUSE_S",fcode:"AJ110",desc:"Greenhouse",geom:"Area",fcsubtype:"100052",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"GREENHOUSE_S",fcode:"AJ110",desc:"Greenhouse",geom:"Area",fcsubtype:"AJ110_Greenhouse_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -32923,7 +32923,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100052"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ110_Greenhouse_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -33063,7 +33063,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HARBOUR_S",fcode:"BB005",desc:"Harbour",geom:"Area",fcsubtype:"100222",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"HARBOUR_S",fcode:"BB005",desc:"Harbour",geom:"Area",fcsubtype:"BB005_Harbour_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -33080,7 +33080,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100222"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB005_Harbour_Area"},
    {name:"FHC",desc:"Harbour Facility Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -33190,7 +33190,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HARDENED_AIRCRAFT_SHELTER_P",fcode:"GB250",desc:"Hardened Aircraft Shelter",geom:"Point",fcsubtype:"100457",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"HARDENED_AIRCRAFT_SHELTER_P",fcode:"GB250",desc:"Hardened Aircraft Shelter",geom:"Point",fcsubtype:"GB250_Hardened_Aircraft_Shelter_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -33208,7 +33208,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100457"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB250_Hardened_Aircraft_Shelter_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -33353,7 +33353,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HARDENED_AIRCRAFT_SHELTER_S",fcode:"GB250",desc:"Hardened Aircraft Shelter",geom:"Area",fcsubtype:"100457",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"HARDENED_AIRCRAFT_SHELTER_S",fcode:"GB250",desc:"Hardened Aircraft Shelter",geom:"Area",fcsubtype:"GB250_Hardened_Aircraft_Shelter_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -33371,7 +33371,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100457"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB250_Hardened_Aircraft_Shelter_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -33516,7 +33516,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HAZARDOUS_ROCK_P",fcode:"BD130",desc:"Hazardous Rock",geom:"Point",fcsubtype:"100306",fdname:"TDS_CARTO",thematic:"HazardousRockPnt",
+ {name:"HAZARDOUS_ROCK_P",fcode:"BD130",desc:"Hazardous Rock",geom:"Point",fcsubtype:"BD130_Hazardous_Rock_Point",fdname:"TDS_CARTO",thematic:"HazardousRockPnt",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -33528,7 +33528,7 @@ var schema = [
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100306"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD130_Hazardous_Rock_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD130"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -33585,13 +33585,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HEDGEROW_C",fcode:"EA020",desc:"Hedgerow",geom:"Line",fcsubtype:"100381",fdname:"TDS",thematic:"VegetationCrv",
+ {name:"HEDGEROW_C",fcode:"EA020",desc:"Hedgerow",geom:"Line",fcsubtype:"EA020_Hedgerow_Line",fdname:"TDS",thematic:"VegetationCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100381"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EA020_Hedgerow_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EA020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -33637,7 +33637,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HELIPAD_P",fcode:"GB030",desc:"Helipad",geom:"Point",fcsubtype:"100441",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"HELIPAD_P",fcode:"GB030",desc:"Helipad",geom:"Point",fcsubtype:"GB030_Helipad_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -33663,7 +33663,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100441"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB030_Helipad_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB030"},
    {name:"HAF",desc:"Helipad Associated Facility",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -33883,7 +33883,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HELIPAD_S",fcode:"GB030",desc:"Helipad",geom:"Area",fcsubtype:"100441",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"HELIPAD_S",fcode:"GB030",desc:"Helipad",geom:"Area",fcsubtype:"GB030_Helipad_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -33909,7 +33909,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100441"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB030_Helipad_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB030"},
    {name:"HAF",desc:"Helipad Associated Facility",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -34129,7 +34129,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HELIPORT_P",fcode:"GB035",desc:"Heliport",geom:"Point",fcsubtype:"100442",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"HELIPORT_P",fcode:"GB035",desc:"Heliport",geom:"Point",fcsubtype:"GB035_Heliport_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -34157,7 +34157,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100442"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB035_Heliport_Point"},
    {name:"FPT",desc:"Airfield Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -34229,7 +34229,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HELIPORT_S",fcode:"GB035",desc:"Heliport",geom:"Area",fcsubtype:"100442",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"HELIPORT_S",fcode:"GB035",desc:"Heliport",geom:"Area",fcsubtype:"GB035_Heliport_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -34257,7 +34257,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100442"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB035_Heliport_Area"},
    {name:"FPT",desc:"Airfield Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -34329,14 +34329,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HOLDING_PEN_P",fcode:"AJ030",desc:"Holding Pen",geom:"Point",fcsubtype:"100043",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"HOLDING_PEN_P",fcode:"AJ030",desc:"Holding Pen",geom:"Point",fcsubtype:"AJ030_Holding_Pen_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100043"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ030_Holding_Pen_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AJ030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -34395,14 +34395,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HOLDING_PEN_S",fcode:"AJ030",desc:"Holding Pen",geom:"Area",fcsubtype:"100043",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"HOLDING_PEN_S",fcode:"AJ030",desc:"Holding Pen",geom:"Area",fcsubtype:"AJ030_Holding_Pen_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100043"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ030_Holding_Pen_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AJ030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -34461,7 +34461,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HOPPER_P",fcode:"AF080",desc:"Hopper",geom:"Point",fcsubtype:"100033",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"HOPPER_P",fcode:"AF080",desc:"Hopper",geom:"Point",fcsubtype:"AF080_Hopper_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -34479,7 +34479,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100033"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF080_Hopper_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF080"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -34539,13 +34539,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HOP_FIELD_S",fcode:"EA055",desc:"Hop Field",geom:"Area",fcsubtype:"100386",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"HOP_FIELD_S",fcode:"EA055",desc:"Hop Field",geom:"Area",fcsubtype:"EA055_Hop_Field_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100386"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EA055_Hop_Field_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EA055"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -34652,7 +34652,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HULK_P",fcode:"BD181",desc:"Hulk",geom:"Point",fcsubtype:"100279",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"HULK_P",fcode:"BD181",desc:"Hulk",geom:"Point",fcsubtype:"BD181_Hulk_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -34668,7 +34668,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100279"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD181_Hulk_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD181"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -34728,13 +34728,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HUMMOCK_S",fcode:"BH077",desc:"Hummock",geom:"Area",fcsubtype:"100304",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"HUMMOCK_S",fcode:"BH077",desc:"Hummock",geom:"Area",fcsubtype:"BH077_Hummock_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100304"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH077_Hummock_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH077"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -34777,7 +34777,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HUT_P",fcode:"AL099",desc:"Hut",geom:"Point",fcsubtype:"100103",fdname:"TDS",thematic:"StructurePnt",
+ {name:"HUT_P",fcode:"AL099",desc:"Hut",geom:"Point",fcsubtype:"AL099_Hut_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -34795,7 +34795,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100103"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL099_Hut_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -34911,7 +34911,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HUT_S",fcode:"AL099",desc:"Hut",geom:"Area",fcsubtype:"100103",fdname:"TDS",thematic:"StructureSrf",
+ {name:"HUT_S",fcode:"AL099",desc:"Hut",geom:"Area",fcsubtype:"AL099_Hut_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -34929,7 +34929,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100103"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL099_Hut_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -35045,13 +35045,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HYDROCARBONS_FIELD_P",fcode:"AA052",desc:"Hydrocarbons Field",geom:"Point",fcsubtype:"100006",fdname:"TDS_CARTO",thematic:"HydroCarbonsFieldPnt",
+ {name:"HYDROCARBONS_FIELD_P",fcode:"AA052",desc:"Hydrocarbons Field",geom:"Point",fcsubtype:"AA052_Hydrocarbons_Field_Point",fdname:"TDS_CARTO",thematic:"HydroCarbonsFieldPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100006"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA052_Hydrocarbons_Field_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA052"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -35131,13 +35131,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"HYDROCARBONS_FIELD_S",fcode:"AA052",desc:"Hydrocarbons Field",geom:"Area",fcsubtype:"100006",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"HYDROCARBONS_FIELD_S",fcode:"AA052",desc:"Hydrocarbons Field",geom:"Area",fcsubtype:"AA052_Hydrocarbons_Field_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100006"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA052_Hydrocarbons_Field_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA052"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -35217,13 +35217,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ICE_CAP_S",fcode:"BJ099",desc:"Ice Cap",geom:"Area",fcsubtype:"100348",fdname:"TDS_CARTO",thematic:"IceCapSrf",
+ {name:"ICE_CAP_S",fcode:"BJ099",desc:"Ice Cap",geom:"Area",fcsubtype:"BJ099_Ice_Cap_Area",fdname:"TDS_CARTO",thematic:"IceCapSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100348"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ099_Ice_Cap_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ099"},
    {name:"LND",desc:"Land Morphology",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -35287,12 +35287,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ICE_CLIFF_C",fcode:"BJ040",desc:"Ice Cliff",geom:"Line",fcsubtype:"100343",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"ICE_CLIFF_C",fcode:"BJ040",desc:"Ice Cliff",geom:"Line",fcsubtype:"BJ040_Ice_Cliff_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100343"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ040_Ice_Cliff_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -35339,13 +35339,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ICE_PEAK_P",fcode:"BJ060",desc:"Ice Peak",geom:"Point",fcsubtype:"100344",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"ICE_PEAK_P",fcode:"BJ060",desc:"Ice Peak",geom:"Point",fcsubtype:"BJ060_Ice_Peak_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100344"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ060_Ice_Peak_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -35423,12 +35423,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ICE_ROUTE_C",fcode:"AQ075",desc:"Ice Route",geom:"Line",fcsubtype:"100173",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"ICE_ROUTE_C",fcode:"AQ075",desc:"Ice Route",geom:"Line",fcsubtype:"AQ075_Ice_Route_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100173"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ075_Ice_Route_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ075"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -35520,13 +35520,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ICE_SHELF_S",fcode:"BJ065",desc:"Ice Shelf",geom:"Area",fcsubtype:"100345",fdname:"TDS_CARTO",thematic:"IceShelfSrf",
+ {name:"ICE_SHELF_S",fcode:"BJ065",desc:"Ice Shelf",geom:"Area",fcsubtype:"BJ065_Ice_Shelf_Area",fdname:"TDS_CARTO",thematic:"IceShelfSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100345"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ065_Ice_Shelf_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ065"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -35571,7 +35571,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INDUSTRIAL_FARM_P",fcode:"AL270",desc:"Industrial Farm",geom:"Point",fcsubtype:"100129",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"INDUSTRIAL_FARM_P",fcode:"AL270",desc:"Industrial Farm",geom:"Point",fcsubtype:"AL270_Industrial_Farm_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -35590,7 +35590,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100129"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL270_Industrial_Farm_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -35932,7 +35932,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INDUSTRIAL_FARM_S",fcode:"AL270",desc:"Industrial Farm",geom:"Area",fcsubtype:"100129",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"INDUSTRIAL_FARM_S",fcode:"AL270",desc:"Industrial Farm",geom:"Area",fcsubtype:"AL270_Industrial_Farm_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -35951,7 +35951,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100129"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL270_Industrial_Farm_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -36294,7 +36294,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INDUSTRIAL_FURNACE_P",fcode:"AC060",desc:"Industrial Furnace",geom:"Point",fcsubtype:"100016",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"INDUSTRIAL_FURNACE_P",fcode:"AC060",desc:"Industrial Furnace",geom:"Point",fcsubtype:"AC060_Industrial_Furnace_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36312,7 +36312,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100016"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC060_Industrial_Furnace_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -36407,7 +36407,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INDUSTRIAL_FURNACE_S",fcode:"AC060",desc:"Industrial Furnace",geom:"Area",fcsubtype:"100016",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"INDUSTRIAL_FURNACE_S",fcode:"AC060",desc:"Industrial Furnace",geom:"Area",fcsubtype:"AC060_Industrial_Furnace_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36425,7 +36425,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100016"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC060_Industrial_Furnace_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -36520,7 +36520,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INLAND_WATERBODY_P",fcode:"BH082",desc:"Inland Waterbody",geom:"Point",fcsubtype:"130384",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"INLAND_WATERBODY_P",fcode:"BH082",desc:"Inland Waterbody",geom:"Point",fcsubtype:"BH082_Inland_Waterbody_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36569,7 +36569,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMD",desc:"Dammed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130384"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH082_Inland_Waterbody_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -36718,7 +36718,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INLAND_WATERBODY_S",fcode:"BH082",desc:"Inland Waterbody",geom:"Area",fcsubtype:"130384",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"INLAND_WATERBODY_S",fcode:"BH082",desc:"Inland Waterbody",geom:"Area",fcsubtype:"BH082_Inland_Waterbody_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36767,7 +36767,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMD",desc:"Dammed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130384"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH082_Inland_Waterbody_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -36916,7 +36916,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INSTALLATION_P",fcode:"AL011",desc:"Installation",geom:"Point",fcsubtype:"100081",fdname:"TDS_CARTO",thematic:"InstallationPnt",
+ {name:"INSTALLATION_P",fcode:"AL011",desc:"Installation",geom:"Point",fcsubtype:"AL011_Installation_Point",fdname:"TDS_CARTO",thematic:"InstallationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36924,7 +36924,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100081"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL011_Installation_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL011"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36981,7 +36981,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INSTALLATION_S",fcode:"AL011",desc:"Installation",geom:"Area",fcsubtype:"100081",fdname:"TDS",thematic:"FacilitySrf",
+ {name:"INSTALLATION_S",fcode:"AL011",desc:"Installation",geom:"Area",fcsubtype:"AL011_Installation_Area",fdname:"TDS",thematic:"FacilitySrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -36989,7 +36989,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100081"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL011_Installation_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL011"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -37046,12 +37046,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"INTERNATIONAL_DATE_LINE_C",fcode:"FA110",desc:"International Date Line",geom:"Line",fcsubtype:"800591",fdname:"TDS_CARTO",thematic:"InternationalDateLineCrv",
+ {name:"INTERNATIONAL_DATE_LINE_C",fcode:"FA110",desc:"International Date Line",geom:"Line",fcsubtype:"FA110_International_Date_Line_Line",fdname:"TDS_CARTO",thematic:"InternationalDateLineCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"800591"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA110_International_Date_Line_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA110"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -37085,7 +37085,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ISLAND_P",fcode:"BA030",desc:"Island",geom:"Point",fcsubtype:"100217",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"ISLAND_P",fcode:"BA030",desc:"Island",geom:"Point",fcsubtype:"BA030_Island_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -37113,7 +37113,7 @@ var schema = [
    {name:"BA000_VDR",desc:"Water Line : Sounding Datum Name",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100217"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BA030_Island_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BA030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -37161,7 +37161,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ISLAND_S",fcode:"BA030",desc:"Island",geom:"Area",fcsubtype:"100217",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"ISLAND_S",fcode:"BA030",desc:"Island",geom:"Area",fcsubtype:"BA030_Island_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -37189,7 +37189,7 @@ var schema = [
    {name:"BA000_VDR",desc:"Water Line : Sounding Datum Name",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100217"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BA030_Island_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BA030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -37237,12 +37237,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ISOGONIC_LINE_C",fcode:"ZC050",desc:"Isogonic Line",geom:"Line",fcsubtype:"800597",fdname:"TDS_CARTO",thematic:"IsogonicLineCrv",
+ {name:"ISOGONIC_LINE_C",fcode:"ZC050",desc:"Isogonic Line",geom:"Line",fcsubtype:"ZC050_Isogonic_Line_Line",fdname:"TDS_CARTO",thematic:"IsogonicLineCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"800597"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZC050_Isogonic_Line_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZC050"},
    {name:"MAG",desc:"Magnetic Variation",optional:"R",type:"String",defValue:"noInformation"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
@@ -37277,7 +37277,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LAND_AERODROME_P",fcode:"GB005",desc:"Land Aerodrome",geom:"Point",fcsubtype:"100436",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"LAND_AERODROME_P",fcode:"GB005",desc:"Land Aerodrome",geom:"Point",fcsubtype:"GB005_Land_Aerodrome_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"APT",desc:"Airfield Use",optional:"R",type:"enumeration",defValue:"-999999",
@@ -37355,7 +37355,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100436"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB005_Land_Aerodrome_Point"},
    {name:"FPT",desc:"Airfield Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -37427,7 +37427,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LAND_AERODROME_S",fcode:"GB005",desc:"Land Aerodrome",geom:"Area",fcsubtype:"100436",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"LAND_AERODROME_S",fcode:"GB005",desc:"Land Aerodrome",geom:"Area",fcsubtype:"GB005_Land_Aerodrome_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"APT",desc:"Airfield Use",optional:"R",type:"enumeration",defValue:"-999999",
@@ -37505,7 +37505,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100436"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB005_Land_Aerodrome_Area"},
    {name:"FPT",desc:"Airfield Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -37577,13 +37577,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LAND_SUBJECT_TO_INUNDATION_S",fcode:"BH090",desc:"Land Subject To Inundation",geom:"Area",fcsubtype:"100307",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"LAND_SUBJECT_TO_INUNDATION_S",fcode:"BH090",desc:"Land Subject To Inundation",geom:"Area",fcsubtype:"BH090_Land_Subject_To_Inundation_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100307"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH090_Land_Subject_To_Inundation_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH090"},
    {name:"INU",desc:"Inundation Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -37633,7 +37633,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LAND_WATER_BOUNDARY_C",fcode:"BA010",desc:"Land Water Boundary",geom:"Line",fcsubtype:"100212",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"LAND_WATER_BOUNDARY_C",fcode:"BA010",desc:"Land Water Boundary",geom:"Line",fcsubtype:"BA010_Land_Water_Boundary_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AZC",desc:"Man-made",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -37660,7 +37660,7 @@ var schema = [
    {name:"BA000_VDR",desc:"Water Line : Sounding Datum Name",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100212"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BA010_Land_Water_Boundary_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BA010"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -37721,14 +37721,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LAUNCH_PAD_P",fcode:"GB040",desc:"Launch Pad",geom:"Point",fcsubtype:"100443",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"LAUNCH_PAD_P",fcode:"GB040",desc:"Launch Pad",geom:"Point",fcsubtype:"GB040_Launch_Pad_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100443"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB040_Launch_Pad_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -37822,14 +37822,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LAUNCH_PAD_S",fcode:"GB040",desc:"Launch Pad",geom:"Area",fcsubtype:"100443",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"LAUNCH_PAD_S",fcode:"GB040",desc:"Launch Pad",geom:"Area",fcsubtype:"GB040_Launch_Pad_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100443"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB040_Launch_Pad_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -37923,12 +37923,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LEADER_LINE_C",fcode:"LDRLN",desc:"Leader Line",geom:"Line",fcsubtype:"999997",fdname:"TDS_CARTO",thematic:"LeaderLineCrv",
+ {name:"LEADER_LINE_C",fcode:"LDRLN",desc:"Leader Line",geom:"Line",fcsubtype:"_Leader_Line_Line",fdname:"TDS_CARTO",thematic:"LeaderLineCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"999997"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"_Leader_Line_Line"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
    {name:"ZI001_SDP",desc:"Source Information : Source Description",optional:"R",type:"String",defValue:"noInformation"},
@@ -37964,7 +37964,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LIGHTHOUSE_P",fcode:"BC050",desc:"Lighthouse",geom:"Point",fcsubtype:"100253",fdname:"TDS",thematic:"HydroAidNavigationPnt",
+ {name:"LIGHTHOUSE_P",fcode:"BC050",desc:"Lighthouse",geom:"Point",fcsubtype:"BC050_Lighthouse_Point",fdname:"TDS",thematic:"HydroAidNavigationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -37982,7 +37982,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100253"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BC050_Lighthouse_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -38169,7 +38169,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LIGHTHOUSE_S",fcode:"BC050",desc:"Lighthouse",geom:"Area",fcsubtype:"100253",fdname:"TDS",thematic:"HydroAidNavigationSrf",
+ {name:"LIGHTHOUSE_S",fcode:"BC050",desc:"Lighthouse",geom:"Area",fcsubtype:"BC050_Lighthouse_Area",fdname:"TDS",thematic:"HydroAidNavigationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -38187,7 +38187,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100253"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BC050_Lighthouse_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -38374,7 +38374,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LIGHT_SUPPORT_STRUCTURE_P",fcode:"AL110",desc:"Light Support Structure",geom:"Point",fcsubtype:"100105",fdname:"TDS",thematic:"StructurePnt",
+ {name:"LIGHT_SUPPORT_STRUCTURE_P",fcode:"AL110",desc:"Light Support Structure",geom:"Point",fcsubtype:"AL110_Light_Support_Structure_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -38391,7 +38391,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100105"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL110_Light_Support_Structure_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -38516,7 +38516,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LIGHT_VESSEL_P",fcode:"BC070",desc:"Light Vessel",geom:"Point",fcsubtype:"100256",fdname:"TDS_CARTO",thematic:"LightVesselPnt",
+ {name:"LIGHT_VESSEL_P",fcode:"BC070",desc:"Light Vessel",geom:"Point",fcsubtype:"BC070_Light_Vessel_Point",fdname:"TDS_CARTO",thematic:"LightVesselPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -38572,7 +38572,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100256"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BC070_Light_Vessel_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BC070"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -38632,7 +38632,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LOCK_C",fcode:"BI030",desc:"Lock",geom:"Line",fcsubtype:"100331",fdname:"TDS",thematic:"TransportationWaterCrv",
+ {name:"LOCK_C",fcode:"BI030",desc:"Lock",geom:"Line",fcsubtype:"BI030_Lock_Line",fdname:"TDS",thematic:"TransportationWaterCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -38650,7 +38650,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100331"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI030_Lock_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -38758,7 +38758,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LOCK_P",fcode:"BI030",desc:"Lock",geom:"Point",fcsubtype:"100331",fdname:"TDS",thematic:"TransportationWaterPnt",
+ {name:"LOCK_P",fcode:"BI030",desc:"Lock",geom:"Point",fcsubtype:"BI030_Lock_Point",fdname:"TDS",thematic:"TransportationWaterPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -38776,7 +38776,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100331"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI030_Lock_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -38884,7 +38884,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LOCK_S",fcode:"BI030",desc:"Lock",geom:"Area",fcsubtype:"100331",fdname:"TDS",thematic:"TransportationWaterSrf",
+ {name:"LOCK_S",fcode:"BI030",desc:"Lock",geom:"Area",fcsubtype:"BI030_Lock_Area",fdname:"TDS",thematic:"TransportationWaterSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -38902,7 +38902,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100331"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI030_Lock_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -39010,13 +39010,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"LOGGING_SITE_S",fcode:"EE010",desc:"Logging Site",geom:"Area",fcsubtype:"100401",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"LOGGING_SITE_S",fcode:"EE010",desc:"Logging Site",geom:"Area",fcsubtype:"EE010_Logging_Site_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100401"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EE010_Logging_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EE010"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -39061,7 +39061,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MANOR_HOUSE_P",fcode:"AL371",desc:"Manor House",geom:"Point",fcsubtype:"180086",fdname:"TDS_CARTO",thematic:"ManorHousePnt",
+ {name:"MANOR_HOUSE_P",fcode:"AL371",desc:"Manor House",geom:"Point",fcsubtype:"AL371_Manor_House_Point",fdname:"TDS_CARTO",thematic:"ManorHousePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -39091,7 +39091,7 @@ var schema = [
      {name:"Partially Operational",value:"14"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"180086"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL371_Manor_House_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL371"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -39243,7 +39243,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MANOR_HOUSE_S",fcode:"AL371",desc:"Manor House",geom:"Area",fcsubtype:"180086",fdname:"TDS_CARTO",thematic:"ManorHouseSrf",
+ {name:"MANOR_HOUSE_S",fcode:"AL371",desc:"Manor House",geom:"Area",fcsubtype:"AL371_Manor_House_Area",fdname:"TDS_CARTO",thematic:"ManorHouseSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -39273,7 +39273,7 @@ var schema = [
      {name:"Partially Operational",value:"14"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"180086"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL371_Manor_House_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL371"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -39425,7 +39425,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MANUFACTURED_HOME_PARK_P",fcode:"AI021",desc:"Manufactured Home Park",geom:"Point",fcsubtype:"133168",fdname:"TDS_CARTO",thematic:"ManufacturedHomeParkPnt",
+ {name:"MANUFACTURED_HOME_PARK_P",fcode:"AI021",desc:"Manufactured Home Park",geom:"Point",fcsubtype:"AI021_Manufactured_Home_Park_Point",fdname:"TDS_CARTO",thematic:"ManufacturedHomeParkPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -39443,7 +39443,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"133168"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AI021_Manufactured_Home_Park_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -39550,7 +39550,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MANUFACTURED_HOME_PARK_S",fcode:"AI021",desc:"Manufactured Home Park",geom:"Area",fcsubtype:"133168",fdname:"TDS",thematic:"SettlementSrf",
+ {name:"MANUFACTURED_HOME_PARK_S",fcode:"AI021",desc:"Manufactured Home Park",geom:"Area",fcsubtype:"AI021_Manufactured_Home_Park_Area",fdname:"TDS",thematic:"SettlementSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -39568,7 +39568,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"133168"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AI021_Manufactured_Home_Park_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -39675,7 +39675,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MARICULTURE_SITE_P",fcode:"BH050",desc:"Mariculture Site",geom:"Point",fcsubtype:"114168",fdname:"TDS_CARTO",thematic:"MaricultureSitePnt",
+ {name:"MARICULTURE_SITE_P",fcode:"BH050",desc:"Mariculture Site",geom:"Point",fcsubtype:"BH050_Mariculture_Site_Point",fdname:"TDS_CARTO",thematic:"MaricultureSitePnt",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -39687,7 +39687,7 @@ var schema = [
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"114168"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH050_Mariculture_Site_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH050"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PCF",desc:"Physical Condition",optional:"R",type:"enumeration",defValue:"-999999",
@@ -39736,7 +39736,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MARICULTURE_SITE_S",fcode:"BH050",desc:"Mariculture Site",geom:"Area",fcsubtype:"114168",fdname:"TDS_CARTO",thematic:"MaricultureSiteSrf",
+ {name:"MARICULTURE_SITE_S",fcode:"BH050",desc:"Mariculture Site",geom:"Area",fcsubtype:"BH050_Mariculture_Site_Area",fdname:"TDS_CARTO",thematic:"MaricultureSiteSrf",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -39748,7 +39748,7 @@ var schema = [
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"114168"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH050_Mariculture_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH050"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PCF",desc:"Physical Condition",optional:"R",type:"enumeration",defValue:"-999999",
@@ -39797,7 +39797,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MARITIME_NAVIGATION_LIGHT_P",fcode:"BC040",desc:"Maritime Navigation Light",geom:"Point",fcsubtype:"800668",fdname:"TDS_CARTO",thematic:"MaritimeNavigationLightPnt",
+ {name:"MARITIME_NAVIGATION_LIGHT_P",fcode:"BC040",desc:"Maritime Navigation Light",geom:"Point",fcsubtype:"BC040_Maritime_Navigation_Light_Point",fdname:"TDS_CARTO",thematic:"MaritimeNavigationLightPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
@@ -39834,7 +39834,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"800668"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BC040_Maritime_Navigation_Light_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BC040"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -39868,7 +39868,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MARSH_S",fcode:"ED010",desc:"Marsh",geom:"Area",fcsubtype:"100399",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"MARSH_S",fcode:"ED010",desc:"Marsh",geom:"Area",fcsubtype:"ED010_Marsh_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -39922,7 +39922,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100399"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ED010_Marsh_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ED010"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -39976,9 +39976,9 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MAXIMUM_ELEVATION_S",fcode:"MXELE",desc:"Maximum Elevation",geom:"Area",fcsubtype:"500001",fdname:"TDS_CARTO",thematic:"MaximumElevationSrf",
+ {name:"MAXIMUM_ELEVATION_S",fcode:"MXELE",desc:"Maximum Elevation",geom:"Area",fcsubtype:"_Maximum_Elevation_Area",fdname:"TDS_CARTO",thematic:"MaximumElevationSrf",
   columns:[
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"500001"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"_Maximum_Elevation_Area"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
    {name:"early_date",desc:"Earliest image date in mosaic",optional:"R",length:"254",type:"String",defValue:"noInformation"},
@@ -39989,7 +39989,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MEMORIAL_MONUMENT_C",fcode:"AL130",desc:"Memorial Monument",geom:"Line",fcsubtype:"100108",fdname:"TDS",thematic:"CultureCrv",
+ {name:"MEMORIAL_MONUMENT_C",fcode:"AL130",desc:"Memorial Monument",geom:"Line",fcsubtype:"AL130_Memorial_Monument_Line",fdname:"TDS",thematic:"CultureCrv",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40008,7 +40008,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100108"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL130_Memorial_Monument_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL130"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -40128,7 +40128,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MEMORIAL_MONUMENT_P",fcode:"AL130",desc:"Memorial Monument",geom:"Point",fcsubtype:"100108",fdname:"TDS",thematic:"CulturePnt",
+ {name:"MEMORIAL_MONUMENT_P",fcode:"AL130",desc:"Memorial Monument",geom:"Point",fcsubtype:"AL130_Memorial_Monument_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40147,7 +40147,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100108"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL130_Memorial_Monument_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL130"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -40267,7 +40267,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MEMORIAL_MONUMENT_S",fcode:"AL130",desc:"Memorial Monument",geom:"Area",fcsubtype:"100108",fdname:"TDS",thematic:"CultureSrf",
+ {name:"MEMORIAL_MONUMENT_S",fcode:"AL130",desc:"Memorial Monument",geom:"Area",fcsubtype:"AL130_Memorial_Monument_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40286,7 +40286,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100108"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL130_Memorial_Monument_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL130"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -40406,14 +40406,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MILITARY_INSTALLATION_P",fcode:"SU001",desc:"Military Installation",geom:"Point",fcsubtype:"100462",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"MILITARY_INSTALLATION_P",fcode:"SU001",desc:"Military Installation",geom:"Point",fcsubtype:"SU001_Military_Installation_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100462"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"SU001_Military_Installation_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"SU001"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40484,14 +40484,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MILITARY_INSTALLATION_S",fcode:"SU001",desc:"Military Installation",geom:"Area",fcsubtype:"100462",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"MILITARY_INSTALLATION_S",fcode:"SU001",desc:"Military Installation",geom:"Area",fcsubtype:"SU001_Military_Installation_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100462"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"SU001_Military_Installation_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"SU001"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40562,14 +40562,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MINEFIELD_P",fcode:"AL065",desc:"Minefield",geom:"Point",fcsubtype:"100097",fdname:"TDS_CARTO",thematic:"MineFieldPnt",
+ {name:"MINEFIELD_P",fcode:"AL065",desc:"Minefield",geom:"Point",fcsubtype:"AL065_Minefield_Point",fdname:"TDS_CARTO",thematic:"MineFieldPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100097"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL065_Minefield_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL065"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -40623,14 +40623,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MINEFIELD_S",fcode:"AL065",desc:"Minefield",geom:"Area",fcsubtype:"100097",fdname:"TDS_CARTO",thematic:"MineFieldSrf",
+ {name:"MINEFIELD_S",fcode:"AL065",desc:"Minefield",geom:"Area",fcsubtype:"AL065_Minefield_Area",fdname:"TDS_CARTO",thematic:"MineFieldSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100097"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL065_Minefield_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL065"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -40684,7 +40684,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MINERAL_PILE_P",fcode:"AM040",desc:"Mineral Pile",geom:"Point",fcsubtype:"100136",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"MINERAL_PILE_P",fcode:"AM040",desc:"Mineral Pile",geom:"Point",fcsubtype:"AM040_Mineral_Pile_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40702,7 +40702,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100136"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM040_Mineral_Pile_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -40791,7 +40791,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MINERAL_PILE_S",fcode:"AM040",desc:"Mineral Pile",geom:"Area",fcsubtype:"100136",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"MINERAL_PILE_S",fcode:"AM040",desc:"Mineral Pile",geom:"Area",fcsubtype:"AM040_Mineral_Pile_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40809,7 +40809,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100136"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM040_Mineral_Pile_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -40898,7 +40898,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MINE_SHAFT_SUPERSTRUCTURE_P",fcode:"AA020",desc:"Mine Shaft Superstructure",geom:"Point",fcsubtype:"100003",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"MINE_SHAFT_SUPERSTRUCTURE_P",fcode:"AA020",desc:"Mine Shaft Superstructure",geom:"Point",fcsubtype:"AA020_Mine_Shaft_Superstructure_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -40916,7 +40916,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100003"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA020_Mine_Shaft_Superstructure_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -41034,7 +41034,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MINE_SHAFT_SUPERSTRUCTURE_S",fcode:"AA020",desc:"Mine Shaft Superstructure",geom:"Area",fcsubtype:"100003",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"MINE_SHAFT_SUPERSTRUCTURE_S",fcode:"AA020",desc:"Mine Shaft Superstructure",geom:"Area",fcsubtype:"AA020_Mine_Shaft_Superstructure_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41052,7 +41052,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100003"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA020_Mine_Shaft_Superstructure_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -41170,13 +41170,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MOAT_C",fcode:"BH100",desc:"Moat",geom:"Line",fcsubtype:"100309",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"MOAT_C",fcode:"BH100",desc:"Moat",geom:"Line",fcsubtype:"BH100_Moat_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100309"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH100_Moat_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH100"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -41253,13 +41253,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MOAT_S",fcode:"BH100",desc:"Moat",geom:"Area",fcsubtype:"100309",fdname:"TDS_CARTO",thematic:"MoatSrf",
+ {name:"MOAT_S",fcode:"BH100",desc:"Moat",geom:"Area",fcsubtype:"BH100_Moat_Area",fdname:"TDS_CARTO",thematic:"MoatSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100309"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH100_Moat_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH100"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -41336,7 +41336,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MOORING_MAST_P",fcode:"AQ110",desc:"Mooring Mast",geom:"Point",fcsubtype:"100177",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"MOORING_MAST_P",fcode:"AQ110",desc:"Mooring Mast",geom:"Point",fcsubtype:"AQ110_Mooring_Mast_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41353,7 +41353,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100177"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ110_Mooring_Mast_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ110"},
    {name:"GUG",desc:"Guyed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41437,13 +41437,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MORAINE_S",fcode:"BJ020",desc:"Moraine",geom:"Area",fcsubtype:"100340",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"MORAINE_S",fcode:"BJ020",desc:"Moraine",geom:"Area",fcsubtype:"BJ020_Moraine_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100340"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ020_Moraine_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ020"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -41488,7 +41488,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MOTOR_VEHICLE_STATION_P",fcode:"AQ170",desc:"Motor Vehicle Station",geom:"Point",fcsubtype:"100197",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"MOTOR_VEHICLE_STATION_P",fcode:"AQ170",desc:"Motor Vehicle Station",geom:"Point",fcsubtype:"AQ170_Motor_Vehicle_Station_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41507,7 +41507,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100197"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ170_Motor_Vehicle_Station_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -41647,7 +41647,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MOTOR_VEHICLE_STATION_S",fcode:"AQ170",desc:"Motor Vehicle Station",geom:"Area",fcsubtype:"100197",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"MOTOR_VEHICLE_STATION_S",fcode:"AQ170",desc:"Motor Vehicle Station",geom:"Area",fcsubtype:"AQ170_Motor_Vehicle_Station_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41666,7 +41666,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100197"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ170_Motor_Vehicle_Station_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -41806,14 +41806,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MOUNTAIN_PASS_P",fcode:"DB150",desc:"Mountain Pass",geom:"Point",fcsubtype:"100372",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"MOUNTAIN_PASS_P",fcode:"DB150",desc:"Mountain Pass",geom:"Point",fcsubtype:"DB150_Mountain_Pass_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100372"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB150_Mountain_Pass_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB150"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -41859,7 +41859,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MUNITION_STORAGE_FACILITY_P",fcode:"AM065",desc:"Munition Storage Facility",geom:"Point",fcsubtype:"100138",fdname:"TDS",thematic:"StoragePnt",
+ {name:"MUNITION_STORAGE_FACILITY_P",fcode:"AM065",desc:"Munition Storage Facility",geom:"Point",fcsubtype:"AM065_Munition_Storage_Facility_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41877,7 +41877,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100138"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM065_Munition_Storage_Facility_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM065"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -41937,7 +41937,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"MUNITION_STORAGE_FACILITY_S",fcode:"AM065",desc:"Munition Storage Facility",geom:"Area",fcsubtype:"100138",fdname:"TDS",thematic:"StorageSrf",
+ {name:"MUNITION_STORAGE_FACILITY_S",fcode:"AM065",desc:"Munition Storage Facility",geom:"Area",fcsubtype:"AM065_Munition_Storage_Facility_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -41955,7 +41955,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100138"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM065_Munition_Storage_Facility_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM065"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -42015,12 +42015,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NAMED_LOCATION_P",fcode:"ZD040",desc:"Named Location",geom:"Point",fcsubtype:"100475",fdname:"TDS",thematic:"InformationPnt",
+ {name:"NAMED_LOCATION_P",fcode:"ZD040",desc:"Named Location",geom:"Point",fcsubtype:"ZD040_Named_Location_Point",fdname:"TDS",thematic:"InformationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100475"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZD040_Named_Location_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZD040"},
    {name:"NLT",desc:"Named Location Type",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -42074,14 +42074,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NATURAL_POOL_P",fcode:"BH170",desc:"Natural Pool",geom:"Point",fcsubtype:"100320",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"NATURAL_POOL_P",fcode:"BH170",desc:"Natural Pool",geom:"Point",fcsubtype:"BH170_Natural_Pool_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DOF",desc:"Direction of Flow",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100320"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH170_Natural_Pool_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH170"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -42177,7 +42177,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NAVIGABLE_CANAL_C",fcode:"BH020",desc:"Navigable Canal",geom:"Line",fcsubtype:"100297",fdname:"TDS",thematic:"TransportationWaterCrv",
+ {name:"NAVIGABLE_CANAL_C",fcode:"BH020",desc:"Navigable Canal",geom:"Line",fcsubtype:"BH020_Navigable_Canal_Line",fdname:"TDS",thematic:"TransportationWaterCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -42287,7 +42287,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100297"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH020_Navigable_Canal_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -42394,7 +42394,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NAVIGABLE_CANAL_S",fcode:"BH020",desc:"Navigable Canal",geom:"Area",fcsubtype:"100297",fdname:"TDS",thematic:"TransportationWaterSrf",
+ {name:"NAVIGABLE_CANAL_S",fcode:"BH020",desc:"Navigable Canal",geom:"Area",fcsubtype:"BH020_Navigable_Canal_Area",fdname:"TDS",thematic:"TransportationWaterSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -42504,7 +42504,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100297"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH020_Navigable_Canal_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -42611,12 +42611,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NONDIRECTIONAL_RADIO_BEACON_P",fcode:"GA038",desc:"Nondirectional Radio Beacon",geom:"Point",fcsubtype:"800786",fdname:"TDS_CARTO",thematic:"NonDirectionalRadioBeaconPnt",
+ {name:"NONDIRECTIONAL_RADIO_BEACON_P",fcode:"GA038",desc:"Nondirectional Radio Beacon",geom:"Point",fcsubtype:"GA038_Nondirectional_Radio_Beacon_Point",fdname:"TDS_CARTO",thematic:"NonDirectionalRadioBeaconPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"800786"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA038_Nondirectional_Radio_Beacon_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA038"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
@@ -42651,7 +42651,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NON_BUILDING_STRUCTURE_P",fcode:"AL014",desc:"Non Building Structure",geom:"Point",fcsubtype:"100084",fdname:"TDS",thematic:"StructurePnt",
+ {name:"NON_BUILDING_STRUCTURE_P",fcode:"AL014",desc:"Non Building Structure",geom:"Point",fcsubtype:"AL014_Non_Building_Structure_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -42669,7 +42669,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100084"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL014_Non_Building_Structure_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL014"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -43152,7 +43152,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NON_BUILDING_STRUCTURE_S",fcode:"AL014",desc:"Non Building Structure",geom:"Area",fcsubtype:"100084",fdname:"TDS",thematic:"StructureSrf",
+ {name:"NON_BUILDING_STRUCTURE_S",fcode:"AL014",desc:"Non Building Structure",geom:"Area",fcsubtype:"AL014_Non_Building_Structure_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -43170,7 +43170,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100084"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL014_Non_Building_Structure_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL014"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -43653,13 +43653,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NON_WATER_WELL_P",fcode:"AA054",desc:"Non Water Well",geom:"Point",fcsubtype:"155023",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"NON_WATER_WELL_P",fcode:"AA054",desc:"Non Water Well",geom:"Point",fcsubtype:"AA054_Non_Water_Well_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"155023"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA054_Non_Water_Well_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA054"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -43809,7 +43809,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NUCLEAR_REACTOR_CONTAINMENT_P",fcode:"AD041",desc:"Nuclear Reactor Containment",geom:"Point",fcsubtype:"100022",fdname:"TDS_CARTO",thematic:"NuclearReactorContainmentPnt",
+ {name:"NUCLEAR_REACTOR_CONTAINMENT_P",fcode:"AD041",desc:"Nuclear Reactor Containment",geom:"Point",fcsubtype:"AD041_Nuclear_Reactor_Containment_Point",fdname:"TDS_CARTO",thematic:"NuclearReactorContainmentPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -43828,7 +43828,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100022"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD041_Nuclear_Reactor_Containment_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD041"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -43954,7 +43954,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"NUCLEAR_REACTOR_CONTAINMENT_S",fcode:"AD041",desc:"Nuclear Reactor Containment",geom:"Area",fcsubtype:"100022",fdname:"TDS_CARTO",thematic:"NuclearReactorContainmentSrf",
+ {name:"NUCLEAR_REACTOR_CONTAINMENT_S",fcode:"AD041",desc:"Nuclear Reactor Containment",geom:"Area",fcsubtype:"AD041_Nuclear_Reactor_Containment_Area",fdname:"TDS_CARTO",thematic:"NuclearReactorContainmentSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -43973,7 +43973,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100022"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD041_Nuclear_Reactor_Containment_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD041"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -44099,13 +44099,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OASIS_P",fcode:"EC020",desc:"Oasis",geom:"Point",fcsubtype:"100394",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"OASIS_P",fcode:"EC020",desc:"Oasis",geom:"Point",fcsubtype:"EC020_Oasis_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100394"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC020_Oasis_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC020"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -44161,13 +44161,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OASIS_S",fcode:"EC020",desc:"Oasis",geom:"Area",fcsubtype:"100394",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"OASIS_S",fcode:"EC020",desc:"Oasis",geom:"Area",fcsubtype:"EC020_Oasis_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100394"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC020_Oasis_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC020"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -44223,7 +44223,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OFFSHORE_CONSTRUCTION_P",fcode:"BD115",desc:"Offshore Construction",geom:"Point",fcsubtype:"100272",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"OFFSHORE_CONSTRUCTION_P",fcode:"BD115",desc:"Offshore Construction",geom:"Point",fcsubtype:"BD115_Offshore_Construction_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -44241,7 +44241,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100272"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD115_Offshore_Construction_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD115"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -44350,7 +44350,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OFFSHORE_CONSTRUCTION_S",fcode:"BD115",desc:"Offshore Construction",geom:"Area",fcsubtype:"100272",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"OFFSHORE_CONSTRUCTION_S",fcode:"BD115",desc:"Offshore Construction",geom:"Area",fcsubtype:"BD115_Offshore_Construction_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -44368,7 +44368,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100272"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD115_Offshore_Construction_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD115"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -44477,14 +44477,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ORCHARD_S",fcode:"EA040",desc:"Orchard",geom:"Area",fcsubtype:"100384",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"ORCHARD_S",fcode:"EA040",desc:"Orchard",geom:"Area",fcsubtype:"EA040_Orchard_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100384"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EA040_Orchard_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EA040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -44664,7 +44664,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OUTDOOR_THEATRE_SCREEN_P",fcode:"AK080",desc:"Outdoor Theatre Screen",geom:"Point",fcsubtype:"100060",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"OUTDOOR_THEATRE_SCREEN_P",fcode:"AK080",desc:"Outdoor Theatre Screen",geom:"Point",fcsubtype:"AK080_Outdoor_Theatre_Screen_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -44682,7 +44682,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100060"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK080_Outdoor_Theatre_Screen_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK080"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -44742,7 +44742,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OVERHEAD_OBSTRUCTION_C",fcode:"AL155",desc:"Overhead Obstruction",geom:"Line",fcsubtype:"100112",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"OVERHEAD_OBSTRUCTION_C",fcode:"AL155",desc:"Overhead Obstruction",geom:"Line",fcsubtype:"AL155_Overhead_Obstruction_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -44757,7 +44757,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100112"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL155_Overhead_Obstruction_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL155"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OHC",desc:"Overhead Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -44877,7 +44877,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"OVERHEAD_OBSTRUCTION_P",fcode:"AL155",desc:"Overhead Obstruction",geom:"Point",fcsubtype:"100112",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"OVERHEAD_OBSTRUCTION_P",fcode:"AL155",desc:"Overhead Obstruction",geom:"Point",fcsubtype:"AL155_Overhead_Obstruction_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -44892,7 +44892,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100112"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL155_Overhead_Obstruction_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL155"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OHC",desc:"Overhead Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45012,7 +45012,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PARKING_GARAGE_P",fcode:"AQ141",desc:"Parking Garage",geom:"Point",fcsubtype:"100190",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"PARKING_GARAGE_P",fcode:"AQ141",desc:"Parking Garage",geom:"Point",fcsubtype:"AQ141_Parking_Garage_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45031,7 +45031,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100190"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ141_Parking_Garage_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -45185,7 +45185,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PARKING_GARAGE_S",fcode:"AQ141",desc:"Parking Garage",geom:"Area",fcsubtype:"100190",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"PARKING_GARAGE_S",fcode:"AQ141",desc:"Parking Garage",geom:"Area",fcsubtype:"AQ141_Parking_Garage_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45204,7 +45204,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100190"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ141_Parking_Garage_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -45358,7 +45358,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PARK_P",fcode:"AK120",desc:"Park",geom:"Point",fcsubtype:"100065",fdname:"TDS_CARTO",thematic:"ParkPnt",
+ {name:"PARK_P",fcode:"AK120",desc:"Park",geom:"Point",fcsubtype:"AK120_Park_Point",fdname:"TDS_CARTO",thematic:"ParkPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45376,7 +45376,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100065"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK120_Park_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK120"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45433,7 +45433,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PARK_S",fcode:"AK120",desc:"Park",geom:"Area",fcsubtype:"100065",fdname:"TDS",thematic:"CultureSrf",
+ {name:"PARK_S",fcode:"AK120",desc:"Park",geom:"Area",fcsubtype:"AK120_Park_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45451,7 +45451,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100065"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK120_Park_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK120"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45508,13 +45508,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PARTICLE_ACCELERATOR_C",fcode:"AL140",desc:"Particle Accelerator",geom:"Line",fcsubtype:"100110",fdname:"TDS",thematic:"StructureCrv",
+ {name:"PARTICLE_ACCELERATOR_C",fcode:"AL140",desc:"Particle Accelerator",geom:"Line",fcsubtype:"AL140_Particle_Accelerator_Line",fdname:"TDS",thematic:"StructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100110"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL140_Particle_Accelerator_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL140"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45571,13 +45571,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PARTICLE_ACCELERATOR_S",fcode:"AL140",desc:"Particle Accelerator",geom:"Area",fcsubtype:"100110",fdname:"TDS",thematic:"StructureSrf",
+ {name:"PARTICLE_ACCELERATOR_S",fcode:"AL140",desc:"Particle Accelerator",geom:"Area",fcsubtype:"AL140_Particle_Accelerator_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100110"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL140_Particle_Accelerator_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL140"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45634,14 +45634,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PENSTOCK_C",fcode:"BH110",desc:"Penstock",geom:"Line",fcsubtype:"100310",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"PENSTOCK_C",fcode:"BH110",desc:"Penstock",geom:"Line",fcsubtype:"BH110_Penstock_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DIM",desc:"Diameter",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100310"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH110_Penstock_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH110"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -45706,7 +45706,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PIPELINE_C",fcode:"AQ113",desc:"Pipeline",geom:"Line",fcsubtype:"100179",fdname:"TDS",thematic:"UtilityInfrastructureCrv",
+ {name:"PIPELINE_C",fcode:"AQ113",desc:"Pipeline",geom:"Line",fcsubtype:"AQ113_Pipeline_Line",fdname:"TDS",thematic:"UtilityInfrastructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CAA",desc:"Controlling Authority",optional:"R",type:"enumeration",defValue:"-999999",
@@ -45725,7 +45725,7 @@ var schema = [
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
    {name:"DIM",desc:"Diameter",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100179"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ113_Pipeline_Line"},
    {name:"FLO",desc:"Floating",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ113"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -45891,13 +45891,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PIPELINE_CROSSING_POINT_P",fcode:"AL165",desc:"Pipeline Crossing Point",geom:"Point",fcsubtype:"100113",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"PIPELINE_CROSSING_POINT_P",fcode:"AL165",desc:"Pipeline Crossing Point",geom:"Point",fcsubtype:"AL165_Pipeline_Crossing_Point_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100113"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL165_Pipeline_Crossing_Point_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL165"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -45953,13 +45953,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PLANT_NURSERY_S",fcode:"EA030",desc:"Plant Nursery",geom:"Area",fcsubtype:"100382",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"PLANT_NURSERY_S",fcode:"EA030",desc:"Plant Nursery",geom:"Area",fcsubtype:"EA030_Plant_Nursery_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100382"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EA030_Plant_Nursery_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EA030"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -46047,12 +46047,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"POINT_OF_CHANGE_P",fcode:"ZD015",desc:"Point Of Change",geom:"Point",fcsubtype:"100578",fdname:"TDS_CARTO",thematic:"PointofChangePnt",
+ {name:"POINT_OF_CHANGE_P",fcode:"ZD015",desc:"Point Of Change",geom:"Point",fcsubtype:"ZD015_Point_Of_Change_Point",fdname:"TDS_CARTO",thematic:"PointofChangePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100578"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZD015_Point_Of_Change_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZD015"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -46087,13 +46087,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"POLAR_ICE_S",fcode:"BJ080",desc:"Polar Ice",geom:"Area",fcsubtype:"100347",fdname:"TDS_CARTO",thematic:"PolarIceSrf",
+ {name:"POLAR_ICE_S",fcode:"BJ080",desc:"Polar Ice",geom:"Area",fcsubtype:"BJ080_Polar_Ice_Area",fdname:"TDS_CARTO",thematic:"PolarIceSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100347"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ080_Polar_Ice_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ080"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -46142,7 +46142,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PORT_P",fcode:"BB009",desc:"Port",geom:"Point",fcsubtype:"100223",fdname:"TDS",thematic:"PortHarbourPnt",
+ {name:"PORT_P",fcode:"BB009",desc:"Port",geom:"Point",fcsubtype:"BB009_Port_Point",fdname:"TDS",thematic:"PortHarbourPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -46161,7 +46161,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100223"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB009_Port_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -46750,7 +46750,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PORT_S",fcode:"BB009",desc:"Port",geom:"Area",fcsubtype:"100223",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"PORT_S",fcode:"BB009",desc:"Port",geom:"Area",fcsubtype:"BB009_Port_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -46769,7 +46769,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100223"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB009_Port_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -47358,7 +47358,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"POWER_SUBSTATION_P",fcode:"AD030",desc:"Power Substation",geom:"Point",fcsubtype:"100021",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"POWER_SUBSTATION_P",fcode:"AD030",desc:"Power Substation",geom:"Point",fcsubtype:"AD030_Power_Substation_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -47376,7 +47376,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100021"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD030_Power_Substation_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -47510,7 +47510,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"POWER_SUBSTATION_S",fcode:"AD030",desc:"Power Substation",geom:"Area",fcsubtype:"100021",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"POWER_SUBSTATION_S",fcode:"AD030",desc:"Power Substation",geom:"Area",fcsubtype:"AD030_Power_Substation_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -47528,7 +47528,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100021"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD030_Power_Substation_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD030"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -47662,14 +47662,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PUBLIC_SQUARE_P",fcode:"AL170",desc:"Public Square",geom:"Point",fcsubtype:"100114",fdname:"TDS_CARTO",thematic:"PublicSquarePnt",
+ {name:"PUBLIC_SQUARE_P",fcode:"AL170",desc:"Public Square",geom:"Point",fcsubtype:"AL170_Public_Square_Point",fdname:"TDS_CARTO",thematic:"PublicSquarePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100114"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL170_Public_Square_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL170"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -47725,14 +47725,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PUBLIC_SQUARE_S",fcode:"AL170",desc:"Public Square",geom:"Area",fcsubtype:"100114",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"PUBLIC_SQUARE_S",fcode:"AL170",desc:"Public Square",geom:"Area",fcsubtype:"AL170_Public_Square_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100114"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL170_Public_Square_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL170"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -47788,7 +47788,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PUMPING_STATION_P",fcode:"AQ116",desc:"Pumping Station",geom:"Point",fcsubtype:"100182",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"PUMPING_STATION_P",fcode:"AQ116",desc:"Pumping Station",geom:"Point",fcsubtype:"AQ116_Pumping_Station_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -47807,7 +47807,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100182"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ116_Pumping_Station_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -47986,7 +47986,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PUMPING_STATION_S",fcode:"AQ116",desc:"Pumping Station",geom:"Area",fcsubtype:"100182",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"PUMPING_STATION_S",fcode:"AQ116",desc:"Pumping Station",geom:"Area",fcsubtype:"AQ116_Pumping_Station_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48005,7 +48005,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100182"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ116_Pumping_Station_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -48184,7 +48184,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"PYLON_P",fcode:"AT042",desc:"Pylon",geom:"Point",fcsubtype:"100558",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"PYLON_P",fcode:"AT042",desc:"Pylon",geom:"Point",fcsubtype:"AT042_Pylon_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48262,7 +48262,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100558"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT042_Pylon_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AT042"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -48359,13 +48359,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"QANAT_SHAFT_P",fcode:"BH012",desc:"Qanat Shaft",geom:"Point",fcsubtype:"131749",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"QANAT_SHAFT_P",fcode:"BH012",desc:"Qanat Shaft",geom:"Point",fcsubtype:"BH012_Qanat_Shaft_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131749"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH012_Qanat_Shaft_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH012"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -48424,14 +48424,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RACETRACK_C",fcode:"AK130",desc:"Racetrack",geom:"Line",fcsubtype:"100069",fdname:"TDS",thematic:"RecreationCrv",
+ {name:"RACETRACK_C",fcode:"AK130",desc:"Racetrack",geom:"Line",fcsubtype:"AK130_Racetrack_Line",fdname:"TDS",thematic:"RecreationCrv",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100069"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK130_Racetrack_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK130"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48488,14 +48488,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RACETRACK_P",fcode:"AK130",desc:"Racetrack",geom:"Point",fcsubtype:"100069",fdname:"TDS_CARTO",thematic:"RaceTrackPnt",
+ {name:"RACETRACK_P",fcode:"AK130",desc:"Racetrack",geom:"Point",fcsubtype:"AK130_Racetrack_Point",fdname:"TDS_CARTO",thematic:"RaceTrackPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100069"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK130_Racetrack_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK130"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48552,14 +48552,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RACETRACK_S",fcode:"AK130",desc:"Racetrack",geom:"Area",fcsubtype:"100069",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"RACETRACK_S",fcode:"AK130",desc:"Racetrack",geom:"Area",fcsubtype:"AK130_Racetrack_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100069"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK130_Racetrack_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK130"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48616,7 +48616,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RADAR_STATION_P",fcode:"AT045",desc:"Radar Station",geom:"Point",fcsubtype:"100207",fdname:"TDS",thematic:"FacilityPnt",
+ {name:"RADAR_STATION_P",fcode:"AT045",desc:"Radar Station",geom:"Point",fcsubtype:"AT045_Radar_Station_Point",fdname:"TDS",thematic:"FacilityPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48635,7 +48635,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100207"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT045_Radar_Station_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -48756,7 +48756,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RADAR_STATION_S",fcode:"AT045",desc:"Radar Station",geom:"Area",fcsubtype:"100207",fdname:"TDS",thematic:"FacilitySrf",
+ {name:"RADAR_STATION_S",fcode:"AT045",desc:"Radar Station",geom:"Area",fcsubtype:"AT045_Radar_Station_Area",fdname:"TDS",thematic:"FacilitySrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -48775,7 +48775,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100207"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AT045_Radar_Station_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -48896,7 +48896,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAILWAY_C",fcode:"AN010",desc:"Railway",geom:"Line",fcsubtype:"100143",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"RAILWAY_C",fcode:"AN010",desc:"Railway",geom:"Line",fcsubtype:"AN010_Railway_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -48922,7 +48922,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100143"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN010_Railway_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AN010"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
@@ -49111,7 +49111,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAILWAY_SIDETRACK_C",fcode:"AN050",desc:"Railway Sidetrack",geom:"Line",fcsubtype:"100144",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"RAILWAY_SIDETRACK_C",fcode:"AN050",desc:"Railway Sidetrack",geom:"Line",fcsubtype:"AN050_Railway_Sidetrack_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -49126,7 +49126,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CTL",desc:"Cumulative Track Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100144"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN050_Railway_Sidetrack_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AN050"},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -49249,13 +49249,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAILWAY_TURNTABLE_P",fcode:"AN075",desc:"Railway Turntable",geom:"Point",fcsubtype:"100146",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"RAILWAY_TURNTABLE_P",fcode:"AN075",desc:"Railway Turntable",geom:"Point",fcsubtype:"AN075_Railway_Turntable_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100146"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN075_Railway_Turntable_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AN075"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49347,13 +49347,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAILWAY_TURNTABLE_S",fcode:"AN075",desc:"Railway Turntable",geom:"Area",fcsubtype:"100146",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"RAILWAY_TURNTABLE_S",fcode:"AN075",desc:"Railway Turntable",geom:"Area",fcsubtype:"AN075_Railway_Turntable_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100146"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN075_Railway_Turntable_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AN075"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49445,7 +49445,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAILWAY_YARD_S",fcode:"AN060",desc:"Railway Yard",geom:"Area",fcsubtype:"100145",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"RAILWAY_YARD_S",fcode:"AN060",desc:"Railway Yard",geom:"Area",fcsubtype:"AN060_Railway_Yard_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49465,7 +49465,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CTL",desc:"Cumulative Track Length",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100145"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN060_Railway_Yard_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -49596,14 +49596,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAPIDS_C",fcode:"BH120",desc:"Rapids",geom:"Line",fcsubtype:"100311",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"RAPIDS_C",fcode:"BH120",desc:"Rapids",geom:"Line",fcsubtype:"BH120_Rapids_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100311"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH120_Rapids_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH120"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49649,14 +49649,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAPIDS_P",fcode:"BH120",desc:"Rapids",geom:"Point",fcsubtype:"100311",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"RAPIDS_P",fcode:"BH120",desc:"Rapids",geom:"Point",fcsubtype:"BH120_Rapids_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100311"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH120_Rapids_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH120"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49702,14 +49702,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RAPIDS_S",fcode:"BH120",desc:"Rapids",geom:"Area",fcsubtype:"100311",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"RAPIDS_S",fcode:"BH120",desc:"Rapids",geom:"Area",fcsubtype:"BH120_Rapids_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100311"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH120_Rapids_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH120"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49755,7 +49755,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RECYCLING_SITE_P",fcode:"AB010",desc:"Recycling Site",geom:"Point",fcsubtype:"100008",fdname:"TDS_CARTO",thematic:"RecyclingSitePnt",
+ {name:"RECYCLING_SITE_P",fcode:"AB010",desc:"Recycling Site",geom:"Point",fcsubtype:"AB010_Recycling_Site_Point",fdname:"TDS_CARTO",thematic:"RecyclingSitePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49773,7 +49773,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100008"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB010_Recycling_Site_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -49832,7 +49832,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RECYCLING_SITE_S",fcode:"AB010",desc:"Recycling Site",geom:"Area",fcsubtype:"100008",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"RECYCLING_SITE_S",fcode:"AB010",desc:"Recycling Site",geom:"Area",fcsubtype:"AB010_Recycling_Site_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -49850,7 +49850,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100008"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB010_Recycling_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -49909,7 +49909,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"REEF_C",fcode:"BD120",desc:"Reef",geom:"Line",fcsubtype:"100301",fdname:"TDS_CARTO",thematic:"ReefCrv",
+ {name:"REEF_C",fcode:"BD120",desc:"Reef",geom:"Line",fcsubtype:"BD120_Reef_Line",fdname:"TDS_CARTO",thematic:"ReefCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -49922,7 +49922,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100301"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD120_Reef_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD120"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -49979,7 +49979,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"REEF_P",fcode:"BD120",desc:"Reef",geom:"Point",fcsubtype:"100301",fdname:"TDS_CARTO",thematic:"ReefPnt",
+ {name:"REEF_P",fcode:"BD120",desc:"Reef",geom:"Point",fcsubtype:"BD120_Reef_Point",fdname:"TDS_CARTO",thematic:"ReefPnt",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -49992,7 +49992,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100301"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD120_Reef_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD120"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -50049,7 +50049,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"REEF_S",fcode:"BD120",desc:"Reef",geom:"Area",fcsubtype:"100301",fdname:"TDS_CARTO",thematic:"ReefSrf",
+ {name:"REEF_S",fcode:"BD120",desc:"Reef",geom:"Area",fcsubtype:"BD120_Reef_Area",fdname:"TDS_CARTO",thematic:"ReefSrf",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -50062,7 +50062,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100301"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD120_Reef_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD120"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -50119,13 +50119,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RICE_FIELD_S",fcode:"BH135",desc:"Rice Field",geom:"Area",fcsubtype:"100313",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"RICE_FIELD_S",fcode:"BH135",desc:"Rice Field",geom:"Area",fcsubtype:"BH135_Rice_Field_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100313"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH135_Rice_Field_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH135"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -50247,7 +50247,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RIG_P",fcode:"AA040",desc:"Rig",geom:"Point",fcsubtype:"100004",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"RIG_P",fcode:"AA040",desc:"Rig",geom:"Point",fcsubtype:"AA040_Rig_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -50265,7 +50265,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100004"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA040_Rig_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -50396,7 +50396,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RIG_S",fcode:"AA040",desc:"Rig",geom:"Area",fcsubtype:"100004",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"RIG_S",fcode:"AA040",desc:"Rig",geom:"Area",fcsubtype:"AA040_Rig_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -50414,7 +50414,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100004"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA040_Rig_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -50545,7 +50545,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RIVER_C",fcode:"BH140",desc:"River",geom:"Line",fcsubtype:"100314",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"RIVER_C",fcode:"BH140",desc:"River",geom:"Line",fcsubtype:"BH140_River_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -50644,7 +50644,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDA",desc:"Covered Drain",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100314"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH140_River_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH140"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
@@ -50759,7 +50759,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RIVER_S",fcode:"BH140",desc:"River",geom:"Area",fcsubtype:"100314",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"RIVER_S",fcode:"BH140",desc:"River",geom:"Area",fcsubtype:"BH140_River_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -50858,7 +50858,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDA",desc:"Covered Drain",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100314"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH140_River_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH140"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
@@ -50973,7 +50973,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROADSIDE_REST_AREA_P",fcode:"AQ135",desc:"Roadside Rest Area",geom:"Point",fcsubtype:"100188",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"ROADSIDE_REST_AREA_P",fcode:"AQ135",desc:"Roadside Rest Area",geom:"Point",fcsubtype:"AQ135_Roadside_Rest_Area_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -50991,7 +50991,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100188"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ135_Roadside_Rest_Area_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -51116,7 +51116,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROADSIDE_REST_AREA_S",fcode:"AQ135",desc:"Roadside Rest Area",geom:"Area",fcsubtype:"100188",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"ROADSIDE_REST_AREA_S",fcode:"AQ135",desc:"Roadside Rest Area",geom:"Area",fcsubtype:"AQ135_Roadside_Rest_Area_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -51134,7 +51134,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100188"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ135_Roadside_Rest_Area_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -51259,7 +51259,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROAD_C",fcode:"AP030",desc:"Road",geom:"Line",fcsubtype:"100152",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"ROAD_C",fcode:"AP030",desc:"Road",geom:"Line",fcsubtype:"AP030_Road_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -51297,7 +51297,7 @@ var schema = [
      {name:"Non-divided",value:"7"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100152"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP030_Road_Line"},
    {name:"FSC",desc:"Flight Strip Capable",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP030"},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
@@ -51488,7 +51488,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROAD_INTERCHANGE_P",fcode:"AP020",desc:"Road Interchange",geom:"Point",fcsubtype:"100151",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"ROAD_INTERCHANGE_P",fcode:"AP020",desc:"Road Interchange",geom:"Point",fcsubtype:"AP020_Road_Interchange_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -51506,7 +51506,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100151"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP020_Road_Interchange_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP020"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -51602,12 +51602,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROAD_MARKER_P",fcode:"RDMKR",desc:"Road Marker",geom:"Point",fcsubtype:"999998",fdname:"TDS_CARTO",thematic:"RoadMarkerPnt",
+ {name:"ROAD_MARKER_P",fcode:"RDMKR",desc:"Road Marker",geom:"Point",fcsubtype:"_Road_Marker_Point",fdname:"TDS_CARTO",thematic:"RoadMarkerPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"999998"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"_Road_Marker_Point"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
    {name:"ZI001_SDP",desc:"Source Information : Source Description",optional:"R",type:"String",defValue:"noInformation"},
@@ -51643,14 +51643,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROCK_FORMATION_P",fcode:"DB160",desc:"Rock Formation",geom:"Point",fcsubtype:"100373",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"ROCK_FORMATION_P",fcode:"DB160",desc:"Rock Formation",geom:"Point",fcsubtype:"DB160_Rock_Formation_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100373"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB160_Rock_Formation_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB160"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -51709,14 +51709,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROCK_FORMATION_S",fcode:"DB160",desc:"Rock Formation",geom:"Area",fcsubtype:"100373",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"ROCK_FORMATION_S",fcode:"DB160",desc:"Rock Formation",geom:"Area",fcsubtype:"DB160_Rock_Formation_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100373"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB160_Rock_Formation_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB160"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -51775,7 +51775,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROUNDHOUSE_P",fcode:"AN076",desc:"Roundhouse",geom:"Point",fcsubtype:"100147",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"ROUNDHOUSE_P",fcode:"AN076",desc:"Roundhouse",geom:"Point",fcsubtype:"AN076_Roundhouse_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -51793,7 +51793,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100147"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN076_Roundhouse_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -52002,7 +52002,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ROUNDHOUSE_S",fcode:"AN076",desc:"Roundhouse",geom:"Area",fcsubtype:"100147",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"ROUNDHOUSE_S",fcode:"AN076",desc:"Roundhouse",geom:"Area",fcsubtype:"AN076_Roundhouse_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -52020,7 +52020,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100147"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AN076_Roundhouse_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -52229,7 +52229,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RUINS_P",fcode:"AL200",desc:"Ruins",geom:"Point",fcsubtype:"100116",fdname:"TDS",thematic:"CulturePnt",
+ {name:"RUINS_P",fcode:"AL200",desc:"Ruins",geom:"Point",fcsubtype:"AL200_Ruins_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -52237,7 +52237,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100116"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL200_Ruins_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL200"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -52285,7 +52285,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RUINS_S",fcode:"AL200",desc:"Ruins",geom:"Area",fcsubtype:"100116",fdname:"TDS",thematic:"CultureSrf",
+ {name:"RUINS_S",fcode:"AL200",desc:"Ruins",geom:"Area",fcsubtype:"AL200_Ruins_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -52293,7 +52293,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100116"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL200_Ruins_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL200"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -52341,7 +52341,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RUNWAY_C",fcode:"GB055",desc:"Runway",geom:"Line",fcsubtype:"100448",fdname:"TDS_CARTO",thematic:"RunwayCrv",
+ {name:"RUNWAY_C",fcode:"GB055",desc:"Runway",geom:"Line",fcsubtype:"GB055_Runway_Line",fdname:"TDS_CARTO",thematic:"RunwayCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -52368,7 +52368,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100448"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB055_Runway_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB055"},
    {name:"GB052_RIDH",desc:"Runway Direction : Runway Designator (high end)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"GB052_RIDL",desc:"Runway Direction : Runway Designator (low end)",optional:"R",type:"String",defValue:"noInformation"},
@@ -52604,7 +52604,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RUNWAY_P",fcode:"GB055",desc:"Runway",geom:"Point",fcsubtype:"100448",fdname:"TDS_CARTO",thematic:"RunwayPnt",
+ {name:"RUNWAY_P",fcode:"GB055",desc:"Runway",geom:"Point",fcsubtype:"GB055_Runway_Point",fdname:"TDS_CARTO",thematic:"RunwayPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -52631,7 +52631,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100448"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB055_Runway_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB055"},
    {name:"GB052_RIDH",desc:"Runway Direction : Runway Designator (high end)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"GB052_RIDL",desc:"Runway Direction : Runway Designator (low end)",optional:"R",type:"String",defValue:"noInformation"},
@@ -52867,7 +52867,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"RUNWAY_S",fcode:"GB055",desc:"Runway",geom:"Area",fcsubtype:"100448",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"RUNWAY_S",fcode:"GB055",desc:"Runway",geom:"Area",fcsubtype:"GB055_Runway_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -52894,7 +52894,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100448"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB055_Runway_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB055"},
    {name:"GB052_RIDH",desc:"Runway Direction : Runway Designator (high end)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"GB052_RIDL",desc:"Runway Direction : Runway Designator (low end)",optional:"R",type:"String",defValue:"noInformation"},
@@ -53130,13 +53130,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SABKHA_S",fcode:"BH160",desc:"Sabkha",geom:"Area",fcsubtype:"100318",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"SABKHA_S",fcode:"BH160",desc:"Sabkha",geom:"Area",fcsubtype:"BH160_Sabkha_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100318"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH160_Sabkha_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH160"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53182,14 +53182,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SALT_EVAPORATOR_P",fcode:"BH155",desc:"Salt Evaporator",geom:"Point",fcsubtype:"100317",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"SALT_EVAPORATOR_P",fcode:"BH155",desc:"Salt Evaporator",geom:"Point",fcsubtype:"BH155_Salt_Evaporator_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AZC",desc:"Man-made",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100317"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH155_Salt_Evaporator_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH155"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53246,14 +53246,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SALT_EVAPORATOR_S",fcode:"BH155",desc:"Salt Evaporator",geom:"Area",fcsubtype:"100317",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"SALT_EVAPORATOR_S",fcode:"BH155",desc:"Salt Evaporator",geom:"Area",fcsubtype:"BH155_Salt_Evaporator_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AZC",desc:"Man-made",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100317"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH155_Salt_Evaporator_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH155"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53310,13 +53310,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SALT_FLAT_S",fcode:"BH150",desc:"Salt Flat",geom:"Area",fcsubtype:"100316",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"SALT_FLAT_S",fcode:"BH150",desc:"Salt Flat",geom:"Area",fcsubtype:"BH150_Salt_Flat_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100316"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH150_Salt_Flat_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH150"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -53388,13 +53388,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SAND_DUNES_S",fcode:"DB170",desc:"Sand Dunes",geom:"Area",fcsubtype:"100374",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"SAND_DUNES_S",fcode:"DB170",desc:"Sand Dunes",geom:"Area",fcsubtype:"DB170_Sand_Dunes_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100374"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB170_Sand_Dunes_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB170"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53457,7 +53457,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SCOREBOARD_P",fcode:"AK161",desc:"Scoreboard",geom:"Point",fcsubtype:"121747",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"SCOREBOARD_P",fcode:"AK161",desc:"Scoreboard",geom:"Point",fcsubtype:"AK161_Scoreboard_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53475,7 +53475,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"121747"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK161_Scoreboard_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK161"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -53534,7 +53534,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SEAPLANE_RUN_S",fcode:"GB070",desc:"Seaplane Run",geom:"Area",fcsubtype:"100453",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"SEAPLANE_RUN_S",fcode:"GB070",desc:"Seaplane Run",geom:"Area",fcsubtype:"GB070_Seaplane_Run_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53552,7 +53552,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100453"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB070_Seaplane_Run_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB070"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -53609,7 +53609,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SETTLEMENT_P",fcode:"AL105",desc:"Settlement",geom:"Point",fcsubtype:"100104",fdname:"TDS",thematic:"SettlementPnt",
+ {name:"SETTLEMENT_P",fcode:"AL105",desc:"Settlement",geom:"Point",fcsubtype:"AL105_Settlement_Point",fdname:"TDS",thematic:"SettlementPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53626,7 +53626,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100104"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL105_Settlement_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -53721,7 +53721,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SETTLEMENT_S",fcode:"AL105",desc:"Settlement",geom:"Area",fcsubtype:"100104",fdname:"TDS",thematic:"SettlementSrf",
+ {name:"SETTLEMENT_S",fcode:"AL105",desc:"Settlement",geom:"Area",fcsubtype:"AL105_Settlement_Area",fdname:"TDS",thematic:"SettlementSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53738,7 +53738,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100104"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL105_Settlement_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -53833,13 +53833,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SETTLING_POND_S",fcode:"AC030",desc:"Settling Pond",geom:"Area",fcsubtype:"100014",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"SETTLING_POND_S",fcode:"AC030",desc:"Settling Pond",geom:"Area",fcsubtype:"AC030_Settling_Pond_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100014"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AC030_Settling_Pond_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AC030"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -53896,13 +53896,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHANTY_TOWN_P",fcode:"AL208",desc:"Shanty Town",geom:"Point",fcsubtype:"100118",fdname:"TDS_CARTO",thematic:"ShantyTownPnt",
+ {name:"SHANTY_TOWN_P",fcode:"AL208",desc:"Shanty Town",geom:"Point",fcsubtype:"AL208_Shanty_Town_Point",fdname:"TDS_CARTO",thematic:"ShantyTownPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100118"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL208_Shanty_Town_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL208"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -53961,13 +53961,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHANTY_TOWN_S",fcode:"AL208",desc:"Shanty Town",geom:"Area",fcsubtype:"100118",fdname:"TDS",thematic:"SettlementSrf",
+ {name:"SHANTY_TOWN_S",fcode:"AL208",desc:"Shanty Town",geom:"Area",fcsubtype:"AL208_Shanty_Town_Area",fdname:"TDS",thematic:"SettlementSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100118"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL208_Shanty_Town_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL208"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -54026,12 +54026,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHARP_CURVE_P",fcode:"AQ118",desc:"Sharp Curve",geom:"Point",fcsubtype:"100183",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"SHARP_CURVE_P",fcode:"AQ118",desc:"Sharp Curve",geom:"Point",fcsubtype:"AQ118_Sharp_Curve_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100183"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ118_Sharp_Curve_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ118"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -54075,12 +54075,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHEAR_WALL_C",fcode:"AA011",desc:"Shear Wall",geom:"Line",fcsubtype:"100002",fdname:"TDS",thematic:"IndustryCrv",
+ {name:"SHEAR_WALL_C",fcode:"AA011",desc:"Shear Wall",geom:"Line",fcsubtype:"AA011_Shear_Wall_Line",fdname:"TDS",thematic:"IndustryCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100002"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AA011_Shear_Wall_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AA011"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -54127,7 +54127,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHED_P",fcode:"AL019",desc:"Shed",geom:"Point",fcsubtype:"100088",fdname:"TDS",thematic:"StructurePnt",
+ {name:"SHED_P",fcode:"AL019",desc:"Shed",geom:"Point",fcsubtype:"AL019_Shed_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -54145,7 +54145,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100088"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL019_Shed_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -54789,7 +54789,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHED_S",fcode:"AL019",desc:"Shed",geom:"Area",fcsubtype:"100088",fdname:"TDS",thematic:"StructureSrf",
+ {name:"SHED_S",fcode:"AL019",desc:"Shed",geom:"Area",fcsubtype:"AL019_Shed_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -54807,7 +54807,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100088"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL019_Shed_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -55451,7 +55451,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHIP_ELEVATOR_C",fcode:"BI006",desc:"Ship Elevator",geom:"Line",fcsubtype:"132749",fdname:"TDS",thematic:"TransportationWaterCrv",
+ {name:"SHIP_ELEVATOR_C",fcode:"BI006",desc:"Ship Elevator",geom:"Line",fcsubtype:"BI006_Ship_Elevator_Line",fdname:"TDS",thematic:"TransportationWaterCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -55469,7 +55469,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132749"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI006_Ship_Elevator_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI006"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -55563,7 +55563,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHIP_ELEVATOR_P",fcode:"BI006",desc:"Ship Elevator",geom:"Point",fcsubtype:"132749",fdname:"TDS",thematic:"TransportationWaterPnt",
+ {name:"SHIP_ELEVATOR_P",fcode:"BI006",desc:"Ship Elevator",geom:"Point",fcsubtype:"BI006_Ship_Elevator_Point",fdname:"TDS",thematic:"TransportationWaterPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -55581,7 +55581,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132749"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI006_Ship_Elevator_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI006"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -55675,7 +55675,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHIP_ELEVATOR_S",fcode:"BI006",desc:"Ship Elevator",geom:"Area",fcsubtype:"132749",fdname:"TDS",thematic:"TransportationWaterSrf",
+ {name:"SHIP_ELEVATOR_S",fcode:"BI006",desc:"Ship Elevator",geom:"Area",fcsubtype:"BI006_Ship_Elevator_Area",fdname:"TDS",thematic:"TransportationWaterSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -55693,7 +55693,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"132749"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI006_Ship_Elevator_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI006"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -55787,7 +55787,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHOPPING_COMPLEX_S",fcode:"AG030",desc:"Shopping Complex",geom:"Area",fcsubtype:"100034",fdname:"TDS",thematic:"FacilitySrf",
+ {name:"SHOPPING_COMPLEX_S",fcode:"AG030",desc:"Shopping Complex",geom:"Area",fcsubtype:"AG030_Shopping_Complex_Area",fdname:"TDS",thematic:"FacilitySrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -55806,7 +55806,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100034"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AG030_Shopping_Complex_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -56099,7 +56099,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHORELINE_CONSTRUCTION_C",fcode:"BB081",desc:"Shoreline Construction",geom:"Line",fcsubtype:"100231",fdname:"TDS",thematic:"PortHarbourCrv",
+ {name:"SHORELINE_CONSTRUCTION_C",fcode:"BB081",desc:"Shoreline Construction",geom:"Line",fcsubtype:"BB081_Shoreline_Construction_Line",fdname:"TDS",thematic:"PortHarbourCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56118,7 +56118,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"FAC",desc:"Solid Maritime Construction",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100231"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB081_Shoreline_Construction_Line"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -56307,7 +56307,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHORELINE_CONSTRUCTION_S",fcode:"BB081",desc:"Shoreline Construction",geom:"Area",fcsubtype:"100231",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"SHORELINE_CONSTRUCTION_S",fcode:"BB081",desc:"Shoreline Construction",geom:"Area",fcsubtype:"BB081_Shoreline_Construction_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56326,7 +56326,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"FAC",desc:"Solid Maritime Construction",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100231"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB081_Shoreline_Construction_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -56515,13 +56515,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHORELINE_RAMP_C",fcode:"BB082",desc:"Shoreline Ramp",geom:"Line",fcsubtype:"100232",fdname:"TDS",thematic:"PortHarbourCrv",
+ {name:"SHORELINE_RAMP_C",fcode:"BB082",desc:"Shoreline Ramp",geom:"Line",fcsubtype:"BB082_Shoreline_Ramp_Line",fdname:"TDS",thematic:"PortHarbourCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100232"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB082_Shoreline_Ramp_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB082"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56642,13 +56642,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SHORELINE_RAMP_S",fcode:"BB082",desc:"Shoreline Ramp",geom:"Area",fcsubtype:"100232",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"SHORELINE_RAMP_S",fcode:"BB082",desc:"Shoreline Ramp",geom:"Area",fcsubtype:"BB082_Shoreline_Ramp_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100232"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BB082_Shoreline_Ramp_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BB082"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56769,7 +56769,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SIDEWALK_C",fcode:"AQ035",desc:"Sidewalk",geom:"Line",fcsubtype:"100159",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"SIDEWALK_C",fcode:"AQ035",desc:"Sidewalk",geom:"Line",fcsubtype:"AQ035_Sidewalk_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56777,7 +56777,7 @@ var schema = [
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CIW",desc:"Closed in Winter",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100159"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ035_Sidewalk_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ035"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56874,7 +56874,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SKI_JUMP_C",fcode:"AK150",desc:"Ski Jump",geom:"Line",fcsubtype:"100072",fdname:"TDS",thematic:"RecreationCrv",
+ {name:"SKI_JUMP_C",fcode:"AK150",desc:"Ski Jump",geom:"Line",fcsubtype:"AK150_Ski_Jump_Line",fdname:"TDS",thematic:"RecreationCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56892,7 +56892,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100072"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK150_Ski_Jump_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK150"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -56952,7 +56952,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SKI_JUMP_P",fcode:"AK150",desc:"Ski Jump",geom:"Point",fcsubtype:"100072",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"SKI_JUMP_P",fcode:"AK150",desc:"Ski Jump",geom:"Point",fcsubtype:"AK150_Ski_Jump_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -56970,7 +56970,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100072"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK150_Ski_Jump_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK150"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -57030,13 +57030,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SLUICE_GATE_C",fcode:"BI040",desc:"Sluice Gate",geom:"Line",fcsubtype:"100334",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"SLUICE_GATE_C",fcode:"BI040",desc:"Sluice Gate",geom:"Line",fcsubtype:"BI040_Sluice_Gate_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100334"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI040_Sluice_Gate_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI040"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -57130,13 +57130,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SLUICE_GATE_P",fcode:"BI040",desc:"Sluice Gate",geom:"Point",fcsubtype:"100334",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"SLUICE_GATE_P",fcode:"BI040",desc:"Sluice Gate",geom:"Point",fcsubtype:"BI040_Sluice_Gate_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100334"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI040_Sluice_Gate_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI040"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -57230,7 +57230,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SMOKESTACK_P",fcode:"AF010",desc:"Smokestack",geom:"Point",fcsubtype:"100025",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"SMOKESTACK_P",fcode:"AF010",desc:"Smokestack",geom:"Point",fcsubtype:"AF010_Smokestack_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -57248,7 +57248,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DIM",desc:"Diameter",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100025"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AF010_Smokestack_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AF010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -57348,13 +57348,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SNAG_P",fcode:"BD140",desc:"Snag",geom:"Point",fcsubtype:"100277",fdname:"TDS_CARTO",thematic:"SnagPnt",
+ {name:"SNAG_P",fcode:"BD140",desc:"Snag",geom:"Point",fcsubtype:"BD140_Snag_Point",fdname:"TDS_CARTO",thematic:"SnagPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100277"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD140_Snag_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD140"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -57399,13 +57399,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SNAG_S",fcode:"BD140",desc:"Snag",geom:"Area",fcsubtype:"100277",fdname:"TDS_CARTO",thematic:"SnagSrf",
+ {name:"SNAG_S",fcode:"BD140",desc:"Snag",geom:"Area",fcsubtype:"BD140_Snag_Area",fdname:"TDS_CARTO",thematic:"SnagSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100277"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD140_Snag_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD140"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -57450,13 +57450,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SNOW_ICE_FIELD_S",fcode:"BJ100",desc:"Snow Ice Field",geom:"Area",fcsubtype:"100349",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"SNOW_ICE_FIELD_S",fcode:"BJ100",desc:"Snow Ice Field",geom:"Area",fcsubtype:"BJ100_Snow_Ice_Field_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100349"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ100_Snow_Ice_Field_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ100"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -57531,13 +57531,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SOIL_SURFACE_REGION_S",fcode:"DA010",desc:"Soil Surface Region",geom:"Area",fcsubtype:"100358",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"SOIL_SURFACE_REGION_S",fcode:"DA010",desc:"Soil Surface Region",geom:"Area",fcsubtype:"DA010_Soil_Surface_Region_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100358"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DA010_Soil_Surface_Region_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DA010"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -57729,7 +57729,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SOLAR_FARM_P",fcode:"AD025",desc:"Solar Farm",geom:"Point",fcsubtype:"100020",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"SOLAR_FARM_P",fcode:"AD025",desc:"Solar Farm",geom:"Point",fcsubtype:"AD025_Solar_Farm_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -57747,7 +57747,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100020"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD025_Solar_Farm_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD025"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -57869,7 +57869,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SOLAR_FARM_S",fcode:"AD025",desc:"Solar Farm",geom:"Area",fcsubtype:"100020",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"SOLAR_FARM_S",fcode:"AD025",desc:"Solar Farm",geom:"Area",fcsubtype:"AD025_Solar_Farm_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -57887,7 +57887,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100020"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD025_Solar_Farm_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD025"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -58009,14 +58009,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SOLAR_PANEL_P",fcode:"AD020",desc:"Solar Panel",geom:"Point",fcsubtype:"100019",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"SOLAR_PANEL_P",fcode:"AD020",desc:"Solar Panel",geom:"Point",fcsubtype:"AD020_Solar_Panel_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100019"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD020_Solar_Panel_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -58099,14 +58099,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SOLAR_PANEL_S",fcode:"AD020",desc:"Solar Panel",geom:"Area",fcsubtype:"100019",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"SOLAR_PANEL_S",fcode:"AD020",desc:"Solar Panel",geom:"Area",fcsubtype:"AD020_Solar_Panel_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100019"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD020_Solar_Panel_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -58189,7 +58189,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPACE_FACILITY_P",fcode:"AL351",desc:"Space Facility",geom:"Point",fcsubtype:"100126",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"SPACE_FACILITY_P",fcode:"AL351",desc:"Space Facility",geom:"Point",fcsubtype:"AL351_Space_Facility_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -58207,7 +58207,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100126"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL351_Space_Facility_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -58311,7 +58311,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPACE_FACILITY_S",fcode:"AL351",desc:"Space Facility",geom:"Area",fcsubtype:"100126",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"SPACE_FACILITY_S",fcode:"AL351",desc:"Space Facility",geom:"Area",fcsubtype:"AL351_Space_Facility_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -58329,7 +58329,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100126"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL351_Space_Facility_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -58433,13 +58433,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPILLWAY_C",fcode:"BH165",desc:"Spillway",geom:"Line",fcsubtype:"100319",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"SPILLWAY_C",fcode:"BH165",desc:"Spillway",geom:"Line",fcsubtype:"BH165_Spillway_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100319"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH165_Spillway_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH165"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -58540,13 +58540,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPILLWAY_S",fcode:"BH165",desc:"Spillway",geom:"Area",fcsubtype:"100319",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"SPILLWAY_S",fcode:"BH165",desc:"Spillway",geom:"Area",fcsubtype:"BH165_Spillway_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100319"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH165_Spillway_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH165"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"MCC",desc:"Structural Material Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -58647,14 +58647,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPORTS_GROUND_P",fcode:"AK040",desc:"Sports Ground",geom:"Point",fcsubtype:"100055",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"SPORTS_GROUND_P",fcode:"AK040",desc:"Sports Ground",geom:"Point",fcsubtype:"AK040_Sports_Ground_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100055"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK040_Sports_Ground_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -58713,14 +58713,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPORTS_GROUND_S",fcode:"AK040",desc:"Sports Ground",geom:"Area",fcsubtype:"100055",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"SPORTS_GROUND_S",fcode:"AK040",desc:"Sports Ground",geom:"Area",fcsubtype:"AK040_Sports_Ground_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100055"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK040_Sports_Ground_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK040"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -58779,7 +58779,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SPOT_ELEVATION_P",fcode:"CA030",desc:"Spot Elevation",geom:"Point",fcsubtype:"100355",fdname:"TDS_CARTO",thematic:"HypsographyPnt",
+ {name:"SPOT_ELEVATION_P",fcode:"CA030",desc:"Spot Elevation",geom:"Point",fcsubtype:"CA030_Spot_Elevation_Point",fdname:"TDS_CARTO",thematic:"HypsographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
@@ -58794,7 +58794,7 @@ var schema = [
      {name:"Tidal Water",value:"6"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100355"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"CA030_Spot_Elevation_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"CA030"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -58851,7 +58851,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STADIUM_P",fcode:"AK160",desc:"Stadium",geom:"Point",fcsubtype:"154703",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"STADIUM_P",fcode:"AK160",desc:"Stadium",geom:"Point",fcsubtype:"AK160_Stadium_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -58879,7 +58879,7 @@ var schema = [
     ]
    },
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"154703"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK160_Stadium_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -59026,7 +59026,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STADIUM_S",fcode:"AK160",desc:"Stadium",geom:"Area",fcsubtype:"154703",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"STADIUM_S",fcode:"AK160",desc:"Stadium",geom:"Area",fcsubtype:"AK160_Stadium_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59054,7 +59054,7 @@ var schema = [
     ]
    },
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"154703"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK160_Stadium_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -59201,13 +59201,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STAIR_C",fcode:"AQ150",desc:"Stair",geom:"Line",fcsubtype:"100191",fdname:"TDS",thematic:"StructureCrv",
+ {name:"STAIR_C",fcode:"AQ150",desc:"Stair",geom:"Line",fcsubtype:"AQ150_Stair_Line",fdname:"TDS",thematic:"StructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100191"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ150_Stair_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ150"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59265,13 +59265,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STAIR_S",fcode:"AQ150",desc:"Stair",geom:"Area",fcsubtype:"100191",fdname:"TDS",thematic:"StructureSrf",
+ {name:"STAIR_S",fcode:"AQ150",desc:"Stair",geom:"Area",fcsubtype:"AQ150_Stair_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100191"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ150_Stair_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ150"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59329,13 +59329,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STEEP_TERRAIN_FACE_C",fcode:"DB010",desc:"Steep Terrain Face",geom:"Line",fcsubtype:"100362",fdname:"TDS",thematic:"PhysiographyCrv",
+ {name:"STEEP_TERRAIN_FACE_C",fcode:"DB010",desc:"Steep Terrain Face",geom:"Line",fcsubtype:"DB010_Steep_Terrain_Face_Line",fdname:"TDS",thematic:"PhysiographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100362"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB010_Steep_Terrain_Face_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB010"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59402,7 +59402,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STOPWAY_S",fcode:"GB045",desc:"Stopway",geom:"Area",fcsubtype:"100444",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"STOPWAY_S",fcode:"GB045",desc:"Stopway",geom:"Area",fcsubtype:"GB045_Stopway_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59489,7 +59489,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100444"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB045_Stopway_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB045"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -59546,7 +59546,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STORAGE_DEPOT_P",fcode:"AM010",desc:"Storage Depot",geom:"Point",fcsubtype:"100131",fdname:"TDS",thematic:"StoragePnt",
+ {name:"STORAGE_DEPOT_P",fcode:"AM010",desc:"Storage Depot",geom:"Point",fcsubtype:"AM010_Storage_Depot_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59565,7 +59565,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100131"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM010_Storage_Depot_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -59775,7 +59775,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STORAGE_DEPOT_S",fcode:"AM010",desc:"Storage Depot",geom:"Area",fcsubtype:"100131",fdname:"TDS",thematic:"StorageSrf",
+ {name:"STORAGE_DEPOT_S",fcode:"AM010",desc:"Storage Depot",geom:"Area",fcsubtype:"AM010_Storage_Depot_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -59794,7 +59794,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100131"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM010_Storage_Depot_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -60004,7 +60004,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STORAGE_TANK_P",fcode:"AM070",desc:"Storage Tank",geom:"Point",fcsubtype:"100139",fdname:"TDS",thematic:"StoragePnt",
+ {name:"STORAGE_TANK_P",fcode:"AM070",desc:"Storage Tank",geom:"Point",fcsubtype:"AM070_Storage_Tank_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -60023,7 +60023,7 @@ var schema = [
    {name:"CBP",desc:"Containment Berm Present",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100139"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM070_Storage_Tank_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM070"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -60211,7 +60211,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STORAGE_TANK_S",fcode:"AM070",desc:"Storage Tank",geom:"Area",fcsubtype:"100139",fdname:"TDS",thematic:"StorageSrf",
+ {name:"STORAGE_TANK_S",fcode:"AM070",desc:"Storage Tank",geom:"Area",fcsubtype:"AM070_Storage_Tank_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -60230,7 +60230,7 @@ var schema = [
    {name:"CBP",desc:"Containment Berm Present",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100139"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM070_Storage_Tank_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM070"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -60418,13 +60418,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STRUCTURAL_PILE_P",fcode:"BD100",desc:"Structural Pile",geom:"Point",fcsubtype:"100271",fdname:"TDS",thematic:"PortHarbourPnt",
+ {name:"STRUCTURAL_PILE_P",fcode:"BD100",desc:"Structural Pile",geom:"Point",fcsubtype:"BD100_Structural_Pile_Point",fdname:"TDS",thematic:"PortHarbourPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100271"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD100_Structural_Pile_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD100"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -60531,13 +60531,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"STRUCTURAL_PILE_S",fcode:"BD100",desc:"Structural Pile",geom:"Area",fcsubtype:"100271",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"STRUCTURAL_PILE_S",fcode:"BD100",desc:"Structural Pile",geom:"Area",fcsubtype:"BD100_Structural_Pile_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100271"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD100_Structural_Pile_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD100"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -60644,7 +60644,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SURFACE_BUNKER_P",fcode:"AM060",desc:"Surface Bunker",geom:"Point",fcsubtype:"100137",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"SURFACE_BUNKER_P",fcode:"AM060",desc:"Surface Bunker",geom:"Point",fcsubtype:"AM060_Surface_Bunker_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -60662,7 +60662,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100137"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM060_Surface_Bunker_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -60756,7 +60756,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SURFACE_BUNKER_S",fcode:"AM060",desc:"Surface Bunker",geom:"Area",fcsubtype:"100137",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"SURFACE_BUNKER_S",fcode:"AM060",desc:"Surface Bunker",geom:"Area",fcsubtype:"AM060_Surface_Bunker_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -60774,7 +60774,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100137"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM060_Surface_Bunker_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -60868,13 +60868,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SURVEY_POINT_P",fcode:"ZB050",desc:"Survey Point",geom:"Point",fcsubtype:"177997",fdname:"TDS_CARTO",thematic:"HypsographyPnt",
+ {name:"SURVEY_POINT_P",fcode:"ZB050",desc:"Survey Point",geom:"Point",fcsubtype:"ZB050_Survey_Point_Point",fdname:"TDS_CARTO",thematic:"HypsographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"BEL",desc:"Base Elevation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"177997"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZB050_Survey_Point_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZB050"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PCF",desc:"Physical Condition",optional:"R",type:"enumeration",defValue:"-999999",
@@ -60945,7 +60945,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SWAMP_S",fcode:"ED020",desc:"Swamp",geom:"Area",fcsubtype:"100400",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"SWAMP_S",fcode:"ED020",desc:"Swamp",geom:"Area",fcsubtype:"ED020_Swamp_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61000,7 +61000,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DMT",desc:"Canopy Cover",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100400"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ED020_Swamp_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ED020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61084,14 +61084,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SWIMMING_POOL_P",fcode:"AK170",desc:"Swimming Pool",geom:"Point",fcsubtype:"100077",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"SWIMMING_POOL_P",fcode:"AK170",desc:"Swimming Pool",geom:"Point",fcsubtype:"AK170_Swimming_Pool_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100077"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK170_Swimming_Pool_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK170"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61148,14 +61148,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"SWIMMING_POOL_S",fcode:"AK170",desc:"Swimming Pool",geom:"Area",fcsubtype:"100077",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"SWIMMING_POOL_S",fcode:"AK170",desc:"Swimming Pool",geom:"Area",fcsubtype:"AK170_Swimming_Pool_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100077"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK170_Swimming_Pool_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK170"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61212,12 +61212,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TACTICAL_AIR_NAVIGATION_AID_BEACON_P",fcode:"GA037",desc:"Tactical Air Navigation Aid Beacon",geom:"Point",fcsubtype:"801074",fdname:"TDS_CARTO",thematic:"TacticalAirNavAidBeaconPnt",
+ {name:"TACTICAL_AIR_NAVIGATION_AID_BEACON_P",fcode:"GA037",desc:"Tactical Air Navigation Aid Beacon",geom:"Point",fcsubtype:"GA037_Tactical_Air_Navigation_Aid_Beacon_Point",fdname:"TDS_CARTO",thematic:"TacticalAirNavAidBeaconPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"801074"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA037_Tactical_Air_Navigation_Aid_Beacon_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA037"},
    {name:"GA032_NSX",desc:"Aeronautical Radio Navigation Service Name",optional:"R",type:"String",defValue:"noInformation"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61254,7 +61254,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TANK_FARM_P",fcode:"AM071",desc:"Tank Farm",geom:"Point",fcsubtype:"100140",fdname:"TDS",thematic:"StoragePnt",
+ {name:"TANK_FARM_P",fcode:"AM071",desc:"Tank Farm",geom:"Point",fcsubtype:"AM071_Tank_Farm_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61273,7 +61273,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100140"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM071_Tank_Farm_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -61413,7 +61413,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TANK_FARM_S",fcode:"AM071",desc:"Tank Farm",geom:"Area",fcsubtype:"100140",fdname:"TDS",thematic:"StorageSrf",
+ {name:"TANK_FARM_S",fcode:"AM071",desc:"Tank Farm",geom:"Area",fcsubtype:"AM071_Tank_Farm_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61432,7 +61432,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100140"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM071_Tank_Farm_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -61572,7 +61572,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TAXIWAY_C",fcode:"GB075",desc:"Taxiway",geom:"Line",fcsubtype:"100454",fdname:"TDS",thematic:"AeronauticCrv",
+ {name:"TAXIWAY_C",fcode:"GB075",desc:"Taxiway",geom:"Line",fcsubtype:"GB075_Taxiway_Line",fdname:"TDS",thematic:"AeronauticCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61588,7 +61588,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100454"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB075_Taxiway_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB075"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -61813,7 +61813,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TAXIWAY_S",fcode:"GB075",desc:"Taxiway",geom:"Area",fcsubtype:"100454",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"TAXIWAY_S",fcode:"GB075",desc:"Taxiway",geom:"Area",fcsubtype:"GB075_Taxiway_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -61829,7 +61829,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100454"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB075_Taxiway_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB075"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -62054,13 +62054,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TEST_SITE_S",fcode:"FA100",desc:"Test Site",geom:"Area",fcsubtype:"100414",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"TEST_SITE_S",fcode:"FA100",desc:"Test Site",geom:"Area",fcsubtype:"FA100_Test_Site_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100414"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA100_Test_Site_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"FA100"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -62116,13 +62116,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TETHERED_BALLOON_P",fcode:"AL510",desc:"Tethered Balloon",geom:"Point",fcsubtype:"100130",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"TETHERED_BALLOON_P",fcode:"AL510",desc:"Tethered Balloon",geom:"Point",fcsubtype:"AL510_Tethered_Balloon_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100130"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL510_Tethered_Balloon_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL510"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -62169,13 +62169,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"THICKET_S",fcode:"EB020",desc:"Thicket",geom:"Area",fcsubtype:"100388",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"THICKET_S",fcode:"EB020",desc:"Thicket",geom:"Area",fcsubtype:"EB020_Thicket_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100388"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EB020_Thicket_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EB020"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62222,7 +62222,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TIDAL_WATER_S",fcode:"BA040",desc:"Tidal Water",geom:"Area",fcsubtype:"100218",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"TIDAL_WATER_S",fcode:"BA040",desc:"Tidal Water",geom:"Area",fcsubtype:"BA040_Tidal_Water_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62291,7 +62291,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100218"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BA040_Tidal_Water_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BA040"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -62336,7 +62336,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TOMB_P",fcode:"AL036",desc:"Tomb",geom:"Point",fcsubtype:"100094",fdname:"TDS",thematic:"CulturePnt",
+ {name:"TOMB_P",fcode:"AL036",desc:"Tomb",geom:"Point",fcsubtype:"AL036_Tomb_Point",fdname:"TDS",thematic:"CulturePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62355,7 +62355,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100094"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL036_Tomb_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL036"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -62463,7 +62463,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TOMB_S",fcode:"AL036",desc:"Tomb",geom:"Area",fcsubtype:"100094",fdname:"TDS",thematic:"CultureSrf",
+ {name:"TOMB_S",fcode:"AL036",desc:"Tomb",geom:"Area",fcsubtype:"AL036_Tomb_Area",fdname:"TDS",thematic:"CultureSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62482,7 +62482,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100094"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL036_Tomb_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL036"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -62590,7 +62590,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TOWER_P",fcode:"AL241",desc:"Tower",geom:"Point",fcsubtype:"100122",fdname:"TDS",thematic:"StructurePnt",
+ {name:"TOWER_P",fcode:"AL241",desc:"Tower",geom:"Point",fcsubtype:"AL241_Tower_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62608,7 +62608,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100122"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL241_Tower_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL241"},
    {name:"GUG",desc:"Guyed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62796,7 +62796,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TOWER_S",fcode:"AL241",desc:"Tower",geom:"Area",fcsubtype:"100122",fdname:"TDS",thematic:"StructureSrf",
+ {name:"TOWER_S",fcode:"AL241",desc:"Tower",geom:"Area",fcsubtype:"AL241_Tower_Area",fdname:"TDS",thematic:"StructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -62814,7 +62814,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100122"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL241_Tower_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL241"},
    {name:"GUG",desc:"Guyed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63002,7 +63002,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRAIL_C",fcode:"AP050",desc:"Trail",geom:"Line",fcsubtype:"100156",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"TRAIL_C",fcode:"AP050",desc:"Trail",geom:"Line",fcsubtype:"AP050_Trail_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -63019,7 +63019,7 @@ var schema = [
    {name:"CIW",desc:"Closed in Winter",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"CWT",desc:"Contained within Tunnel",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"DEV",desc:"Deck Level",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100156"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP050_Trail_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP050"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LOC",desc:"Vertical Relative Location",optional:"R",type:"enumeration",defValue:"-999999",
@@ -63104,7 +63104,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRAINING_SITE_P",fcode:"FA165",desc:"Training Site",geom:"Point",fcsubtype:"100416",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"TRAINING_SITE_P",fcode:"FA165",desc:"Training Site",geom:"Point",fcsubtype:"FA165_Training_Site_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63122,7 +63122,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100416"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA165_Training_Site_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -63247,7 +63247,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRAINING_SITE_S",fcode:"FA165",desc:"Training Site",geom:"Area",fcsubtype:"100416",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"TRAINING_SITE_S",fcode:"FA165",desc:"Training Site",geom:"Area",fcsubtype:"FA165_Training_Site_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63265,7 +63265,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100416"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"FA165_Training_Site_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -63390,7 +63390,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANSPORTATION_BLOCK_P",fcode:"AQ068",desc:"Transportation Block",geom:"Point",fcsubtype:"100171",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"TRANSPORTATION_BLOCK_P",fcode:"AQ068",desc:"Transportation Block",geom:"Point",fcsubtype:"AQ068_Transportation_Block_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63405,7 +63405,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100171"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ068_Transportation_Block_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ068"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -63489,7 +63489,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANSPORTATION_BLOCK_S",fcode:"AQ068",desc:"Transportation Block",geom:"Area",fcsubtype:"100171",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"TRANSPORTATION_BLOCK_S",fcode:"AQ068",desc:"Transportation Block",geom:"Area",fcsubtype:"AQ068_Transportation_Block_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63504,7 +63504,7 @@ var schema = [
      {name:"Other",value:"999"}
     ]
    },
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100171"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ068_Transportation_Block_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ068"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -63588,7 +63588,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANSPORTATION_STATION_P",fcode:"AQ125",desc:"Transportation Station",geom:"Point",fcsubtype:"100186",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"TRANSPORTATION_STATION_P",fcode:"AQ125",desc:"Transportation Station",geom:"Point",fcsubtype:"AQ125_Transportation_Station_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63607,7 +63607,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100186"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ125_Transportation_Station_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -63875,7 +63875,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANSPORTATION_STATION_S",fcode:"AQ125",desc:"Transportation Station",geom:"Area",fcsubtype:"100186",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"TRANSPORTATION_STATION_S",fcode:"AQ125",desc:"Transportation Station",geom:"Area",fcsubtype:"AQ125_Transportation_Station_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -63894,7 +63894,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100186"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ125_Transportation_Station_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -64162,7 +64162,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANS_ROUTE_PROTECT_STRUCT_C",fcode:"AL211",desc:"Trans Route Protect Struct",geom:"Line",fcsubtype:"130921",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"TRANS_ROUTE_PROTECT_STRUCT_C",fcode:"AL211",desc:"Trans Route Protect Struct",geom:"Line",fcsubtype:"AL211_Trans_Route_Protect_Struct_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64177,7 +64177,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130921"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL211_Trans_Route_Protect_Struct_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL211"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64273,7 +64273,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANS_ROUTE_PROTECT_STRUCT_P",fcode:"AL211",desc:"Trans Route Protect Struct",geom:"Point",fcsubtype:"130921",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"TRANS_ROUTE_PROTECT_STRUCT_P",fcode:"AL211",desc:"Trans Route Protect Struct",geom:"Point",fcsubtype:"AL211_Trans_Route_Protect_Struct_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64288,7 +64288,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130921"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL211_Trans_Route_Protect_Struct_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL211"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64384,7 +64384,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TRANS_ROUTE_PROTECT_STRUCT_S",fcode:"AL211",desc:"Trans Route Protect Struct",geom:"Area",fcsubtype:"130921",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"TRANS_ROUTE_PROTECT_STRUCT_S",fcode:"AL211",desc:"Trans Route Protect Struct",geom:"Area",fcsubtype:"AL211_Trans_Route_Protect_Struct_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64399,7 +64399,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"130921"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL211_Trans_Route_Protect_Struct_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL211"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64495,12 +64495,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TREE_P",fcode:"EC005",desc:"Tree",geom:"Point",fcsubtype:"100392",fdname:"TDS",thematic:"VegetationPnt",
+ {name:"TREE_P",fcode:"EC005",desc:"Tree",geom:"Point",fcsubtype:"EC005_Tree_Point",fdname:"TDS",thematic:"VegetationPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100392"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EC005_Tree_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EC005"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -64552,13 +64552,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TUNDRA_S",fcode:"BJ110",desc:"Tundra",geom:"Area",fcsubtype:"100350",fdname:"TDS",thematic:"VegetationSrf",
+ {name:"TUNDRA_S",fcode:"BJ110",desc:"Tundra",geom:"Area",fcsubtype:"BJ110_Tundra_Area",fdname:"TDS",thematic:"VegetationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100350"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BJ110_Tundra_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BJ110"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -64603,7 +64603,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TUNNEL_C",fcode:"AQ130",desc:"Tunnel",geom:"Line",fcsubtype:"100187",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"TUNNEL_C",fcode:"AQ130",desc:"Tunnel",geom:"Line",fcsubtype:"AQ130_Tunnel_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64630,7 +64630,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DZC",desc:"Deck Count",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100187"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ130_Tunnel_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ130"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64735,7 +64735,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TUNNEL_MOUTH_P",fcode:"AQ095",desc:"Tunnel Mouth",geom:"Point",fcsubtype:"100176",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"TUNNEL_MOUTH_P",fcode:"AQ095",desc:"Tunnel Mouth",geom:"Point",fcsubtype:"AQ095_Tunnel_Mouth_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64752,7 +64752,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100176"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ095_Tunnel_Mouth_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ095"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64810,7 +64810,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"TUNNEL_S",fcode:"AQ130",desc:"Tunnel",geom:"Area",fcsubtype:"100187",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"TUNNEL_S",fcode:"AQ130",desc:"Tunnel",geom:"Area",fcsubtype:"AQ130_Tunnel_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64837,7 +64837,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DZC",desc:"Deck Count",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100187"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ130_Tunnel_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ130"},
    {name:"HCA",desc:"Horizontal Clearance",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64942,7 +64942,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"UNDERGROUND_BUNKER_P",fcode:"AH060",desc:"Underground Bunker",geom:"Point",fcsubtype:"100038",fdname:"TDS",thematic:"MilitaryPnt",
+ {name:"UNDERGROUND_BUNKER_P",fcode:"AH060",desc:"Underground Bunker",geom:"Point",fcsubtype:"AH060_Underground_Bunker_Point",fdname:"TDS",thematic:"MilitaryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -64959,7 +64959,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100038"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH060_Underground_Bunker_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AH060"},
    {name:"HST",desc:"Hazard Shelter Intended Use",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -65094,7 +65094,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"UNDERGROUND_BUNKER_S",fcode:"AH060",desc:"Underground Bunker",geom:"Area",fcsubtype:"100038",fdname:"TDS",thematic:"MilitarySrf",
+ {name:"UNDERGROUND_BUNKER_S",fcode:"AH060",desc:"Underground Bunker",geom:"Area",fcsubtype:"AH060_Underground_Bunker_Area",fdname:"TDS",thematic:"MilitarySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65112,7 +65112,7 @@ var schema = [
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DZP",desc:"Deepest Depth Below Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100038"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AH060_Underground_Bunker_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AH060"},
    {name:"HST",desc:"Hazard Shelter Intended Use",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -65248,14 +65248,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"UNDERGROUND_DWELLING_P",fcode:"AL250",desc:"Underground Dwelling",geom:"Point",fcsubtype:"100123",fdname:"TDS",thematic:"StructurePnt",
+ {name:"UNDERGROUND_DWELLING_P",fcode:"AL250",desc:"Underground Dwelling",geom:"Point",fcsubtype:"AL250_Underground_Dwelling_Point",fdname:"TDS",thematic:"StructurePnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100123"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL250_Underground_Dwelling_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL250"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65312,12 +65312,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"UNESCOW_P",fcode:"UNSCW",desc:"Unescow",geom:"Point",fcsubtype:"999996",fdname:"TDS_CARTO",thematic:"UNESCOWPnt",
+ {name:"UNESCOW_P",fcode:"UNSCW",desc:"Unescow",geom:"Point",fcsubtype:"_Unescow_Point",fdname:"TDS_CARTO",thematic:"UNESCOWPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"999996"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"_Unescow_Point"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -65355,13 +65355,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VANISHING_POINT_P",fcode:"BH145",desc:"Vanishing Point",geom:"Point",fcsubtype:"100315",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"VANISHING_POINT_P",fcode:"BH145",desc:"Vanishing Point",geom:"Point",fcsubtype:"BH145_Vanishing_Point_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
    {name:"DOF",desc:"Direction of Flow",optional:"R",type:"Real",defValue:"-999999.0"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100315"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH145_Vanishing_Point_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH145"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -65414,14 +65414,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VEHICLE_BARRIER_C",fcode:"AP041",desc:"Vehicle Barrier",geom:"Line",fcsubtype:"100155",fdname:"TDS",thematic:"TransportationGroundCrv",
+ {name:"VEHICLE_BARRIER_C",fcode:"AP041",desc:"Vehicle Barrier",geom:"Line",fcsubtype:"AP041_Vehicle_Barrier_Line",fdname:"TDS",thematic:"TransportationGroundCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100155"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP041_Vehicle_Barrier_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP041"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65545,14 +65545,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VEHICLE_BARRIER_P",fcode:"AP041",desc:"Vehicle Barrier",geom:"Point",fcsubtype:"100155",fdname:"TDS",thematic:"TransportationGroundPnt",
+ {name:"VEHICLE_BARRIER_P",fcode:"AP041",desc:"Vehicle Barrier",geom:"Point",fcsubtype:"AP041_Vehicle_Barrier_Point",fdname:"TDS",thematic:"TransportationGroundPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100155"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AP041_Vehicle_Barrier_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AP041"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65676,7 +65676,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VEHICLE_LOT_S",fcode:"AQ140",desc:"Vehicle Lot",geom:"Area",fcsubtype:"100189",fdname:"TDS",thematic:"TransportationGroundSrf",
+ {name:"VEHICLE_LOT_S",fcode:"AQ140",desc:"Vehicle Lot",geom:"Area",fcsubtype:"AQ140_Vehicle_Lot_Area",fdname:"TDS",thematic:"TransportationGroundSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65694,7 +65694,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100189"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AQ140_Vehicle_Lot_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AQ140"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65791,12 +65791,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VERTICAL_OBSTRUCTION_P",fcode:"VOBST",desc:"Vertical Obstruction",geom:"Point",fcsubtype:"999995",fdname:"TDS_CARTO",thematic:"VerticalObstructionPnt",
+ {name:"VERTICAL_OBSTRUCTION_P",fcode:"VOBST",desc:"Vertical Obstruction",geom:"Point",fcsubtype:"_Vertical_Obstruction_Point",fdname:"TDS_CARTO",thematic:"VerticalObstructionPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"999995"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"_Vertical_Obstruction_Point"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -65832,7 +65832,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VESSEL_LIFT_S",fcode:"BI005",desc:"Vessel Lift",geom:"Area",fcsubtype:"100328",fdname:"TDS",thematic:"PortHarbourSrf",
+ {name:"VESSEL_LIFT_S",fcode:"BI005",desc:"Vessel Lift",geom:"Area",fcsubtype:"BI005_Vessel_Lift_Area",fdname:"TDS",thematic:"PortHarbourSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -65850,7 +65850,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100328"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI005_Vessel_Lift_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI005"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -65909,12 +65909,12 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VHF_OMNI_RADIO_BEACON_P",fcode:"GA036",desc:"Vhf Omni Radio Beacon",geom:"Point",fcsubtype:"801161",fdname:"TDS_CARTO",thematic:"VhfOmniRadioBeaconPnt",
+ {name:"VHF_OMNI_RADIO_BEACON_P",fcode:"GA036",desc:"Vhf Omni Radio Beacon",geom:"Point",fcsubtype:"GA036_Vhf_Omni_Radio_Beacon_Point",fdname:"TDS_CARTO",thematic:"VhfOmniRadioBeaconPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"801161"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GA036_Vhf_Omni_Radio_Beacon_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GA036"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
@@ -65949,13 +65949,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VINEYARD_S",fcode:"EA050",desc:"Vineyard",geom:"Area",fcsubtype:"100385",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"VINEYARD_S",fcode:"EA050",desc:"Vineyard",geom:"Area",fcsubtype:"EA050_Vineyard_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100385"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"EA050_Vineyard_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"EA050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66064,13 +66064,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VOID_COLLECTION_AREA_S",fcode:"ZD020",desc:"Void Collection Area",geom:"Area",fcsubtype:"100473",fdname:"TDS",thematic:"InformationSrf",
+ {name:"VOID_COLLECTION_AREA_S",fcode:"ZD020",desc:"Void Collection Area",geom:"Area",fcsubtype:"ZD020_Void_Collection_Area_Area",fdname:"TDS",thematic:"InformationSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100473"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"ZD020_Void_Collection_Area_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"ZD020"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",type:"String",defValue:"noInformation"},
@@ -66194,13 +66194,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VOLCANIC_DYKE_C",fcode:"DB190",desc:"Volcanic Dyke",geom:"Line",fcsubtype:"100377",fdname:"TDS_CARTO",thematic:"VolcanicDykeCrv",
+ {name:"VOLCANIC_DYKE_C",fcode:"DB190",desc:"Volcanic Dyke",geom:"Line",fcsubtype:"DB190_Volcanic_Dyke_Line",fdname:"TDS_CARTO",thematic:"VolcanicDykeCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100377"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB190_Volcanic_Dyke_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB190"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -66250,13 +66250,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VOLCANO_P",fcode:"DB180",desc:"Volcano",geom:"Point",fcsubtype:"100375",fdname:"TDS",thematic:"PhysiographyPnt",
+ {name:"VOLCANO_P",fcode:"DB180",desc:"Volcano",geom:"Point",fcsubtype:"DB180_Volcano_Point",fdname:"TDS",thematic:"PhysiographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100375"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB180_Volcano_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66322,13 +66322,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"VOLCANO_S",fcode:"DB180",desc:"Volcano",geom:"Area",fcsubtype:"100375",fdname:"TDS",thematic:"PhysiographySrf",
+ {name:"VOLCANO_S",fcode:"DB180",desc:"Volcano",geom:"Area",fcsubtype:"DB180_Volcano_Area",fdname:"TDS",thematic:"PhysiographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100375"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"DB180_Volcano_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"DB180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66394,7 +66394,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WALL_C",fcode:"AL260",desc:"Wall",geom:"Line",fcsubtype:"100124",fdname:"TDS",thematic:"StructureCrv",
+ {name:"WALL_C",fcode:"AL260",desc:"Wall",geom:"Line",fcsubtype:"AL260_Wall_Line",fdname:"TDS",thematic:"StructureCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"BAT",desc:"Barrier Top Type",optional:"R",type:"enumeration",defValue:"-999999",
@@ -66421,7 +66421,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100124"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AL260_Wall_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AL260"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66536,13 +66536,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WASTE_HEAP_P",fcode:"AB507",desc:"Waste Heap",geom:"Point",fcsubtype:"177962",fdname:"TDS_CARTO",thematic:"WasteHeapPnt",
+ {name:"WASTE_HEAP_P",fcode:"AB507",desc:"Waste Heap",geom:"Point",fcsubtype:"AB507_Waste_Heap_Point",fdname:"TDS_CARTO",thematic:"WasteHeapPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"177962"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB507_Waste_Heap_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB507"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66591,13 +66591,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WASTE_HEAP_S",fcode:"AB507",desc:"Waste Heap",geom:"Area",fcsubtype:"177962",fdname:"TDS_CARTO",thematic:"WasteHeapSrf",
+ {name:"WASTE_HEAP_S",fcode:"AB507",desc:"Waste Heap",geom:"Area",fcsubtype:"AB507_Waste_Heap_Area",fdname:"TDS_CARTO",thematic:"WasteHeapSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"177962"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AB507_Waste_Heap_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AB507"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66646,14 +66646,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATERFALL_C",fcode:"BH180",desc:"Waterfall",geom:"Line",fcsubtype:"100321",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"WATERFALL_C",fcode:"BH180",desc:"Waterfall",geom:"Line",fcsubtype:"BH180_Waterfall_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100321"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH180_Waterfall_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66701,14 +66701,14 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATERFALL_P",fcode:"BH180",desc:"Waterfall",geom:"Point",fcsubtype:"100321",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"WATERFALL_P",fcode:"BH180",desc:"Waterfall",geom:"Point",fcsubtype:"BH180_Waterfall_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100321"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH180_Waterfall_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -66756,7 +66756,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_AERODROME_P",fcode:"GB065",desc:"Water Aerodrome",geom:"Point",fcsubtype:"100452",fdname:"TDS",thematic:"AeronauticPnt",
+ {name:"WATER_AERODROME_P",fcode:"GB065",desc:"Water Aerodrome",geom:"Point",fcsubtype:"GB065_Water_Aerodrome_Point",fdname:"TDS",thematic:"AeronauticPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -66785,7 +66785,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100452"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB065_Water_Aerodrome_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB065"},
    {name:"IKO",desc:"ICAO Location Indicator",optional:"R",type:"String",defValue:"noInformation"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -66847,7 +66847,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_AERODROME_S",fcode:"GB065",desc:"Water Aerodrome",geom:"Area",fcsubtype:"100452",fdname:"TDS",thematic:"AeronauticSrf",
+ {name:"WATER_AERODROME_S",fcode:"GB065",desc:"Water Aerodrome",geom:"Area",fcsubtype:"GB065_Water_Aerodrome_Area",fdname:"TDS",thematic:"AeronauticSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -66876,7 +66876,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100452"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"GB065_Water_Aerodrome_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"GB065"},
    {name:"IKO",desc:"ICAO Location Indicator",optional:"R",type:"String",defValue:"noInformation"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -66938,7 +66938,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_INTAKE_TOWER_P",fcode:"BI050",desc:"Water Intake Tower",geom:"Point",fcsubtype:"100337",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"WATER_INTAKE_TOWER_P",fcode:"BI050",desc:"Water Intake Tower",geom:"Point",fcsubtype:"BI050_Water_Intake_Tower_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -66956,7 +66956,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100337"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI050_Water_Intake_Tower_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -67064,7 +67064,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_INTAKE_TOWER_S",fcode:"BI050",desc:"Water Intake Tower",geom:"Area",fcsubtype:"100337",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"WATER_INTAKE_TOWER_S",fcode:"BI050",desc:"Water Intake Tower",geom:"Area",fcsubtype:"BI050_Water_Intake_Tower_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -67082,7 +67082,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100337"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BI050_Water_Intake_Tower_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BI050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -67190,7 +67190,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_MILL_P",fcode:"AJ055",desc:"Water Mill",geom:"Point",fcsubtype:"100046",fdname:"TDS",thematic:"IndustryPnt",
+ {name:"WATER_MILL_P",fcode:"AJ055",desc:"Water Mill",geom:"Point",fcsubtype:"AJ055_Water_Mill_Point",fdname:"TDS",thematic:"IndustryPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -67208,7 +67208,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100046"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ055_Water_Mill_Point"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -67340,7 +67340,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_MILL_S",fcode:"AJ055",desc:"Water Mill",geom:"Area",fcsubtype:"100046",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"WATER_MILL_S",fcode:"AJ055",desc:"Water Mill",geom:"Area",fcsubtype:"AJ055_Water_Mill_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -67358,7 +67358,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100046"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ055_Water_Mill_Area"},
    {name:"FFN",desc:"Feature Function",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
      {name:"noInformation",value:"-999999"},
@@ -67490,7 +67490,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_MOVEMENT_DATA_LOCATION_P",fcode:"BG010",desc:"Water Movement Data Location",geom:"Point",fcsubtype:"100215",fdname:"TDS_CARTO",thematic:"WaterMovementDataLocationPnt",
+ {name:"WATER_MOVEMENT_DATA_LOCATION_P",fcode:"BG010",desc:"Water Movement Data Location",geom:"Point",fcsubtype:"BG010_Water_Movement_Data_Location_Point",fdname:"TDS_CARTO",thematic:"WaterMovementDataLocationPnt",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -67511,7 +67511,7 @@ var schema = [
     ]
    },
    {name:"DOF",desc:"Direction of Flow",optional:"R",type:"Integer",defValue:"-999999"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100215"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BG010_Water_Movement_Data_Location_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BG010"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},
    {name:"PFI",desc:"Acquisition Platform Identifier",optional:"R",length:"15",type:"String",defValue:"noInformation"},
@@ -67545,13 +67545,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_RACE_C",fcode:"BH065",desc:"Water Race",geom:"Line",fcsubtype:"131810",fdname:"TDS",thematic:"HydrographyCrv",
+ {name:"WATER_RACE_C",fcode:"BH065",desc:"Water Race",geom:"Line",fcsubtype:"BH065_Water_Race_Line",fdname:"TDS",thematic:"HydrographyCrv",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"131810"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH065_Water_Race_Line"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH065"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -67633,7 +67633,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_TOWER_P",fcode:"AM080",desc:"Water Tower",geom:"Point",fcsubtype:"100142",fdname:"TDS",thematic:"StoragePnt",
+ {name:"WATER_TOWER_P",fcode:"AM080",desc:"Water Tower",geom:"Point",fcsubtype:"AM080_Water_Tower_Point",fdname:"TDS",thematic:"StoragePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -67651,7 +67651,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100142"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM080_Water_Tower_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM080"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -67737,7 +67737,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_TOWER_S",fcode:"AM080",desc:"Water Tower",geom:"Area",fcsubtype:"100142",fdname:"TDS",thematic:"StorageSrf",
+ {name:"WATER_TOWER_S",fcode:"AM080",desc:"Water Tower",geom:"Area",fcsubtype:"AM080_Water_Tower_Area",fdname:"TDS",thematic:"StorageSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -67755,7 +67755,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100142"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AM080_Water_Tower_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AM080"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -67841,13 +67841,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_TREATMENT_BED_S",fcode:"BH040",desc:"Water Treatment Bed",geom:"Area",fcsubtype:"100299",fdname:"TDS",thematic:"IndustrySrf",
+ {name:"WATER_TREATMENT_BED_S",fcode:"BH040",desc:"Water Treatment Bed",geom:"Area",fcsubtype:"BH040_Water_Treatment_Bed_Area",fdname:"TDS",thematic:"IndustrySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100299"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH040_Water_Treatment_Bed_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH040"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -67904,13 +67904,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_WELL_P",fcode:"BH230",desc:"Water Well",geom:"Point",fcsubtype:"100326",fdname:"TDS",thematic:"HydrographyPnt",
+ {name:"WATER_WELL_P",fcode:"BH230",desc:"Water Well",geom:"Point",fcsubtype:"BH230_Water_Well_Point",fdname:"TDS",thematic:"HydrographyPnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100326"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH230_Water_Well_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH230"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68011,13 +68011,13 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WATER_WELL_S",fcode:"BH230",desc:"Water Well",geom:"Area",fcsubtype:"100326",fdname:"TDS",thematic:"HydrographySrf",
+ {name:"WATER_WELL_S",fcode:"BH230",desc:"Water Well",geom:"Area",fcsubtype:"BH230_Water_Well_Area",fdname:"TDS",thematic:"HydrographySrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100326"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BH230_Water_Well_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BH230"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68118,7 +68118,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WINDMILL_P",fcode:"AJ050",desc:"Windmill",geom:"Point",fcsubtype:"100044",fdname:"TDS",thematic:"AgriculturePnt",
+ {name:"WINDMILL_P",fcode:"AJ050",desc:"Windmill",geom:"Point",fcsubtype:"AJ050_Windmill_Point",fdname:"TDS",thematic:"AgriculturePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68136,7 +68136,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100044"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ050_Windmill_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AJ050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68276,7 +68276,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WINDMILL_S",fcode:"AJ050",desc:"Windmill",geom:"Area",fcsubtype:"100044",fdname:"TDS",thematic:"AgricultureSrf",
+ {name:"WINDMILL_S",fcode:"AJ050",desc:"Windmill",geom:"Area",fcsubtype:"AJ050_Windmill_Area",fdname:"TDS",thematic:"AgricultureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68294,7 +68294,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100044"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ050_Windmill_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AJ050"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68434,7 +68434,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WIND_FARM_P",fcode:"AD060",desc:"Wind Farm",geom:"Point",fcsubtype:"100687",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"WIND_FARM_P",fcode:"AD060",desc:"Wind Farm",geom:"Point",fcsubtype:"AD060_Wind_Farm_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68452,7 +68452,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100687"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD060_Wind_Farm_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68511,7 +68511,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WIND_FARM_S",fcode:"AD060",desc:"Wind Farm",geom:"Area",fcsubtype:"100687",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
+ {name:"WIND_FARM_S",fcode:"AD060",desc:"Wind Farm",geom:"Area",fcsubtype:"AD060_Wind_Farm_Area",fdname:"TDS",thematic:"UtilityInfrastructureSrf",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68529,7 +68529,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100687"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AD060_Wind_Farm_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AD060"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68588,7 +68588,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WIND_TURBINE_P",fcode:"AJ051",desc:"Wind Turbine",geom:"Point",fcsubtype:"100045",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
+ {name:"WIND_TURBINE_P",fcode:"AJ051",desc:"Wind Turbine",geom:"Point",fcsubtype:"AJ051_Wind_Turbine_Point",fdname:"TDS",thematic:"UtilityInfrastructurePnt",
   columns:[
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"AOO",desc:"Angle of Orientation",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68606,7 +68606,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100045"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AJ051_Wind_Turbine_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AJ051"},
    {name:"GUG",desc:"Guyed",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68722,7 +68722,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"WRECK_P",fcode:"BD180",desc:"Wreck",geom:"Point",fcsubtype:"100278",fdname:"TDS_CARTO",thematic:"WreckPnt",
+ {name:"WRECK_P",fcode:"BD180",desc:"Wreck",geom:"Point",fcsubtype:"BD180_Wreck_Point",fdname:"TDS_CARTO",thematic:"WreckPnt",
   columns:[
    {name:"ACC",desc:"Horizontal Accuracy Category",optional:"R",type:"enumeration",defValue:"-999999",
     enumerations:[
@@ -68735,7 +68735,7 @@ var schema = [
    {name:"ARA",desc:"Area",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100278"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"BD180_Wreck_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BD180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LZN",desc:"Length",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68807,7 +68807,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ZOO_P",fcode:"AK180",desc:"Zoo",geom:"Point",fcsubtype:"100078",fdname:"TDS",thematic:"RecreationPnt",
+ {name:"ZOO_P",fcode:"AK180",desc:"Zoo",geom:"Point",fcsubtype:"AK180_Zoo_Point",fdname:"TDS",thematic:"RecreationPnt",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68826,7 +68826,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100078"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK180_Zoo_Point"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},
@@ -68885,7 +68885,7 @@ var schema = [
    {name:"legacy_id",desc:"Legacy Image Id",optional:"R",length:"254",type:"String",defValue:"noInformation"}
   ]
  },
- {name:"ZOO_S",fcode:"AK180",desc:"Zoo",geom:"Area",fcsubtype:"100078",fdname:"TDS",thematic:"RecreationSrf",
+ {name:"ZOO_S",fcode:"AK180",desc:"Zoo",geom:"Area",fcsubtype:"AK180_Zoo_Area",fdname:"TDS",thematic:"RecreationSrf",
   columns:[
    {name:"ADR",desc:"Address",optional:"R",type:"String",defValue:"noInformation"},
    {name:"AHA",desc:"Absolute Horizontal Accuracy (90%)",optional:"R",type:"Real",defValue:"-999999.0"},
@@ -68904,7 +68904,7 @@ var schema = [
    },
    {name:"CCN",desc:"Commercial Copyright Notice",optional:"R",type:"String",defValue:"noInformation"},
    {name:"CDR",desc:"Commercial Distribution Restriction",optional:"R",type:"String",defValue:"noInformation"},
-   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100078"},
+   {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"String",defValue:"AK180_Zoo_Area"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"AK180"},
    {name:"HGT",desc:"Height Above Surface Level",optional:"R",type:"Real",defValue:"-999999.0"},
    {name:"LMC",desc:"Navigation Landmark",optional:"R",type:"enumeration",defValue:"-999999",enumerations: truefalse},

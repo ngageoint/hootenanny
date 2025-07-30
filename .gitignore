@@ -114,8 +114,11 @@ src/proto/*.pb.h
 stamp-h1
 **/target/
 test-files/*.db
+test-files/*
 test-output/**
 **/test-output/*
+translations/templates/*
+translations/checkSingleFeature.js
 tgs/src/main/cpp/tgs/TgsConfig.h
 **/tmp/
 todo.txt
