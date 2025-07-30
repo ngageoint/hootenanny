@@ -27,6 +27,8 @@ RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
 
 RUN yum -q -y install epel-release
 
+RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+
 RUN yum -y install \
         bzip2 \
         git \
