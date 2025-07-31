@@ -1235,6 +1235,7 @@ mgcp = {
           delete tags.landuse;
           break;
       }
+      break;
     case 'AL140':
       tags.amenity = 'research_institute';
       tags.research = 'particle_physics';
