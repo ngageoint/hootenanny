@@ -1239,6 +1239,7 @@ mgcp = {
           delete tags.landuse;
           break;
       }
+      break;
     case 'AL140':
       tags.amenity = 'research_institute';
       tags.research = 'particle_physics';
@@ -1258,6 +1259,9 @@ mgcp = {
         tags.service = 'siding';
       }
       delete tags.sidetrack;
+      break;
+    case 'AN060':
+      tags.railway = 'yard';
       break;
     case 'AT045':
       tags.man_made = 'tower';
@@ -1957,7 +1961,7 @@ mgcp = {
       case 'railway':
         if (tags['railway:yard'] == 'marshalling_yard' || tags.railway == 'yard') attrs.F_CODE = 'AN060';
         else {
-          attrs.F_CODE = 'AN010';
+          attrs.F_CODE = 'AL010';
           attrs.FFN = '480';
         }
         break;
