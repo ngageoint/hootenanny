@@ -54,6 +54,7 @@ mgcp.rules = {
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     //['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
+    ['F_CODE','AK130','highway','race_way'],
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
@@ -105,6 +106,7 @@ mgcp.rules = {
     // ['F_CODE','AK120','leisure','nature_reserve'], // Park (commenting out because it was translating over other features)
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
+    ['F_CODE','AK190','man_made','pier'],
     ['F_CODE','AL010','diplomatic','embassy'], // Embassy
     ['F_CODE','AL015','building','yes'], // To fix amenity etc
     ['F_CODE','AL015','information','office'], // Tourism Office
@@ -152,7 +154,6 @@ mgcp.rules = {
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
-    ['F_CODE','BB190','man_made','pier'], // From OSM
     ['F_CODE','BB190','man_made','quay'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
     ['F_CODE','BH030','barrier','ditch'], // Ditch. Not great: Dry vs wet
@@ -997,7 +998,7 @@ mgcp.rules = {
     ['RAY','4','race:type','harness'], // Harness
     ['RAY','5','race:type','horse'], // Horse
     ['RAY','6','race:type','ice_skate'], // Ice Skate
-    ['RAY','7','race:type','motor_vehicle'], // Motor Vehicle
+    ['RAY','7','sport','motor'], // Motor Vehicle
     ['RAY','8','race:type','roller_skate'], // Roller Skate
     ['RAY','9','race:type','track_and_field'], // Track and Field
     ['RAY','999','race:type','other'], // Other
@@ -1077,7 +1078,7 @@ mgcp.rules = {
     ['RTA','4','arrangement','juxtaposition'],
 
     // RWC - Railway Class
-    ['RWC','1','usage','high_speed_rail'],
+    ['RWC','1','highspeed','yes'],
     ['RWC','2','usage','main'],
     ['RWC','3','usage','branch'],
 

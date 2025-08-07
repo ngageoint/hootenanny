@@ -1166,6 +1166,10 @@ mgcp = {
       delete tags['seamark:type']
       break;
 
+    case 'AK190':
+      tags.man_made = 'pier';
+      break;
+
     case 'AK040': // Athletic Field, Sports Ground
     case 'BA050': // Beach
     case 'AL010': // Facility
@@ -1244,6 +1248,20 @@ mgcp = {
       break;
     case 'AM020': // Grain Storage Structure
       tags.content = 'grain';
+      break;
+    case 'AN050':
+      tags.railway = 'rail';
+      if (attrs.RSA == '1') {
+        tags.service = 'spur';
+      }
+      else if (attrs.RSA == '2') {
+        tags.service = 'siding';
+      }
+      delete tags.sidetrack;
+      break;
+    case 'AT045':
+      tags.man_made = 'tower';
+      tags['tower:type'] = 'radar';
       break;
     case 'BB005': // Harbour
       tags.harbour = 'yes';
@@ -1338,6 +1356,9 @@ mgcp = {
         if (tags.railway !== 'rail') tags['railway:type'] = tags.railway; // Redundant tags
         tags.railway = 'monorail';
         delete tags['railway:track'];
+      }
+      else if (attrs.RRC == '2') {
+        tags.railway = 'light_rail';
       }
       break;
 
@@ -1771,7 +1792,11 @@ mgcp = {
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
       ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
-      ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"]
+      ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"],
+      ["t.railway == 'rail' && (t.highspeed == 'yes' || t.maxspeed >= 200)", "a.RWC = '1'"],
+      ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
+      ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
+      ["t.railway == 'light_rail'", "a.F_CODE = 'AN010', a.RRC = '2'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -1930,7 +1955,11 @@ mgcp = {
         break;
 
       case 'railway':
-        if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+        if (tags['railway:yard'] == 'marshalling_yard' || tags.railway == 'yard') attrs.F_CODE = 'AN060';
+        else {
+          attrs.F_CODE = 'AN010';
+          attrs.FFN = '480';
+        }
         break;
 
       case 'reservoir':
@@ -2518,9 +2547,13 @@ mgcp = {
         tags.product = 'gas';
         break;
 
-      case 'mast':
       case 'tower':
-        if (tags.mooring = 'yes') { // This combination of tags is specifically for a mooring airship
+        if (tags['tower:type'] == 'radar') {
+          attrs.F_CODE = 'AT045';
+          break;
+        }
+      case 'mast':
+        if (tags.mooring == 'yes') { // This combination of tags is specifically for a mooring airship
           attrs.F_CODE = 'AQ110';
         }
         break;
