@@ -170,6 +170,8 @@ userfiles/
 test-files/cases/**/out
 test-files/cases/**/validated-output-report
 test-files/cases/**/Output-validated.osm
+test-files/*
+translations/templates/*
 .bundle/
 vendor/
 docs/package-lock.json
