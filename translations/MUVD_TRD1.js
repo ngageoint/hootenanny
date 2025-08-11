@@ -50,5 +50,25 @@ function initialize()
 // Set up the Schema for export
 function getDbSchema()
 {
-    
+    // return muvd.schema.getDbSchema();
+    return muvd.getDbSchema();
+}
+
+// IMPORT
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
+function translateToOsm(attrs, layerName, geometryType)
+{
+    return muvd.toOsm(attrs, layerName, geometryType);
+} // End of translateToOsm
+
+// EXPORT
+// translateToOgr - takes 'tags' + geometry and returns 'attrs' + layername
+function translateToOgr(tags, elementType, geometryType)
+{
+    return muvd.toOgr(tags, elementType, geometryType)
+} // End of translateToOgr
+
+// module method for use in Translation Server
+if (typeof exports !== 'undefined') {
+    exports.toOsm = muvd.toOsm;
 }
