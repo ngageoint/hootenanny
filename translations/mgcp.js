@@ -1746,7 +1746,7 @@ mgcp = {
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
       ["t.power == 'minor_line'","t.spower = 'minor_line'"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
-      ["t.resource && t.man_made != 'heap'","t.product = t.resource; delete t.resource"],
+      ["t.resource && t.man_made && t.man_made != 'heap'","t.product = t.resource; delete t.resource"],
       ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
       // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
       ["t.tourism == 'information' && t.information","delete t.tourism"],
@@ -1926,6 +1926,47 @@ mgcp = {
         {
           attrs.F_CODE = 'EA055'; // Hop Field
           attrs.CSP = '18'; // Hops
+        }
+        break;
+
+      case 'quarry':
+        if (!tags.name) tags.name = 'UNK';
+        switch (tags.resource) {
+          case undefined:
+            attrs.PPO = '0';
+            break;
+          case 'clay':
+            attrs.PPO = '17';
+            break;
+          case 'dolomite':
+            attrs.PPO = '35';
+            break;
+          case 'granite':
+            attrs.PPO = '50';
+            break;
+          case 'gravel':
+            attrs.PPO = '53';
+            break;
+          case 'marble':
+            attrs.PPO = '66';
+            break;
+          case 'sand':
+            attrs.PPO = '96';
+            break;
+          case 'slate':
+          case 'dimension_stone':
+          case 'stone':
+          case 'limestone':
+            attrs.PPO = '110';
+            break;
+          default:
+            if (tags.resource && tags.resource.includes(';')) { // multiple ore types
+              attrs.PPO = '996'
+            }
+            else {
+              attrs.PPO = '999';
+            }
+            break;   
         }
         break;
 
