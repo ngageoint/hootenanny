@@ -1159,6 +1159,36 @@ mgcp = {
         tags.building = 'bunker';
       }
       break;
+
+    case 'AK130': // Racetrack
+      switch (attrs.RAY)
+      {
+        case '0':
+          tags.sport = 'unknown';
+          break;
+        case '1':
+          tags.sport = 'cycling';
+          break;
+        case '3':
+          tags.sport = 'dog_racing';
+          break;
+        case '5':
+          tags.sport = 'horse_racing';
+          break;
+        case '6':
+          tags.sport = 'ice_skating';
+          break;
+        case '8':
+          tags.sport = 'roller_skating';
+          break;
+        case '9':
+          tags.sport = 'athletics';
+          break;
+        case '999':
+          tags.sport = 'other';
+          break;
+      }
+      break;
     
     case 'AQ110': // Mooring airship
       tags.man_made = 'tower';
@@ -1790,6 +1820,38 @@ mgcp = {
       delete tags.power;
       tags.pylon = 'yes';
       if (!tags['cable:type']) tags['cable:type'] = 'power';
+    }
+
+    if (tags.leisure == 'track')
+    {
+      switch (tags.sport)
+      {
+        case undefined:
+        case 'unknown':
+          attrs.RAY = '0';
+          break;
+        case 'cycling':
+          attrs.RAY = '1';
+          break;
+        case 'dog_racing':
+          attrs.RAY = '3';
+          break;
+        case 'horse_racing':
+          attrs.RAY = '5';
+          break;
+        case 'ice_skating':
+          attrs.RAY = '6';
+          break;
+        case 'roller_skating':
+          attrs.RAY = '8';
+          break;
+        case 'athletics':
+          attrs.RAY = '9';
+          break;
+        default:
+          attrs.RAY = '999';
+          break;
+      }
     }
 
     // Sort out landuse
