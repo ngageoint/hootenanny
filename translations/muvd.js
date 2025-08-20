@@ -127,6 +127,180 @@ muvd = {
 
     }, // End manyFeatures
 
+    // Function to drop default and useless values
+    // NOTE: this is also called to remove translated tag values
+    dropDefaults: function (feat)
+    {
+        for (var col in feat)
+        {
+            // First push to lowercase
+            var attrValue = feat[col].toString().toLowerCase();
+
+            // get rid of the spaces in the text
+            attrValue = attrValue.replace(/\s/g, '');
+
+            // Wipe out the useless values
+            if (feat[col] == '' || feat[col] == ' ' || attrValue in muvd.rules.dropList || feat[col] in muvd.rules.dropList)
+            {
+                // debug
+                // print('Dropping: ) + col + ' = ' + feat[col];
+                delete feat[col];
+                continue;
+            }
+        } // end col in attrs loop
+    }, // End dropDefaults
+
+    // Cleanup the attributes
+    cleanAttrs: function (attrs)
+    {
+        // Switch to keep all of the default values. Mainly for the schema switcher
+        if (muvd.configIn.ReaderDropDefaults == 'true')
+        {
+            muvd.dropDefaults(attrs);
+        }
+
+        // unit conversion
+        for (var col in attrs)
+        {
+            // see if we need to swap attr names
+            if (col in muvd.rules.swapListIn)
+            {
+                // debug
+                // print('Swapped: ) + swapList[i]);
+                attrs[muvd.rules.swapListIn[col]] = attrs[col];
+                delete attrs[col];
+                continue;
+            }
+        } // End col in attrs loop
+    },
+
+    // ##### Start of the toOsm Block
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+    {
+        if (attrs.F_CODE)
+        {
+            // Drop the "Not Found" F_CODE. This is from the UI
+            // NOTE: We should be getting "FCODE" not "F_CODE" from files/UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
+        }
+        else if (attrs.FCODE)
+        {
+            // Swap these since the rest of the lookup tables use F_CODE
+            if (attrs.FCODE != 'Not found') attrs.F_CODE = attrs.FCODE;
+
+            delete attrs.FCODE;
+        }
+        else
+        {
+            // TODO: some pre processing after finding an appropriate FCODE
+        }
+    }, // end of applyToOsmPreProcessing
+
+    // Post processing: lots of cleanup
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
+    {
+        // Unpack the TXT field or OSMTAGSX if needed
+        if (tags.note || attrs.OSMTAGS)
+        {
+            var tTags = {};
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags != '')
+            {
+                try
+                {
+                    tTags = JSON.parse(tObj.tags);
+                }
+                catch (error)
+                {
+                    hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+                }
+            }
+
+            if (attrs.OSMTAGS)
+            {
+                var tmp = translate.unpackText(attrs,'OSMTAGS');
+                for (var i in tmp)
+                {
+                    if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+                    tTags[i] = tmp[i];
+                }
+            }
+
+            // Now add the unpacked tags to the main list
+            for (var i in tTags)
+            {
+                // Debug
+                // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + ' with ' + tTags[i]);
+                tags[i] = tTags[i];
+
+                // Now check if this is a synonym etc. If so, remove the other tag.
+                if (i in muvd.fcodeLookupOut) // tag -> FCODE table
+                {
+                    if (tags[i] in muvd.fcodeLookupOut[i])
+                    {
+                        var row = muvd.fcodeLookupOut[i][tags[i]];
+
+                        // Now find the "real" tag that comes from the FCode
+                        if (row[1] in muvd.fcodeLookup['F_CODE'])
+                        {
+                            var row2 = muvd.fcodeLookup['F_CODE'][row[1]];
+                            // If the tags match, delete it
+                            if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
+                            {
+                                delete tags[row2[0]];
+                            }
+                        }
+                    }
+                }
+            } // End nTags
+
+            if (tObj.text != '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // end process tags.note
+
+        // Add the LayerName to the source
+        if ((!tags.source) && layerName != '') tags.source = 'muvd:' + layerName.toLowerCase();
+
+        // If we have a UUID, store it
+        if (tags.uuid)
+        {
+            tags.uuid = tags['uuid'].toString().toLowerCase();
+            if (tags['uuid'].indexOf('{') == -1) tags.uuid = '{' + tags['uuid'] + '}';
+        }
+        else
+        {
+            if (muvd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        }
+
+        // TODO: there will be a lot more post processing here that may be more MUVD specific
+
+        if (muvd.osmPostRules == undefined)
+        {
+            // TODO: create post rules here
+
+            // Rules format: ["test expression","output result"];
+            // NOTE: t = tags, a = attrs and attrs can only be on the RHS
+
+
+            // uncomment this line below whenever the rulesList is created
+            // muvd.osmPostRules = translate.buildComplexRules(rulesList);
+        }
+
+        // applying the post rules here
+        // for (var i = 0, rLen = muvd.osmPostRules.length; i< rLen; i++)
+        // {
+        //   if (muvd.osmPostRules[i][0](tags)) muvd.osmPostRules[i][1](tags,attrs);
+        // }
+    }, // end of applyToOsmPostProcessing
+
     // Start of the toOgr Block
     applyToOgrPreProcessing: function(tags, attrs, geometryType)
     {
@@ -259,6 +433,176 @@ muvd = {
 
     }, // End applyToOgrPostProcessing
 
+    // toOsm - Translate Attrs to Tags
+    toOsm : function(attrs, layerName, geometryType)
+    {
+        tags = {}; // This is the output
+
+        // Setup config variables. We could do this in initialize() but some things don't call it
+        // Doing this so we don't have to keep calling into Hoot core
+        if (muvd.configIn == undefined)
+        {
+            muvd.configIn = {};
+            muvd.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+            muvd.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+            muvd.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+
+            // Get any changes
+            muvd.toChange = hoot.Settings.get("schema.translation.override");
+        }
+
+        // Moved this so it gets checked for each call
+        muvd.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
+
+        // Debug:
+        if (muvd.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
+
+        // See if we have an o2s_X layer and try to unpack it
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.unpackText(attrs,'tag');
+
+            // Throw out the reason for the o2s if it exists
+            delete tags.o2s_reason;
+
+            // Add some metadata
+            if (!tags.uuid)
+            {
+                // Upper case as a test
+                if (muvd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid().toUpperCase();
+            }
+
+            if (!tags.source) tags.source = 'muvd:' + layerName.toLowerCase();
+
+            // Debug:
+            if (muvd.configIn.OgrDebugDumptags == 'true')
+            {
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+            }
+
+            return tags;
+        } // End layername = o2s_X
+
+        // Set up the fcode translation rules
+        if (muvd.fcodeLookup == undefined)
+        {
+            fcodeCommon.one2one.forEach( function(item) { if (muvd.rules.fcodeNameLookup[item[1]]) muvd.rules.fcodeOne2oneOut.push(item); });
+
+            muvd.fcodeLookup = translate.createLookup(muvd.rules.fcodeOne2oneOut);
+
+            muvd.fcodeLookupOut = translate.createBackwardsLookup(muvd.rules.fcodeOne2oneOut);
+
+            // Debug:
+            // translate.dumpOne2OneLookup(muvd.fcodeLookupOut);
+        }
+
+        if (muvd.lookup == undefined)
+        {
+
+            // TODO: whenever the MUVD specific attributes are implemented, come back
+            // here and add them to the attribute table
+
+            // Setup lookup tables to make translation easier
+            muvd.lookup = translate.createLookup(muvd.rules.one2one);
+
+        }
+
+        if (muvd.rules.txtBiased == undefined)
+        {
+            // TODO: If there's more than one version of MUVD, then this will come into play
+
+            //muvd.rules.txtBiased = {};
+            // Add the MUVD specific attributes to the attribute table
+            //for (var i in muvd.rules.txtBasedV2) muvd.rules.txtBiased[i] = muvd.rules.txtBasedV2[i];
+        }
+
+        if (muvd.rules.numBiased == undefined)
+        {
+            // TODO: if there's more than one version of MUVD, then this will come into play
+
+            //muvd.rules.numBiased = {};
+            //for (var i in muvd.rules.numBasedV2) muvd.rules.numBiased[i] = muvd.rules.numBasedV2[i];
+        }
+
+        // Clean out the useless attrs
+        muvd.cleanAttrs(attrs);
+
+        // Untangle MUVD attributes & OSM tags
+        // NOTE: this could get wrapped with an ENV variable so it only get called during import
+        translate.untangleAttributes(attrs,tags,muvd);
+
+        // Debug:
+        if (muvd.configIn.OgrDebugDumptags == 'true')
+        {
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
+        }
+
+        // pre processing
+        muvd.applyToOsmPreProcessing(attrs, layerName, geometryType);
+
+        // Use the FCODE to add some tags
+        if (attrs.F_CODE)
+        {
+            var ftag = muvd.fcodeLookup['F_CODE'][attrs.F_CODE];
+            if (ftag)
+            {
+                if (!tags[ftag[0]])
+                {
+                    tags[ftag[0]] = ftag[1];
+                }
+                else
+                {
+                    // Debug
+                    hoot.logWarn('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + ' with ' + ftag[1]);
+                }
+                // Debug: dump out the tags from the FCODE
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + ' value=' + ftag[1]);
+            }
+            else
+            {
+                hoot.logTrace('Translation for FCODE ' + attrs.F_CODE + ' not found');
+            }
+        }
+
+        // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
+        // isn't used in the translation - this should end up empty
+        var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
+
+        // apply the simple number and text based rules
+        translate.numToOSM(notUsedAttrs, tags, muvd.rules.numBiased);
+        translate.txtToOSM(notUsedAttrs, tags, muvd.rules.txtBiased);
+
+        // one 2 one
+        translate.applyOne2One(notUsedAttrs, tags, muvd.lookup, {'k':'v'},[]);
+
+        // post processing
+        muvd.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+
+        // If we are reading from an OGR source, drop all of the output tags with default values
+        // This cleans up after the one2one rules since '0' can be a number or an enumerated attribute value
+        if (muvd.configIn.ReaderDropDefaults == 'true')
+        {
+            muvd.dropDefaults(tags);
+        }
+
+        // Debug: add the FCODE to the tags
+        if (muvd.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+
+        // Override tag values if appropriate
+        translate.overrideValues(tags,muvd.toChange);
+
+        // Debug:
+        if (muvd.configIn.OgrDebugDumptags == 'true')
+        {
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+        }
+
+        return tags;
+    }, // End of toOsm
+
     // We get Tags and return Attrs and a tableName
     toOgr : function(tags, elementType, geometryType)
     {
@@ -280,6 +624,7 @@ muvd = {
             muvd.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
             muvd.configOut.OgrCodedValues = hoot.Settings.get('ogr.coded.values');
             muvd.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
+            print(muvd.configOut.OgrThrowError);
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignement soon
@@ -435,7 +780,7 @@ muvd = {
         else // we don't have a feature
         {
             // for the UI: throw an error and die if we don't have a valid feature
-            if (muvd.configOut.ogrThrowError == 'true')
+            if (muvd.configOut.OgrThrowError == 'true')
             {
                 if (!attrs.F_CODE)
                 {

@@ -36,15 +36,28 @@ muvd.rules = {
         []
     ],
 
-    // One2one rules for Text attributes
-    txtBased : {
+    // Stuff to be ignored or that gets swapped later
+    // This is taken from OSM pre processing and a few things added.
+    ignoreList : ['FCODE'],
+    // End of ignoreList
 
-    }, // End txtBased
+    // Attribute values that are to be dropped since they are defaults or don't add value.
+    dropList : { '-32767':1,'-32767.0':1,'unk':1},
+    // ###### End of dropList ######
+
+    // Attribute names to swap on input.
+    swapListIn : {},
+    // ###### End of swapListIn ######
+
+    // One2one rules for Text attributes
+    txtBiased : {
+
+    }, // End txtBiased
 
     // One2one rules for Number attributes
-    numBased : {
+    numBiased : {
 
-    }, // End numBased
+    }, // End numBiased
 
     // Common one2one rules. Used for both import and export
     one2one : [
