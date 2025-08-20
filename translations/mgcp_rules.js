@@ -70,7 +70,6 @@ mgcp.rules = {
     // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
-    ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_platform'], // Offshore Platform - NFDD BD115
     ['F_CODE','BD130','seamark:type','obstruction'], // Hazardous Rock Point - NFDD BD130
@@ -80,6 +79,7 @@ mgcp.rules = {
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BI041','man_made','basin_gate'], // Water Gate - NFDD BI045
     ['F_CODE','CA035','geological','water_elevation'], // Inland Water Elevation
+    ['F_CODE','DB160','geological','out_crop'],
     ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
     ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
     ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
