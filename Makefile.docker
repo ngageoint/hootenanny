@@ -3,6 +3,8 @@ GID=$(shell id -g)
 
 DOCKER_VERSION := $(shell docker --version 2>/dev/null)
 
+PLATFORM = DOCKER_DEFAULT_PLATFORM=linux/amd64
+
 ifndef DOCKER_VERSION
 $(error "command docker is not available, please install Docker")
 endif
@@ -45,16 +47,16 @@ hoot-ui-2x/README.md:
 	git submodule update --init
 
 build: .env hoot.env conf/database/DatabaseConfigLocal.sh hoot-ui-2x/README.md
-	DOCKER_BUILDKIT=1 $(COMPOSE_COMMAND) build --no-cache
+	DOCKER_BUILDKIT=1 $(PLATFORM) $(COMPOSE_COMMAND) build --no-cache
 
 up: .env hoot.env conf/database/DatabaseConfigLocal.sh hoot-ui-2x/README.md
-	DOCKER_BUILDKIT=1 $(COMPOSE_COMMAND) up -d
+	DOCKER_BUILDKIT=1 $(PLATFORM) $(COMPOSE_COMMAND) up -d
 
 down: .env hoot.env
-	DOCKER_BUILDKIT=1 $(COMPOSE_COMMAND) down
+	DOCKER_BUILDKIT=1 $(PLATFORM) $(COMPOSE_COMMAND) down
 
 distclean: .env hoot.env
-	DOCKER_BUILDKIT=1 $(COMPOSE_COMMAND) down --volumes --rmi all
+	DOCKER_BUILDKIT=1 $(PLATFORM) $(COMPOSE_COMMAND) down --volumes --rmi all
 	rm -fr .ccache lib bin \
 		.env hoot.env hoot-ui-2x/node_modules \
 		conf/database/DatabaseConfigLocal.sh
