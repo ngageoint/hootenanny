@@ -22,6 +22,13 @@
     "path" : "MGCP_TRD4_Cartographic.js"
   },
   {
+    "name" : "MUVD",
+    "description" : "MUVD TRD1",
+    "canExport" : true,
+    "schema" : "muvd_schema.js",
+    "path" : "MUVD_TRD1.js"
+  },
+  {
     "name" : "GGDMv30",
     "description" : "Ground-Warfighter Geospatial Data Model (GGDM) v3.0",
     "canExport" : true,
