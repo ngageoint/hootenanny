@@ -23,7 +23,7 @@ describe('TranslationServer', function () {
         var fcode_key = (schema === 'MGCP') ? 'FCODE' : 'F_CODE';
         var fcode_value = (schema === 'MGCP') ? 'AK190' : 'BB081';
         var osm_key = (schema === 'MGCP') ? 'man_made' : 'man_made';
-        var osm_value = (schema === 'MGCP') ? 'recreational_pier' : 'shoreline_construction';
+        var osm_value = (schema === 'MGCP') ? 'pier' : 'shoreline_construction';
 
         it('should write OSMTAGS to osm tags when translating from ' + schema + ' -> OSM', function() {
 
@@ -101,6 +101,8 @@ describe('TranslationServer', function () {
             if (schema === 'TDSv70') {
                 assert.equal(tags['OSMTAGS'], '{"area":"yes"}');
                 assert.equal(tags['ZI001_SDP'], 'DigitalGlobe');
+            } else if (schema === 'MGCP') {
+                assert.equal(tags['OSMTAGS'], '{"area":"yes","man_made":"pier","source:imagery":"DigitalGlobe"}');
             } else {
                 assert.equal(tags['OSMTAGS'], '{"area":"yes","source:imagery":"DigitalGlobe"}');
             }
