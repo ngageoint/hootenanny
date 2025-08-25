@@ -1,92 +1,28 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<osm version='0.6' generator='JOSM'>
-  <node id='-11747' action='modify' visible='true' lat='38.89090742894522' lon='-104.7569887037003' />
-  <node id='-11668' action='modify' visible='true' lat='38.890739732442' lon='-104.75699422813669' />
-  <node id='-1099' action='modify' visible='true' lat='38.89134292200346' lon='-104.75710214663876' />
-  <node id='-1087' action='modify' visible='true' lat='38.891279072030684' lon='-104.75688339011795' />
-  <node id='-780' action='modify' visible='true' lat='38.8898114834073' lon='-104.7569005828555' />
-  <node id='-778' visible='true' lat='38.89039651938844' lon='-104.75689342443083' />
-  <node id='-776' action='modify' visible='true' lat='38.891122625435884' lon='-104.75687943473568' />
-  <node id='-774' action='modify' visible='true' lat='38.891460004509604' lon='-104.75689407873907' />
-  <node id='-772' visible='true' lat='38.89158607769046' lon='-104.7569041620678' />
-  <node id='-770' visible='true' lat='38.891825658451125' lon='-104.75693637497865' />
-  <node id='-768' visible='true' lat='38.889822626994814' lon='-104.7571081771699' />
-  <node id='-766' visible='true' lat='38.89031851486936' lon='-104.7571045979576' />
-  <node id='-764' action='modify' visible='true' lat='38.89111197616253' lon='-104.75710101874529' />
-  <node id='-762' action='modify' visible='true' lat='38.89144296663711' lon='-104.75709906556204' />
-  <node id='-760' visible='true' lat='38.89179780026467' lon='-104.75713323165614' />
-  <node id='-758' action='modify' visible='true' lat='38.89087847398167' lon='-104.75858997106944' />
-  <node id='-756' visible='true' lat='38.890884045691955' lon='-104.75843248572748' />
-  <node id='-754' visible='true' lat='38.890903546674494' lon='-104.75762358374367' />
-  <node id='-752' action='modify' visible='true' lat='38.8909091183828' lon='-104.75710101874529' />
-  <node id='-750' action='modify' visible='true' lat='38.890909118382815' lon='-104.7568791075816' />
-  <node id='-748' visible='true' lat='38.89093697691782' lon='-104.75593419552972' />
-  <node id='-746' visible='true' lat='38.890984336402276' lon='-104.75559059114721' />
-  <node id='-744' action='modify' visible='true' lat='38.89081161342421' lon='-104.75555121981172' />
-  <node id='-742' visible='true' lat='38.89076982554384' lon='-104.75578386861238' />
-  <node id='-740' visible='true' lat='38.890764253824614' lon='-104.75597714607754' />
-  <node id='-738' visible='true' lat='38.890741966943274' lon='-104.75688626600623' />
-  <node id='-736' action='modify' visible='true' lat='38.89073918108263' lon='-104.7571045979576' />
-  <node id='-734' visible='true' lat='38.89071968005495' lon='-104.75857923343251' />
-  <node id='-732' action='modify' visible='true' lat='38.89022609025981' lon='-104.75710272568844' />
-  <node id='-730' action='modify' visible='true' lat='38.8902230497384' lon='-104.75689959463338' />
-  <node id='-728' action='modify' visible='true' lat='38.89082811093288' lon='-104.75688396916762' />
-  <node id='-726' action='modify' visible='true' lat='38.89082659068507' lon='-104.75710467887164' />
-  <way id='-812' action='modify' visible='true'>
-    <nd ref='-746' />
-    <nd ref='-748' />
-    <tag k='highway' v='primary' />
-    <tag k='oneway' v='yes' />
-  </way>
-  <way id='-802' action='modify' visible='true'>
-    <nd ref='-748' />
-    <nd ref='-750' />
-    <nd ref='-11747' />
-    <nd ref='-752' />
-    <nd ref='-754' />
-    <nd ref='-756' />
-    <nd ref='-758' />
-    <tag k='highway' v='primary' />
-    <tag k='oneway' v='yes' />
-  </way>
-  <way id='-796' action='modify' visible='true'>
-    <nd ref='-760' />
-    <nd ref='-762' />
-    <nd ref='-1099' />
-    <nd ref='-764' />
-    <nd ref='-752' />
-    <nd ref='-726' />
-    <nd ref='-736' />
-    <nd ref='-766' />
-    <nd ref='-732' />
-    <nd ref='-768' />
-    <tag k='highway' v='primary' />
-    <tag k='oneway' v='yes' />
-  </way>
-  <way id='-792' action='modify' visible='true'>
-    <nd ref='-734' />
-    <nd ref='-736' />
-    <nd ref='-11668' />
-    <nd ref='-738' />
-    <nd ref='-740' />
-    <nd ref='-742' />
-    <nd ref='-744' />
-    <tag k='highway' v='primary' />
-    <tag k='oneway' v='yes' />
-  </way>
-  <way id='-784' action='modify' visible='true'>
-    <nd ref='-780' />
-    <nd ref='-730' />
-    <nd ref='-778' />
-    <nd ref='-738' />
-    <nd ref='-728' />
-    <nd ref='-750' />
-    <nd ref='-776' />
-    <nd ref='-1087' />
-    <nd ref='-774' />
-    <nd ref='-772' />
-    <nd ref='-770' />
-    <tag k='highway' v='primary' />
-    <tag k='oneway' v='yes' />
-  </way>
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.89073917370341" minlon="-104.7571045979576" maxlat="38.89090911100367" maxlon="-104.7568791075816"/>
+    <node visible="true" id="-752" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8909091110036371" lon="-104.7571010187453027">
+        <tag k="MinAngle" v="87.2334"/>
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.1026"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-750" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8909091110036726" lon="-104.7568791075815966">
+        <tag k="MinAngle" v="86.1847"/>
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="94.8461"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-738" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8907419595640533" lon="-104.7568862660062337">
+        <tag k="MinAngle" v="87.0093"/>
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.7248"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-736" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8907391737034089" lon="-104.7571045979576070">
+        <tag k="MinAngle" v="89.031"/>
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.9275"/>
+        <tag k="error:circular" v="15"/>
+    </node>
 </osm>

@@ -3217,11 +3217,13 @@ Generated: Wed Oct 13 2021 16:25:21 GMT+0000 (Coordinated Universal Time)
 | landuse | commercial | Feature Code AG040 | AG040:NFDD
 | landuse | depot | Feature Code AM010 | AM010:NFDD
 | landuse | ditches | Feature Code NM030 | NM030:NFDD
+| landuse | fairground | Feature Code AK090 | AK090:NFDD
 | landuse | farmland | Feature Code EA010 | EA010:NFDD
 | landuse | forest | Feature Code EC015 | EC015:NFDD
 | landuse | harbour | Feature Code BB005 | BB005:NFDD
 | landuse | holding_pen | Feature Code AJ030 | AJ030:NFDD
 | landuse | hop_garden | Feature Code EA055 | EA055:NFDD
+| landuse | industrial | Feature Code AA010 | AA010:NFDD
 | landuse | installation | Feature Code AL011 | AL011:NFDD
 | landuse | landfill | Feature Code AB000 | AB000:NFDD
 | landuse | logging | Feature Code EE010 | EE010:NFDD
@@ -3241,7 +3243,6 @@ Generated: Wed Oct 13 2021 16:25:21 GMT+0000 (Coordinated Universal Time)
 | landuse | silviculture | Feature Function | FFN:GGDM30, FFN:TDS40, FFN:TDS61
 | landuse | solar_farm | Feature Code AD025 | AD025:NFDD
 | landuse | storage_tank_area | Feature Code NU070 | NU070:NFDD
-| landuse | surface_mining | Feature Code AA010 | AA010:NFDD
 | landuse | swimming_pool_area | Feature Code NU170 | NU170:NFDD
 | landuse | tank_farm | Feature Code AM071 | AM071:NFDD
 | landuse | test_area | Feature Code FA100 | FA100:NFDD
@@ -3285,7 +3286,6 @@ Generated: Wed Oct 13 2021 16:25:21 GMT+0000 (Coordinated Universal Time)
 [options="header"]
 |==========
 | Key | Value | Comment | Source
-| leisure | fairground | Feature Code AK090 | AK090:NFDD
 | leisure | fishing | Feature Function | FFN:GGDM30, FFN:TDS40, FFN:TDS61
 | leisure | fitness_centre | Feature Function | FFN:GGDM30, FFN:TDS40, FFN:TDS61
 | leisure | gambling | Feature Function | FFN:GGDM30, FFN:TDS40, FFN:TDS61

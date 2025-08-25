@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2024 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2025 Maxar (http://www.maxar.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
@@ -596,11 +596,11 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
     throw HootException(QString("Expected layer (%1) to contain a geom.").arg(newLayer->getName()));
 
   QString geom = map["geom"].toString().toLower();
-  if (geom == "line")
+  if (geom == "line" || geom == "curve")
     newLayer->setGeometryType(GEOS_LINESTRING);
   else if (geom == "point")
     newLayer->setGeometryType(GEOS_POINT);
-  else if (geom == "area" || geom == "polygon")
+  else if (geom == "area" || geom == "polygon" || geom == "surface")
     newLayer->setGeometryType(GEOS_POLYGON);
   else
     throw HootException(QString("Expected layer (%1) to contain a valid geom.").arg(newLayer->getName()));
