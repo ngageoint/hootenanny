@@ -102,7 +102,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Wa
 std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const ConstWayPtr& e, bool throwError,
                                                                         const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_POLYGON)
     return convertToPolygon(e);
@@ -115,7 +115,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Co
 std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const ConstRelationPtr& e, bool throwError,
                                                                         const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
     return RelationToMultiPolygonConverter(_constProvider, e).createMultipolygon();
@@ -291,8 +291,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
 }
 
 geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(const ConstElementPtr& e, bool throwError,
-                                                                       const bool statsFlag,
-                                                                       const bool requireAreaForPolygonConversion)
+                                                                       const bool statsFlag)
 {
   ElementType t = e->getElementType();
 
@@ -320,7 +319,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(const Con
     // Hootenanny by default requires that an polygon element be an area in the schema in order
     // to be converted to a polygon, it is created as a linestring. There are situations, however,
     // where we want to relax this requirement (generic geometry matching).
-    if (!requireAreaForPolygonConversion && w->isValidPolygon() && w->isClosedArea())
+    if (w->isValidPolygon() && w->isClosedArea())
       return GEOS_POLYGON;
     else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
       return GEOS_POLYGON;

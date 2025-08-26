@@ -101,12 +101,9 @@ public:
    * false, a an unknown geometry ID is returned when encountering an invalid element.
    * @param statsFlag If true, this geometry type is being retrieved for the purpose of map
    * statistics.
-   * @param requireAreaForPolygonConversion if true, in order for the element being converted to
-   * become a polygon it must be classifiable in the schema as an area
    * @return a geometry ID
    */
-  static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e, bool throwError = false, const bool statsFlag = false,
-                                                    const bool requireAreaForPolygonConversion = false);
+  static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e, bool throwError = false, const bool statsFlag = false);
 
   void setRequireAreaForPolygonConversion(bool require)
   { _requireAreaForPolygonConversion = require; }
