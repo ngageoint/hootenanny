@@ -2870,6 +2870,27 @@ mgcp = {
       case undefined: // Break early if no value
         break;
 
+      case 'AA040': // Rig
+        switch (tags.product)
+        {
+          case undefined:
+            attrs.PPO = '999';
+            break;
+          
+          case 'oil':
+            attrs.PPO = '75';
+            break;
+          
+          case 'gas':
+            attrs.PPO = '45';
+            break;
+
+          default:
+            attrs.PPO = '999';
+            break;
+        }
+        break;
+
       case 'AA050': // Well
         if (attrs.PPO && attrs.PPO !== '0' && attrs.PPO !== '122')
         {

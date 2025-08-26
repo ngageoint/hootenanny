@@ -47,6 +47,7 @@ mgcp.rules = {
     // MGCP TRDv4 Only FCODES
     // These are used for both import and export
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
+    ['F_CODE','AA040','man_made','petroleum_well'], // Rig
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
     ['F_CODE','AH070','amenity','checkpoint'],
