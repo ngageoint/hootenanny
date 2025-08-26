@@ -1270,6 +1270,9 @@ mgcp = {
           break;
       }
       break;
+    case 'AL105':
+      tags.place = 'village';
+      break;
     case 'AL140':
       tags.amenity = 'research_institute';
       tags.research = 'particle_physics';
@@ -1301,6 +1304,19 @@ mgcp = {
       tags.harbour = 'yes';
       tags['seamark:type'] = 'harbour';
       tags.industrial = 'port';
+      break;
+    case 'BB230':
+      tags.barrier = 'wall';
+      tags.wall = 'seawall';
+      break;
+    case 'BH150':
+      tags.natural = 'desert';
+      tags.water = 'salt';
+      break;
+    case 'BH160':
+      tags.wetland = 'saltmarsh';
+      tags.natural = 'wetland';
+      tags.intermittent = 'yes';
       break;
     case 'BJ040': // Ice cliff
       tags.natural = 'cliff';
@@ -1751,6 +1767,10 @@ mgcp = {
           attrs.F_CODE = 'AP030'
         }
         break;
+      
+      case 'services':
+        attrs.F_CODE = 'AQ135';
+        break;
     } // End highway
 
     // Ice roads are a special case.
@@ -1807,6 +1827,7 @@ mgcp = {
       ["t.tourism == 'information' && t.information","delete t.tourism"],
       ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
       ["t.waterway == 'riverbank'","t.waterway = 'river'"],
+      ["t.natural == 'wetland' && t.wetland == 'saltmarsh' && t.intermittent == 'yes'", "a.F_CODE = 'BH160'"],
       ["t.wetland && t.natural == 'wetland'","delete t.natural"],
       ["t.wetland == 'wet_meadow'", "a.F_CODE = 'ED010'"],
       ["t.aeroway == 'hangar' && t.building == 'yes'", "t.building = 'hangar'"],
@@ -1830,7 +1851,8 @@ mgcp = {
       ["t.railway == 'rail' && (t.highspeed == 'yes' || t.maxspeed >= 200)", "a.RWC = '1'"],
       ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
       ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
-      ["t.railway == 'light_rail'", "a.F_CODE = 'AN010', a.RRC = '2'"]
+      ["t.railway == 'light_rail'", "a.F_CODE = 'AN010', a.RRC = '2'"],
+      ["t.wall == 'seawall' && t.barrier == 'wall'", "a.F_CODE = 'BB230'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -2288,7 +2310,6 @@ mgcp = {
       case 'suburb':
       case 'neighbourhood':
       case 'quarter':
-      case 'village':
       case 'hamlet':
       case 'yes':  // We set this as a default when going to OSM
         if (!tags.boundary) {
@@ -2297,8 +2318,9 @@ mgcp = {
         }
           break;
 
+      case 'village':
       case 'isolated_dwelling':
-        attrs.F_CODE = 'AL105'; // Settlement
+        attrs.F_CODE = 'AL105'; // Village
         delete tags.place;
         break;
 
@@ -3089,7 +3111,8 @@ mgcp = {
       ["t.natural == 'tree'","a.F_CODE = 'EC030'"],
       ["t.amenity == 'ferry_terminal'","a.F_CODE = 'AQ125'; a.FFN = '7'"],
       // ["t.landuse == 'forest'","a.F_CODE = 'EC030'"],
-      ["t.amenity == 'fuel'","a.F_CODE = 'AL015'"]
+      ["t.amenity == 'fuel'","a.F_CODE = 'AL015'"],
+      ["t.natural == 'desert' && t.water == 'salt'", "a.F_CODE = 'BH150'"]
       ];
 
       mgcp.mgcpPostRules = translate.buildComplexRules(rulesList);
