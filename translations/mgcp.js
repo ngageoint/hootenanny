@@ -702,6 +702,12 @@ mgcp = {
       tags.industrial = 'heating';
     }
 
+    if (attrs.F_CODE == 'AB010')
+    {
+      tags.landuse = 'industrial';
+      tags.industrial = 'scrapyard';
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -991,6 +997,7 @@ mgcp = {
       ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.landuse == 'industrial' && t.industrial == 'heating' && t.amenity","delete t.amenity"],
+      ["t.landuse == 'industrial' && t.industrial == 'scrapyard'","delete t.amenity"],
       ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
@@ -2018,6 +2025,10 @@ mgcp = {
 
           case 'hydrocarbons_field': // Unsupported tag in OSM, included here for legacy reasons
             delete tags.landuse;
+            break;
+
+          case 'scrapyard':
+            attrs.F_CODE = 'AB010';
             break;
         }
         break;
