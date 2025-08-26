@@ -124,7 +124,9 @@ describe('Pedestrian Area / Plaza / Public Square', function () {
             assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
             tags = osmtogeojson(xml).features[0].properties;
 
-            assert.equal(tags['landuse'], 'plaza', 'landuse tag should equal');
+            var osm_key = (schema === 'MGCP') ? 'place' : 'landuse';
+            var osm_value = (schema === 'MGCP') ? 'square' : 'plaza';
+            assert.equal(tags[osm_key], osm_value, osm_key + ' tag should equal');
 
         });
     });
