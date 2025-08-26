@@ -106,7 +106,7 @@ public:
    * @return a geometry ID
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e, bool throwError = false, const bool statsFlag = false,
-                                                    const bool requireAreaForPolygonConversion = true);
+                                                    const bool requireAreaForPolygonConversion = false);
 
   void setRequireAreaForPolygonConversion(bool require)
   { _requireAreaForPolygonConversion = require; }
