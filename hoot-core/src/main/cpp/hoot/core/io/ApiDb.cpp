@@ -419,7 +419,7 @@ Tags ApiDb::unescapeTags(const QVariant &v)
   QString str = v.toString();
 
   Tags result;
-  QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
+  QRegularExpression rxKeyValue("\"(.*?)\"=>\"(.*?)\"(?:, |$)");
   QRegularExpressionMatchIterator matches = rxKeyValue.globalMatch(str);
 
   while (matches.hasNext())

@@ -147,16 +147,17 @@ function translateToOsm(attrs, layerName, geometryType)
   ['tags','tags2','tags3','tags4','tags5'].forEach(function(tName) {
     if (attrs[tName])
     {
-      var tList = attrs[tName].split('","');
+      var tList = attrs[tName].replaceAll('\\','').replaceAll('"','').split(',');
       delete attrs[tName];
 
       for (var val in tList)
       {
-        vList = tList[val].split('"=>"');
-        attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
+        vList = tList[val].split('=>');
+        // remove the "other_tags" key, which certain workflows add as the key for an additional nested tags list
+        var other_tags_index = vList.indexOf('other_tags');
+        if (other_tags_index > -1) vList.splice(other_tags_index, 1);
 
-        // Debug
-        // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+        attrs[vList[0].toString()] = vList[1].toString();
       }
     }
   });
