@@ -124,39 +124,33 @@ function translateToOsm(attrs, layerName, geometryType)
   }
 
 
-  // var nameList = ['tags','tags2','tags3','tags4','tags5'];
-  // for (var tName of nameList)
-  // {
-  //   if (attrs[tName])
-  //   {
-  //     var tList = attrs[tName].split('","');
-  //     delete attrs[tName];
-
-  //     for (var val in tList)
-  //     {
-  //       vList = tList[val].split('"=>"');
-  //       attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
-
-  //       // Debug
-  //       // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
-  //     }
-  //   }
-  // }
-
   // Now split all of the tagsX tags into separate tags.
   ['tags','tags2','tags3','tags4','tags5'].forEach(function(tName) {
     if (attrs[tName])
     {
-      var tList = attrs[tName].split('","');
-      delete attrs[tName];
+      try {
+        var tList = attrs[tName].replaceAll('\\', '').replaceAll('"', '').split(',');
+        delete attrs[tName];
 
-      for (var val in tList)
-      {
-        vList = tList[val].split('"=>"');
-        attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
+        for (let i = 1; i < tList.length; i++) {
+          if (!tList[i].includes('=>')) {
+            // A value contained a comma and was split unintentionally
+            tList[i - 1] += tList[i];
+            tList.splice(i, 1);
+            i -= 1;
+          }
+        }
 
-        // Debug
-        // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+        for (var val in tList) {
+          vList = tList[val].split('=>');
+          // remove the "other_tags" key, which certain workflows add as the key for an additional nested tags list
+          var other_tags_index = vList.indexOf('other_tags');
+          if (other_tags_index > -1) vList.splice(other_tags_index, 1);
+
+          attrs[vList[0].toString()] = vList[1].toString();
+        }
+      } catch (e) {
+        hoot.logWarn('Error parsing element attributes. Some metadata may be dropped. Element attributes: ' + JSON.stringify(attrs));
       }
     }
   });

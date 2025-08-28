@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2025 Maxar (http://www.maxar.com/)
  */
 #include "ApiDb.h"
 
@@ -419,7 +419,7 @@ Tags ApiDb::unescapeTags(const QVariant &v)
   QString str = v.toString();
 
   Tags result;
-  QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
+  QRegularExpression rxKeyValue("\"(.*?)\"=>\"(.*?)\"(?:, |$)");
   QRegularExpressionMatchIterator matches = rxKeyValue.globalMatch(str);
 
   while (matches.hasNext())
