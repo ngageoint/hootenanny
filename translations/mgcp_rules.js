@@ -53,13 +53,14 @@ mgcp.rules = {
     ['F_CODE','AH070','amenity','checkpoint'],
     //['F_CODE','AL010','landuse','religious'], // Processing Facility - NFDD AL010
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
-    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
+    //['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     //['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK130','highway','race_way'],
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL170','place','square'], // Public Square
     ['F_CODE','AL210','tunnel','avalanche_protector'], // Protection Shed - NFDD AL211
     ['F_CODE','AM040','man_made','heap'],
+    ['F_CODE','AM060','military','bunker'],
     ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
     ['F_CODE','AT042','power','tower'], // Pylon
     ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
@@ -71,6 +72,7 @@ mgcp.rules = {
     ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
+    ['F_CODE','BD100','seamark:type','pile'],
     ['F_CODE','BD110','man_made','offshore_platform'], // Offshore Platform - NFDD BD115
     ['F_CODE','BD130','seamark:type','obstruction'], // Hazardous Rock Point - NFDD BD130
     ['F_CODE','BD130','seamark:type','rock'], // Hazardous Rock Point - NFDD BD130
