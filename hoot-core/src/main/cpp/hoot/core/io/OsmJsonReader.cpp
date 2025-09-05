@@ -866,8 +866,8 @@ void OsmJsonReader::_readFromHttp()
 {
   if (!_sourceUrl.isValid())
     throw HootException("Invalid URL: " + _sourceUrl.toString(QUrl::RemoveUserInfo));
-  if (!_isOverpass)
-    throw HootException("Unable to read non-Overpass JSON sources");
+  //if (!_isOverpass)
+  //  throw HootException("Unable to read non-Overpass JSON sources");
   //  When reading in from the Overpass there won't be duplicates unless we are
   //  dividing up the bounds into smaller quadrants that fit below the 0.25 degrees
   //  squared limits, when we do it is safe to ignore duplicate elements
@@ -876,7 +876,7 @@ void OsmJsonReader::_readFromHttp()
   QUrlQuery urlQuery(_sourceUrl);
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
-  urlQuery.addQueryItem("srsname", "EPSG:4326");
+  //urlQuery.addQueryItem("srsname", "EPSG:4326");
   _sourceUrl.setQuery(urlQuery);
   geos::geom::Envelope env;
 

@@ -489,6 +489,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   else
   {
     LOG_TRACE("Replacing way during crop check: " << way->getElementId() << " with element: " << e->getElementId() << "...");
+    LOG_VART(e->getElementType());
 
     if (e->getElementType() == ElementType::Way)
     {
