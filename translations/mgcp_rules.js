@@ -391,12 +391,12 @@ mgcp.rules = {
 
     // CCT - Cover Closure Type
     // ['CCT','0',undefined,undefined], // Unknown
-    ['CCT','0','cover:type','unknown'], // Unknown
-    ['CCT','1','cover:type','open'], // Open
-    ['CCT','2','cover:type','partial'], // Partial
-    ['CCT','3','cover:type','moveable'], // Moveable
-    ['CCT','4','cover:type','complete'], // Complete
-    ['CCT','999','cover:type','other'], // Complete
+    ['CCT','0','cover','unknown'], // Unknown
+    ['CCT','1','cover','no'], // Open
+    ['CCT','2','cover','partial'], // Partial
+    ['CCT','3','cover','moveable'], // Moveable
+    ['CCT','4','cover','yes'], // Complete
+    ['CCT','999','cover','other'], // Complete
 
     // CDA - Covered Drain
     // ['CDA','0',undefined,undefined],

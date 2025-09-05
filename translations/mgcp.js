@@ -1020,7 +1020,6 @@ mgcp = {
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.landuse == 'industrial' && t.industrial == 'heating' && t.amenity","delete t.amenity"],
       ["t.landuse == 'industrial' && t.industrial == 'scrapyard'","delete t.amenity"],
-      ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
