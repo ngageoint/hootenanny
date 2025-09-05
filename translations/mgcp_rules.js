@@ -71,6 +71,7 @@ mgcp.rules = {
     ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
+    ['F_CODE','BB240','leisure','slip_way'],
     ['F_CODE','BD110','man_made','offshore_platform'], // Offshore Platform - NFDD BD115
     ['F_CODE','BD130','seamark:type','obstruction'], // Hazardous Rock Point - NFDD BD130
     ['F_CODE','BD130','seamark:type','rock'], // Hazardous Rock Point - NFDD BD130
