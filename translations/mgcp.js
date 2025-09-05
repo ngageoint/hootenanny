@@ -981,6 +981,14 @@ mgcp = {
       tags.industrial = 'factory';
     }
 
+    if (attrs.F_CODE == 'AC030')
+    {
+      tags.landuse = 'basin';
+      tags.basin = 'settling';
+      delete tags.natural;
+      delete tags.water;
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -1850,6 +1858,7 @@ mgcp = {
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
       ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
+      ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
