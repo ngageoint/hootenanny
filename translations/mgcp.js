@@ -989,6 +989,13 @@ mgcp = {
       delete tags.water;
     }
 
+    if (attrs.F_CODE == 'AL208')
+    {
+      tags.landuse = 'residential';
+      tags.residential = 'irregular_settlement';
+      delete tags.place;
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -1948,6 +1955,11 @@ mgcp = {
         break;
 
       case 'residential':
+        if (tags.residential == 'irregular_settlement')
+        {
+          attrs.F_CODE = 'AL208';
+          break;
+        }
         attrs.F_CODE = 'AL010';
         attrs.FFN = '563';
         break;
