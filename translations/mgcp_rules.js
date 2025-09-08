@@ -71,6 +71,7 @@ mgcp.rules = {
     ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB190','seamark:type','shoreline_construction'], // Shoreline Construction
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
+    ['F_CODE','BB240','leisure','slip_way'],
     ['F_CODE','BD110','man_made','offshore_platform'], // Offshore Platform - NFDD BD115
     ['F_CODE','BD130','seamark:type','obstruction'], // Hazardous Rock Point - NFDD BD130
     ['F_CODE','BD130','seamark:type','rock'], // Hazardous Rock Point - NFDD BD130
@@ -390,12 +391,12 @@ mgcp.rules = {
 
     // CCT - Cover Closure Type
     // ['CCT','0',undefined,undefined], // Unknown
-    ['CCT','0','cover:type','unknown'], // Unknown
-    ['CCT','1','cover:type','open'], // Open
-    ['CCT','2','cover:type','partial'], // Partial
-    ['CCT','3','cover:type','moveable'], // Moveable
-    ['CCT','4','cover:type','complete'], // Complete
-    ['CCT','999','cover:type','other'], // Complete
+    ['CCT','0','cover','unknown'], // Unknown
+    ['CCT','1','cover','no'], // Open
+    ['CCT','2','cover','partial'], // Partial
+    ['CCT','3','cover','moveable'], // Moveable
+    ['CCT','4','cover','yes'], // Complete
+    ['CCT','999','cover','other'], // Complete
 
     // CDA - Covered Drain
     // ['CDA','0',undefined,undefined],
