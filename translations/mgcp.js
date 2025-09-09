@@ -981,6 +981,28 @@ mgcp = {
       tags.industrial = 'factory';
     }
 
+    if (attrs.F_CODE == 'AC030')
+    {
+      tags.landuse = 'basin';
+      tags.basin = 'settling';
+      delete tags.natural;
+      delete tags.water;
+    }
+
+    if (attrs.F_CODE == 'AL208')
+    {
+      tags.landuse = 'residential';
+      tags.residential = 'irregular_settlement';
+      delete tags.place;
+    }
+
+    if (attrs.F_CODE == 'BB240')
+    {
+      tags['seamark:type'] = 'shoreline_construction';
+      tags['seamark:shoreline_construction:category'] = 'slip_way';
+      delete tags.leisure;
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -998,7 +1020,6 @@ mgcp = {
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.landuse == 'industrial' && t.industrial == 'heating' && t.amenity","delete t.amenity"],
       ["t.landuse == 'industrial' && t.industrial == 'scrapyard'","delete t.amenity"],
-      ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.military == 'revetment'","t.barrier = 'berm'; delete t.military"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
@@ -1881,11 +1902,13 @@ mgcp = {
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
       ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
+      ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
       ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
       ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"],
+      ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'slip_way'", "a.F_CODE = 'BB240'"],
       ["t.railway == 'rail' && (t.highspeed == 'yes' || t.maxspeed >= 200)", "a.RWC = '1'"],
       ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
       ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
@@ -1989,6 +2012,11 @@ mgcp = {
         break;
 
       case 'residential':
+        if (tags.residential == 'irregular_settlement')
+        {
+          attrs.F_CODE = 'AL208';
+          break;
+        }
         attrs.F_CODE = 'AL010';
         attrs.FFN = '563';
         break;
