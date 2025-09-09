@@ -30,15 +30,26 @@
 
   <repositories>
     <repository>
-      <id>org.openstreetmap.josm</id>
-      <url>https://josm.openstreetmap.de/nexus3/#browse/browse:releases/</url>
+      <id>josm-releases</id>
+      <url>https://josm.openstreetmap.de/repository/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>josm-public</id>
+      <url>https://josm.openstreetmap.de/repository/public/</url>
       <releases>
         <enabled>true</enabled>
         <updatePolicy>always</updatePolicy>
       </releases>
       <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
+        <enabled>false</enabled>
       </snapshots>
     </repository>
   </repositories>
