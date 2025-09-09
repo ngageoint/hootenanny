@@ -1217,7 +1217,38 @@ mgcp = {
           break;
       }
       break;
-    
+
+    case 'AM010':
+      if (attrs.PPO == '3')
+      {
+        tags.landuse = 'military';
+        tags.military = 'ammunition';
+      }
+      else
+      {
+        tags.landuse = 'industrial';
+        tags.industrial = 'depot';
+      }
+      break;
+
+    case 'AM060':
+      tags.military = 'bunker';
+      switch (attrs.PPO)
+      {
+        case '1':
+          tags.bunker_type = 'hardened_aircraft_shelter';
+          delete tags.product;
+          break;
+        case '3':
+          tags.bunker_type = 'munitions';
+          delete tags.product;
+          break;
+        case '999':
+          tags.bunker_type = 'other';
+          delete tags.product;
+          break;
+      }
+      break;
     case 'AQ110': // Mooring airship
       tags.man_made = 'tower';
       tags.mooring = 'yes';
@@ -1935,6 +1966,25 @@ mgcp = {
       }
     }
 
+    if (tags.military == 'bunker')
+    {
+      switch (tags.bunker_type)
+      {
+        case undefined:
+          attrs.PPO = '0';
+          break;
+        case 'hardened_aircraft_shelter':
+          attrs.PPO = '1';
+          break;
+        case 'munitions':
+          attrs.PPO = '3';
+          break;
+        default:
+          attrs.PPO = '999';
+          break;
+      }
+    }
+
     // Sort out landuse
     switch (tags.landuse)
     {
@@ -2038,6 +2088,11 @@ mgcp = {
             }
 
             break;
+          
+          case 'depot':
+            delete tags.landuse;
+            attrs.F_CODE = 'AM010';
+            break;
 
           case 'oil':
             tags.product = 'petroleum';
@@ -2062,8 +2117,16 @@ mgcp = {
         break;
 
       case 'military':
-        attrs.F_CODE = 'AL010'
-        attrs.FFN = '835'
+        if (tags.military == 'ammunition')
+        {
+          attrs.F_CODE = 'AM010';
+          attrs.PPO = '3';
+        }
+        else
+        {
+          attrs.F_CODE = 'AL010'
+          attrs.FFN = '835'
+        }
         break;
 
       case 'orchard':
