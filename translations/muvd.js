@@ -406,6 +406,39 @@ muvd = {
             }
         } // End cycleList
 
+        // Highway cleanup
+        switch (tags.highway)
+        {
+            case undefined:
+                break;
+
+            case 'emergency_access_point':
+            case 'give_way':
+            case 'milestone':
+            case 'passing_place':
+            case 'speed_display':
+            case 'trailhead':
+                attrs.F_CODE = 'AL050'; // Display Sign
+                break;
+        } // End highway
+
+        if (muvd.muvdPreRules == undefined)
+        {
+            // See ToOsmPostProcessing for more details about rulesList
+            var rulesList = [
+                ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
+                ["t.landuse == 'retail'","t.amenity = 'marketplace'; a.F_CODE = 'AG060'"]
+            ];
+
+            muvd.muvdPreRules = translate.buildComplexRules(rulesList);
+        }
+
+        // Apply the rulesList
+        for (var i = 0, rLen = muvd.muvdPreRules.length; i < rLen; i++)
+        {
+            if (muvd.muvdPreRules[i][0](tags)) muvd.muvdPreRules[i][1](tags,attrs);
+        }
+
         // Keep looking for an FCODE
         // This uses the fcodeLookup tables that are defined earlier
         if (!attrs.F_CODE)
@@ -610,6 +643,19 @@ muvd = {
         var transMap = {}; // A map of translated attributes
         attrs = {}; // This is the output <GLOBAL>
         attrs.F_CODE = '';
+        
+        // MUVD TRD uses different "geometry" names to classify their geometries
+        switch (geometryType)
+        {
+            case 'Area':
+                geometryType = 'Surface';
+                break;
+            
+            case 'Line':
+                geometryType = 'Curve';
+                break;
+
+        }
 
         // Setup config variables. We could do this in initialize() but some things don't call it
         // Doing this so we don't have to keep calling into Hoot core
@@ -624,7 +670,6 @@ muvd = {
             muvd.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
             muvd.configOut.OgrCodedValues = hoot.Settings.get('ogr.coded.values');
             muvd.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
-            print(muvd.configOut.OgrThrowError);
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignement soon

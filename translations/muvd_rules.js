@@ -33,7 +33,34 @@ muvd.rules = {
     // These are for finding an FCODE for export.
     // NOTE: these get swapped around before being used
     fcodeOne2oneOut : [
-        []
+        ['F_CODE','AA010','historic','mine'],
+        ['F_CODE','AA010','landuse','quarry'],
+        ['F_CODE','AA010','man_made','adit'],
+        ['F_CODE','AG060','amenity','marketplace'],
+        ['F_CODE','AH050','military','bunker'],
+        ['F_CODE','AH050','military','trench'],
+        ['F_CODE','AH050','barrier','city_wall'],
+        ['F_CODE','AI040','amenity','refugee_site'],
+        ['F_CODE','AK015','leisure','bandstand'],
+        ['F_CODE','AL035','cemetery','grave'],
+        ['F_CODE','AL050','man_made','gantry'],
+        ['F_CODE','AL131','historic','monument'],
+        ['F_CODE','AN077','railway','traverser'],
+        ['F_CODE','BB030','barrier','bollard'],
+        ['F_CODE','BD123','waterway','floating_barrier'],
+        ['F_CODE','BH172','natural','spring'],
+        ['F_CODE','EA060','landuse','allotments'],
+        ['F_CODE','EA060','place','allotments'],
+        ['F_CODE','FA091','geophysical_data_track','yes'],
+        ['F_CODE','FA220','landuse','conservation'],
+        ['F_CODE','GA036','navaid:beacon','vor'],
+        ['F_CODE','GA037','navaid:beacon','tacan'],
+        ['F_CODE','GB025','barrier','yes'],
+        ['F_CODE','GB485','aeroway','approach_light'],
+        ['F_CODE','ZD019','boundary','user_defined'],
+        ['F_CODE','ZD050','place','archipelago'],
+        ['F_CODE','ZD050','place','continent'],
+        ['F_CODE','ZD050','place','locality']
     ],
 
     // Stuff to be ignored or that gets swapped later
