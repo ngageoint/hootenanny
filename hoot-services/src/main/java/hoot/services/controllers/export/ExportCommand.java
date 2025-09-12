@@ -143,6 +143,24 @@ class ExportCommand extends ExternalCommand {
             options.add("tag.filter.keys=hoot:status;hoot:building:match;error:circular");
         }
 
+        if (params.getFilterRelations()) {
+            if (!convertOps.contains("RemoveElementsVisitor")) {
+                convertOps.add("RemoveElementsVisitor");
+            }
+
+            boolean updated = false;
+            for (int i=0; i<options.size(); i++) {
+                if (options.get(i).startsWith("remove.elements.visitor.element.criteria")) {
+                    options.set(i, options.get(i).concat(";RelationCriterion"));
+                    updated = true;
+                    break;
+                }
+            }
+            if (!updated) {
+                options.add("remove.elements.visitor.element.criteria=RelationCriterion");
+            }
+        }
+
         //Decompose building relations for non-osm formats only
         if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
             convertOps.add("DecomposeBuildingRelationsVisitor");

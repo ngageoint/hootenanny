@@ -88,6 +88,9 @@ public class ExportParams {
     @JsonProperty("buffer")
     private long buffer = 0;
 
+    @JsonProperty("filterrelations")
+    private boolean filterRelations = false;
+
 
     private String outputPath;
 
@@ -241,6 +244,14 @@ public class ExportParams {
 
     public void setOutputPath(String outputPath) {
         this.outputPath = outputPath;
+    }
+
+    public Boolean getFilterRelations() {
+        return this.filterRelations;
+    }
+
+    public void setFilterRelations(Boolean filterRelations) {
+        this.filterRelations = filterRelations;
     }
 
     @Override
