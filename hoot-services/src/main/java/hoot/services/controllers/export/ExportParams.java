@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2025 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -87,6 +87,9 @@ public class ExportParams {
 
     @JsonProperty("buffer")
     private long buffer = 0;
+
+    @JsonProperty("filterrelations")
+    private boolean filterRelations = false;
 
 
     private String outputPath;
@@ -241,6 +244,14 @@ public class ExportParams {
 
     public void setOutputPath(String outputPath) {
         this.outputPath = outputPath;
+    }
+
+    public Boolean getFilterRelations() {
+        return this.filterRelations;
+    }
+
+    public void setFilterRelations(Boolean filterRelations) {
+        this.filterRelations = filterRelations;
     }
 
     @Override
