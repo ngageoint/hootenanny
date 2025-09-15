@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016-2024 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016-2025 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -144,6 +144,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         if (params.getFilterRelations()) {
+            logger.info("params.getFilterRelations was true");
             if (!convertOps.contains("RemoveElementsVisitor")) {
                 convertOps.add("RemoveElementsVisitor");
             }
