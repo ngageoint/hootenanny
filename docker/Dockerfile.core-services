@@ -27,7 +27,7 @@ ARG jdk_version
 
 ENV HOOT_HOME=$hoot_home
 
-COPY scripts/yum/geoint-repo.sh scripts/yum/hoot-repo.sh scripts/yum/pgdg-repo.sh /tmp
+COPY scripts/yum/geoint-repo.sh scripts/yum/hoot-repo.sh scripts/yum/pgdg-repo.sh /tmp/
 
 RUN --mount=type=cache,target=/var/cache/yum \
     /tmp/geoint-repo.sh && \
@@ -46,7 +46,7 @@ RUN yum -y install epel-release centos-release-scl
 
 RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
     sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo 
+    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 
 RUN yum install -y \
         armadillo-$armadillo_version \
