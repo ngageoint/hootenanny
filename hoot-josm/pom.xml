@@ -66,6 +66,53 @@
 		<finalName>hoot-josm</finalName>
 		<plugins>
 
+            <!-- Download josm-19043.jar from archive into target/vendor -->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.7.1</version>
+                <executions>
+                    <execution>
+                        <id>fetch-josm-jar</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://josm.openstreetmap.de/download/Archiv/josm-snapshot-19043.jar</url>
+                            <unpack>false</unpack>
+                            <outputDirectory>${project.build.directory}/vendor</outputDirectory>
+                            <outputName>josm-19043.jar</outputName>
+                            <skipSSLVerification>true</skipSSLVerification>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Install the downloaded JAR into the local Maven repository so the normal dependency resolves -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>install-josm-local</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}/vendor/josm-19043.jar</file>
+                            <groupId>org.openstreetmap.josm</groupId>
+                            <artifactId>josm</artifactId>
+                            <version>19043</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 			<!-- Set a compiler level -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
