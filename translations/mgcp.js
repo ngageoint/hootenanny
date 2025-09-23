@@ -1924,7 +1924,7 @@ mgcp = {
       ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
       ["t.natural == 'ridge' && t.ridge == 'esker'", "a.F_CODE = 'DB100'"],
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
-      ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
+      ["t.public_transport == 'station'", "a.F_CODE = 'AQ125'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
