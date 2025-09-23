@@ -60,7 +60,7 @@
       <artifactId>josm</artifactId>
       <version>19043</version>
       <scope>system</scope>
-      <systemPath>${project.build.directory}/vendor/josm-19043.jar</systemPath>
+      <systemPath>${project.basedir}/vendor/josm-19043.jar</systemPath>
     </dependency>
 	</dependencies>
 
@@ -68,29 +68,7 @@
 		<finalName>hoot-josm</finalName>
 		<plugins>
 
-            <!-- Fetch josm-19043.jar using Ant (works with older Maven on EL7) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <id>fetch-josm-jar</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <mkdir dir="${project.build.directory}/vendor"/>
-                                <get src="https://josm.openstreetmap.de/download/Archiv/josm-snapshot-19043.jar"
-                                     dest="${project.build.directory}/vendor/josm-19043.jar"
-                                     skipexisting="true"/>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
 
 			<!-- Set a compiler level -->
 			<plugin>
