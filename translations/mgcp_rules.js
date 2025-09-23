@@ -80,7 +80,7 @@ mgcp.rules = {
     ['F_CODE','BH060','water:race','flume'], // Flume - NFDD BH065
     ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
-    ['F_CODE','BI041','man_made','basin_gate'], // Water Gate - NFDD BI045
+    ['F_CODE','BI041','waterway','floodgate'], // Water Gate - NFDD BI045
     ['F_CODE','CA035','geological','water_elevation'], // Inland Water Elevation
     ['F_CODE','DB160','geological','out_crop'],
     ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
@@ -88,6 +88,7 @@ mgcp.rules = {
     ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
     ['F_CODE','FA090','man_made','geophysical_prospecting_grid'], // Geophysical Prospecting Grid - No replacement code
     ['F_CODE','GA034','airmark','beacon'], // Aeronautical Radio Navigation Service - TDS GA033
+    ['F_CODE','GB065','seamark:type','seaplane_landing_area'],
     ['F_CODE','GB220','aeroway','obstacle'], // Aeronautical Obstacle - No replacement code
     ['F_CODE','GB485','aeroway','navigationaid'], // Approach Lighting System - Not in TDS
     ['F_CODE','AI030','amenity','refugee_site'],
