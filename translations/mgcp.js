@@ -1003,6 +1003,13 @@ mgcp = {
       delete tags.leisure;
     }
 
+    if (attrs.F_CODE == 'BB140')
+    {
+      tags['seamark:type'] = 'shoreline_construction';
+      tags['seamark:shoreline_construction:category'] = 'training_wall';
+      delete tags.man_made;
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -1926,6 +1933,7 @@ mgcp = {
       ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
       ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"],
       ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'slip_way'", "a.F_CODE = 'BB240'"],
+      ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'training_wall'", "a.F_CODE = 'BB140'"],
       ["t.railway == 'rail' && (t.highspeed == 'yes' || t.maxspeed >= 200)", "a.RWC = '1'"],
       ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
       ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
