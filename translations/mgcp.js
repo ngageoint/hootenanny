@@ -1384,6 +1384,11 @@ mgcp = {
       tags.natural = 'wetland';
       tags.intermittent = 'yes';
       break;
+    case 'BI050':
+      tags.man_made = 'tower';
+      tags['tower:type'] = 'intake';
+      delete tags.tower;
+      break;
     case 'BJ040': // Ice cliff
       tags.natural = 'cliff';
       tags.surface = 'ice';
@@ -1927,6 +1932,7 @@ mgcp = {
       ["t.public_transport == 'station'", "a.F_CODE = 'AQ125'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
+      ["t.landuse == 'basin' && t.basin == 'aeration'","a.F_CODE = 'BH040'"],
       ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
@@ -1938,7 +1944,10 @@ mgcp = {
       ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
       ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
       ["t.railway == 'light_rail'", "a.F_CODE = 'AN010', a.RRC = '2'"],
-      ["t.wall == 'seawall' && t.barrier == 'wall'", "a.F_CODE = 'BB230'"]
+      ["t.wall == 'seawall' && t.barrier == 'wall'", "a.F_CODE = 'BB230'"],
+      ["t.aeroway == 'aerodrome' && t['aerodrome:type'] == 'seaplane'", "a.F_CODE = 'GB065'"],
+      ["(t['seamark:type'] == 'gate' && t['seamark:gate:category'] == 'flood_barrage') || t.man_made == 'basin_gate'", "a.F_CODE = 'BI041'"],
+      ["t.man_made == 'tower' && t['tower:type'] == 'intake'", "a.F_CODE = 'BI050'"]
       ];
 
       mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);

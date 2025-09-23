@@ -21,7 +21,7 @@
 		-->
 
     <josm.artifactId>josm</josm.artifactId>
-		<josm.version>19369</josm.version>
+		<josm.version>19043</josm.version>
 
 	  <!-- josm.artifactId>me-josm</josm.artifactId -->
 		<!-- josm.version>10.2.2</josm.version -->
@@ -56,15 +56,19 @@
 
 	<dependencies>
     <dependency>
-    			<groupId>org.openstreetmap.josm</groupId>
-    			<artifactId>${josm.artifactId}</artifactId>
-    			<version>${josm.version}</version>
-		</dependency>
+      <groupId>org.openstreetmap.josm</groupId>
+      <artifactId>josm</artifactId>
+      <version>19043</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/vendor/josm-19043.jar</systemPath>
+    </dependency>
 	</dependencies>
 
 	<build>
 		<finalName>hoot-josm</finalName>
 		<plugins>
+
+
 
 			<!-- Set a compiler level -->
 			<plugin>
