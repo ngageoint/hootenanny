@@ -1459,6 +1459,21 @@ mgcp = {
       if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
+    case 'AL241': // Tower
+      switch (attrs.TTC)
+      {
+        case '12':
+          tags.man_made = 'tower';
+          tags.emergency = 'fire_lookout';
+          break;
+          
+        case '19':
+          tags.man_made = 'mast';
+          tags['tower:type'] = 'communication';
+          tags['communication:mobile_phone'] = 'yes';
+          break;
+      }
+
     case 'AN010':
       if (tags['railway:track'] == 'monorail')
       {
@@ -1648,11 +1663,13 @@ mgcp = {
         delete tags.named_location;
         tags.annotated_location = 'yes';
       }
+      break;
     
     case 'EC010':
       delete tags.natural;
-      tags.crop = 'sugarcane'
-      tags.landuse = 'orchard'
+      tags.crop = 'sugarcane';
+      tags.landuse = 'orchard';
+      break;
     } // End switch FCODE
 
     // Content vs Product for storage tanks
@@ -3049,6 +3066,9 @@ mgcp = {
 
       case 'AL241': // 
         if (tags.man_made == 'lighthouse') attrs.TTC = '5';
+        if (tags.man_made == 'mast' && tags['tower:type'] == 'communication' && tags['communication:mobile_phone'] == 'yes') attrs.TTC = '19';
+        if (tags.man_made == 'tower' && tags.emergency == 'fire_lookout') attrs.TTC = '12';
+        if (!attrs.TTC) attrs.TTC = '0';
         break;
         
       case 'AN010': // Railway
