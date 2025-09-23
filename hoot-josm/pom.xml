@@ -56,10 +56,12 @@
 
 	<dependencies>
     <dependency>
-    			<groupId>org.openstreetmap.josm</groupId>
-    			<artifactId>${josm.artifactId}</artifactId>
-    			<version>${josm.version}</version>
-		</dependency>
+      <groupId>org.openstreetmap.josm</groupId>
+      <artifactId>josm</artifactId>
+      <version>19043</version>
+      <scope>system</scope>
+      <systemPath>${project.build.directory}/vendor/josm-19043.jar</systemPath>
+    </dependency>
 	</dependencies>
 
 	<build>
@@ -85,30 +87,6 @@
                                      dest="${project.build.directory}/vendor/josm-19043.jar"
                                      skipexisting="true"/>
                             </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Install the downloaded JAR into the local Maven repository so the normal dependency resolves -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>install-josm-local</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <file>${project.build.directory}/vendor/josm-19043.jar</file>
-                            <groupId>org.openstreetmap.josm</groupId>
-                            <artifactId>josm</artifactId>
-                            <version>19043</version>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
                         </configuration>
                     </execution>
                 </executions>
