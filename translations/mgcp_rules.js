@@ -1345,16 +1345,14 @@ mgcp.rules = {
     ['TTC','0','tower:type','unknown'],
     ['TTC','1','tower:type','bridge'], // Bridge Tower
     ['TTC','2','tower:type','observation'], // Observation Tower
-    ['TTC','5','tower:type','light'], // Light Tower
+    ['TTC','5','tower:type','lighting'], // Light Tower
     // ['TTC','6','tower:type','water'], // Water Tower
     ['TTC','6','man_made','water_tower'], // Water Tower
     ['TTC','8','tower:type','cooling'], // Cooling Tower
-    ['TTC','10','tower:type','lookout'], // Lookout Tower
-    ['TTC','12','tower:type','fire'], // Fire Tower
+    ['TTC','10','tower:type','watchtower'], // Lookout Tower
     // ['TTC','16','tower:type','control'], // Control Tower
     ['TTC','16','service','aircraft_control'], // Control Tower
     ['TTC','18','tower:type','communication'], // Telecommunication Tower
-    ['TTC','19','tower:type','cell'], // Cell Tower
     ['TTC','21','tower:type','guard'], // Guard Tower
     ['TTC','22','tower:type','industrial'], // Industrial Tower
     ['TTC','23','tower:type','drop'], // Drop Tower

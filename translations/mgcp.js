@@ -1003,6 +1003,13 @@ mgcp = {
       delete tags.leisure;
     }
 
+    if (attrs.F_CODE == 'BB140')
+    {
+      tags['seamark:type'] = 'shoreline_construction';
+      tags['seamark:shoreline_construction:category'] = 'training_wall';
+      delete tags.man_made;
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
@@ -1464,6 +1471,21 @@ mgcp = {
       if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
+    case 'AL241': // Tower
+      switch (attrs.TTC)
+      {
+        case '12':
+          tags.man_made = 'tower';
+          tags.emergency = 'fire_lookout';
+          break;
+          
+        case '19':
+          tags.man_made = 'mast';
+          tags['tower:type'] = 'communication';
+          tags['communication:mobile_phone'] = 'yes';
+          break;
+      }
+
     case 'AN010':
       if (tags['railway:track'] == 'monorail')
       {
@@ -1653,11 +1675,13 @@ mgcp = {
         delete tags.named_location;
         tags.annotated_location = 'yes';
       }
+      break;
     
     case 'EC010':
       delete tags.natural;
-      tags.crop = 'sugarcane'
-      tags.landuse = 'orchard'
+      tags.crop = 'sugarcane';
+      tags.landuse = 'orchard';
+      break;
     } // End switch FCODE
 
     // Content vs Product for storage tanks
@@ -1905,7 +1929,7 @@ mgcp = {
       ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
       ["t.natural == 'ridge' && t.ridge == 'esker'", "a.F_CODE = 'DB100'"],
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
-      ["t.public_transport == 'station'", "a.F_CODE = 'AL010'; a.FFN = '480'"],
+      ["t.public_transport == 'station'", "a.F_CODE = 'AQ125'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
       ["t.landuse == 'basin' && t.basin == 'aeration'","a.F_CODE = 'BH040'"],
@@ -1915,6 +1939,7 @@ mgcp = {
       ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
       ["t['seamark:type'] == 'mooring'", "delete t['seamark:type']"],
       ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'slip_way'", "a.F_CODE = 'BB240'"],
+      ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'training_wall'", "a.F_CODE = 'BB140'"],
       ["t.railway == 'rail' && (t.highspeed == 'yes' || t.maxspeed >= 200)", "a.RWC = '1'"],
       ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
       ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
@@ -3058,6 +3083,9 @@ mgcp = {
 
       case 'AL241': // 
         if (tags.man_made == 'lighthouse') attrs.TTC = '5';
+        if (tags.man_made == 'mast' && tags['tower:type'] == 'communication' && tags['communication:mobile_phone'] == 'yes') attrs.TTC = '19';
+        if (tags.man_made == 'tower' && tags.emergency == 'fire_lookout') attrs.TTC = '12';
+        if (!attrs.TTC) attrs.TTC = '0';
         break;
         
       case 'AN010': // Railway
