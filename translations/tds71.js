@@ -1648,6 +1648,7 @@ tds71 = {
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
+        ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
@@ -2864,6 +2865,15 @@ tds71 = {
       case 'BH140': // River
         if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
         if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        break;
+      
+      case 'AL013':
+        if (tags.building == 'apartments')
+        {
+          attrs.FFN = '550';
+          attrs.FFN2 = '549';
+          attrs.FFN3 = '563';
+        }
         break;
     } // End switch F_CODE
 
