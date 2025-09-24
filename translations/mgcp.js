@@ -3046,7 +3046,7 @@ mgcp = {
           attrs.FFN = '931';
         }
 
-        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931' && attrs.FFN !== '0'))
+        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931' && attrs.FFN !== '0' && attrs.FFN !== '535'))
         {
           // Debug
           //print('AL015: Setting HWT 998');
@@ -3137,7 +3137,11 @@ mgcp = {
         break;
 
       case 'AQ140': // Vehicle Lot/Vehicle Storage area: Valid NFDD/NAS FCODE but not in the MGCP spec
-        if (geometryType == 'Point') attrs.F_CODE = 'AL015'; // Parking Garage Building
+        if (geometryType == 'Point') 
+        {
+          attrs.F_CODE = 'AL015'; // Parking Garage Building
+          attrs.FFN = '535';
+        }
         break;
 
       case 'AT060': // Communications Cable
