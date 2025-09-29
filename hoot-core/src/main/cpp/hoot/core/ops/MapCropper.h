@@ -122,6 +122,9 @@ private:
   /** When set to true the way ref is removed from any parent relations (generally should happen) */
   bool _removeFromParentRelation;
 
+  std::vector<long> _traceBoundaryNodes(const OsmMapPtr& map, const geos::geom::Polygon* poly, const NodePtr& nA, const NodePtr& nB);
+
+  void _stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr& rel, const geos::geom::Polygon* aoiPoly);
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 

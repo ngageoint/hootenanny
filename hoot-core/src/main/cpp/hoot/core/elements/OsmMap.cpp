@@ -496,7 +496,10 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const std::shar
     {
       const std::shared_ptr<Relation> r = std::dynamic_pointer_cast<Relation>(to);
       if (!r->getMember(from->getElementId()).isNull())
+      {
+        LOG_TRACE("The new relation contains the original element so we will add it after updates to relations.");
         addFirst = false;
+      }
     }
     //  Add the new element to the map first, if necessary, because we are replacing a single non-containing relation or other element
     if (addFirst && !containsElement(to))
@@ -506,11 +509,16 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const std::shar
     for (auto relation_id : rids)
     {
       const RelationPtr& r = getRelation(relation_id);
+      LOG_TRACE("replacing element");
       r->replaceElement(from, to);
+      LOG_TRACE("element replaced");
     }
     //  Add the new element to the map last, if necessary, because we are replacing a single containing relation
     if (!addFirst && !containsElement(to))
+    {
+      LOG_TRACE("Adding the new element to the map last.");
       addElement(to);
+    }
     //  Only remove the from element if requested
     if (remove_from)
       RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());

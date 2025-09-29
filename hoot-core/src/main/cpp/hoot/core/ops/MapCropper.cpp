@@ -431,6 +431,44 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(numSuperfluousNodesRemoved);
 }
 
+void MapCropper::_stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr& rel, const geos::geom::Polygon* aoiPoly)
+{
+  for (const auto& m : rel->getMembers())
+  {
+    LOG_TRACE("stitching...");
+    LOG_VART(m.getElementId());
+    if (m.getElementId().getType() != ElementType::Way) continue;
+
+    WayPtr memberWay = map->getWay(m.getElementId().getId());
+    if (!memberWay) continue;
+
+    std::shared_ptr<Geometry> wayGeom = ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(memberWay);
+
+    if (!wayGeom || wayGeom->isEmpty()) continue;
+
+    std::unique_ptr<Geometry> boundary(aoiPoly->getBoundary());
+    std::shared_ptr<Geometry> intersection(wayGeom->intersection(boundary.get()));
+
+    if (intersection && !intersection->isEmpty())
+    {
+      LOG_TRACE("we found an intersection between the AOI and the way geom");
+      GeometryToElementConverter gc(map);
+      ElementPtr e = gc.convertGeometryToElement(intersection.get(), memberWay->getStatus(), memberWay->getCircularError());
+
+      if (e && e->getElementType() == ElementType::Way)
+      {
+        LOG_TRACE("creating a new way out of the boundary...");
+        WayPtr newBoundaryWay = std::dynamic_pointer_cast<Way>(e);
+        newBoundaryWay->setTags(memberWay->getTags());
+        map->addWay(newBoundaryWay);
+
+        // directly append the new way into the relation
+        rel->addElement("outer", ElementId(ElementType::Way, newBoundaryWay->getId()));
+      }
+    }
+  }
+}
+
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
 {
   LOG_TRACE("Cropping way crossing bounds: " << wid << "...");
@@ -460,6 +498,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
       g = fg->intersection(_bounds.get());
   }
   LOG_VART(GeometryUtils::geometryTypeIdToString(g));
+  LOG_VART(g->getNumGeometries());
 
   std::shared_ptr<FindNodesInWayFactory> nodeFactory = std::make_shared<FindNodesInWayFactory>(way);
   GeometryToElementConverter gc(map);
@@ -493,6 +532,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
 
     if (e->getElementType() == ElementType::Way)
     {
+      LOG_TRACE("Replacing WAY: " << e->getElementId());
       //  Update the current way with the cropped node IDs only
       WayPtr newWay = std::dynamic_pointer_cast<Way>(e);
       way->setNodes(newWay->getNodeIds());
@@ -502,37 +542,57 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     }
     else if (e->getElementType() == ElementType::Relation)
     {
+      LOG_TRACE("Replacing")
       //  Find the way with the most nodes in the relation to retain the ID
       long eid = 0;
       size_t max_nodes = 0;
       //  When cropping a way that turns into a relation, one of the ways should retain the original ID
       RelationPtr newRelation = std::dynamic_pointer_cast<Relation>(e);
       const vector<RelationData::Entry>& members = newRelation->getMembers();
+      LOG_VART(newRelation->getMemberCount());
       for (const auto& element : members)
       {
-        if (element.getElementId().getType() == ElementType::Way)
+        LOG_TRACE(element.getElementId());
+        LOG_TRACE(element.getElementId().getType());
+        if (element.getElementId().getType() != ElementType::Way) continue;
+
+        WayPtr memberWay = map->getWay(element.getElementId().getId());
+        if (!memberWay) continue;
+
+        memberWay->setPid(way->getId());
+        // Retain the way tags here and not on the multilinestring relation
+        memberWay->setTags(way->getTags());
+        LOG_VART(way->getId());
+        LOG_VART(memberWay->getId());
+        LOG_VART(memberWay->getNodeCount());
+        if (memberWay->getNodeCount() > max_nodes)
         {
-          WayPtr memberWay = map->getWay(element.getElementId().getId());
-          memberWay->setPid(way->getId());
-          // Retain the way tags here and not on the multilinestring relation
-          memberWay->setTags(way->getTags());
-          if (memberWay->getNodeCount() > max_nodes)
-          {
-            eid = memberWay->getId();
-            max_nodes = memberWay->getNodeCount();
-          }
+          eid = memberWay->getId();
+          max_nodes = memberWay->getNodeCount();
         }
       }
       WayPtr oldWay = std::dynamic_pointer_cast<Way>(way->clone());
       //  Replace the way with the relation element
-      map->replace(way, e);
+      map->replace(way, newRelation);
       //  Replace the new way in the relation with the modified way
+      LOG_VART(eid);
       if (eid != 0)
       {
         //  Update the old way and replace the old one with the new one just created in the geometry
         WayPtr newWay = map->getWay(eid);
         oldWay->setNodes(newWay->getNodeIds());
+        oldWay->setTags(way->getTags());
+
         map->replace(newWay, oldWay);
+      }
+
+      // Stitch dangling ends along AOI boundary polygon
+      std::shared_ptr<geos::geom::Polygon> polyBounds = std::dynamic_pointer_cast<geos::geom::Polygon>(_bounds);
+
+      if (polyBounds)
+      {
+        LOG_TRACE("about to stitch relation along AOI");
+        _stitchRelationAlongAOI(map, newRelation, polyBounds.get());
       }
     }
     _numCrossingWaysKept++;
