@@ -1150,8 +1150,32 @@ mgcp = {
         if (tags.substance == 'water' )
         {
           tags.man_made = 'water_well';
-          delete tags.substance;
         }
+        
+      }
+
+      switch (attrs.PPO)
+      {
+        case '0':
+          tags.substance = 'unknown';
+          break;
+
+        case '45':
+          tags.substance = 'gas';
+          break;
+
+        case '75':
+          tags.substance = 'oil';
+          break;
+
+        case '122':
+          tags.substance = 'water';
+          break;
+
+        default:
+          tags.substance = 'other';
+          break;
+
       }
       break;
 
@@ -2832,7 +2856,11 @@ mgcp = {
         break;
 
       case 'petroleum_well':
-        if (!tags.product) tags.product = 'oil'; // Not great
+        if (!tags.substance)
+        { 
+          tags.substance = 'oil';
+          attrs.PPO = '75';
+        }
         break;
       
       case 'works':
