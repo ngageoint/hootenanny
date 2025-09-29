@@ -1705,7 +1705,7 @@ mgcp = {
     case 'EC010':
       delete tags.natural;
       tags.crop = 'sugarcane';
-      tags.landuse = 'orchard';
+      tags.landuse = 'farmland';
       break;
     } // End switch FCODE
 
@@ -1951,7 +1951,7 @@ mgcp = {
       ["t.amenity == 'language_school' && t.barrier == 'wall'", "delete t.barrier"],
       ["t.amenity == 'language_school'", "a.FFN = '850'"],
       ["t.depot == 'bus' && t.landuse == 'brownfield'", "delete t.landuse; a.F_CODE = 'AL010'; a.FFN = '480'"],
-      ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
+      ["t.crop == 'sugarcane' && t.landuse == 'farmland'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
       ["t.natural == 'ridge' && t.ridge == 'esker'", "a.F_CODE = 'DB100'"],
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
       ["t.public_transport == 'station'", "a.F_CODE = 'AQ125'"],
