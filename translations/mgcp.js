@@ -1032,6 +1032,7 @@ mgcp = {
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
       ["t['pipeline:type'] == 'penstock' && t.location","delete t['pipeline:type']; t.man_made = 'pipeline'; t.usage = 'penstock'; t.substance = 'water'"],
       ["t.power == 'substation' && t.name","t.operator = t.name; delete t.name"],
+      ["t.power == 'generator' && t['generator:source'] == 'wind'","t['generator:method'] = 'wind_turbine'"],
       // ["t.public_transport == 'station'","t.bus = 'yes'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['subject_to_inundation'] == 'yes'","delete t['subject_to_inundation']; t.flood_prone = 'yes'"],
