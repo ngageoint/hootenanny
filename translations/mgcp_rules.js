@@ -111,6 +111,7 @@ mgcp.rules = {
     // ['F_CODE','AK120','leisure','nature_reserve'], // Park (commenting out because it was translating over other features)
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
+    ['F_CODE','AK180','tourism','zoo'], // Zoo
     ['F_CODE','AK190','man_made','pier'],
     ['F_CODE','AL010','diplomatic','embassy'], // Embassy
     ['F_CODE','AL015','building','yes'], // To fix amenity etc

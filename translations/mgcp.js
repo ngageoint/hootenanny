@@ -1958,7 +1958,7 @@ mgcp = {
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
       ["t.landuse == 'basin' && t.basin == 'aeration'","a.F_CODE = 'BH040'"],
-      ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
+      ["t.leisure == 'garden'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
       ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
