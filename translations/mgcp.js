@@ -1032,6 +1032,7 @@ mgcp = {
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
       ["t['pipeline:type'] == 'penstock' && t.location","delete t['pipeline:type']; t.man_made = 'pipeline'; t.usage = 'penstock'; t.substance = 'water'"],
       ["t.power == 'substation' && t.name","t.operator = t.name; delete t.name"],
+      ["t.power == 'generator' && t['generator:source'] == 'wind'","t['generator:method'] = 'wind_turbine'"],
       // ["t.public_transport == 'station'","t.bus = 'yes'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['subject_to_inundation'] == 'yes'","delete t['subject_to_inundation']; t.flood_prone = 'yes'"],
@@ -1150,8 +1151,32 @@ mgcp = {
         if (tags.substance == 'water' )
         {
           tags.man_made = 'water_well';
-          delete tags.substance;
         }
+        
+      }
+
+      switch (attrs.PPO)
+      {
+        case '0':
+          tags.substance = 'unknown';
+          break;
+
+        case '45':
+          tags.substance = 'gas';
+          break;
+
+        case '75':
+          tags.substance = 'oil';
+          break;
+
+        case '122':
+          tags.substance = 'water';
+          break;
+
+        default:
+          tags.substance = 'other';
+          break;
+
       }
       break;
 
@@ -1699,7 +1724,7 @@ mgcp = {
     case 'EC010':
       delete tags.natural;
       tags.crop = 'sugarcane';
-      tags.landuse = 'orchard';
+      tags.landuse = 'farmland';
       break;
     } // End switch FCODE
 
@@ -1945,14 +1970,14 @@ mgcp = {
       ["t.amenity == 'language_school' && t.barrier == 'wall'", "delete t.barrier"],
       ["t.amenity == 'language_school'", "a.FFN = '850'"],
       ["t.depot == 'bus' && t.landuse == 'brownfield'", "delete t.landuse; a.F_CODE = 'AL010'; a.FFN = '480'"],
-      ["t.crop == 'sugarcane' && t.landuse == 'orchard'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
+      ["t.crop == 'sugarcane' && t.landuse == 'farmland'", "a.F_CODE = 'EC010'"], // override the Orchard FCode with Cane when Cane is the relevant crop
       ["t.natural == 'ridge' && t.ridge == 'esker'", "a.F_CODE = 'DB100'"],
       ["t.landuse == 'industrial' && t.utilities", "a.F_CODE = 'AL010'; a.FFN = '350'"],
       ["t.public_transport == 'station'", "a.F_CODE = 'AQ125'"],
       ["t.tourism == 'hotel'", "a.F_CODE = 'AL010'; a.FFN = '550'"],
       ["t.landuse == 'basin' && t.basin == 'settling'","a.F_CODE = 'AC030'"],
       ["t.landuse == 'basin' && t.basin == 'aeration'","a.F_CODE = 'BH040'"],
-      ["t.leisure == 'garden' || t.tourism == 'zoo'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
+      ["t.leisure == 'garden'", "a.F_CODE = 'AL010'; a.FFN = '907'"],
       ["t.leisure == 'sports_centre'", "a.F_CODE = 'AL010'; a.FFN = '912'"],
       ["t.natural == 'cliff' && t.surface == 'ice'", "a.F_CODE = 'BJ040'"],
       ["t.natural == 'peak' && t.surface == 'ice'", "a.F_CODE = 'BJ060'"],
@@ -2847,7 +2872,11 @@ mgcp = {
         break;
 
       case 'petroleum_well':
-        if (!tags.product) tags.product = 'oil'; // Not great
+        if (!tags.substance)
+        { 
+          tags.substance = 'oil';
+          attrs.PPO = '75';
+        }
         break;
       
       case 'works':
