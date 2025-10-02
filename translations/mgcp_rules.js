@@ -47,7 +47,6 @@ mgcp.rules = {
     // MGCP TRDv4 Only FCODES
     // These are used for both import and export
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
-    ['F_CODE','AA040','man_made','petroleum_well'], // Rig
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
     ['F_CODE','AH070','amenity','checkpoint'],
@@ -112,6 +111,7 @@ mgcp.rules = {
     // ['F_CODE','AK120','leisure','nature_reserve'], // Park (commenting out because it was translating over other features)
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
+    ['F_CODE','AK180','tourism','zoo'], // Zoo
     ['F_CODE','AK190','man_made','pier'],
     ['F_CODE','AL010','diplomatic','embassy'], // Embassy
     ['F_CODE','AL015','building','yes'], // To fix amenity etc
