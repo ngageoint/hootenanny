@@ -1436,6 +1436,25 @@ mgcp = {
       {
         tags.product = 'petroleum';
       }
+      switch(attrs.FFN) {
+        case '810':
+          tags.government = 'administrative';
+          tags.office = 'government';
+          break;
+        case '860':
+          tags.building = 'yes';
+          tags.amenity = 'doctors';
+          break;
+        case '912':
+          tags.building = 'sports_centre';
+          delete tags.leisure;
+          break;
+        case '955':
+          tags.club = 'sailing';
+          delete tags.leisure;
+          delete tags.building;
+          break;
+      }
       break;
 
     case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
@@ -2296,10 +2315,6 @@ mgcp = {
         attrs.F_CODE = 'AL010';
         attrs.FFN = '610';
         break;
-      case 'government':
-        attrs.F_CODE = 'AL010';
-        attrs.FFN = '811';
-        break;
       case 'diplomatic':
         attrs.F_CODE = 'AL010';
         attrs.FFN = '825';
@@ -3074,7 +3089,7 @@ mgcp = {
 
       case 'AL015': // General Building
         // Unknown House of Worship
-        if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
+        if (tags.amenity == 'place_of_worship') attrs.HWT = '0';
 
         // AL015 doesn't use the religion tag
         delete attrs.REL;
@@ -3082,13 +3097,6 @@ mgcp = {
         if (attrs.HWT && attrs.HWT !== '7' && !tags.amenity && !attrs.FFN)
         {
           attrs.FFN = '931';
-        }
-
-        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931' && attrs.FFN !== '0'))
-        {
-          // Debug
-          //print('AL015: Setting HWT 998');
-          attrs.HWT = '998';
         }
 
         // This is a catch all and assigns "Commerce" as the function
@@ -3295,7 +3303,15 @@ mgcp = {
       // Most of these rules are to account for differences between MGCP & TDS/NFDD
       // If we don't change it here, hoot tries to output the wrong FCODE
       var rulesList = [
+      ["t.building == 'sports_centre'","a.F_CODE = 'AL015'; a.FFN = '912'"],
+      ["t.building == 'yes' && t.amenity == 'prison'","a.F_CODE = 'AL015'"],
+      ["t.building == 'yes' && t.amenity == 'clinic'","a.F_CODE = 'AL015'"],
+      ["t.building == 'yes' && t.amenity == 'dentist'","a.F_CODE = 'AL015'"],
+      ["t.building == 'yes' && t.amenity == 'doctors'","a.F_CODE = 'AL015'; a.FFN = '860'"],
+      ["t.club == 'sailing'","a.F_CODE = 'AL015'; a.FFN = '955'"],
+      ["t.club == 'sport' && t.sport == 'sailing'","a.F_CODE = 'AL015'; a.FFN = '955'"],
       ["t.control_tower == 'yes'","a.F_CODE = 'AL241'"],
+      ["t.government == 'administrative' && t.office == 'government'","a.FFN = '810'; delete a.HWT"],
       ["t.sport == 'tennis'","a.F_CODE = 'AK040'"],
       ["t.natural == 'tree'","a.F_CODE = 'EC030'"],
       ["t.amenity == 'ferry_terminal'","a.F_CODE = 'AQ125'; a.FFN = '7'"],
