@@ -122,7 +122,11 @@ private:
   /** When set to true the way ref is removed from any parent relations (generally should happen) */
   bool _removeFromParentRelation;
 
-  std::vector<long> _traceBoundaryNodes(const OsmMapPtr& map, const geos::geom::Polygon* poly, const NodePtr& nA, const NodePtr& nB);
+  bool _isPointOnBoundary(const geos::geom::Coordinate& pt, const geos::geom::Polygon* poly, double tol);
+
+  double _distToSegment(const geos::geom::Coordinate& p, const geos::geom::Coordinate& a, const geos::geom::Coordinate& b, geos::geom::Coordinate& proj);
+
+  std::vector<long> _traceAOIBoundary(const OsmMapPtr& map, const geos::geom::Polygon* aoi, const geos::geom::Coordinate& start, const geos::geom::Coordinate& end);
 
   void _stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr& rel, const geos::geom::Polygon* aoiPoly);
 

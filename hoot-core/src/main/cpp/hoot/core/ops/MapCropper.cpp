@@ -28,7 +28,9 @@
 #include "MapCropper.h"
 
 // GEOS
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
@@ -431,42 +433,177 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(numSuperfluousNodesRemoved);
 }
 
-void MapCropper::_stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr& rel, const geos::geom::Polygon* aoiPoly)
+bool MapCropper::_isPointOnBoundary(const geos::geom::Coordinate& pt, const geos::geom::Polygon* poly, double tol = 1e-8)
 {
-  for (const auto& m : rel->getMembers())
+  if (!poly) return false;
+
+  const geos::geom::GeometryFactory* factory = geos::geom::GeometryFactory::getDefaultInstance();
+  std::unique_ptr<geos::geom::Point> point(factory->createPoint(pt));
+
+  const geos::geom::LineString* shell = poly->getExteriorRing();
+
+  // use distance instead of manual check
+  return point->distance(shell) < tol;
+}
+
+double MapCropper::_distToSegment(const geos::geom::Coordinate& p, const geos::geom::Coordinate& a, const geos::geom::Coordinate& b, geos::geom::Coordinate& proj)
+{
+  double dx = b.x - a.x;
+  double dy = b.y - a.y;
+  if (dx == 0 && dy == 0) {
+      proj = a;
+      double dxp = p.x - a.x, dyp = p.y - a.y;
+      return dxp*dxp + dyp*dyp;
+  }
+  double t = ((p.x - a.x)*dx + (p.y - a.y)*dy) / (dx*dx + dy*dy);
+  if (t < 0) t = 0;
+  if (t > 1) t = 1;
+  proj = geos::geom::Coordinate(a.x + t*dx, a.y + t*dy);
+  double dxp = p.x - proj.x, dyp = p.y - proj.y;
+  return dxp*dxp + dyp*dyp;
+}
+
+// trace the boundary between 2 points on the AOI
+std::vector<long> MapCropper::_traceAOIBoundary(const OsmMapPtr& map, const geos::geom::Polygon* aoi, const geos::geom::Coordinate& start, const geos::geom::Coordinate& end)
+{
+  std::vector<long> boundaryNodeIds;
+
+  if (!aoi) return boundaryNodeIds;
+
+  const geos::geom::LineString* exterior = aoi->getExteriorRing();
+  const geos::geom::CoordinateSequence* coordsRO = exterior->getCoordinatesRO();
+
+  // Copy coordinates to a vector for easy manipulation
+  std::vector<geos::geom::Coordinate> coords;
+  for (size_t i = 0; i < coordsRO->size(); ++i)
   {
-    LOG_TRACE("stitching...");
-    LOG_VART(m.getElementId());
-    if (m.getElementId().getType() != ElementType::Way) continue;
+    coords.push_back(coordsRO->getAt(i));
+  }
 
-    WayPtr memberWay = map->getWay(m.getElementId().getId());
-    if (!memberWay) continue;
+  // Find the index of start and end along the exterior ring
+  int startIdx = -1, endIdx = -1;
+  for (size_t i = 0; i < coords.size(); ++i)
+  {
+    if (coords[i].equals2D(start)) startIdx = i;
+    if (coords[i].equals2D(end)) endIdx = i;
+  }
+  LOG_VART(startIdx);
+  LOG_VART(endIdx);
 
-    std::shared_ptr<Geometry> wayGeom = ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(memberWay);
-
-    if (!wayGeom || wayGeom->isEmpty()) continue;
-
-    std::unique_ptr<Geometry> boundary(aoiPoly->getBoundary());
-    std::shared_ptr<Geometry> intersection(wayGeom->intersection(boundary.get()));
-
-    if (intersection && !intersection->isEmpty())
+  // Could not find both points on the boundary
+if (startIdx == -1)
+{
+  // Insert start coordinate after closest segment
+  double bestDist = std::numeric_limits<double>::max();
+  size_t bestIdx = 0;
+  geos::geom::Coordinate bestProj;
+  for (size_t i = 0; i+1 < coords.size(); ++i)
+  {
+    geos::geom::Coordinate proj;
+    double d2 = _distToSegment(start, coords[i], coords[i+1], proj);
+    if (d2 < bestDist)
     {
-      LOG_TRACE("we found an intersection between the AOI and the way geom");
-      GeometryToElementConverter gc(map);
-      ElementPtr e = gc.convertGeometryToElement(intersection.get(), memberWay->getStatus(), memberWay->getCircularError());
-
-      if (e && e->getElementType() == ElementType::Way)
-      {
-        LOG_TRACE("creating a new way out of the boundary...");
-        WayPtr newBoundaryWay = std::dynamic_pointer_cast<Way>(e);
-        newBoundaryWay->setTags(memberWay->getTags());
-        map->addWay(newBoundaryWay);
-
-        // directly append the new way into the relation
-        rel->addElement("outer", ElementId(ElementType::Way, newBoundaryWay->getId()));
-      }
+      bestDist = d2;
+      bestIdx = i;
+      bestProj = proj;
     }
   }
+  coords.insert(coords.begin() + bestIdx + 1, bestProj);
+  startIdx = bestIdx + 1;
+  LOG_VART(startIdx);
+}
+
+if (endIdx == -1)
+{
+  // Insert end coordinate after closest segment
+  double bestDist = std::numeric_limits<double>::max();
+  size_t bestIdx = 0;
+  geos::geom::Coordinate bestProj;
+  for (size_t i = 0; i+1 < coords.size(); ++i) {
+    geos::geom::Coordinate proj;
+    double d2 = _distToSegment(end, coords[i], coords[i+1], proj);
+    if (d2 < bestDist) {
+      bestDist = d2;
+      bestIdx = i;
+      bestProj = proj;
+    }
+  }
+  coords.insert(coords.begin() + bestIdx + 1, bestProj);
+  endIdx = bestIdx + 1;
+  LOG_VART(endIdx);
+}
+
+if (startIdx == endIdx)
+{
+  endIdx = (endIdx + 1) % coords.size();
+}
+
+  // Trace clockwise from startIdx -> endIdx
+  int i = startIdx;
+  while (true)
+  {
+    const geos::geom::Coordinate& c = coords[i];
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c.x, c.y, 0.0);
+    map->addNode(node);
+    boundaryNodeIds.push_back(node->getId());
+
+    if (i == endIdx) break;
+    i = (i + 1) % coords.size();  // wrap around
+  }
+
+  return boundaryNodeIds;
+}
+
+void MapCropper::_stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr& rel, const geos::geom::Polygon* aoiPoly)
+{
+  // 1. Collect the dangling endpoints
+  std::vector<NodePtr> endpoints;
+  for (const auto& m : rel->getMembers())
+  {
+    if (m.getElementId().getType() != ElementType::Way) continue;
+
+    LOG_VART(m.getElementId().getId());
+    WayPtr w = map->getWay(m.getElementId().getId());
+    if (!w) continue;
+
+    NodePtr start = map->getNode(w->getFirstNodeId());
+    NodePtr end = map->getNode(w->getLastNodeId());
+
+    LOG_VART(start->getId());
+    LOG_VART(end->getId());
+
+    if (_isPointOnBoundary(start->toCoordinate(), aoiPoly))
+    {
+      LOG_TRACE("starting point on boundary");
+      endpoints.push_back(start);
+    }
+
+    if (_isPointOnBoundary(end->toCoordinate(), aoiPoly))
+    {
+      LOG_TRACE("end point on boundary");
+      endpoints.push_back(end);
+    }
+  }
+
+  if (endpoints.size() < 2) return; // nothing to stitch
+
+  // 2. Pair endpoints (assuming 2 endpoints)
+  NodePtr a = endpoints[0];
+  NodePtr b = endpoints[1];
+  LOG_VART(a->getId());
+  LOG_VART(b->getId());
+
+  // 3. Trace AOI boundary between them
+  std::vector<long> boundaryNodes = _traceAOIBoundary(map, aoiPoly, a->toCoordinate(), b->toCoordinate());
+
+  // 4. Create new way
+  WayPtr boundaryWay = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
+  boundaryWay->setNodes(boundaryNodes);
+  map->addWay(boundaryWay);
+
+  // 5. Add to relation
+  rel->addElement("outer", boundaryWay->getElementId());
+  
 }
 
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
@@ -591,6 +728,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
 
       if (polyBounds)
       {
+        LOG_VART(wid);
         LOG_TRACE("about to stitch relation along AOI");
         _stitchRelationAlongAOI(map, newRelation, polyBounds.get());
       }
