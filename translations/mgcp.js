@@ -1311,7 +1311,8 @@ mgcp = {
           tags.landuse = 'commercial';
           break;
         case '480':
-          tags.public_transport = 'station';
+          tags.depot = 'bus';
+          tags.industrial = 'depot';
           delete tags.landuse;
           break;
         case '550':
