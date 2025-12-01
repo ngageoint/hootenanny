@@ -708,6 +708,13 @@ mgcp = {
       tags.industrial = 'scrapyard';
     }
 
+    if (attrs.F_CODE == 'AL015' && attrs.FFN == '827')
+    {
+      tags.diplomatic = 'embassy';
+      tags.embassy = 'yes';
+      delete tags.amenity;
+    }
+
 
   }, // End of applyToOsmPreProcessing
 
@@ -1022,6 +1029,7 @@ mgcp = {
       ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
       // ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
       ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
+      ["t.diplomatic == 'embassy' && t.embassy == 'yes' && t.amenity == 'embassy'","delete t.amenity"],
       ["t.embankment == 'yes' && !(t.highway || t.railway)","delete t.embankment; t.man_made = 'embankment'"],
       ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
@@ -1916,6 +1924,7 @@ mgcp = {
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
+      ["t.diplomatic == 'embassy' && t.embassy == 'yes'","a.F_CODE = 'AL015'; a.FFN = '827'"],
       ["t.landuse == 'farmyard' && t.farmyard == 'stockyard'","a.F_CODE = 'AJ030'"],
       ["t.landuse == 'aquaculture' && t.aquaculture == 'fish'","a.F_CODE = 'BH051'"],
       ["t.landuse == 'industrial' && t.industrial == 'mine'","a.F_CODE = 'AA010'"],
