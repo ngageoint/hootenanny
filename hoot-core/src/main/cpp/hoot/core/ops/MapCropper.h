@@ -102,6 +102,9 @@ private:
   ElementCriterionPtr _inclusionCrit;
   // tracks all ways satisfying _inclusionCrit
   std::set<long> _explicitlyIncludedWayIds;
+
+  // relations created or affected by the AOI boundary
+  std::set<long> _touchedRelations;
   // removes useful features created after cropping
   bool _removeSuperfluousFeatures;
   // removes references to missing elements after cropping occurs

@@ -556,16 +556,27 @@ if (startIdx == endIdx)
 
 void MapCropper::_stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr& rel, const geos::geom::Polygon* aoiPoly)
 {
-  // 1. Collect the dangling endpoints
-  std::vector<NodePtr> endpoints;
+
+  struct EndpointInfo {
+    WayPtr way;
+    NodePtr node;     // boundary node
+    bool isStartNode; // true if start node of way
+  };
+
+  // Collect all ways in the relations
+  std::vector<WayPtr> ways;
   for (const auto& m : rel->getMembers())
   {
     if (m.getElementId().getType() != ElementType::Way) continue;
-
-    LOG_VART(m.getElementId().getId());
     WayPtr w = map->getWay(m.getElementId().getId());
-    if (!w) continue;
+    if (w) ways.push_back(w);
+  }
 
+  // 1. Collect the dangling endpoints
+  std::vector<EndpointInfo> endpoints;
+
+  for (WayPtr w : ways)
+  {
     NodePtr start = map->getNode(w->getFirstNodeId());
     NodePtr end = map->getNode(w->getLastNodeId());
 
@@ -574,35 +585,59 @@ void MapCropper::_stitchRelationAlongAOI(const OsmMapPtr& map, const RelationPtr
 
     if (_isPointOnBoundary(start->toCoordinate(), aoiPoly))
     {
-      LOG_TRACE("starting point on boundary");
-      endpoints.push_back(start);
+      endpoints.push_back({w, start, true});
     }
 
     if (_isPointOnBoundary(end->toCoordinate(), aoiPoly))
     {
-      LOG_TRACE("end point on boundary");
-      endpoints.push_back(end);
+      endpoints.push_back({w, end, false});
     }
   }
 
   if (endpoints.size() < 2) return; // nothing to stitch
 
-  // 2. Pair endpoints (assuming 2 endpoints)
-  NodePtr a = endpoints[0];
-  NodePtr b = endpoints[1];
-  LOG_VART(a->getId());
-  LOG_VART(b->getId());
+  // 2. Sort endpoints along AOI boundary
+  // pair the endpoints sequentially
+  struct BoundaryWayInfo {
+    WayPtr way;
+    WayPtr before;
+    WayPtr after;
+  };
+  std::vector<BoundaryWayInfo> boundaryWays;
+  for (size_t i = 0; i + 1 < endpoints.size(); i+=2)
+  {
+    NodePtr a = endpoints[i].node;
+    NodePtr b = endpoints[i+1].node;
 
-  // 3. Trace AOI boundary between them
-  std::vector<long> boundaryNodes = _traceAOIBoundary(map, aoiPoly, a->toCoordinate(), b->toCoordinate());
+    // 3. Trace AOI boundary between the two nodes
+    std::vector<long> boundaryNodes = _traceAOIBoundary(map, aoiPoly, a->toCoordinate(), b->toCoordinate());
+    if (boundaryNodes.empty()) continue;
 
-  // 4. Create new way
-  WayPtr boundaryWay = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
-  boundaryWay->setNodes(boundaryNodes);
-  map->addWay(boundaryWay);
+    // 4. Create new boundary way
+    WayPtr boundaryWay = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
+    boundaryWay->setNodes(boundaryNodes);
+    map->addWay(boundaryWay);
+    boundaryWays.push_back({boundaryWay, endpoints[i].way, endpoints[i+1].way});
+  }
 
-  // 5. Add to relation
-  rel->addElement("outer", boundaryWay->getElementId());
+  // Rebuild relation members in correct order
+  std::vector<RelationData::Entry> newMembers;
+  for (size_t i = 0; i < ways.size(); ++i)
+  {
+    WayPtr w = ways[i];
+    newMembers.push_back(RelationData::Entry("outer", w->getElementId()));
+
+    // Insert any boundary ways that should go after this way
+    for (auto& bw : boundaryWays)
+    {
+      if (bw.before == w)
+      {
+        newMembers.push_back(RelationData::Entry("outer", bw.way->getElementId()));
+      }
+    }
+  }
+
+  rel->setMembers(newMembers);
   
 }
 
@@ -676,6 +711,86 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
       //  In some instances, the new element has already been added to the map, remove it here
       if (map->containsWay(e->getId()))
         map->bulkRemoveWays({e->getId()}, false);
+
+      // Check if the way is part of a polygon relation
+      const std::set<long>& parentRelIds = map->getIndex().getElementToRelationMap()->getRelationByElement(way->getElementId());
+      LOG_TRACE("checking for relations...");
+      LOG_VART(parentRelIds.size());
+
+      for (long rid : parentRelIds)
+      {
+        LOG_TRACE("currently looking at way: " << way->getId());
+        LOG_VART(rid);
+        RelationPtr parentRel = map->getRelation(rid);
+        if (!parentRel) continue;
+
+        // Skip non-polygon relations
+        if (parentRel->getType() != "multipolygon" && parentRel->getType() != "boundary") continue;
+
+        std::shared_ptr<geos::geom::Polygon> polyBounds = std::dynamic_pointer_cast<geos::geom::Polygon>(_bounds);
+        if (!polyBounds) continue;
+
+        NodePtr start = map->getNode(way->getFirstNodeId());
+        NodePtr end = map->getNode(way->getLastNodeId());
+
+        bool startOnBoundary = _isPointOnBoundary(start->toCoordinate(), polyBounds.get());
+        bool endOnBoundary = _isPointOnBoundary(end->toCoordinate(), polyBounds.get());
+
+        // If cropped way touches AOI boundary, we might need to close the relation
+        if (startOnBoundary || endOnBoundary)
+        {
+          std::vector<long> boundaryNodes =
+              _traceAOIBoundary(map, polyBounds.get(), start->toCoordinate(), end->toCoordinate());
+          if (!boundaryNodes.empty())
+          {
+            WayPtr boundaryWay = std::make_shared<Way>(
+                Status::Unknown1, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
+            boundaryWay->setNodes(boundaryNodes);
+            map->addWay(boundaryWay);
+
+            // Determine proper direction for continuity
+            long croppedFirst = way->getFirstNodeId();
+            long croppedLast = way->getLastNodeId();
+
+            long boundaryFirst = boundaryWay->getFirstNodeId();
+            long boundaryLast = boundaryWay->getLastNodeId();
+
+            bool reverseBoundary = false;
+            if (croppedLast == boundaryLast)
+            {
+              reverseBoundary = true;
+            }
+            else if (croppedFirst == boundaryFirst)
+            {
+              reverseBoundary = true;
+            }
+
+            if (reverseBoundary)
+            {
+              std::vector<long> reversedNodes = boundaryWay->getNodeIds();
+              std::reverse(reversedNodes.begin(), reversedNodes.end());
+              boundaryWay->setNodes(reversedNodes);
+            }
+
+            // Insert boundary way immediately after the cropped way in the relation
+            std::vector<RelationData::Entry> newMembers;
+            const auto& members = parentRel->getMembers();
+            for (const auto& m : members)
+            {
+              newMembers.push_back(m);
+              if (m.getElementId() == way->getElementId())
+              {
+                newMembers.emplace_back("outer", boundaryWay->getElementId());
+              }
+            }
+
+            parentRel->setMembers(newMembers);
+
+            LOG_TRACE("Inserted boundary way " << boundaryWay->getId()
+                      << " into relation " << parentRel->getId());
+          }
+        }
+      }
     }
     else if (e->getElementType() == ElementType::Relation)
     {
@@ -732,6 +847,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
         LOG_TRACE("about to stitch relation along AOI");
         _stitchRelationAlongAOI(map, newRelation, polyBounds.get());
       }
+      _touchedRelations.insert(newRelation->getId());
     }
     _numCrossingWaysKept++;
   }
