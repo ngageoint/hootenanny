@@ -1017,6 +1017,11 @@ mgcp = {
       delete tags.man_made;
     }
 
+    if (attrs.F_CODE == 'AL015' && attrs.FFN == '550')
+    {
+      tags.building = 'hotel';
+    }
+
     if (mgcp.osmPostRules == undefined)
     {
       // "New" style complex rules
