@@ -1407,6 +1407,10 @@ mgcp = {
       tags['seamark:type'] = 'harbour';
       tags.industrial = 'port';
       break;
+    case 'BB090':
+      tags.dock = 'drydock';
+      tags.waterway = 'dock';
+      break;
     case 'BB230':
       tags.barrier = 'wall';
       tags.wall = 'seawall';
@@ -1947,6 +1951,7 @@ mgcp = {
       ["t.barrier == 'fence' && t.area == 'yes' && !(t.landuse || t.military)","delete t.area"],
       ["t.bus == 'yes'","t['transport:type'] = 'bus'"],
       ["t.communication == 'line'","t['cable:type'] = 'communication'"],
+      ["t.dock == 'drydock'","t.waterway == 'dock'","a.F_CODE = 'BB090'"],
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],

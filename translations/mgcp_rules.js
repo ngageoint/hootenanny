@@ -161,7 +161,7 @@ mgcp.rules = {
     ['F_CODE','BA030','place','islet'], // From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BB190','man_made','quay'], // Berthing Structure - NFDD BB081
-    ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB090','waterway','dock'], // Berthing Structure - NFDD BB081
     ['F_CODE','BH030','barrier','ditch'], // Ditch. Not great: Dry vs wet
     ['F_CODE','BH080','water','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
