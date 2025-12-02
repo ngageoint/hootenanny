@@ -1315,15 +1315,19 @@ mgcp = {
         case '99':
           tags.man_made = 'works';
           delete tags.landuse;
+          delete tags.industrial;
           break;
         case '350':
           tags.landuse = 'industrial';
           tags.utilities = 'yes';
+          delete tags.building;
           break;
         case '440':
           tags.landuse = 'commercial';
+          delete tags.building;
           break;
         case '480':
+          delete tags.building;
           tags.depot = 'bus';
           tags.industrial = 'depot';
           delete tags.landuse;
@@ -1331,6 +1335,7 @@ mgcp = {
         case '550':
           tags.tourism = 'hotel';
           delete tags.landuse;
+          delete tags.building;
           break;
         case '563':
           tags.landuse = 'residential';
@@ -1338,9 +1343,11 @@ mgcp = {
         case '610':
           tags.office = 'telecommunication';
           delete tags.landuse;
+          delete tags.building;
           break;
         case '810':
           tags.landuse = 'civic_admin';
+          delete tags.office;
           break;
         case '811':
           tags.office = 'government';
@@ -1349,9 +1356,11 @@ mgcp = {
         case '825':
           tags.office = 'diplomatic';
           delete tags.landuse;
+          delete tags.amenity;
           break;
         case '835':
           tags.landuse = 'military';
+          delete tags.building;
           break;
         case '843':
           tags.amenity = 'prison';
@@ -1364,12 +1373,14 @@ mgcp = {
         case '860':
           tags.amenity = 'hospital';
           delete tags.landuse;
+          delete tags.building;
           break;
         case '907':
           tags.leisure = 'garden';
+          tags['garden:type'] = 'botanical';
           delete tags.landuse;
           break;
-        case '907':
+        case '912':
           tags.leisure = 'sports_centre';
           delete tags.landuse;
           break;
@@ -1410,9 +1421,18 @@ mgcp = {
       tags['seamark:type'] = 'harbour';
       tags.industrial = 'port';
       break;
+    case 'BB090':
+      tags.dock = 'drydock';
+      tags.waterway = 'dock';
+      break;
     case 'BB230':
       tags.barrier = 'wall';
       tags.wall = 'seawall';
+      break;
+    case 'BH051':
+      tags.landuse = 'aquaculture';
+      tags.aquaculture = 'fish';
+      delete tags.place;
       break;
     case 'BH150':
       tags.natural = 'desert';
@@ -1457,7 +1477,7 @@ mgcp = {
           break;
         case '860':
           tags.building = 'yes';
-          tags.amenity = 'doctors';
+          tags.amenity = 'hospital';
           break;
         case '912':
           tags.building = 'sports_centre';
@@ -1945,6 +1965,7 @@ mgcp = {
       ["t.barrier == 'fence' && t.area == 'yes' && !(t.landuse || t.military)","delete t.area"],
       ["t.bus == 'yes'","t['transport:type'] = 'bus'"],
       ["t.communication == 'line'","t['cable:type'] = 'communication'"],
+      ["t.dock == 'drydock'","t.waterway == 'dock'","a.F_CODE = 'BB090'"],
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -2017,6 +2038,11 @@ mgcp = {
     for (var i = 0, rLen = mgcp.mgcpPreRules.length; i < rLen; i++)
     {
       if (mgcp.mgcpPreRules[i][0](tags)) mgcp.mgcpPreRules[i][1](tags,attrs);
+    }
+
+    if (tags.healthcare) {
+      attrs.F_CODE = 'AL010';
+      attrs.FFN = '860';
     }
 
     // Deconflict towers
@@ -2898,10 +2924,6 @@ mgcp = {
         attrs.F_CODE = 'AL010';
         attrs.FFN = '99';
         break;
-    }
-    if (tags.man_made == 'works')
-    {
-      attrs.F_CODE = 'AC000';
     }
 
     // Fix up water features from OSM
