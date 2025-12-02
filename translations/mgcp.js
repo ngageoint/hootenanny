@@ -1363,6 +1363,7 @@ mgcp = {
           break;
         case '907':
           tags.leisure = 'garden';
+          tags['garden:type'] = 'botanical';
           delete tags.landuse;
           break;
         case '912':
