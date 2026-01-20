@@ -26,7 +26,7 @@ if (typeof hoot === 'undefined') {
 
 
     // Throw errors instead of returning partial translations/o2s_X features
-    hoot.Settings.set({'ogr.throw.error':'true'});
+    hoot.Settings.set({'ogr.throw.error':'false'});
 
     // Setting this here as a placeholder. The default is "true"
     hoot.Settings.set({"reader.drop.defaults": "true"});
