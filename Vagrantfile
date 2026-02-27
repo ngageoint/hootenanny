@@ -212,12 +212,20 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  def set_provisioners(config)
-    config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
-    config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
-    config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
+  def set_provisioners(config, os_version = 'el7')
+    if os_version == 'el9'
+      config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionEL9.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
+      config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+      config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat9", run: "always"
+      config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+      config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
+    else
+      config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
+      config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+      config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+      config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+      config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
+    end
   end
 
   def set_forwarding(config)
@@ -290,6 +298,33 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
   end
 
+  # Rocky Linux 9 box - Hootenanny from RPM's
+  config.vm.define "hoot_el9_rpm", autostart: false do |hoot_el9_rpm|
+    hoot_el9_rpm.vm.box = "hoot/rockylinux9-minimal"
+    hoot_el9_rpm.vm.hostname = "hoot-el9-rpm"
+
+    set_forwarding(hoot_el9_rpm)
+    mount_shares(hoot_el9_rpm)
+
+    # NOTE: For commandline only Hootenanny, set COREONLY to "yes"
+    hoot_el9_rpm.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionEL9Rpm.sh", :env => {"HOOT_HOME" => "/home/vagrant/hoot", "YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly, "NIGHTLY" => $nightly}
+    hoot_el9_rpm.vm.provision "updatehoot", type: "shell", :privileged => false, :path => "scripts/yum/update-hoot.sh", run: "never", :env => {"HOOT_HOME" => "/home/vagrant/hoot"}
+  end
+
+  # Rocky Linux 9 box - not preprovisioned
+  config.vm.define "hoot_el9", autostart: false do |hoot_el9|
+    hoot_el9.vm.box = "hoot/rockylinux9-minimal"
+    hoot_el9.vm.hostname = "hoot-el9"
+
+    set_forwarding(hoot_el9)
+    mount_shares(hoot_el9)
+
+    # We do want to add repos and update this box
+    $addRepos = "yes"
+    $yumUpdate = "yes"
+    set_provisioners(hoot_el9, 'el9')
+  end
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider "virtualbox" do |vb|
@@ -300,10 +335,10 @@ Vagrant.configure(2) do |config|
 end
 
 # Allow local overrides of vagrant settings
-if File.exists?('VagrantfileLocal')
+if File.exist?('VagrantfileLocal')
   load 'VagrantfileLocal'
 else
-  if File.exists?('VagrantfileLocal.vbox')
+  if File.exist?('VagrantfileLocal.vbox')
     load 'VagrantfileLocal.vbox'
   end
 end

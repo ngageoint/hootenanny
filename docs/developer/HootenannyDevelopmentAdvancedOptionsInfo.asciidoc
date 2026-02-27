@@ -133,6 +133,8 @@ NEW_CONFLATION_PATH = getProperty("newConflationConf") // read the config into m
 ```bash
 make services-build
 $HOOT_HOME/scripts/tomcat/CopyWebAppsToTomcat.sh
-sudo services tomcat8 restart
+# For EL9: sudo systemctl restart tomcat9
+# For EL7: sudo systemctl restart tomcat8
+sudo systemctl restart tomcat9  # or tomcat8 for EL7
 ```
 

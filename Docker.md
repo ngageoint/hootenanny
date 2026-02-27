@@ -1,5 +1,18 @@
 ## Docker development environment cheat sheet
 
+### System Requirements
+
+**Operating System:** The Docker images are now based on Rocky Linux 9 (EL9) which provides:
+* Modern compiler toolchain (GCC 11+)
+* Java 11
+* Tomcat 9
+* Node.js 18
+* PostgreSQL 15
+* Python 3 (Python 2 removed)
+
+**Note:** Legacy CentOS 7 / EL7 Docker images are no longer maintained. All Docker configurations have been migrated to Rocky Linux 9.
+
+### Basic Commands
 
 To start the containers
 >make -f Makefile.docker up

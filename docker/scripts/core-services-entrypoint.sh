@@ -1,28 +1,31 @@
 #!/bin/bash
 set -euo pipefail
 
-. /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable
-
+# No devtoolset needed on EL9 - GCC 11 is default
+# Only enable devtoolset if DEVTOOLSET_VERSION is set and not "none"
+if [ -n "${DEVTOOLSET_VERSION:-}" ] && [ "${DEVTOOLSET_VERSION}" != "none" ] && [ -f /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable ]; then
+    . /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable
+fi
 
 source ./SetupEnv.sh
 source conf/database/DatabaseConfig.sh
 
 start_tomcat()
 {
-    . /etc/tomcat8/tomcat8.conf
-    . /etc/sysconfig/tomcat8
-    NAME= /usr/libexec/tomcat8/server start
+    . /etc/tomcat9/tomcat9.conf
+    . /etc/sysconfig/tomcat9
+    NAME= /usr/libexec/tomcat9/server start
 }
 
 stop_tomcat()
 {
-    /usr/libexec/tomcat8/server stop
+    /usr/libexec/tomcat9/server stop
 }
 
 copy_war_to_tomcat()
 {
-    rm -rf $TOMCAT8_HOME/webapps/hoot-services/*
-    cp -R hoot-services/target/hoot-services-$HOOT_USER/* $TOMCAT8_HOME/webapps/hoot-services
+    rm -rf $TOMCAT9_HOME/webapps/hoot-services/*
+    cp -R hoot-services/target/hoot-services-$HOOT_USER/* $TOMCAT9_HOME/webapps/hoot-services
 }
 
 touch core-services-building.txt

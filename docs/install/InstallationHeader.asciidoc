@@ -1,6 +1,5 @@
 
 == Installation
 
-This section describes how to install Hootenanny. Hootenanny is supported on CentOS 7.x. Both an RPM 
-package and a virtual machine are provided.
+This section describes how to install Hootenanny. Hootenanny is supported on Rocky Linux 9 / EL9 (recommended) and CentOS 7.x / EL7 (legacy). Both an RPM package and a virtual machine are provided.
 

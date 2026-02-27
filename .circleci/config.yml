@@ -1,8 +1,20 @@
 ---
+# CircleCI Configuration for Hootenanny
+#
+# NOTE: EL9 Migration
+# The following Docker images need to be built and pushed to support EL9:
+#   - hootenanny/rpmbuild-hoot-release-el9:latest (based on Rocky Linux 9)
+#   - hootenanny/rpmbuild-repo-el9:latest (based on Rocky Linux 9)
+#   - hootenanny/rpmbuild-generic-el9:latest (based on Rocky Linux 9)
+#
+# These images should be built using the updated Dockerfiles in the docker/ directory
+# which have been updated to use rockylinux:9 as the base image.
+#
 version: 2
 
 jobs:
-  archive-create:
+  # EL7 jobs (legacy)
+  archive-create-el7:
     working_directory: /rpmbuild/hootenanny
     docker:
       - image: hootenanny/rpmbuild-hoot-release@sha256:1f3fd7fe9b40dc4b650f2f1ecbe0f17bcae4d984149d6a84716ed5a3d05d6669
@@ -14,7 +26,7 @@ jobs:
             chown -R rpmbuild:rpmbuild .
             su-exec rpmbuild git submodule update --init --recursive
       - run:
-          name: 'Make Hootenanny Archive'
+          name: 'Make Hootenanny Archive (EL7)'
           command: |
             su-exec postgres pg_ctl -D $PGDATA -s start
             su-exec rpmbuild ./scripts/ci/archive.sh
@@ -23,10 +35,37 @@ jobs:
           root: archives
           paths:
             - hootenanny-*.tar.gz
+
+  # EL9 jobs (primary)
+  archive-create:
+    working_directory: /rpmbuild/hootenanny
+    docker:
+      # TODO: Update to EL9-based rpmbuild image when available
+      # For now, this is a placeholder - the actual EL9 image needs to be built
+      - image: hootenanny/rpmbuild-hoot-release-el9:latest
+    steps:
+      - checkout
+      - run:
+          name: 'Git Submodules'
+          command: |
+            chown -R rpmbuild:rpmbuild .
+            su-exec rpmbuild git submodule update --init --recursive
+      - run:
+          name: 'Make Hootenanny Archive (EL9)'
+          command: |
+            su-exec postgres pg_ctl -D $PGDATA -s start
+            su-exec rpmbuild ./scripts/ci/archive.sh
+            su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
+      - persist_to_workspace:
+          root: archives
+          paths:
+            - hootenanny-*.tar.gz
+
   archive-upload:
     working_directory: /rpmbuild/hootenanny
     docker:
-      - image: hootenanny/rpmbuild-repo@sha256:885934cb06bf3710909f591afb9cfa3ae9bcc1711f6a7837828079a57ed6ce16
+      # TODO: Update to EL9-based repo image when available
+      - image: hootenanny/rpmbuild-repo-el9:latest
         user: rpmbuild
     steps:
       - attach_workspace:
@@ -35,10 +74,12 @@ jobs:
           name: 'Upload Hootenanny Archive'
           command: |
             find archives -type f -exec aws s3 cp {} s3://hoot-archives/circle/$CIRCLE_BRANCH/ \;
+
   copyright:
     working_directory: /rpmbuild/hootenanny
     docker:
-      - image: hootenanny/rpmbuild-generic@sha256:5297f40c253df3fdea4e9c2afa115e3e45d417154b4d26830bd0369ebccedddb
+      # TODO: Update to EL9-based generic image when available
+      - image: hootenanny/rpmbuild-generic-el9:latest
         user: rpmbuild
         environment:
           HOOT_HOME: /rpmbuild/hootenanny
@@ -47,9 +88,11 @@ jobs:
       - run:
           name: 'Check Copyright Headers'
           command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
+
   lint:
     machine:
-      image: ubuntu-2004:202111-02
+      # Updated to newer Ubuntu image
+      image: ubuntu-2204:2023.10.1
     steps:
       - checkout
       - run:
@@ -62,9 +105,12 @@ workflows:
   version: 2
   tests:
     jobs:
+      # Primary EL9 workflow
       - archive-create
       - archive-upload:
           requires:
             - archive-create
       - copyright
       - lint
+      # Legacy EL7 workflow (optional, can be removed once EL9 is stable)
+      - archive-create-el7

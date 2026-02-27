@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2021-2023 Maxar Technologies (https://www.maxar.com)
+# Copyright (C) 2021-2024 Maxar Technologies (https://www.maxar.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 set -euo pipefail
 
+# Auto-detect EL version
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    EL_VERSION=$(echo "$VERSION_ID" | cut -d. -f1)
+else
+    # Fallback to el7 if we can't detect
+    EL_VERSION=7
+fi
+
 GEOINT_DEPS_CHANNEL="${GEOINT_DEPS_CHANNEL:-stable}"
-GEOINT_DEPS_BASEURL="${GEOINT_DEPS_BASEURL:-https://geoint-deps.s3.amazonaws.com/el7/${GEOINT_DEPS_CHANNEL}}"
+GEOINT_DEPS_BASEURL="${GEOINT_DEPS_BASEURL:-https://geoint-deps.s3.amazonaws.com/el${EL_VERSION}/${GEOINT_DEPS_CHANNEL}}"
 GEOINT_DEPS_KEY="${GEOINT_DEPS_KEY:-/etc/pki/rpm-gpg/RPM-GPG-KEY-GEOINT}"
 GEOINT_DEPS_REPO="${GEOINT_DEPS_REPO:-/etc/yum.repos.d/geoint-deps.repo}"
 

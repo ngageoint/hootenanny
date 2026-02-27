@@ -1,8 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+# Auto-detect EL version
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    EL_VERSION=$(echo "$VERSION_ID" | cut -d. -f1)
+else
+    # Fallback to el7 if we can't detect
+    EL_VERSION=7
+fi
+
 HOOT_DEPS_CHANNEL="${HOOT_DEPS_CHANNEL:-stable}"
-HOOT_DEPS_BASEURL="${HOOT_DEPS_BASEURL:-https://hoot-repo.s3.amazonaws.com/el7/deps/${HOOT_DEPS_CHANNEL}}"
+HOOT_DEPS_BASEURL="${HOOT_DEPS_BASEURL:-https://hoot-repo.s3.amazonaws.com/el${EL_VERSION}/deps/${HOOT_DEPS_CHANNEL}}"
 HOOT_DEPS_KEY=/etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
 
 cat > $HOOT_DEPS_KEY <<EOF

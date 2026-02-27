@@ -26,6 +26,15 @@ You may also need to enable hardware virtualization extensions in your BIOS.
 ### AKA "I just want to get Hootenanny up and running" 😁
 
 This method will clone the git repository, but instead of installing dependencies with the provision script and building the source code from scratch, it will use the RPMs built nightly from the master branch.
+
+**For Rocky Linux 9 / EL9 (Recommended):**
+```
+git clone git@github.com:ngageoint/hootenanny.git hoot
+cd hoot
+vagrant up hoot_el9_rpm
+```
+
+**For CentOS 7 / EL7 (Legacy):**
 ```
 git clone git@github.com:ngageoint/hootenanny.git hoot
 cd hoot
@@ -34,6 +43,10 @@ vagrant up hoot_centos7_rpm
 
 To update Hoot on this vm to the latest nightly version from the master branch (after it's intial creation), simply run this provisioner when bringing the box up in the future:
 ```
+# For EL9
+vagrant up hoot_el9_rpm --provision-with updatehoot
+
+# For EL7
 vagrant up hoot_centos7_rpm --provision-with updatehoot
 ```
 
@@ -50,10 +63,21 @@ Once the prerequisites have been installed, you can set up the Hootenanny enviro
     git submodule update
     vagrant up
 
+**Note:** The default VM (`vagrant up`) uses CentOS 7. To use Rocky Linux 9 (EL9), specify the box name:
+
+    vagrant up hoot_el9
+
+Available Vagrant boxes:
+* `default` or `vagrant up` - CentOS 7 preprovisioned box (legacy)
+* `hoot_el9` - Rocky Linux 9 box for building from source (recommended)
+* `hoot_el9_rpm` - Rocky Linux 9 box with RPM installation (recommended)
+* `hoot_centos7` - CentOS 7 box for building from source (legacy)
+* `hoot_centos7_rpm` - CentOS 7 box with RPM installation (legacy)
+
 Please note, cloning using SSH is supported only with an authenticated GitHub account. To use anonymous cloning, replace the first line with SSL cloning like this:
 
     git clone https://github.com/ngageoint/hootenanny.git hoot --config core.autocrlf=input
-    
+
 Log into the Hootenanny virtual machine:
 
     vagrant ssh
@@ -90,11 +114,11 @@ Follow these steps:
     
     If you get SSH error, retry same command.
 
-B) The compilation of C++ code is fairly slow with the default VirtualBox instance. The compilation time can take up to an hour. The code is built in silent logging mode, so if you see a long pause at some point after seeing the message: "Building Hoot...", compilation is what is occurring. To see more information from the compiler, you can add the environment variable, `BUILD_VERBOSE = 'yes'`, to `VagrantProvisionCentOS7.sh` before provisioning. See the "Faster C++ Compilation" section below for information on speeding this process up during development.
+B) The compilation of C++ code is fairly slow with the default VirtualBox instance. The compilation time can take up to an hour. The code is built in silent logging mode, so if you see a long pause at some point after seeing the message: "Building Hoot...", compilation is what is occurring. To see more information from the compiler, you can add the environment variable, `BUILD_VERBOSE = 'yes'`, to `VagrantProvisionCentOS7.sh` (for EL7) or `VagrantProvisionEL9.sh` (for EL9) before provisioning. See the "Faster C++ Compilation" section below for information on speeding this process up during development.
 
 ==== Windows hints
 
-It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + https://github.com/mishamosher/CentOS-WSL[CentOS7 image] and https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md[RPM install]. It is somewhat easier, faster and light on PC requirements. The WebUI won't work, because WSL2 does not yet support systemd that is needed to start Hootenanny-services (also Postgres and Tomcat).
+It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + https://github.com/mishamosher/CentOS-WSL[CentOS7 image] or Rocky Linux 9 image and https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md[RPM install]. It is somewhat easier, faster and light on PC requirements. The WebUI won't work, because WSL2 does not yet support systemd that is needed to start Hootenanny-services (also Postgres and Tomcat).
 
 To install using Vagrant, first, make sure you have tools above. If you don't, then, if you have https://chocolatey.org/install[Chocolatey], run in the elevated shell:
 
@@ -136,6 +160,15 @@ If you've updated the Hootenanny code, perform the following steps to redeploy i
 If you typically use hoot-server for development, make sure that the UI on localhost:8080 matches localhost:8888. See https://github.com/ngageoint/hootenanny/blob/develop/test-files/ui/README.md[here] for further instructions on how to run tests.
 
 If you run into permission errors running the Tomcat deployment script, remove files that may be owned by Tomcat and then re-run the script:
+
+**For EL9 (Tomcat 9):**
+
+    sudo rm -rf /usr/share/tomcat9/webapps/hootenannyid
+    sudo rm -rf /usr/share/tomcat9/webapps/hoot-services.war
+    sudo rm -rf /usr/share/tomcat9/webapps/hoot-services
+    scripts/tomcat/CopyWebAppsToTomcat.sh
+
+**For EL7 (Tomcat 8):**
 
     sudo rm -rf /usr/share/tomcat8/webapps/hootenannyid
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services.war

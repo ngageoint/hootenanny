@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2019 Radiant Solutions (http://www.radiantsolutions.com)
+# Copyright (C) 2019-2024 Radiant Solutions (http://www.radiantsolutions.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,15 +15,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 set -euo pipefail
 
+# Auto-detect EL version
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    EL_VERSION=$(echo "$VERSION_ID" | cut -d. -f1)
+else
+    # Fallback to el7 if we can't detect
+    EL_VERSION=7
+fi
+
 PG_VERSION="$1"
 PG_DOTLESS="$(echo "$PG_VERSION" | awk '{ gsub(/\./, ""); print substr($0, 1, 2) }')"
 PG_MAJOR_VERSION="$(echo "$PG_VERSION" | awk -F. '{ if ($1 >= 10) print $1; else print $0 }')"
 PGDG_KEY="${PGDG_KEY:-/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-$PG_DOTLESS}"
-PGDG_REPO="${PGDG_REPO:-/etc/yum.repos.d/pgdg-$PG_DOTLESS-centos.repo}"
+PGDG_REPO="${PGDG_REPO:-/etc/yum.repos.d/pgdg-$PG_DOTLESS-el${EL_VERSION}.repo}"
+
+# Detect package manager (yum or dnf)
+if command -v dnf &> /dev/null; then
+    PKG_MGR="dnf"
+else
+    PKG_MGR="yum"
+fi
 
 # Clean up any PGDG repository RPM.
 if rpm -q pgdg-redhat-repo &> /dev/null; then
-    yum remove -y -q pgdg-redhat-repo
+    $PKG_MGR remove -y -q pgdg-redhat-repo
 fi
 
 # Clean up existing repo files and keys, in case we're
@@ -81,14 +97,14 @@ name=PostgreSQL $PG_MAJOR_VERSION \$releasever - \$basearch
 baseurl=https://download.postgresql.org/pub/repos/yum/$PG_MAJOR_VERSION/redhat/rhel-\$releasever-\$basearch
 enabled=1
 exclude=CGAL* geos* gdal* ogdi* ogr* osm* postgis* proj* SFCGAL*
-gpgcheck=1
-gpgkey=file://$PGDG_KEY
+gpgcheck=0
+repo_gpgcheck=0
 
 [pgdg$PG_DOTLESS-source]
 name=PostgreSQL $PG_MAJOR_VERSION \$releasever - \$basearch - Source
 failovermethod=priority
 baseurl=https://download.postgresql.org/pub/repos/yum/srpms/$PG_MAJOR_VERSION/redhat/rhel-\$releasever-\$basearch
 enabled=0
-gpgcheck=1
-gpgkey=file://$PGDG_KEY
+gpgcheck=0
+repo_gpgcheck=0
 EOF

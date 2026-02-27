@@ -1,4 +1,5 @@
-FROM centos:7
+# Use Rocky Linux 9 as the base image (EL9 compatible)
+FROM rockylinux:9
 
 ARG postgresql_version
 ARG pgdata=/var/lib/pgsql/$postgresql_version/data
@@ -7,24 +8,23 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
     PGDATA=${pgdata}
 
+# Install glibc-langpack-en for locale support and dnf-plugins-core
+RUN dnf install -y glibc-langpack-en dnf-plugins-core && dnf clean all
+
 COPY scripts/yum/geoint-repo.sh \
      scripts/yum/pgdg-repo.sh \
      docker/scripts/postgres-install.sh \
      /tmp/
 
-RUN --mount=type=cache,target=/var/cache/yum \
-    /tmp/geoint-repo.sh && \
+# Configure repositories for EL9
+RUN /tmp/geoint-repo.sh && \
     /tmp/pgdg-repo.sh ${postgresql_version} && \
-    yum-config-manager --save \
-        --setopt=base.repo_gpgcheck=1 \
-        --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null
+    dnf config-manager --save \
+        --setopt=baseos.repo_gpgcheck=1 \
+        --setopt=appstream.repo_gpgcheck=1 &> /dev/null
 
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
-
-RUN yum -q -y install epel-release
+# Install EPEL repository
+RUN dnf -q -y install epel-release
 
 RUN /tmp/postgres-install.sh $postgresql_version && rm -f /tmp/*.sh
 

@@ -31,6 +31,18 @@ There is also an introduction [video](https://www.youtube.com/watch?v=LeaTLxVCFm
 
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 
+## Supported Operating Systems
+
+Hootenanny now supports **Rocky Linux 9 / EL9** (recommended) and legacy **CentOS 7 / EL7** systems.
+
+**EL9 provides:**
+* Modern compiler toolchain (GCC 11+)
+* Java 11, Tomcat 9, Node.js 18, PostgreSQL 15
+* Python 3 only (Python 2 removed)
+* Updated geospatial libraries (GDAL 3.8.3, GEOS 3.12.1, PROJ 9.3.1)
+
+## Installation
+
 For installation from RPM, follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, follow [this](https://github.com/ngageoint/hootenanny/blob/master/docs/install/Vagrant.asciidoc).
 
 For installation using Docker, [follow these instructions](https://github.com/ngageoint/hootenanny/blob/master/Docker.md).

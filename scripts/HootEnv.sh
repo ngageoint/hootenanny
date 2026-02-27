@@ -14,10 +14,17 @@ export GDAL_LIB_DIR=`gdal-config --libs | sed -e "s/-L//g" | sed -e "s/ *-lgdal.
 export GDAL_DATA=`gdal-config --datadir`
 
 # Use JDK path for JAVA_HOME if present
-if [ -L "/usr/lib/jvm/java-1.8.0" ]; then
+# Support both Java 8 (EL7) and Java 11+ (EL9)
+if [ -L "/usr/lib/jvm/java-11" ]; then
+  export JAVA_HOME="/usr/lib/jvm/java-11"
+  export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/lib/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
+elif [ -L "/usr/lib/jvm/jre-11" ]; then
+  export JAVA_HOME="/usr/lib/jvm/jre-11"
+  export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/lib/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
+elif [ -L "/usr/lib/jvm/java-1.8.0" ]; then
   export JAVA_HOME="/usr/lib/jvm/java-1.8.0"
   export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
-else # Assume there is just a 'jre' path
+else # Assume there is just a 'jre' path for Java 8
   export JAVA_HOME="/usr/lib/jvm/jre-1.8.0"
   export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
 fi
@@ -25,7 +32,8 @@ fi
 export PATH=$HOOT_HOME/bin/:$PATH
 export QT_SELECT=5
 
-if [ -f /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/enable ]; then
+# Devtoolset only needed on EL7 - EL9 has GCC 11 by default
+if [ -f /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/enable ] && [ "${DEVTOOLSET_VERSION}" != "none" ]; then
     source $HOOT_HOME/VagrantProvisionVars.sh
     source /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable
 fi

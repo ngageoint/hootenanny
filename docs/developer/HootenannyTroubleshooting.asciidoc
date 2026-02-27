@@ -89,6 +89,12 @@ COMMIT
 
 * *Need to monitor the Tomcat log?* ->
 
+**For EL9 (Tomcat 9):**
+--------------------------------------
+sudo journalctl -eu tomcat9
+--------------------------------------
+
+**For EL7 (Tomcat 8):**
 --------------------------------------
 sudo journalctl -eu tomcat8
 --------------------------------------
@@ -97,7 +103,19 @@ sudo journalctl -eu tomcat8
 	** `http://localhost/hoot-services/info/about/servicesVersionInfo`
 	** `http://localhost/hoot-services/info/about/servicesVersionDetail`
 
-* *Do you want to see more granular services log output or redirect it to a file?* -> Edit `/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/log4j2.xml` . See the log4j2 documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
+* *Do you want to see more granular services log output or redirect it to a file?* -> Edit the log4j2.xml file (location depends on OS version):
+
+**For EL9 (Tomcat 9):**
+--------------------------------------
+/var/lib/tomcat9/webapps/hoot-services/WEB-INF/classes/log4j2.xml
+--------------------------------------
+
+**For EL7 (Tomcat 8):**
+--------------------------------------
+/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/log4j2.xml
+--------------------------------------
+
+See the log4j2 documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 [[HootUITroubleshoot]]
 ==== UI

@@ -1,4 +1,5 @@
-FROM centos:7
+# Use Rocky Linux 9 as the base image (EL9 compatible)
+FROM rockylinux:9
 
 ARG hoot_user
 ARG hoot_uid
@@ -19,39 +20,34 @@ ARG gdal_version
 ARG geos_version
 ARG libgeotiff_version
 ARG proj_version
-ARG devtoolset_version
 ARG stxxl_version
 ARG postgresql_version
 ARG jdk_version
+ARG google_chrome_version
 
 
 ENV HOOT_HOME=$hoot_home
 
-COPY scripts/yum/geoint-repo.sh scripts/yum/hoot-repo.sh scripts/yum/pgdg-repo.sh /tmp/
+# Install glibc-langpack-en for locale support and dnf-plugins-core
+RUN dnf install -y glibc-langpack-en dnf-plugins-core && dnf clean all
 
-RUN --mount=type=cache,target=/var/cache/yum \
-    /tmp/geoint-repo.sh && \
-    /tmp/hoot-repo.sh && \
+COPY scripts/yum/geoint-repo.sh scripts/yum/pgdg-repo.sh /tmp/
+
+# Configure repositories for EL9
+# NOTE: hoot-repo.sh is temporarily disabled because EL9 packages are not yet available in S3
+# TODO: Re-enable once https://hoot-repo.s3.amazonaws.com/el9/deps/stable/ is populated
+RUN /tmp/geoint-repo.sh && \
     /tmp/pgdg-repo.sh $postgresql_version && \
-    yum-config-manager --save \
-        --setopt=base.repo_gpgcheck=1 \
-        --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null
+    dnf config-manager --save \
+        --setopt=baseos.repo_gpgcheck=1 \
+        --setopt=appstream.repo_gpgcheck=1 &> /dev/null
 
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+# Install EPEL repository (no centos-release-scl needed on EL9)
+RUN dnf -y install epel-release
 
-RUN yum -y install epel-release centos-release-scl
-
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
-
-RUN yum install -y \
+# Install versioned dependencies (no devtoolset needed on EL9 - GCC 11 is default)
+RUN dnf install -y \
         armadillo-$armadillo_version \
-        devtoolset-$devtoolset_version \
-        devtoolset-$devtoolset_version-libasan-devel \
         geos-$geos_version \
         geos-devel-$geos_version \
         glpk-$glpk_version \
@@ -83,7 +79,8 @@ RUN yum install -y \
         stxxl-devel-$stxxl_version \
         v8-devel-$v8_version
 
-RUN yum -y install \
+# Install general dependencies (EL9 changes: no python/python-devel, tomcat9 instead of tomcat8)
+RUN dnf -y install \
         asciidoc \
         autoconf \
         autoconf-archive \
@@ -112,17 +109,15 @@ RUN yum -y install \
         opencv \
         opencv-core \
         opencv-devel \
-        opencv-python \
         osmosis \
         java-$jdk_version-openjdk \
+        java-$jdk_version-openjdk-devel \
         perl-XML-LibXML \
         parallel \
         make \
         protobuf \
         protobuf-compiler \
         protobuf-devel \
-        python \
-        python-devel \
         python3 \
         python3-devel \
         python3-matplotlib \
@@ -134,50 +129,47 @@ RUN yum -y install \
         qt5-qtwebkit \
         qt5-qtwebkit-devel \
         readline-devel \
-        redhat-lsb-core \
         sqlite-devel \
         swig \
-        tex-fonts-hebrew \
         texlive \
         texlive-collection-fontsrecommended \
         texlive-collection-langcyrillic \
-        tomcat8 \
+        tomcat9 \
         unzip \
         vim \
-        wamerican-insane \
         w3m \
         wget \
         words \
         xorg-x11-server-Xvfb \
         zip
 
-RUN yum install -y postgresql$postgresql_version-devel && \
+RUN dnf install -y postgresql$postgresql_version-devel && \
     alternatives --install /usr/bin/pg_config pgsql-pg_config /usr/pgsql-$postgresql_version/bin/pg_config 500
 
 RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
     useradd -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \
     chmod 0755 ${hoot_home}
 
-ARG tomcat_config=/etc/tomcat8
-ARG tomcat_logs=/var/log/tomcat8
+# EL9 uses Tomcat 9 instead of Tomcat 8
+ARG tomcat_config=/etc/tomcat9
+ARG tomcat_logs=/var/log/tomcat9
 
-# vars needed for core entrypoint
-ENV DEVTOOLSET_VERSION=$devtoolset_version
+# vars needed for core entrypoint (no DEVTOOLSET_VERSION needed on EL9)
 ENV HOOT_USER=$hoot_user
 ENV PG_MAJOR_VERSION=$postgresql_version
 ENV PATH=$PATH:/usr/pgsql-$postgresql_version/bin
-ENV MANPATH=/opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/share/
 ENV TOMCAT_CONFIG=$tomcat_config
-ENV TOMCAT8_HOME=/var/lib/tomcat8
+ENV TOMCAT9_HOME=/var/lib/tomcat9
 ENV TOMCAT_SERVER=$tomcat_config/server.xml
 
 # services configuration files.
+# EL9 Java 11 uses lib/server instead of lib/amd64/server
 RUN echo -e '\
 export GDAL_DATA=$GDAL_DATA\n\
 export HOOT_HOME=$HOOT_HOME\n\
 export HOOT_WORKING_NAME=hootenanny\n\
 export JAVA_HOME=$JRE_HOME\n\
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib\n\
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$JAVA_HOME/lib/server:$HOOT_HOME/lib\n\
 export PATH=$HOOT_HOME/bin:$PATH\n\
 export JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"\n'\
 >> $tomcat_config/conf.d/hoot.conf
@@ -185,7 +177,7 @@ export JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=858
 RUN install -d -m 0775 $tomcat_logs
 RUN echo '\n\
 Please login to the host to view the logs:\n\
-   sudo journalctl -u tomcat8\n\
+   sudo journalctl -u tomcat9\n\
 EOF\n'\ >> $tomcat_logs/catalina.out
 
 RUN chown $hoot_user:$hoot_user $tomcat_logs/catalina.out
@@ -193,7 +185,7 @@ RUN chown $hoot_user:$hoot_user $tomcat_logs/catalina.out
 COPY docker/scripts/tomcat_configure.sh /tmp
 RUN /tmp/tomcat_configure.sh && rm -f /tmp/tomcat_configure.sh
 
-# let hoot user execute tomcat8 commands
+# let hoot user execute tomcat9 commands
 RUN usermod -a -G tomcat $hoot_user
 
 COPY docker/scripts/core-services-entrypoint.sh /docker-entrypoint.sh

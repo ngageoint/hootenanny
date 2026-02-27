@@ -134,16 +134,30 @@ config.vm.network :forwarded_port, :guest => 8585, :host => 8585
 vagrant reload
 ```
 
-* ssh'd into your vagrant vm change the JAVA_OPTS in the `/etc/tomcat8/tomcat8.conf` file to..
+* ssh'd into your vagrant vm change the JAVA_OPTS in the Tomcat configuration file:
 
+**For EL9 (Tomcat 9):**
 ```
+# Edit /etc/tomcat9/tomcat9.conf
 JAVA_OPTS="-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Djdk.tls.ephemeralDHKeySize=2048 -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"
 ```
 
-* Restart tomcat8 (in the vagrant box)
-
+**For EL7 (Tomcat 8):**
 ```
-sudo service tomcat8 restart
+# Edit /etc/tomcat8/tomcat8.conf
+JAVA_OPTS="-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Djdk.tls.ephemeralDHKeySize=2048 -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"
+```
+
+* Restart Tomcat (in the vagrant box)
+
+**For EL9:**
+```
+sudo systemctl restart tomcat9
+```
+
+**For EL7:**
+```
+sudo systemctl restart tomcat8
 ```
 
 * (Using eclipse) add a new debug configuration that attaches to the service at port 8585

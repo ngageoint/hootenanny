@@ -3,7 +3,14 @@ set -eu
 
 POSTGRES_VERSION="${1}"
 
-yum -q -y install \
+# Detect package manager (yum or dnf)
+if command -v dnf &> /dev/null; then
+    PKG_MGR="dnf"
+else
+    PKG_MGR="yum"
+fi
+
+$PKG_MGR -q -y install \
     postgresql${POSTGRES_VERSION} \
     postgresql${POSTGRES_VERSION}-contrib \
     postgresql${POSTGRES_VERSION}-server

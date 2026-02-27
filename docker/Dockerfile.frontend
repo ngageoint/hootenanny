@@ -1,4 +1,5 @@
-FROM centos:7
+# Use Rocky Linux 9 as the base image (EL9 compatible)
+FROM rockylinux:9
 
 ARG hoot_user
 ARG hoot_uid
@@ -7,35 +8,37 @@ ARG hoot_group
 ARG hoot_shell=/bin/bash
 ARG hoot_home
 ARG node_version
+ARG google_chrome_version
 
 ENV HOOT_HOME=$hoot_home
 
-COPY scripts/node/nodesource-repo.sh scripts/yum/hoot-repo.sh /tmp/
+# Install glibc-langpack-en for locale support and dnf-plugins-core
+RUN dnf install -y glibc-langpack-en dnf-plugins-core && dnf clean all
 
-RUN --mount=type=cache,target=/var/cache/yum \
-    /tmp/nodesource-repo.sh $node_version && \
-    /tmp/hoot-repo.sh
+COPY scripts/node/nodesource-repo.sh /tmp/
 
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo && \
-    yum-config-manager --save \
-        --setopt=base.repo_gpgcheck=1 \
-        --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
-    yum makecache -y
+# Configure repositories for EL9
+# NOTE: hoot-repo.sh is temporarily disabled because EL9 packages are not yet available in S3
+# TODO: Re-enable once https://hoot-repo.s3.amazonaws.com/el9/deps/stable/ is populated
+RUN /tmp/nodesource-repo.sh $node_version
 
-RUN yum -q -y install epel-release
+RUN dnf config-manager --save \
+        --setopt=baseos.repo_gpgcheck=1 \
+        --setopt=appstream.repo_gpgcheck=1 &> /dev/null && \
+    dnf makecache -y
 
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+RUN dnf -q -y install epel-release
 
-RUN yum -y install \
+# Install Node.js 18.x for EL9
+RUN curl -sL https://rpm.nodesource.com/setup_18.x | bash -
+
+RUN dnf -y install \
         bzip2 \
         git \
         git-core \
         nodejs-devel yarn \
-        google-chrome-stable-91.0.4472.114 && \
-    yum -q -y clean all && rm -f /tmp*.sh
+        google-chrome-stable-${google_chrome_version} && \
+    dnf -q -y clean all && rm -f /tmp*.sh
 
 RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
     useradd -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \

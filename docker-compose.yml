@@ -66,8 +66,8 @@ services:
       - 8000:8585
     volumes:
       - ./:${HOOT_HOME}:rw
-      - tomcat8-hoot-services:/var/lib/tomcat8/webapps/hoot-services:rw
+      - tomcat9-hoot-services:/var/lib/tomcat9/webapps/hoot-services:rw
 
 volumes:
   postgres-data:
-  tomcat8-hoot-services:
+  tomcat9-hoot-services:
