@@ -436,7 +436,7 @@ void RelationToMultiPolygonConverter::_createRings(const vector<long>& role_ways
   }
   LOG_VART(partials.size());
 
-  if (!partials.empty())
+  if (!partials.empty() && ConfigOptions().getJoinPartialPolygons() == true)
     _createRingsFromPartials(partials, no_role_ways, rings);
 }
 

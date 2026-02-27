@@ -2577,6 +2577,15 @@ This option allows for passing in a job ID for the currently executing command. 
 trying to track multiple commands across a single job. When the Hootenanny API database is used
 for job output storage, the ID will be stored in the job status table of the associated map.
 
+=== join.partial.polygons
+
+* Data Type: bool
+* Default Value: `false`
+
+When exporting to OGR formats, if a polygon member of a multipolygon is composed of multiple different non-closed ways,
+consolidate them into a single closed way. This can cause problems with cropped datasets, because they turn polygons
+into non-circular ways, and forcing them to be circular leads to erroneous closures.
+
 === josm.map.cleaner.add.detail.tags
 
 * Data Type: bool
