@@ -1,7 +1,7 @@
 {
   "datasources": {
     "API": {
-      "conn": "https://api.openstreetmap.org/api/0.6/map"
+      "conn": "https://192.168.33.12/api/0.6/map"
     },
     "APIDB": {
       "conn": "osmapidb://vagrant:vagrant!@192.168.33.12:5432/openstreetmap"
