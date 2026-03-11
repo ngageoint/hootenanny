@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2026 Maxar (http://www.maxar.com/)
  */
 #include "RelationToMultiPolygonConverter.h"
 
@@ -436,7 +436,7 @@ void RelationToMultiPolygonConverter::_createRings(const vector<long>& role_ways
   }
   LOG_VART(partials.size());
 
-  if (!partials.empty())
+  if (!partials.empty() && ConfigOptions().getJoinPartialPolygons() == true)
     _createRingsFromPartials(partials, no_role_ways, rings);
 }
 
