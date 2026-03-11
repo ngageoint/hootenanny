@@ -805,6 +805,12 @@ tds71 = {
     {
       attrs.ZI017_GAW = Number(attrs.ZI017_GAW) * 1000; // Convert M to MM
     }
+
+    if (attrs.F_CODE == 'AL010') {
+      if (attrs.FFN == '99' && attrs.FFN2 == '330' && attrs.FFN3 == '340') {
+        tags.waterway = 'boatyard';
+      }
+    }
   }, // End of applyToOsmPreProcessing
 
 
@@ -877,6 +883,10 @@ tds71 = {
         delete tags.note;
       }
     } // End process tags.note
+
+    if (attrs.F_CODE == 'AL013' && attrs.FFN == '810' && attrs.FFN2 == '811') {
+      tags.office = 'government';
+    }
 
     // Ice roads vs highways
     if (attrs.F_CODE == 'AQ075' && !tags.highway) tags.highway = 'road';
@@ -1674,6 +1684,7 @@ tds71 = {
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
+        ['t.office == "government"','a.FFN2 = "811"'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
         ['t.power == "line"','t["cable:type"] = "transmission"; t.cable = "yes"; delete t.power'],
@@ -1685,12 +1696,15 @@ tds71 = {
         ['t.resource','t.raw_material = t.resource; delete t.resource'],
         ['(t.shop || t.office) && !(t.facility) && !(t.building) && !(t.amenity == "fuel")','a.F_CODE = "AL013"'],
         ['t.amenity == "fuel" && t.building == "yes"','a.F_CODE = "AL013"'],
+        ['t["seamark:type"]','delete t["seamark:type"]'],
+        ['t["seamark:mooring:category"]','delete t["seamark:mooring:category"]'],
         ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
         ['t["tower:type"] == "minaret" && t.man_made == "tower"','delete t.man_made'],
         ['t.tunnel == "building_passage"','t.tunnel = "yes"'],
         ['t.use == "islamic_prayer_hall" && t.amenity == "place_of_worship"','delete t.amenity'],
         ['t.wetland && t.natural == "wetland"','delete t.natural'],
         ['t.water == "river"','t.waterway = "river"'],
+        ['t.waterway == "boatyard"','a.F_CODE = "AL010"; a.FFN = "99"; a.FFN2 = "330"; a.FFN3 = "340"'],
         ['t.waterway == "riverbank"','t.waterway = "river"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]']
       ];
@@ -2306,7 +2320,7 @@ tds71 = {
       'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
       'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
       'waste_basket','waste_disposal','water','water_point','watering_place','yes',
-      'fuel' // NOTE: Fuel goes to a different F_CODE
+      'fuel', 'planned' // NOTE: Fuel goes to a different F_CODE
     ]; // End notBuildingList
 
     if (!attrs.F_CODE && !tags.facility && tags.amenity && !tags.building && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
