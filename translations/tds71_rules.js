@@ -100,6 +100,7 @@ tds71.rules = {
     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
+    ['F_CODE','AL170','place','square'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','tower','communication'],
     ['F_CODE','AL241','tower','yes'],
@@ -614,8 +615,8 @@ tds71.rules = {
     ['BC034_MRT','9','seamark:radio_station:category','rotating_pattern'], // Rotating Pattern Radiobeacon
     ['BC034_MRT','999','seamark:radio_station:category','other'], // Other
 
-   // BC101_SST - Fog Signal : Fog Signal Type
-   ['BC101_SST','-999999','seamark:fog_signal:category','unknown'], // noInformation
+    // BC101_SST - Fog Signal : Fog Signal Type
+    ['BC101_SST', '-999999', 'seamark:fog_signal:category', 'unknown'], // noInformation
     ['BC101_SST','1','seamark:fog_signal:category','bell'], // Bell
     ['BC101_SST','2','seamark:fog_signal:category','diaphone'], // Diaphone
     ['BC101_SST','3','seamark:fog_signal:category','explosive'], // Explosive
