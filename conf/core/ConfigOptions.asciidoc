@@ -2580,7 +2580,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 === join.partial.polygons
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 When exporting to OGR formats, if a polygon member of a multipolygon is composed of multiple different non-closed ways,
 consolidate them into a single closed way. This can cause problems with cropped datasets, because they turn polygons

@@ -144,7 +144,6 @@ class ExportCommand extends ExternalCommand {
         }
 
         if (params.getFilterRelations()) {
-            logger.info("params.getFilterRelations was true");
             if (!convertOps.contains("RemoveElementsVisitor")) {
                 convertOps.add("RemoveElementsVisitor");
             }

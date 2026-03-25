@@ -192,6 +192,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         + req.params.format
         + req.query.bbox
         + req.query.crop
+        + req.query.allowUnclosedPolygons
         + req.query.poly
         + req.query.overrideTags
         + req.query.appendFgdb
@@ -388,7 +389,7 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
 /**
  * Builds the hootenanny command(s) from parts of provided request.
  */
-function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, ignoreConf) {
+function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, allowUnclosedPolygons, ignoreSourceIds, ignoreConf) {
     var paramschema = params.schema;
     var paramformat = params.format;
     var command = '', overrideTags = null;
@@ -467,6 +468,10 @@ function buildCommand(params, style, queryOverrideTags, querybbox, querypoly, is
     if (willCrop) {
         command += ' -D crop.bounds="' + (bbox || poly) + '"';
         convertOpts.push('MapCropper');
+    }
+
+    if (allowUnclosedPolygons) {
+        command += ' -D join.partial.polygons=false';
     }
 
     if (convertOpts.length > 0)
@@ -608,6 +613,7 @@ function doExport(req, res, hash, input) {
         if (req.params.format === 'File Geodatabase') outDir = outFile;
         var outZip = outDir + '.zip';
         var doCrop = req.query.crop || Number(req.query.crop);
+        var allowUnclosedPolygons = Number(req.query.allowUnclosedPolygons);
         var tempOsmFile = outDir + '.osm';
         var downloadFile = req.params.datasource.replace(' ', '_')
             + '_' + req.params.schema.replace(' ', '_')
@@ -626,7 +632,7 @@ function doExport(req, res, hash, input) {
                 var ringOutDir = appDir + ringOutput;
                 var ringOutFile = ringOutDir + '.osm';
 
-                multiCommand += buildCommand({schema:'OSM'}, null, req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, doCrop);
+                multiCommand += buildCommand({schema:'OSM'}, null, req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, doCrop, allowUnclosedPolygons);
                 multiCommand += ' && ';
 
                 rings.push(ringOutFile);
@@ -660,7 +666,7 @@ function doExport(req, res, hash, input) {
                 }
             })
         } else {
-            var command = buildCommand(req.params, req.query.style, req.query.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, Number(req.query.crop));
+            var command = buildCommand(req.params, req.query.style, req.query.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, Number(req.query.crop), Number(allowUnclosedPolygons));
             console.log(command);
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
