@@ -1162,13 +1162,19 @@ tds71 = {
         }
       break;
 
-      case 'AK030': // Amusement Park
-        // F_CODE translation == tourism but FFN translation could be leisure
-        // E.g. water parks
-        if (tags.leisure && tags.tourism) delete tags.tourism;
+    case 'AK030': // Amusement Park
+      // F_CODE translation == tourism but FFN translation could be leisure
+      // E.g. water parks
+      if (tags.leisure && tags.tourism) delete tags.tourism;
       // Remove a default
-      if (tags.use == 'recreation') delete tags.use;        break;
+      if (tags.use == 'recreation') delete tags.use;
+      break;
 
+    case 'AL013':
+      if (attrs.FFN == "970") {
+        tags.building = 'civic';
+        break;
+      }
     // Fix up landuse tags
     case 'AL020':
       switch (tags.use) // Fixup the landuse tags
@@ -1656,9 +1662,13 @@ tds71 = {
       // See ToOsmPostProcessing for more details about rulesList.
       var rulesList = [
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
+        ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
+        ['t.building == "civic"','a.F_CODE = "AL013"; a.FFN = "970"; delete t.building'],
+        ['t.building == "industrial"','a.FFN = "99"'],
         ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
+        ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
