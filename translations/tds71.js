@@ -1183,7 +1183,7 @@ tds71 = {
         break;
 
       case 'commercial':
-        tags.landuse = 'commercial';
+        tags.landuse = 'retail';
         delete tags.use;
         break;
 
@@ -1214,6 +1214,26 @@ tds71 = {
       {
         tags.railway = 'monorail';
         delete tags['railway:track'];
+      }
+      else if (tags.railway == 'electric' || tags.railway == 'subway') {
+        switch (attrs.CWT) {
+          case '1001':
+            tags.tunnel = 'yes';
+            break;
+          case '1000':
+            tags.tunnel = 'no';
+            break;
+        }
+        delete tags.in_tunnel;
+        switch (attrs.SBB) {
+          case '1001':
+            tags.bridge = 'yes';
+            break;
+          case '1000':
+            tags.bridge = 'no';
+            break;
+        }
+        delete tags.on_bridge;
       }
       break;
 
@@ -1680,6 +1700,7 @@ tds71 = {
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
+        ['t.landuse == "retail"','delete t.place'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
         ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
         ['t.leisure == "stadium" && t.building','delete t.building'],
@@ -2132,9 +2153,6 @@ tds71 = {
       break;
 
     case 'commercial':
-      // Skipping since it has it's own F_CODE
-      if (geometryType == 'Area') break;
-      // Fall through
     case 'retail':
       tags.use = 'commercial';
       tags.landuse = 'built_up_area';
@@ -2269,6 +2287,35 @@ tds71 = {
     {
       // Push this to Crossing but try and keep the tags
       attrs.F_CODE = 'AQ062'; // Crossing
+    }
+
+    if (tags.railway == 'electric' || tags.railway == 'subway') {
+      attrs.F_CODE = 'AN010';
+      switch (tags.tunnel) {
+        case 'yes':
+          attrs.CWT = '1001'; // true
+          break;
+        case 'no':
+          attrs.CWT = '1000'; // false
+          break;
+        default:
+          attrs.CWT = '-999999';
+          break;
+      }
+      delete tags.tunnel;
+      switch (tags.bridge) {
+        case 'yes':
+          attrs.RLE = '1'; //raised
+          attrs.SBB = '1001'; // true
+          break;
+        case 'no':
+          attrs.SBB = '1000'; // false
+          break;
+        default:
+          attrs.SBB = '-999999';
+          break;
+      }
+      delete tags.bridge;
     }
 
     // Cables

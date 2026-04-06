@@ -41,6 +41,7 @@ tds71.rules = {
   // FCODE rules for Import
   // This is where anything "unique" to TDS goes.
   fcodeOne2oneIn : [
+    ['F_CODE','AK110','amenity','grandstand'],
     ['F_CODE','FA091','geophysical_data_track','yes'], // Geophysical Data Track Line
     ['F_CODE','FLWAR','flow_arrow','yes'], // Flow Arrow - No F_CODE
     ['F_CODE','GA005','airspace','yes'], // Airspace
@@ -89,6 +90,7 @@ tds71.rules = {
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
     ['F_CODE','AK040','landuse','recreation_ground'], // Park
+    ['F_CODE','AK110','amenity','grandstand'],
     ['F_CODE','AK120','landuse','village_green'], // Park
     ['F_CODE','AK120','leisure','common'], // Park - close but not great
     ['F_CODE','AK120','leisure','nature_reserve'], // Park
@@ -98,6 +100,7 @@ tds71.rules = {
     ['F_CODE','AL020','landuse','commercial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
+    ['F_CODE','AL020','landuse','retail'], // From OSM - Map to BUA
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
     ['F_CODE','AL170','place','square'], // From OSM data, not great
