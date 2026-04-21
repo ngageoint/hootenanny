@@ -1169,14 +1169,40 @@ tds71 = {
       // Remove a default
       if (tags.use == 'recreation') delete tags.use;
       break;
+    
+    case 'AK090':
+      if (attrs.FFN == "922") {
+        tags.amenity = "fairground";
+        delete tags.landuse;
+      }
+      break;
 
     case 'AL013':
-      if (attrs.FFN == "970") {
-        tags.building = 'civic';
-        break;
+      switch (attrs.FFN) {
+        case '99':
+          delete tags.landuse;
+          break;
+        case '440':
+          tags.building = 'commercial';
+          break;
+        case '970':
+          tags.building = 'civic';
+          break;
+        case '890':
+          if (attrs.FFN2 == '891') {
+            tags.amenity = 'theatre';
+            tags.building = 'commercial';
+            delete attrs.FFN2;
+          }
+          break;
       }
+      break;
     // Fix up landuse tags
     case 'AL020':
+      if (attrs.FFN == '99') {
+        tags.landuse = 'industrial';
+        break;
+      }
       switch (tags.use) // Fixup the landuse tags
       {
       case undefined: // Break early if no value
@@ -1682,10 +1708,13 @@ tds71 = {
       // See ToOsmPostProcessing for more details about rulesList.
       var rulesList = [
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
+        ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.building == "civic"','a.F_CODE = "AL013"; a.FFN = "970"; delete t.building'],
+        ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building;'],
+        ['t.building == "commercial" && t.amenity == "theatre"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "891"; delete t.building; delete t.amenity'],
         ['t.building == "industrial"','a.FFN = "99"'],
         ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
@@ -1708,6 +1737,7 @@ tds71 = {
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
+        ['t.man_made == "works"','a.F_CODE = "AL010"; a.FFN = "99"'],
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
         ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
@@ -2061,8 +2091,10 @@ tds71 = {
       switch (tags.industrial)
       {
       case undefined: // Built up Area
-        tags.use = 'industrial';
-        tags.landuse = 'built_up_area';
+      case 'shipyard':
+        delete tags.landuse;
+        attrs.F_CODE = 'AL020';
+        attrs.FFN = '99';
         break;
 
       case 'oil':
