@@ -1,4 +1,3 @@
-version: "3.7"
 x-args: &default-args
   hoot_uid: "${HOOT_UID}"
   hoot_gid: "${HOOT_GID}"
@@ -6,6 +5,7 @@ x-args: &default-args
   hoot_group: "${HOOT_GROUP}"
   hoot_home: "${HOOT_HOME}"
   postgresql_version: "${POSTGRESQL_VERSION}"
+  postgres_server_version: "${POSTGRES_SERVER_VERSION:-16}"
   glpk_version: "${GLPK_VERSION}"
   liboauthcpp_version: "${LIBOAUTHCPP_VERSION}"
   libphonenumber_version: "${LIBPHONENUMBER_VERSION}"
@@ -43,8 +43,12 @@ services:
     hostname: postgres
     env_file:
       - hoot.env
+    environment:
+      POSTGRES_DB: hoot
+      POSTGRES_USER: hoot
+      POSTGRES_PASSWORD: hoottest
     volumes:
-      - postgres-data:/var/lib/pgsql/${POSTGRESQL_VERSION}/data:rw
+      - postgres-data:/var/lib/postgresql/data:rw
   core-services:
     depends_on:
       postgres:
