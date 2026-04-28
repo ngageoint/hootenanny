@@ -1,11 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/pgsql-$PG_MAJOR_VERSION/bin:$PATH"
+export GDAL_CONFIG="${GDAL_CONFIG:-/usr/local/bin/gdal-config}"
+
 . /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable
 
 
 source ./SetupEnv.sh
 source conf/database/DatabaseConfig.sh
+
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/pgsql-$PG_MAJOR_VERSION/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/pgsql-$PG_MAJOR_VERSION/lib:$LD_LIBRARY_PATH"
 
 start_tomcat()
 {
@@ -34,6 +40,11 @@ fi;
 
 if [ "${HOOT_BUILD_CORE:-0}" = "1" ] || [ ! -f ./bin/hoot.bin ]; then
     ./docker/scripts/core-services-configure.sh
+    for build_dir in tbs tgs hoot-core hoot-core-test hoot-cmd hoot-js; do
+        if [ -d "$build_dir" ]; then
+            find "$build_dir" -path '*/tmp/*' -name '*.o' -size 0 -delete
+        fi
+    done
     make core -j$(nproc)
     copy_war_to_tomcat
 fi
@@ -58,7 +69,7 @@ if [ "${HOOT_BUILD_NODE_EXPORT_SERVER:-0}" = "1" ] || [ ! -d node-export-server/
     popd
 fi;
 
-export GDAL_DATA=$(gdal-config --datadir)
+export GDAL_DATA=$("$GDAL_CONFIG" --datadir)
 
 rm -f core-services-building.txt
 npm start --prefix "${HOOT_HOME}/node-export-server" &

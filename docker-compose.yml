@@ -21,8 +21,10 @@ x-args: &default-args
   devtoolset_version: "${DEVTOOLSET_VERSION}"
   stxxl_version: "${STXXL_VERSION}"
   jdk_version: "${JDK_VERSION}"
+  google_chrome_version: "${GOOGLE_CHROME_VERSION:-91.0.4472.114}"
 services:
   frontend:
+    platform: "${HOOTENANNY_EL_PLATFORM:-linux/amd64}"
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
@@ -50,6 +52,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data:rw
   core-services:
+    platform: "${HOOTENANNY_EL_PLATFORM:-linux/amd64}"
     depends_on:
       postgres:
         condition: service_healthy
