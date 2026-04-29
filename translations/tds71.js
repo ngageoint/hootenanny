@@ -1881,7 +1881,14 @@ tds71 = {
       'school':'850','university':'855','college':'857','hospital':'860'
     };
 
-    if (tags.amenity in facilityList)
+    if (tags.amenity == 'kindergarten')
+    {
+      attrs.F_CODE = 'AL010'; // Facility
+      if (!(attrs.FFN)) attrs.FFN = '850'; // Education
+      if (!(attrs.FFN2)) attrs.FFN2 = '851'; // Primary Education
+      delete tags.amenity;
+    }
+    else if (tags.amenity in facilityList)
     {
       if (geometryType == 'Area')
       {
