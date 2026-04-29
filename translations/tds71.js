@@ -1881,7 +1881,14 @@ tds71 = {
       'school':'850','university':'855','college':'857','hospital':'860'
     };
 
-    if (tags.amenity == 'kindergarten')
+    if (tags.landuse == 'religious')
+    {
+      attrs.F_CODE = 'AL010'; // Facility
+      if (!(attrs.FFN)) attrs.FFN = '930'; // Religious Activities
+      if (!(attrs.FFN2)) attrs.FFN2 = '931'; // Place of Worship
+      delete tags.landuse;
+    }
+    else if (tags.amenity == 'kindergarten')
     {
       attrs.F_CODE = 'AL010'; // Facility
       if (!(attrs.FFN)) attrs.FFN = '850'; // Education
