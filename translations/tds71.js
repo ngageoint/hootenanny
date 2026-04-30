@@ -1162,6 +1162,11 @@ tds71 = {
         }
       break;
 
+    case 'AG030':
+      if (attrs.FFN == '460')
+        tags.building = 'retail';
+      break;
+
     case 'AK030': // Amusement Park
       // F_CODE translation == tourism but FFN translation could be leisure
       // E.g. water parks
@@ -1186,7 +1191,17 @@ tds71 = {
           tags.building = 'commercial';
           break;
         case '970':
-          tags.building = 'civic';
+          if (attrs.FFN2 == '893')
+            tags.building = 'public';
+          else
+            tags.building = 'civic';
+          break;
+        case '808':
+          if (attrs.FFN2 == '811' && attrs.FFN3 == '815') {
+            tags.building = 'palace';
+            delete tags.office;
+            delete tags.use;
+          }
           break;
         case '890':
           if (attrs.FFN2 == '891') {
@@ -1260,6 +1275,16 @@ tds71 = {
             break;
         }
         delete tags.on_bridge;
+      }
+
+      if (attrs.RLE == '1')
+      {
+        tags.embankment = 'yes';
+        delete tags.layer;
+      }
+      if (attrs.ZI017_RRA == '3')
+      {
+        tags.electrified = 'contact_line';
       }
       break;
 
@@ -1713,9 +1738,12 @@ tds71 = {
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.building == "civic"','a.F_CODE = "AL013"; a.FFN = "970"; delete t.building'],
-        ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building;'],
+        ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building'],
         ['t.building == "commercial" && t.amenity == "theatre"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "891"; delete t.building; delete t.amenity'],
         ['t.building == "industrial"','a.FFN = "99"'],
+        ['t.building == "palace"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "815"; delete t.building'],
+        ['t.building == "public" && t.amenity == "community_centre"','a.F_CODE = "AL013"; a.FFN = "970"; a.FFN2 = "893"; delete t.building'],
+        ['t.building == "retail" && t.shop == "mall"','a.FFN = "460"; delete t.building'],
         ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
@@ -2554,6 +2582,19 @@ tds71 = {
     if (tags.embankment == 'yes' && geometryType == 'Area')
     {
       delete tags.railway;
+    }
+
+    if (tags.railway == 'rail' && tags.embankment == 'yes')
+    {
+      attrs.F_CODE = 'AN010';
+      attrs.RLE = '1';
+      delete tags.embankment;
+      if (tags.highspeed == 'yes' && tags.electrified == 'contact_line')
+      {
+        attrs.RWC = '1';
+        attrs.ZI017_RRA = '3';
+        delete tags.electrified;
+      }
     }
 
     // Now set the relative levels and transportation types for various features
