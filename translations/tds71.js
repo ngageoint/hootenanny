@@ -1190,6 +1190,14 @@ tds71 = {
             delete tags['use:2'];
           }
           break;
+        case '580':
+          if (attrs.FFN2 == '582') {
+            tags.building = 'yes';
+            tags.office = 'newspaper';
+            delete tags.use;
+            delete tags['use:2'];
+          }
+          break;
         case '970':
           tags.building = 'civic';
           break;
@@ -1730,6 +1738,7 @@ tds71 = {
         ['t.building == "commercial" && t.shop == "department_store"','a.F_CODE = "AL013"; a.FFN = "440"; a.FFN2 = "460"; a.FFN3 = "465"; delete t.building; delete t.shop'],
         ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building;'],
         ['t.building == "commercial" && t.amenity == "theatre"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "891"; delete t.building; delete t.amenity'],
+        ['t.building == "yes" && t.office == "newspaper"','a.F_CODE = "AL013"; a.FFN = "580"; a.FFN2 = "582"; delete t.building; delete t.office'],
         ['t.building == "industrial"','a.FFN = "99"'],
         ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
