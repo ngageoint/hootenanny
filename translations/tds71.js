@@ -1235,6 +1235,14 @@ tds71 = {
       if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
+    case 'AL260': // Wall
+      if (attrs.WTI == '2')
+      {
+        tags.barrier = 'retaining_wall';
+        delete tags.wall;
+      }
+      break;
+
     case 'AL270': // Industrial Farm
       if (tags.trees == 'coffea_plants') tags.landuse = 'orchard';
       if (tags.trees == 'tea_plants') tags.landuse = 'orchard';
@@ -1715,6 +1723,7 @@ tds71 = {
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
+        ['t.barrier == "retaining_wall" && t.material == "stone"','a.F_CODE = "AL260"; a.MCC = "108"; a.WTI = "2"; delete t.barrier; delete t.material'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.building == "civic"','a.F_CODE = "AL013"; a.FFN = "970"; delete t.building'],
