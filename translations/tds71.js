@@ -1905,6 +1905,8 @@ tds71 = {
     }
     else if (tags.amenity in facilityList)
     {
+      if (tags.amenity == 'school' && tags.building == 'no') delete tags.building;
+
       if (geometryType == 'Area')
       {
         attrs.F_CODE = 'AL010'; // Facility
