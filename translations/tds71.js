@@ -1115,6 +1115,18 @@ tds71 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    case 'AL010':
+      if (attrs.FFN == '808' && attrs.FFN2 == '825' && attrs.FFN3 == '827')
+      {
+        tags.office = 'diplomatic';
+        tags.diplomatic = 'embassy';
+        delete tags.amenity;
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+      }
+      break;
+
     // Fix oil/gas/petroleum fields
     case 'AA052':
       tags.landuse = 'industrial';
@@ -1194,6 +1206,17 @@ tds71 = {
           if (attrs.FFN2 == '582') {
             tags.building = 'yes';
             tags.office = 'newspaper';
+            delete tags.use;
+            delete tags['use:2'];
+          }
+          break;
+        case '808':
+          if (attrs.FFN2 == '825' && attrs.FFN3 == '827') {
+            tags.building = 'yes';
+            tags.office = 'diplomatic';
+            tags.diplomatic = 'embassy';
+            delete tags.amenity;
+            delete tags.facility;
             delete tags.use;
             delete tags['use:2'];
           }
@@ -1748,6 +1771,8 @@ tds71 = {
         ['t.crossing == "tank" && t.highway == "crossing"','delete t.highway'],
         ['t.diplomatic && t.amenity == "embassy"','delete t.amenity'],
         ['t.dock && t.waterway == "dock"','delete t.waterway'],
+        ['(t.building == "yes" || t.building == "government") && t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.building; delete t.office; delete t.diplomatic'],
+        ['t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL010"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.office; delete t.diplomatic'],
         ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
         // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.historic == "castle" && t.building','delete t.building'],
