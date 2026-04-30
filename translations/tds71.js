@@ -1184,6 +1184,11 @@ tds71 = {
           break;
         case '440':
           tags.building = 'commercial';
+          if (attrs.FFN2 == '460' && attrs.FFN3 == '465') {
+            tags.shop = 'department_store';
+            delete tags.use;
+            delete tags['use:2'];
+          }
           break;
         case '970':
           tags.building = 'civic';
@@ -1713,6 +1718,7 @@ tds71 = {
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.building == "civic"','a.F_CODE = "AL013"; a.FFN = "970"; delete t.building'],
+        ['t.building == "commercial" && t.shop == "department_store"','a.F_CODE = "AL013"; a.FFN = "440"; a.FFN2 = "460"; a.FFN3 = "465"; delete t.building; delete t.shop'],
         ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building;'],
         ['t.building == "commercial" && t.amenity == "theatre"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "891"; delete t.building; delete t.amenity'],
         ['t.building == "industrial"','a.FFN = "99"'],
