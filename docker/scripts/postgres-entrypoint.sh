@@ -14,8 +14,12 @@ update_postgres_setting () {
     fi
 }
 
-# Customize any PostgreSQL settings from POSTGRES_SETTINGS environment.
-if [ -n "${POSTGRES_SETTINGS:-}" ]; then
+# ensure first argument is `postgres`.
+if [ "${1#-}" != "$1" ]; then
+        set -- postgres "$@"
+fi
+
+if [ -f "${PGDATA}/postgresql.conf" ] && [ -n "${POSTGRES_SETTINGS:-}" ]; then
     read -d '#' -a POSTGRES_SETTINGS_ARR <<< "$POSTGRES_SETTINGS#"
     for pg_setting_pair in "${POSTGRES_SETTINGS_ARR[@]}"; do
         pg_setting="$(echo "${pg_setting_pair}" | awk -F= '{ print $1 }')"
@@ -24,9 +28,4 @@ if [ -n "${POSTGRES_SETTINGS:-}" ]; then
     done
 fi
 
-# ensure first argument is `postgres`.
-if [ "${1#-}" != "$1" ]; then
-        set -- postgres "$@"
-fi
-
-exec "$@"
+exec /usr/local/bin/docker-entrypoint.sh "$@"

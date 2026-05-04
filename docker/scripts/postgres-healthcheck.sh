@@ -1,3 +1,3 @@
 #!/bin/sh
 set -eu
-/usr/bin/pg_isready -h "${PGHOST:-0.0.0.0}"
+pg_isready -h "${PGHOST:-127.0.0.1}" -U "${POSTGRES_USER:-postgres}"

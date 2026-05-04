@@ -1,38 +1,20 @@
-FROM centos:7
+ARG postgres_server_version=16
+FROM postgres:${postgres_server_version}-bookworm
 
-ARG postgresql_version
-ARG pgdata=/var/lib/pgsql/$postgresql_version/data
+ARG pgdata=/var/lib/postgresql/data
 
-ENV LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
     PGDATA=${pgdata}
 
-COPY scripts/yum/geoint-repo.sh \
-     scripts/yum/pgdg-repo.sh \
-     docker/scripts/postgres-install.sh \
-     /tmp/
-
-RUN --mount=type=cache,target=/var/cache/yum \
-    /tmp/geoint-repo.sh && \
-    /tmp/pgdg-repo.sh ${postgresql_version} && \
-    yum-config-manager --save \
-        --setopt=base.repo_gpgcheck=1 \
-        --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null
-
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
-
-RUN yum -q -y install epel-release
-
-RUN /tmp/postgres-install.sh $postgresql_version && rm -f /tmp/*.sh
-
+COPY docker/scripts/postgres-initdb.sh /docker-entrypoint-initdb.d/10-postgres-initdb.sh
 COPY docker/scripts/postgres-entrypoint.sh /docker-entrypoint.sh
 COPY docker/scripts/postgres-healthcheck.sh /docker-healthcheck.sh
 
-# Set up data volume, entrypoint, etc.
-USER postgres
+RUN chmod 0755 /docker-entrypoint-initdb.d/10-postgres-initdb.sh \
+               /docker-entrypoint.sh \
+               /docker-healthcheck.sh
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 EXPOSE 5432/tcp
 HEALTHCHECK --interval=15s CMD ["/docker-healthcheck.sh"]
