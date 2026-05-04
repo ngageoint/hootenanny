@@ -1115,6 +1115,18 @@ tds71 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    case 'AL010':
+      if (attrs.FFN == '808' && attrs.FFN2 == '825' && attrs.FFN3 == '827')
+      {
+        tags.office = 'diplomatic';
+        tags.diplomatic = 'embassy';
+        delete tags.amenity;
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+      }
+      break;
+
     // Fix oil/gas/petroleum fields
     case 'AA052':
       tags.landuse = 'industrial';
@@ -1189,6 +1201,30 @@ tds71 = {
           break;
         case '440':
           tags.building = 'commercial';
+          if (attrs.FFN2 == '460' && attrs.FFN3 == '465') {
+            tags.shop = 'department_store';
+            delete tags.use;
+            delete tags['use:2'];
+          }
+          break;
+        case '580':
+          if (attrs.FFN2 == '582') {
+            tags.building = 'yes';
+            tags.office = 'newspaper';
+            delete tags.use;
+            delete tags['use:2'];
+          }
+          break;
+        case '808':
+          if (attrs.FFN2 == '825' && attrs.FFN3 == '827') {
+            tags.building = 'yes';
+            tags.office = 'diplomatic';
+            tags.diplomatic = 'embassy';
+            delete tags.amenity;
+            delete tags.facility;
+            delete tags.use;
+            delete tags['use:2'];
+          }
           break;
         case '970':
           if (attrs.FFN2 == '893')
@@ -1243,6 +1279,14 @@ tds71 = {
     case 'AL170': // Plaza
       // Pedestrian areas go back to being Highway features.
       if (tags.highway == 'pedestrian') delete tags.landuse;
+      break;
+
+    case 'AL260': // Wall
+      if (attrs.WTI == '2')
+      {
+        tags.barrier = 'retaining_wall';
+        delete tags.wall;
+      }
       break;
 
     case 'AL270': // Industrial Farm
@@ -1735,11 +1779,14 @@ tds71 = {
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
+        ['t.barrier == "retaining_wall" && t.material == "stone"','a.F_CODE = "AL260"; a.MCC = "108"; a.WTI = "2"; delete t.barrier; delete t.material'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.building == "civic"','a.F_CODE = "AL013"; a.FFN = "970"; delete t.building'],
-        ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building'],
+        ['t.building == "commercial" && t.shop == "department_store"','a.F_CODE = "AL013"; a.FFN = "440"; a.FFN2 = "460"; a.FFN3 = "465"; delete t.building; delete t.shop'],
+        ['t.building == "commercial" && !(t.amenity)','a.F_CODE = "AL013"; a.FFN = "440"; delete t.building;'],
         ['t.building == "commercial" && t.amenity == "theatre"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "891"; delete t.building; delete t.amenity'],
+        ['t.building == "yes" && t.office == "newspaper"','a.F_CODE = "AL013"; a.FFN = "580"; a.FFN2 = "582"; delete t.building; delete t.office'],
         ['t.building == "industrial"','a.FFN = "99"'],
         ['t.building == "palace"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "815"; delete t.building'],
         ['t.building == "public" && t.amenity == "community_centre"','a.F_CODE = "AL013"; a.FFN = "970"; a.FFN2 = "893"; delete t.building'],
@@ -1752,6 +1799,8 @@ tds71 = {
         ['t.crossing == "tank" && t.highway == "crossing"','delete t.highway'],
         ['t.diplomatic && t.amenity == "embassy"','delete t.amenity'],
         ['t.dock && t.waterway == "dock"','delete t.waterway'],
+        ['(t.building == "yes" || t.building == "government") && t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.building; delete t.office; delete t.diplomatic'],
+        ['t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL010"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.office; delete t.diplomatic'],
         ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
         // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.historic == "castle" && t.building','delete t.building'],
@@ -1909,8 +1958,32 @@ tds71 = {
       'school':'850','university':'855','college':'857','hospital':'860'
     };
 
-    if (tags.amenity in facilityList)
+    if (tags.amenity == 'place_of_worship' && (!tags.building || tags.building == 'no'))
     {
+      attrs.F_CODE = 'AL010'; // Facility
+      if (!(attrs.FFN)) attrs.FFN = '930'; // Religious Activities
+      if (!(attrs.FFN2)) attrs.FFN2 = '931'; // Place of Worship
+      delete tags.amenity;
+      if (tags.building == 'no') delete tags.building;
+    }
+    else if (tags.landuse == 'religious')
+    {
+      attrs.F_CODE = 'AL010'; // Facility
+      if (!(attrs.FFN)) attrs.FFN = '930'; // Religious Activities
+      if (!(attrs.FFN2)) attrs.FFN2 = '931'; // Place of Worship
+      delete tags.landuse;
+    }
+    else if (tags.amenity == 'kindergarten')
+    {
+      attrs.F_CODE = 'AL010'; // Facility
+      if (!(attrs.FFN)) attrs.FFN = '850'; // Education
+      if (!(attrs.FFN2)) attrs.FFN2 = '851'; // Primary Education
+      delete tags.amenity;
+    }
+    else if (tags.amenity in facilityList)
+    {
+      if (tags.amenity == 'school' && tags.building == 'no') delete tags.building;
+
       if (geometryType == 'Area')
       {
         attrs.F_CODE = 'AL010'; // Facility
