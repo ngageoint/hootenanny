@@ -16,4 +16,6 @@ aclocal
 autoconf
 autoheader
 automake --add-missing --copy
-./configure --with-services
+GDAL_CONFIG_PATH="${GDAL_CONFIG:-$(command -v gdal-config)}"
+echo "GDAL_CONFIG=$GDAL_CONFIG_PATH"
+./configure --with-services --with-gdal="$GDAL_CONFIG_PATH"

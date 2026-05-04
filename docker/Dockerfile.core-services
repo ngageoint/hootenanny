@@ -23,6 +23,7 @@ ARG devtoolset_version
 ARG stxxl_version
 ARG postgresql_version
 ARG jdk_version
+ARG google_chrome_version
 
 
 ENV HOOT_HOME=$hoot_home
@@ -42,13 +43,34 @@ RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
     sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
     sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 
-RUN yum -y install epel-release centos-release-scl
+RUN yum -y --disablerepo=pgdg* install epel-release centos-release-scl
 
 RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
     sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo && \
+    if [ "$(uname -m)" = "aarch64" ]; then \
+        rm -f /etc/yum.repos.d/CentOS-SCLo-*.repo && \
+        printf '%s\n' \
+            '[centos-sclo-rh]' \
+            'name=CentOS-7 - SCLo rh' \
+            'baseurl=http://vault.centos.org/altarch/7/sclo/aarch64/rh/' \
+            'gpgcheck=1' \
+            'enabled=1' \
+            'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64' \
+            '       file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7' \
+            > /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo && \
+        printf '%s\n' \
+            '[centos-sclo-sclo]' \
+            'name=CentOS-7 - SCLo sclo' \
+            'baseurl=http://vault.centos.org/altarch/7/sclo/aarch64/sclo/' \
+            'gpgcheck=1' \
+            'enabled=1' \
+            'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64' \
+            '       file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7' \
+            > /etc/yum.repos.d/CentOS-SCLo-sclo.repo; \
+    fi
 
-RUN yum install -y \
+RUN yum --disablerepo=pgdg* install -y \
         armadillo-$armadillo_version \
         devtoolset-$devtoolset_version \
         devtoolset-$devtoolset_version-libasan-devel \
@@ -56,9 +78,6 @@ RUN yum install -y \
         geos-devel-$geos_version \
         glpk-$glpk_version \
         glpk-devel-$glpk_version \
-        gdal-$gdal_version \
-        gdal-devel-$gdal_version \
-        gdal-python-tools-$gdal_version \
         google-chrome-stable-$google_chrome_version \
         libgeotiff-$libgeotiff_version \
         libgeotiff-devel-$libgeotiff_version \
@@ -83,7 +102,16 @@ RUN yum install -y \
         stxxl-devel-$stxxl_version \
         v8-devel-$v8_version
 
-RUN yum -y install \
+RUN yum --disablerepo=pgdg* install -y \
+        gdal-$gdal_version \
+        gdal-devel-$gdal_version \
+        gdal-python-tools-$gdal_version && \
+    rpm -q gdal gdal-devel gdal-python-tools && \
+    GDAL_CONFIG_PATH="$(find /usr -path '*/bin/gdal-config' -type f 2>/dev/null | head -n1)" && \
+    test -n "$GDAL_CONFIG_PATH" && \
+    ln -sf "$GDAL_CONFIG_PATH" /usr/local/bin/gdal-config
+
+RUN yum -y --disablerepo=pgdg* install \
         asciidoc \
         autoconf \
         autoconf-archive \
@@ -151,8 +179,26 @@ RUN yum -y install \
         xorg-x11-server-Xvfb \
         zip
 
-RUN yum install -y postgresql$postgresql_version-devel && \
-    alternatives --install /usr/bin/pg_config pgsql-pg_config /usr/pgsql-$postgresql_version/bin/pg_config 500
+RUN yum -y remove postgresql || true && \
+    yum install -y \
+        postgresql$postgresql_version \
+        postgresql$postgresql_version-contrib \
+        postgresql$postgresql_version-server \
+        postgresql$postgresql_version-devel && \
+    echo "/usr/pgsql-$postgresql_version/lib" > /etc/ld.so.conf.d/pgsql-$postgresql_version.conf && \
+    ldconfig && \
+    alternatives --install /usr/bin/createdb pgsql-createdb /usr/pgsql-$postgresql_version/bin/createdb 500 && \
+    alternatives --install /usr/bin/createuser pgsql-createuser /usr/pgsql-$postgresql_version/bin/createuser 500 && \
+    alternatives --install /usr/bin/pg_config pgsql-pg_config /usr/pgsql-$postgresql_version/bin/pg_config 500 && \
+    alternatives --install /usr/bin/pg_isready pgsql-pg_isready /usr/pgsql-$postgresql_version/bin/pg_isready 500 && \
+    alternatives --install /usr/bin/psql pgsql-psql /usr/pgsql-$postgresql_version/bin/psql 500 && \
+    ln -sf /usr/pgsql-$postgresql_version/bin/createdb /usr/local/bin/createdb && \
+    ln -sf /usr/pgsql-$postgresql_version/bin/createuser /usr/local/bin/createuser && \
+    ln -sf /usr/pgsql-$postgresql_version/bin/pg_config /usr/local/bin/pg_config && \
+    ln -sf /usr/pgsql-$postgresql_version/bin/pg_isready /usr/local/bin/pg_isready && \
+    ln -sf /usr/pgsql-$postgresql_version/bin/psql /usr/local/bin/psql && \
+    rpm -q gdal gdal-devel gdal-python-tools && \
+    gdal-config --version
 
 RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
     useradd -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \
@@ -166,6 +212,7 @@ ENV DEVTOOLSET_VERSION=$devtoolset_version
 ENV HOOT_USER=$hoot_user
 ENV PG_MAJOR_VERSION=$postgresql_version
 ENV PATH=$PATH:/usr/pgsql-$postgresql_version/bin
+ENV LD_LIBRARY_PATH=/usr/pgsql-$postgresql_version/lib:$LD_LIBRARY_PATH
 ENV MANPATH=/opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/share/
 ENV TOMCAT_CONFIG=$tomcat_config
 ENV TOMCAT8_HOME=/var/lib/tomcat8
@@ -177,7 +224,7 @@ export GDAL_DATA=$GDAL_DATA\n\
 export HOOT_HOME=$HOOT_HOME\n\
 export HOOT_WORKING_NAME=hootenanny\n\
 export JAVA_HOME=$JRE_HOME\n\
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib\n\
+export LD_LIBRARY_PATH=/usr/pgsql-$postgresql_version/lib:$LD_LIBRARY_PATH:/usr/local/lib:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib\n\
 export PATH=$HOOT_HOME/bin:$PATH\n\
 export JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"\n'\
 >> $tomcat_config/conf.d/hoot.conf
