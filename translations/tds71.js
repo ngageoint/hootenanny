@@ -1125,6 +1125,24 @@ tds71 = {
         delete tags.use;
         delete tags['use:2'];
       }
+      else if (attrs.FFN == '950' && attrs.FFN2 == '954')
+      {
+        tags.club = 'yes';
+        delete tags.amenity;
+        delete tags['amenity:2'];
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+      }
+      break;
+
+    case 'AL036':
+      if (attrs.SSC == '12')
+      {
+        tags.historic = 'tomb';
+        tags.tomb = 'pyramid';
+        delete tags.shape;
+      }
       break;
 
     // Fix oil/gas/petroleum fields
@@ -1801,6 +1819,7 @@ tds71 = {
         ['t.building == "retail" && t.shop == "mall"','a.FFN = "460"; delete t.building'],
         ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
+        ['t.club == "yes"','a.F_CODE = "AL010"; a.FFN = "950"; a.FFN2 = "954"; delete t.club'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
@@ -1813,6 +1832,7 @@ tds71 = {
         // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
+        ['t.historic == "tomb" && t.tomb == "pyramid"','a.F_CODE = "AL036"; a.SSC = "12"; delete t.building; delete t.historic; delete t.tomb; delete t.tourism; delete t.material'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
         ['t.landuse == "retail"','delete t.place'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
