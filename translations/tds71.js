@@ -1145,6 +1145,12 @@ tds71 = {
       }
       break;
 
+    case 'AL200':
+      tags.amenity = 'ruins';
+      delete tags.historic;
+      delete tags.ruins;
+      break;
+
     // Fix oil/gas/petroleum fields
     case 'AA052':
       tags.landuse = 'industrial';
@@ -1805,6 +1811,8 @@ tds71 = {
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
+        ['t.amenity == "ruins"','a.F_CODE = "AL200"; delete t.amenity; delete t.building; delete t.historic; delete t.material; delete t.tourism'],
+        ['t.historic == "archaeological_site" && t.barrier == "fence"','a.F_CODE = "AL012"; delete t.historic; delete t.barrier'],
         ['t.barrier == "retaining_wall" && t.material == "stone"','a.F_CODE = "AL260"; a.MCC = "108"; a.WTI = "2"; delete t.barrier; delete t.material'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
