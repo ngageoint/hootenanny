@@ -1225,19 +1225,27 @@ tds71 = {
             delete tags.use;
             delete tags['use:2'];
           }
+          else if (attrs.FFN2 == '811' && attrs.FFN3 == '819') {
+            tags.building = 'yes';
+            tags.office = 'government';
+            tags.government = 'legislative';
+            delete tags.amenity;
+            delete tags['amenity:2'];
+            delete tags['office:3'];
+            delete tags.use;
+            delete tags['use:2'];
+          }
+          else if (attrs.FFN2 == '811' && attrs.FFN3 == '815') {
+            tags.building = 'palace';
+            delete tags.office;
+            delete tags.use;
+          }
           break;
         case '970':
           if (attrs.FFN2 == '893')
             tags.building = 'public';
           else
             tags.building = 'civic';
-          break;
-        case '808':
-          if (attrs.FFN2 == '811' && attrs.FFN3 == '815') {
-            tags.building = 'palace';
-            delete tags.office;
-            delete tags.use;
-          }
           break;
         case '890':
           if (attrs.FFN2 == '891') {
@@ -1822,6 +1830,7 @@ tds71 = {
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
+        ['t.office == "government" && t.government == "legislative"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "819"; delete t.office; delete t.government'],
         ['t.office == "government"','a.FFN2 = "811"'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
