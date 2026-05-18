@@ -1125,6 +1125,30 @@ tds71 = {
         delete tags.use;
         delete tags['use:2'];
       }
+      else if (attrs.FFN == '950' && attrs.FFN2 == '954')
+      {
+        tags.club = 'yes';
+        delete tags.amenity;
+        delete tags['amenity:2'];
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+      }
+      break;
+
+    case 'AL036':
+      if (attrs.SSC == '12')
+      {
+        tags.historic = 'tomb';
+        tags.tomb = 'pyramid';
+        delete tags.shape;
+      }
+      break;
+
+    case 'AL200':
+      tags.amenity = 'ruins';
+      delete tags.historic;
+      delete tags.ruins;
       break;
 
     // Fix oil/gas/petroleum fields
@@ -1225,19 +1249,27 @@ tds71 = {
             delete tags.use;
             delete tags['use:2'];
           }
+          else if (attrs.FFN2 == '811' && attrs.FFN3 == '819') {
+            tags.building = 'yes';
+            tags.office = 'government';
+            tags.government = 'legislative';
+            delete tags.amenity;
+            delete tags['amenity:2'];
+            delete tags['office:3'];
+            delete tags.use;
+            delete tags['use:2'];
+          }
+          else if (attrs.FFN2 == '811' && attrs.FFN3 == '815') {
+            tags.building = 'palace';
+            delete tags.office;
+            delete tags.use;
+          }
           break;
         case '970':
           if (attrs.FFN2 == '893')
             tags.building = 'public';
           else
             tags.building = 'civic';
-          break;
-        case '808':
-          if (attrs.FFN2 == '811' && attrs.FFN3 == '815') {
-            tags.building = 'palace';
-            delete tags.office;
-            delete tags.use;
-          }
           break;
         case '890':
           if (attrs.FFN2 == '891') {
@@ -1779,6 +1811,8 @@ tds71 = {
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
+        ['t.amenity == "ruins"','a.F_CODE = "AL200"; delete t.amenity; delete t.building; delete t.historic; delete t.material; delete t.tourism'],
+        ['t.historic == "archaeological_site" && t.barrier == "fence"','a.F_CODE = "AL012"; delete t.historic; delete t.barrier'],
         ['t.barrier == "retaining_wall" && t.material == "stone"','a.F_CODE = "AL260"; a.MCC = "108"; a.WTI = "2"; delete t.barrier; delete t.material'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
@@ -1793,6 +1827,7 @@ tds71 = {
         ['t.building == "retail" && t.shop == "mall"','a.FFN = "460"; delete t.building'],
         ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
+        ['t.club == "yes"','a.F_CODE = "AL010"; a.FFN = "950"; a.FFN2 = "954"; delete t.club'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
@@ -1805,6 +1840,7 @@ tds71 = {
         // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
+        ['t.historic == "tomb" && t.tomb == "pyramid"','a.F_CODE = "AL036"; a.SSC = "12"; delete t.building; delete t.historic; delete t.tomb; delete t.tourism; delete t.material'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
         ['t.landuse == "retail"','delete t.place'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
@@ -1822,6 +1858,7 @@ tds71 = {
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
+        ['t.office == "government" && t.government == "legislative"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "819"; delete t.office; delete t.government'],
         ['t.office == "government"','a.FFN2 = "811"'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
