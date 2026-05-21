@@ -10900,9 +10900,13 @@ var schema = [
      {name:"Manufacturing",value:"99"},
      {name:"Utilities",value:"350"},
      {name:"Commerce",value:"440"},
+     {name:"Accommodation",value:"550"},
+     {name:"Hotel",value:"551"},
      {name:"Residence",value:"563"},
+     {name:"Convention Centre",value:"579"},
      {name:"Defence Activities",value:"835"},
      {name:"Religious Activities",value:"930"},
+     {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
    },
@@ -10912,9 +10916,13 @@ var schema = [
      {name:"Manufacturing",value:"99"},
      {name:"Utilities",value:"350"},
      {name:"Commerce",value:"440"},
+     {name:"Accommodation",value:"550"},
+     {name:"Hotel",value:"551"},
      {name:"Residence",value:"563"},
+     {name:"Convention Centre",value:"579"},
      {name:"Defence Activities",value:"835"},
      {name:"Religious Activities",value:"930"},
+     {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
    },
@@ -10924,9 +10932,13 @@ var schema = [
      {name:"Manufacturing",value:"99"},
      {name:"Utilities",value:"350"},
      {name:"Commerce",value:"440"},
+     {name:"Accommodation",value:"550"},
+     {name:"Hotel",value:"551"},
      {name:"Residence",value:"563"},
+     {name:"Convention Centre",value:"579"},
      {name:"Defence Activities",value:"835"},
      {name:"Religious Activities",value:"930"},
+     {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
    },
@@ -11023,9 +11035,13 @@ var schema = [
      {name:"Manufacturing",value:"99"},
      {name:"Utilities",value:"350"},
      {name:"Commerce",value:"440"},
+     {name:"Accommodation",value:"550"},
+     {name:"Hotel",value:"551"},
      {name:"Residence",value:"563"},
+     {name:"Convention Centre",value:"579"},
      {name:"Defence Activities",value:"835"},
      {name:"Religious Activities",value:"930"},
+     {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
    },
@@ -11035,9 +11051,13 @@ var schema = [
      {name:"Manufacturing",value:"99"},
      {name:"Utilities",value:"350"},
      {name:"Commerce",value:"440"},
+     {name:"Accommodation",value:"550"},
+     {name:"Hotel",value:"551"},
      {name:"Residence",value:"563"},
+     {name:"Convention Centre",value:"579"},
      {name:"Defence Activities",value:"835"},
      {name:"Religious Activities",value:"930"},
+     {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
    },
@@ -11047,9 +11067,13 @@ var schema = [
      {name:"Manufacturing",value:"99"},
      {name:"Utilities",value:"350"},
      {name:"Commerce",value:"440"},
+     {name:"Accommodation",value:"550"},
+     {name:"Hotel",value:"551"},
      {name:"Residence",value:"563"},
+     {name:"Convention Centre",value:"579"},
      {name:"Defence Activities",value:"835"},
      {name:"Religious Activities",value:"930"},
+     {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
    },
@@ -68674,4 +68698,3 @@ var schema = [
 } // End of tds71.schema
 
 exports.getDbSchema = tds71.schema.getDbSchema;
-
