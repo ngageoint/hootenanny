@@ -17751,8 +17751,10 @@ var thematicSchema = [
      {name:"noInformation",value:"-999999"},
      {name:"Motor Vehicle Repair",value:"343"},
      {name:"Restroom",value:"382"},
+     {name:"Commerce",value:"440"},
      {name:"Convenience Store",value:"466"},
      {name:"Petrol Sale",value:"470"},
+     {name:"Postal Activities",value:"540"},
      {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
@@ -17763,7 +17765,10 @@ var thematicSchema = [
      {name:"Motor Vehicle Repair",value:"343"},
      {name:"Restroom",value:"382"},
      {name:"Convenience Store",value:"466"},
+     {name:"Non-specialized Store",value:"465"},
      {name:"Petrol Sale",value:"470"},
+     {name:"Mail and Package Transport",value:"541"},
+     {name:"Theatre",value:"891"},
      {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
@@ -17775,6 +17780,7 @@ var thematicSchema = [
      {name:"Restroom",value:"382"},
      {name:"Convenience Store",value:"466"},
      {name:"Petrol Sale",value:"470"},
+     {name:"Market",value:"475"},
      {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
@@ -17873,8 +17879,10 @@ var thematicSchema = [
      {name:"noInformation",value:"-999999"},
      {name:"Motor Vehicle Repair",value:"343"},
      {name:"Restroom",value:"382"},
+     {name:"Commerce",value:"440"},
      {name:"Convenience Store",value:"466"},
      {name:"Petrol Sale",value:"470"},
+     {name:"Postal Activities",value:"540"},
      {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
@@ -17885,7 +17893,10 @@ var thematicSchema = [
      {name:"Motor Vehicle Repair",value:"343"},
      {name:"Restroom",value:"382"},
      {name:"Convenience Store",value:"466"},
+     {name:"Non-specialized Store",value:"465"},
      {name:"Petrol Sale",value:"470"},
+     {name:"Mail and Package Transport",value:"541"},
+     {name:"Theatre",value:"891"},
      {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
@@ -17897,6 +17908,7 @@ var thematicSchema = [
      {name:"Restroom",value:"382"},
      {name:"Convenience Store",value:"466"},
      {name:"Petrol Sale",value:"470"},
+     {name:"Market",value:"475"},
      {name:"Meeting Place",value:"970"},
      {name:"Other",value:"999"}
     ]
