@@ -1161,6 +1161,25 @@ tds71 = {
         delete tags.use;
         delete tags['use:2'];
       }
+      else if (attrs.FFN == '350' && attrs.FFN2 == '360' && attrs.FFN3 == '362')
+      {
+        tags.man_made = 'wastewater_plant';
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['use:3'];
+      }
+      else if (attrs.FFN == '808' && attrs.FFN2 == '811' && attrs.FFN3 == '822')
+      {
+        tags.landuse = 'civic_admin';
+        tags.office = 'government';
+        delete tags.amenity;
+        delete tags['amenity:2'];
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['use:3'];
+      }
       break;
 
     case 'AL036':
@@ -1304,6 +1323,22 @@ tds71 = {
             tags.building = 'commercial';
             delete attrs.FFN2;
           }
+          else if (attrs.FFN2 == '594') {
+            tags.amenity = 'cinema';
+            tags.building = 'retail';
+            delete tags.use;
+            delete tags['use:2'];
+            delete tags['amenity:2'];
+          }
+          break;
+        case '830':
+          if (attrs.FFN2 == '831' && attrs.FFN3 == '840') {
+            tags.building = 'yes';
+            tags.amenity = 'courthouse';
+            delete tags.use;
+            delete tags['use:2'];
+            delete tags['amenity:3'];
+          }
           break;
       }
       break;
@@ -1332,6 +1367,19 @@ tds71 = {
         tags.amenity = 'theatre';
         tags.tourism = 'attraction';
         if (tags.landuse == 'built_up_area') delete tags.landuse;
+      if (attrs.FFN == '550' && attrs.FFN2 == '551') {
+        tags.tourism = 'hotel';
+        delete tags.landuse;
+        delete tags.use;
+        break;
+      }
+      if (attrs.FFN == '970' && attrs.FFN2 == '579') {
+        tags.amenity = 'exhibition_centre';
+        tags.building = 'commercial';
+        delete tags.landuse;
+        delete tags.use;
+        delete tags['amenity:2'];
+        break;
       }
       if (attrs.FFN == '99') {
         tags.landuse = 'industrial';
@@ -1868,6 +1916,10 @@ tds71 = {
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
         ['t.amenity == "ruins"','a.F_CODE = "AL200"; delete t.amenity; delete t.building; delete t.historic; delete t.material; delete t.tourism'],
+        ['t.tourism == "hotel" && t.barrier == "wall"','a.F_CODE = "AL020"; a.FFN = "550"; a.FFN2 = "551"; delete t.tourism; delete t.barrier'],
+        ['t.amenity == "cinema" && t.building == "retail"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "594"; delete t.amenity; delete t.building'],
+        ['t.amenity == "courthouse"','a.F_CODE = "AL013"; a.FFN = "830"; a.FFN2 = "831"; a.FFN3 = "840"; delete t.amenity'],
+        ['t.amenity == "exhibition_centre" && t.building == "commercial"','a.F_CODE = "AL020"; a.FFN = "970"; a.FFN2 = "579"; delete t.amenity; delete t.building'],
         ['t.historic == "archaeological_site" && t.barrier == "fence"','a.F_CODE = "AL012"; delete t.historic; delete t.barrier'],
         ['t.barrier == "retaining_wall" && t.material == "stone"','a.F_CODE = "AL260"; a.MCC = "108"; a.WTI = "2"; delete t.barrier; delete t.material'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
@@ -1906,6 +1958,7 @@ tds71 = {
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
+        ['t.man_made == "wastewater_plant"','a.F_CODE = "AL010"; a.FFN = "350"; a.FFN2 = "360"; a.FFN3 = "362"; delete t.man_made'],
         ['t.man_made == "works"','a.F_CODE = "AL010"; a.FFN = "99"'],
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
@@ -1914,6 +1967,7 @@ tds71 = {
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
+        ['t.landuse == "civic_admin" && t.office == "government"','a.F_CODE = "AL010"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "822"; delete t.landuse; delete t.office'],
         ['t.office == "government" && t.government == "legislative"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "819"; delete t.office; delete t.government'],
         ['t.office == "government"','a.FFN2 = "811"'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
