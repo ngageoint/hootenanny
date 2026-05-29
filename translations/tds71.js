@@ -1109,10 +1109,37 @@ tds71 = {
       }
     }
 
+    var originalOsmTags = {};
+    if (attrs.OSMTAGS) originalOsmTags = translate.unpackText(attrs,'OSMTAGS');
+
     // Additional rules for particular FCODE's
     switch (attrs.F_CODE)
     {
     case undefined: // Break early if no value. Should not get here.....
+      break;
+
+    case 'GB230':
+      if (originalOsmTags.building && !originalOsmTags.aeroway) {
+        tags.building = originalOsmTags.building;
+        delete tags.aeroway;
+      }
+      else {
+        tags.aeroway = 'hangar';
+        if (originalOsmTags.building) tags.building = originalOsmTags.building;
+        else if (tags.building == 'hangar') delete tags.building;
+      }
+      break;
+
+    case 'AK160':
+      if (originalOsmTags.leisure == 'stadium' && originalOsmTags.building != 'stadium') {
+        tags.leisure = 'stadium';
+        if (originalOsmTags.building) tags.building = originalOsmTags.building;
+        else delete tags.building;
+      }
+      else {
+        tags.building = 'stadium';
+        delete tags.leisure;
+      }
       break;
 
     case 'AL010':
@@ -1317,6 +1344,29 @@ tds71 = {
       break;
     // Fix up landuse tags
     case 'AL020':
+      if (attrs.FFN == '540' && attrs.FFN2 == '541') {
+        tags.amenity = 'post_office';
+        if (tags.landuse == 'built_up_area') delete tags.landuse;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['amenity:2'];
+      }
+      if (attrs.FFN == '440' && attrs.FFN2 == '465' && attrs.FFN3 == '475') {
+        tags.amenity = 'marketplace';
+        tags.tourism = 'attraction';
+        tags.shop = 'handicrafts';
+        if (tags.landuse == 'built_up_area') delete tags.landuse;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['shop:2'];
+        delete tags['shop:3'];
+        delete tags['amenity:2'];
+        delete tags['amenity:3'];
+      }
+      if (attrs.FFN2 == '891') {
+        tags.amenity = 'theatre';
+        tags.tourism = 'attraction';
+        if (tags.landuse == 'built_up_area') delete tags.landuse;
       if (attrs.FFN == '550' && attrs.FFN2 == '551') {
         tags.tourism = 'hotel';
         delete tags.landuse;
@@ -1857,6 +1907,11 @@ tds71 = {
     {
       // See ToOsmPostProcessing for more details about rulesList.
       var rulesList = [
+        ['t.aeroway == "hangar"','a.F_CODE = "GB230"'],
+        ['t.building == "stadium"','a.F_CODE = "AK160"'],
+        ['t.amenity == "marketplace" && t.tourism == "attraction" && t.shop == "handicrafts"','a.F_CODE = "AL020"; a.FFN = "440"; a.FFN2 = "465"; a.FFN3 = "475"; delete t.amenity; delete t.tourism; delete t.shop'],
+        ['t.amenity == "post_office"','a.F_CODE = "AL020"; a.FFN = "540"; a.FFN2 = "541"; delete t.amenity'],
+        ['t.amenity == "theatre" && t.tourism == "attraction"','a.F_CODE = "AL020"; a.FFN2 = "891"; delete t.amenity; delete t.tourism'],
         // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
@@ -2946,6 +3001,29 @@ tds71 = {
 
     // Inland Water Body (BH082) also covers a lot of features
     if (attrs.IWT && !(attrs.F_CODE)) attrs.F_CODE = 'BH082';
+
+    if (attrs.F_CODE == 'GB230') {
+      if (tags.aeroway == 'hangar') {
+        notUsedTags.aeroway = 'hangar';
+        if (tags.building == 'yes') notUsedTags.building = 'yes';
+      }
+      else if (tags.building == 'hangar') {
+        notUsedTags.building = 'hangar';
+      }
+    }
+
+    if (attrs.F_CODE == 'AK160') {
+      if (tags.building == 'stadium') {
+        notUsedTags.building = 'stadium';
+        if (attrs.FFN == '999' && attrs.OTH == '(FFN:stadium)') {
+          delete attrs.FFN;
+          delete attrs.OTH;
+        }
+      }
+      else if (tags.leisure == 'stadium') {
+        notUsedTags.leisure = 'stadium';
+      }
+    }
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
     // with similar names and roughly the same attributes. Bleah!
