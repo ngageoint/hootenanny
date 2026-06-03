@@ -34,6 +34,10 @@
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+// Standard
+#include <utility>
+#include <vector>
+
 namespace hoot
 {
 
@@ -178,7 +182,7 @@ protected:
    */
   std::string _buildRoles(const ElementProviderPtr& provider, ConstRelationPtr relation, bool& first);
   /**
-   * @brief _translateElement Translate the provided element, pushes at least one element onto the _translatedElementQueue map
+   * @brief _translateElement Translate the provided element and stages at least one translated element
    * @param provider Element provider (map or cache)
    * @param e Element to be translated
    * @return Element converted to GEOS geometry
@@ -222,8 +226,8 @@ protected:
   bool _useTaskingManagerFormat;
   /** Flag set to true when the output is into different layers (thematic or FCODE) */
   bool _useThematicLayers;
-  /** Map of translated features with the layer name as the key and the value is a translated element */
-  std::map<QString, ConstElementPtr> _translatedElementMap;
+  /** Translated features with the layer name and translated element to write */
+  std::vector<std::pair<QString, ConstElementPtr>> _translatedElements;
   /** Crop any features that cross the `bounds` of the operation */
   bool _cropFeaturesCrossingBounds;
 };
