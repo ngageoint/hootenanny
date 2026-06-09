@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2026 Maxar (http://www.maxar.com/)
  */
 #include "OsmGeoJsonWriter.h"
 
