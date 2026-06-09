@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2026 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,6 +46,7 @@ class OsmGeoJsonWriterTest : public HootTestFixture
   CPPUNIT_TEST(runBostonSubsetRoadBuildingTranslationTest);
   CPPUNIT_TEST(runSplitThematicBostonRoadBuildingTest);
   CPPUNIT_TEST(runSplitFcodeBostonRoadBuildingTest);
+  CPPUNIT_TEST(runMultipleTranslatedFeaturesTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonHootTest);
   CPPUNIT_TEST(runCroppingTest);
@@ -203,6 +204,16 @@ public:
 
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuildingFcode.geojson", &s, multi_files);
     Log::getInstance().setLevel(logLevel);
+  }
+
+  void runMultipleTranslatedFeaturesTest()
+  {
+    Settings s;
+    s.set(ConfigOptions::getOgrAddUuidKey(), false);
+    s.set(ConfigOptions::getSchemaTranslationScriptKey(), _inputPath + "MultipleTranslatedFeatures.js");
+    s.set(ConfigOptions::getWriterSortTagsByKeyKey(), true);
+
+    runTest(_inputPath + "MultipleTranslatedFeatures.osm", "MultipleTranslatedFeatures.geojson", &s);
   }
 
   void runObjectGeoJsonTest()

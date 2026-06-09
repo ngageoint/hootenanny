@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2026 Maxar (http://www.maxar.com/)
  */
 #include "OsmGeoJsonWriter.h"
 
@@ -47,6 +47,7 @@
 // Qt
 #include <QBuffer>
 #include <QDateTime>
+#include <QSet>
 #include <QXmlStreamWriter>
 #include <QtCore/QStringBuilder>
 
@@ -197,7 +198,7 @@ void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const C
   if (!geometry || geometry->isEmpty())
     return;
   //  Iterate all translations
-  for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
+  for (auto translation_it = _translatedElements.begin(); translation_it != _translatedElements.end(); ++translation_it)
   {
     _writer.setCurrentFileIndex(translation_it->first);
     if (_writer.isCurrentIndexWritten())
@@ -223,7 +224,7 @@ void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const C
   if (!geometry || geometry->isEmpty())
     return;
   //  Iterate all translations
-  for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
+  for (auto translation_it = _translatedElements.begin(); translation_it != _translatedElements.end(); ++translation_it)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(translation_it->second);
     if (!way)
@@ -264,7 +265,7 @@ void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const C
         if (!geometry || geometry->isEmpty())
           continue;
         //  Iterate all translations
-        for (auto node_translation_it = _translatedElementMap.begin(); node_translation_it != _translatedElementMap.end(); ++node_translation_it)
+        for (auto node_translation_it = _translatedElements.begin(); node_translation_it != _translatedElements.end(); ++node_translation_it)
         {
           ConstNodePtr node = std::dynamic_pointer_cast<const Node>(node_translation_it->second);
           if (!node)
@@ -296,7 +297,7 @@ void OsmGeoJsonWriter::_writePartial(const ElementProviderPtr& provider, const C
   if (!geometry || geometry->isEmpty())
     return;
   //  Iterate all translations
-  for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
+  for (auto translation_it = _translatedElements.begin(); translation_it != _translatedElements.end(); ++translation_it)
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(translation_it->second);
     if (!relation)
@@ -774,13 +775,12 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
 {
   std::shared_ptr<geos::geom::Geometry> geometry;
   std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
-  //  Clear out the map of
-  _translatedElementMap.clear();
+  _translatedElements.clear();
   //  Don't translate without a translator
   if (!_translator)
   {
     QString table = _getLayerName(e, nullptr);
-    _translatedElementMap[table] = e;
+    _translatedElements.emplace_back(table, e);
     return convertGeometry(provider, e);
   }
   //  Translate the element and get the
@@ -789,16 +789,40 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
   if (feature.empty())
   {
     QString table = _getLayerName(e, geometry);
-    _translatedElementMap[table] = e;
+    _translatedElements.emplace_back(table, e);
     return geometry;
   }
-  //  Iterate all features and put them into the translated map
+  QSet<QString> translatedElementKeys;
+  const QString geometryKey = geometry ? QString::fromStdString(geometry->toString()) : "";
+  auto addTranslatedElement = [this, &translatedElementKeys, &geometryKey](const QString& layer, const ConstElementPtr& translatedElement)
+  {
+    const Tags& tags = translatedElement->getTags();
+    QStringList tagKeys = tags.keys();
+    tagKeys.sort();
+
+    QStringList tagParts;
+    for (const auto& tagKey : qAsConst(tagKeys))
+    {
+      QStringList values = Tags::split(tags.get(tagKey));
+      values.sort();
+      tagParts.append(tagKey + "=" + values.join(";"));
+    }
+
+    const QString dedupKey = layer + "\n" + geometryKey + "\n" + tagParts.join("\n");
+    if (!translatedElementKeys.contains(dedupKey))
+    {
+      translatedElementKeys.insert(dedupKey);
+      _translatedElements.emplace_back(layer, translatedElement);
+    }
+  };
+
+  //  Iterate all features and put them into the translated list
   for (const auto& f : feature)
   {
     if (!f.feature)
     {
       QString table = _getLayerName(e, geometry);
-      _translatedElementMap[table] = e;
+      addTranslatedElement(table, e);
       continue;
     }
     ElementPtr c = e->clone();
@@ -850,7 +874,7 @@ std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const 
     QString layer = "";
     if (_writeSplitFiles)
       layer = _getLayerName(e, f, geometry);
-    _translatedElementMap[layer] = c;
+    addTranslatedElement(layer, c);
   }
   return geometry;
 }
