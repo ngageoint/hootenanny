@@ -1180,6 +1180,22 @@ tds71 = {
         delete tags['use:2'];
         delete tags['use:3'];
       }
+      else if (attrs.FFN == '830' && attrs.FFN2 == '831' && attrs.FFN3 == '841')
+      {
+        tags.amenity = 'police';
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['amenity:3'];
+      }
+      else if (attrs.FFN == '830' && attrs.FFN2 == '832' && attrs.FFN3 == '845')
+      {
+        tags.amenity = 'fire_station';
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['amenity:3'];
+      }
       break;
 
     case 'AL036':
@@ -1367,6 +1383,7 @@ tds71 = {
         tags.amenity = 'theatre';
         tags.tourism = 'attraction';
         if (tags.landuse == 'built_up_area') delete tags.landuse;
+      }
       if (attrs.FFN == '550' && attrs.FFN2 == '551') {
         tags.tourism = 'hotel';
         delete tags.landuse;
@@ -1471,6 +1488,16 @@ tds71 = {
       // Add defaults for common features
     case 'AP020':
       if (! tags.junction) tags.junction = 'yes';
+      break;
+
+    case 'AT005':
+      if (attrs.CAB == '7' && attrs.LOC == '17') {
+        tags.man_made = 'submarine_cable';
+        tags['seamark:type'] = 'cable_submarine';
+        delete tags.cable;
+        delete tags['cable:type'];
+        delete tags.location;
+      }
       break;
 
     case 'AQ040':
@@ -1916,6 +1943,8 @@ tds71 = {
         ['t.amenity == "fairground"','a.F_CODE = "AK090"; a.FFN = "922"; delete t.amenity'],
         ['t.amenity == "fountain"  && t.natural == "water"','delete t.natural'],
         ['t.amenity == "ruins"','a.F_CODE = "AL200"; delete t.amenity; delete t.building; delete t.historic; delete t.material; delete t.tourism'],
+        ['t.amenity == "police"','a.F_CODE = "AL010"; a.FFN = "830"; a.FFN2 = "831"; a.FFN3 = "841"; delete t.amenity'],
+        ['t.amenity == "fire_station"','a.F_CODE = "AL010"; a.FFN = "830"; a.FFN2 = "832"; a.FFN3 = "845"; delete t.amenity'],
         ['t.tourism == "hotel" && t.barrier == "wall"','a.F_CODE = "AL020"; a.FFN = "550"; a.FFN2 = "551"; delete t.tourism; delete t.barrier'],
         ['t.amenity == "cinema" && t.building == "retail"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "594"; delete t.amenity; delete t.building'],
         ['t.amenity == "courthouse"','a.F_CODE = "AL013"; a.FFN = "830"; a.FFN2 = "831"; a.FFN3 = "840"; delete t.amenity'],
@@ -1955,6 +1984,8 @@ tds71 = {
         ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
         ['t.leisure == "stadium" && t.building','delete t.building'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
+        ['t.man_made == "bridge"','a.F_CODE = "AQ040"; delete t.man_made'],
+        ['t.man_made == "submarine_cable" && t["seamark:type"] == "cable_submarine"','a.F_CODE = "AT005"; a.CAB = "7"; a.LOC = "17"; delete t.man_made; delete t["seamark:type"]'],
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
@@ -1967,6 +1998,7 @@ tds71 = {
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
+        ['t.natural == "water" && t.water == "basin" && t.basin == "retention"','a.F_CODE = "BH082"; a.IWT = "5"; delete t.natural; delete t.water; delete t.basin'],
         ['t.landuse == "civic_admin" && t.office == "government"','a.F_CODE = "AL010"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "822"; delete t.landuse; delete t.office'],
         ['t.office == "government" && t.government == "legislative"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "819"; delete t.office; delete t.government'],
         ['t.office == "government"','a.FFN2 = "811"'],

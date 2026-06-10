@@ -28,6 +28,18 @@ function areaXml(tags) {
             </osm>';
 }
 
+function lineXml(tags) {
+    return '<osm version="0.6" upload="true" generator="hootenanny">\
+                <node id="-10" action="modify" visible="true" lat="0.68307256979" lon="18.45073925651" />\
+                <node id="-13" action="modify" visible="true" lat="0.68270797876" lon="18.45141400736" />\
+                <way id="-19" action="modify" visible="true">\
+                    <nd ref="-10" />\
+                    <nd ref="-13" />\
+                    ' + tagXml(tags) + '\
+                </way>\
+            </osm>';
+}
+
 function translateToTds(osmXml) {
     return server.handleInputs({
         osm: osmXml,
@@ -162,5 +174,72 @@ describe('TDS71 Rule Updates', function () {
             'FFN3': '822'
         });
         assertRoundTrip(data, {'landuse': 'civic_admin', 'office': 'government'}, ['facility', 'use', 'use:2', 'use:3']);
+    });
+
+    it('should translate amenity=police area to AL010 law enforcement facility', function () {
+        var data = areaXml({
+            'amenity': 'police'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AL010',
+            'FFN': '830',
+            'FFN2': '831',
+            'FFN3': '841'
+        });
+        assertRoundTrip(data, {'amenity': 'police'}, ['facility', 'use', 'use:2', 'amenity:3']);
+    });
+
+    it('should translate amenity=fire_station area to AL010 firefighting facility', function () {
+        var data = areaXml({
+            'amenity': 'fire_station'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AL010',
+            'FFN': '830',
+            'FFN2': '832',
+            'FFN3': '845'
+        });
+        assertRoundTrip(data, {'amenity': 'fire_station'}, ['facility', 'use', 'use:2', 'amenity:3']);
+    });
+
+    it('should translate retention basin area to BH082 with basin IWT', function () {
+        var data = areaXml({
+            'natural': 'water',
+            'water': 'basin',
+            'basin': 'retention'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'BH082',
+            'IWT': '5'
+        });
+        assertRoundTrip(data, {'natural': 'water', 'landuse': 'basin', 'water': 'lake'}, ['basin']);
+    });
+
+    it('should translate man_made=bridge area to AQ040', function () {
+        var data = areaXml({
+            'man_made': 'bridge'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AQ040'
+        });
+        assertRoundTrip(data, {'bridge': 'yes'}, ['man_made']);
+    });
+
+    it('should translate submarine cable line to AT005 digital communication cable on waterbody bottom', function () {
+        var data = lineXml({
+            'man_made': 'submarine_cable',
+            'seamark:type': 'cable_submarine'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AT005',
+            'CAB': '7',
+            'LOC': '17'
+        });
+        assertRoundTrip(data, {'man_made': 'submarine_cable', 'seamark:type': 'cable_submarine'}, ['cable', 'cable:type', 'location']);
     });
 });
