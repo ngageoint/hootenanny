@@ -1161,6 +1161,28 @@ tds71 = {
         delete tags.use;
         delete tags['use:2'];
       }
+      else if (attrs.FFN == '900' && attrs.FFN2 == '912')
+      {
+        tags.leisure = 'sports_centre';
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+      }
+      else if (attrs.FFN == '99' && attrs.FFN2 == '340' && attrs.FFN3 == '343')
+      {
+        tags.depot = 'bus';
+        tags.industrial = 'depot';
+        delete tags.facility;
+        delete tags.use;
+        delete tags['use:2'];
+        delete tags['use:3'];
+        delete tags.repair;
+        delete tags['repair:2'];
+        delete tags['repair:3'];
+        delete tags.shop;
+        delete tags['shop:2'];
+        delete tags['shop:3'];
+      }
       else if (attrs.FFN == '350' && attrs.FFN2 == '360' && attrs.FFN3 == '362')
       {
         tags.man_made = 'wastewater_plant';
@@ -1367,6 +1389,7 @@ tds71 = {
         tags.amenity = 'theatre';
         tags.tourism = 'attraction';
         if (tags.landuse == 'built_up_area') delete tags.landuse;
+      }
       if (attrs.FFN == '550' && attrs.FFN2 == '551') {
         tags.tourism = 'hotel';
         delete tags.landuse;
@@ -1734,6 +1757,14 @@ tds71 = {
     // Unpack othertags if required
     translate.unpackOtherTags(tags);
 
+    if (tags.building == 'part') delete tags.building;
+    if (tags.depot && tags.landuse == 'industrial') delete tags.landuse;
+    delete tags['demolished:building'];
+    delete tags.government;
+    if (tags.wall == 'wall') delete tags.wall;
+    delete tags['proposed:building'];
+    if (tags.police == 'yes') delete tags.police;
+
     // Initial cleanup
     for (var i in tags)
     {
@@ -1940,6 +1971,7 @@ tds71 = {
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
         ['t.crossing == "tank" && t.highway == "crossing"','delete t.highway'],
+        ['t.depot == "bus" && t.industrial == "depot"','a.F_CODE = "AL010"; a.FFN = "99"; a.FFN2 = "340"; a.FFN3 = "343"; delete t.depot; delete t.industrial'],
         ['t.diplomatic && t.amenity == "embassy"','delete t.amenity'],
         ['t.dock && t.waterway == "dock"','delete t.waterway'],
         ['(t.building == "yes" || t.building == "government") && t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.building; delete t.office; delete t.diplomatic'],
@@ -1952,7 +1984,7 @@ tds71 = {
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
         ['t.landuse == "retail"','delete t.place'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
-        ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
+        ['t.leisure == "sports_centre"','a.F_CODE = "AL010"; a.FFN = "900"; a.FFN2 = "912"; delete t.leisure; delete t.building'],
         ['t.leisure == "stadium" && t.building','delete t.building'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
         ['t.man_made && t.building == "yes"','delete t.building'],
