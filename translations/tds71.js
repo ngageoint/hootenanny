@@ -1760,7 +1760,7 @@ tds71 = {
     if (tags.building == 'part') delete tags.building;
     if (tags.depot && tags.landuse == 'industrial') delete tags.landuse;
     delete tags['demolished:building'];
-    delete tags.government;
+    if (tags.government == 'yes' && tags.office == 'government') delete tags.government;
     if (tags.wall == 'wall') delete tags.wall;
     delete tags['proposed:building'];
     if (tags.police == 'yes') delete tags.police;
