@@ -163,4 +163,64 @@ describe('TDS71 Rule Updates', function () {
         });
         assertRoundTrip(data, {'landuse': 'civic_admin', 'office': 'government'}, ['facility', 'use', 'use:2', 'use:3']);
     });
+
+    it('should translate leisure=sports_centre area to AL010 sports centre', function () {
+        var data = areaXml({
+            'leisure': 'sports_centre'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AL010',
+            'FFN': '900',
+            'FFN2': '912'
+        });
+        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['facility', 'use', 'use:2']);
+
+        data = areaXml({
+            'leisure': 'sports_centre',
+            'building': 'yes'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AL010',
+            'FFN': '900',
+            'FFN2': '912'
+        });
+        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['building', 'facility', 'use', 'use:2']);
+    });
+
+    it('should translate depot=bus and industrial=depot area to AL010 bus depot', function () {
+        var data = areaXml({
+            'depot': 'bus',
+            'industrial': 'depot',
+            'landuse': 'industrial'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AL010',
+            'FFN': '99',
+            'FFN2': '340',
+            'FFN3': '343'
+        });
+        assertRoundTrip(data, {'depot': 'bus', 'industrial': 'depot'}, ['facility', 'landuse', 'use', 'use:2', 'use:3', 'repair', 'repair:2', 'repair:3', 'shop', 'shop:2', 'shop:3']);
+    });
+
+    it('should drop problematic OSM tags before translating TDS71 sports centre areas', function () {
+        var data = areaXml({
+            'leisure': 'sports_centre',
+            'building': 'part',
+            'demolished:building': 'yes',
+            'government': 'administrative',
+            'wall': 'wall',
+            'proposed:building': 'yes',
+            'police': 'yes'
+        });
+
+        assertForward(data, {
+            'F_CODE': 'AL010',
+            'FFN': '900',
+            'FFN2': '912'
+        });
+        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['building', 'demolished:building', 'government', 'wall', 'proposed:building', 'police', 'facility', 'use', 'use:2']);
+    });
 });
