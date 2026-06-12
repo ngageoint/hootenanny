@@ -28,6 +28,18 @@ function areaXml(tags) {
             </osm>';
 }
 
+function lineXml(tags) {
+    return '<osm version="0.6" upload="true" generator="hootenanny">\
+                <node id="-10" action="modify" visible="true" lat="0.68307256979" lon="18.45073925651" />\
+                <node id="-13" action="modify" visible="true" lat="0.68270797876" lon="18.45141400736" />\
+                <way id="-19" action="modify" visible="true">\
+                    <nd ref="-10" />\
+                    <nd ref="-13" />\
+                    ' + tagXml(tags) + '\
+                </way>\
+            </osm>';
+}
+
 function translateToTds(osmXml) {
     return server.handleInputs({
         osm: osmXml,
