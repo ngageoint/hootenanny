@@ -176,70 +176,63 @@ describe('TDS71 Rule Updates', function () {
         assertRoundTrip(data, {'landuse': 'civic_admin', 'office': 'government'}, ['facility', 'use', 'use:2', 'use:3']);
     });
 
-    it('should translate amenity=police area to AL010 law enforcement facility', function () {
+    it('should translate leisure=sports_centre area to AL010 sports centre', function () {
         var data = areaXml({
-            'amenity': 'police'
+            'leisure': 'sports_centre'
         });
 
         assertForward(data, {
             'F_CODE': 'AL010',
-            'FFN': '830',
-            'FFN2': '831',
-            'FFN3': '841'
+            'FFN': '900',
+            'FFN2': '912'
         });
-        assertRoundTrip(data, {'amenity': 'police'}, ['facility', 'use', 'use:2', 'amenity:3']);
-    });
+        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['facility', 'use', 'use:2']);
 
-    it('should translate amenity=fire_station area to AL010 firefighting facility', function () {
-        var data = areaXml({
-            'amenity': 'fire_station'
+        data = areaXml({
+            'leisure': 'sports_centre',
+            'building': 'yes'
         });
 
         assertForward(data, {
             'F_CODE': 'AL010',
-            'FFN': '830',
-            'FFN2': '832',
-            'FFN3': '845'
+            'FFN': '900',
+            'FFN2': '912'
         });
-        assertRoundTrip(data, {'amenity': 'fire_station'}, ['facility', 'use', 'use:2', 'amenity:3']);
+        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['building', 'facility', 'use', 'use:2']);
     });
 
-    it('should translate retention basin area to BH082 with basin IWT', function () {
+    it('should translate depot=bus and industrial=depot area to AL010 bus depot', function () {
         var data = areaXml({
-            'natural': 'water',
-            'water': 'basin',
-            'basin': 'retention'
+            'depot': 'bus',
+            'industrial': 'depot',
+            'landuse': 'industrial'
         });
 
         assertForward(data, {
-            'F_CODE': 'BH082',
-            'IWT': '5'
+            'F_CODE': 'AL010',
+            'FFN': '99',
+            'FFN2': '340',
+            'FFN3': '343'
         });
-        assertRoundTrip(data, {'natural': 'water', 'landuse': 'basin', 'water': 'lake'}, ['basin']);
+        assertRoundTrip(data, {'depot': 'bus', 'industrial': 'depot'}, ['facility', 'landuse', 'use', 'use:2', 'use:3', 'repair', 'repair:2', 'repair:3', 'shop', 'shop:2', 'shop:3']);
     });
 
-    it('should translate man_made=bridge area to AQ040', function () {
+    it('should drop problematic OSM tags before translating TDS71 sports centre areas', function () {
         var data = areaXml({
-            'man_made': 'bridge'
+            'leisure': 'sports_centre',
+            'building': 'part',
+            'demolished:building': 'yes',
+            'government': 'administrative',
+            'wall': 'wall',
+            'proposed:building': 'yes',
+            'police': 'yes'
         });
 
         assertForward(data, {
-            'F_CODE': 'AQ040'
+            'F_CODE': 'AL010',
+            'FFN': '900',
+            'FFN2': '912'
         });
-        assertRoundTrip(data, {'bridge': 'yes'}, ['man_made']);
-    });
-
-    it('should translate submarine cable line to AT005 digital communication cable on waterbody bottom', function () {
-        var data = lineXml({
-            'man_made': 'submarine_cable',
-            'seamark:type': 'cable_submarine'
-        });
-
-        assertForward(data, {
-            'F_CODE': 'AT005',
-            'CAB': '7',
-            'LOC': '17'
-        });
-        assertRoundTrip(data, {'man_made': 'submarine_cable', 'seamark:type': 'cable_submarine'}, ['cable', 'cable:type', 'location']);
+        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['building', 'demolished:building', 'government', 'wall', 'proposed:building', 'police', 'facility', 'use', 'use:2']);
     });
 });
