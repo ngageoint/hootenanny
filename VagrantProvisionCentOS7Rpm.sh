@@ -15,6 +15,11 @@ echo HOOT_HOME: $HOOT_HOME
 
 export LANG=en_US.UTF-8
 
+echo "### Switch CentOS repos to vault ###" | tee -a CentOS_install.txt
+sudo sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo
+sudo sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo
+sudo sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-*.repo
+
 # Common set of file versions
 source $HOOT_HOME/VagrantProvisionVars.sh
 

@@ -23,6 +23,11 @@ echo GROUP: $VMGROUP
 
 export LANG=en_US.UTF-8
 
+echo "### Switch CentOS repos to vault ###"
+sudo sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo
+sudo sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo
+sudo sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-*.repo
+
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 source ~/.bash_profile
@@ -59,9 +64,9 @@ fi
 echo "### Add devtoolset repo and postgresql ${POSTGRESQL_VERSION} libraries ###"
 sudo yum install -y \
      centos-release-scl postgresql${POSTGRESQL_VERSION}-libs >> CentOS_upgrade.txt 2>&1
-sudo sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
-sudo sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
-sudo sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
+sudo sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-SCLo-*.repo
+sudo sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-SCLo-*.repo
+sudo sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-SCLo-*.repo
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then

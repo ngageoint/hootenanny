@@ -11,6 +11,10 @@ ENV container=docker
 ENV LANG=en_US.UTF-8 
 ENV LC_ALL=en_US.UTF-8
 
+RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo && \
+ sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo && \
+ sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-*.repo
+
 RUN yum install -y wget curl sudo vim yum-utils epel-release && \
  yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/master/hoot.repo && \
  yum-config-manager --add-repo https://geoint-deps.s3.amazonaws.com/el7/stable/geoint-deps.repo
