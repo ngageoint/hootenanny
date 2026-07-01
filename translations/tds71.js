@@ -450,6 +450,7 @@ tds71 = {
   {
     // Add the first feature to the structure that we return
     var returnData = [{attrs:attrs, tableName:''}];
+    var splitSourceTags = ['highway','railway','bridge','tunnel','embankment','cutting','ford'];
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
@@ -641,7 +642,7 @@ tds71 = {
       // post processing
       tds71.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
-      returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
+      returnData.push({attrs: newFeatures[i]['attrs'],tableName: '', dropOsmTags: splitSourceTags});
     }
 
     return returnData;
@@ -3883,16 +3884,26 @@ tds71 = {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds71.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
 
+          var osmTags = notUsedTags;
+          if (returnData[i]['dropOsmTags'])
+          {
+            osmTags = JSON.parse(JSON.stringify(notUsedTags));
+            for (var j = 0, dLen = returnData[i]['dropOsmTags'].length; j < dLen; j++)
+            {
+              delete osmTags[returnData[i]['dropOsmTags'][j]];
+            }
+          }
+
           // If we have unused tags, add them to the memo field.
-          if (Object.keys(notUsedTags).length > 0 && tds71.configOut.OgrNoteExtra == 'attribute')
+          if (Object.keys(osmTags).length > 0 && tds71.configOut.OgrNoteExtra == 'attribute')
           {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
-            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            var str = JSON.stringify(osmTags,Object.keys(osmTags).sort());
             if (tds71.configOut.OgrFormat == 'shp')
             {
               // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
-              var tList = translate.packText(notUsedTags,tds71.configOut.OgrTextFieldNumber,250);
+              var tList = translate.packText(osmTags,tds71.configOut.OgrTextFieldNumber,250);
               returnData[i]['attrs']['OSMTAGS'] = tList[1];
               for (var j = 2, tLen = tList.length; j < tLen; j++)
               {
