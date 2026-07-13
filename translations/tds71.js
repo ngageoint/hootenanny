@@ -2007,6 +2007,7 @@ tds71 = {
         ['t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL010"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.office; delete t.diplomatic'],
         ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
         // ['t.highway == "steps"','t.highway = "footway"'],
+        ['t.highway == "road" || t.highway == "yes" || t.highway == "track"','delete t.seasonal'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.historic == "tomb" && t.tomb == "pyramid"','a.F_CODE = "AL036"; a.SSC = "12"; delete t.building; delete t.historic; delete t.tomb; delete t.tourism; delete t.material'],
@@ -2053,6 +2054,7 @@ tds71 = {
         ['t.use == "islamic_prayer_hall" && t.amenity == "place_of_worship"','delete t.amenity'],
         ['t.wetland && t.natural == "wetland"','delete t.natural'],
         ['t.water == "river"','t.waterway = "river"'],
+        ['t.waterway == "river" && t.intermittent != "yes"','a.ZI024_HYP = "1"'],
         ['t.waterway == "boatyard"','a.F_CODE = "AL010"; a.FFN = "99"; a.FFN2 = "330"; a.FFN3 = "340"'],
         ['t.waterway == "riverbank"','t.waterway = "river"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]']
