@@ -2055,6 +2055,7 @@ tds71 = {
         ['t.wetland && t.natural == "wetland"','delete t.natural'],
         ['t.water == "river"','t.waterway = "river"'],
         ['t.waterway == "river" && t.intermittent != "yes"','a.ZI024_HYP = "1"'],
+        ['t.waterway == "drystream"','a.ZI024_HYP = "4"'],
         ['t.waterway == "boatyard"','a.F_CODE = "AL010"; a.FFN = "99"; a.FFN2 = "330"; a.FFN3 = "340"'],
         ['t.waterway == "riverbank"','t.waterway = "river"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]']
