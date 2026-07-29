@@ -16,6 +16,10 @@ ARG DEV_NAME="dev"
 ARG DEV_UID="1000"
 ARG DEV_GID="1000"
 
+RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo && \
+ sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo && \
+ sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-*.repo
+
 RUN yum install -y wget curl sudo vim yum-utils epel-release && \
  yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/pgdg95.repo && \
  yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/release/hoot.repo && \
@@ -33,4 +37,3 @@ RUN useradd -mUl -G wheel -u $DEV_UID -s /bin/bash $DEV_NAME \
 
 USER $DEV_NAME
 WORKDIR /home/$DEV_NAME
-

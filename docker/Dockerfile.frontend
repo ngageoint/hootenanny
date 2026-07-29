@@ -12,13 +12,17 @@ ENV HOOT_HOME=$hoot_home
 
 COPY scripts/node/nodesource-repo.sh scripts/yum/hoot-repo.sh /tmp/
 
+RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-*.repo
+
 RUN --mount=type=cache,target=/var/cache/yum \
     /tmp/nodesource-repo.sh $node_version && \
     /tmp/hoot-repo.sh
 
 RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
     sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo && \
+    sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/*.repo && \
     yum-config-manager --save \
         --setopt=base.repo_gpgcheck=1 \
         --setopt=extras.repo_gpgcheck=1 \

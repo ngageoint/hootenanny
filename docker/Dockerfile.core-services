@@ -31,6 +31,9 @@ ENV HOOT_HOME=$hoot_home
 COPY scripts/yum/geoint-repo.sh scripts/yum/hoot-repo.sh scripts/yum/pgdg-repo.sh /tmp/
 
 RUN --mount=type=cache,target=/var/cache/yum \
+    sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/CentOS-*.repo && \
     /tmp/geoint-repo.sh && \
     /tmp/hoot-repo.sh && \
     /tmp/pgdg-repo.sh $postgresql_version && \
@@ -39,15 +42,11 @@ RUN --mount=type=cache,target=/var/cache/yum \
         --setopt=extras.repo_gpgcheck=1 \
         --setopt=updates.repo_gpgcheck=1 &> /dev/null
 
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
-
 RUN yum -y --disablerepo=pgdg* install epel-release centos-release-scl
 
 RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
     sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo && \
+    sed -i s/^mirrorlist=/#mirrorlist=/g /etc/yum.repos.d/*.repo && \
     if [ "$(uname -m)" = "aarch64" ]; then \
         rm -f /etc/yum.repos.d/CentOS-SCLo-*.repo && \
         printf '%s\n' \
