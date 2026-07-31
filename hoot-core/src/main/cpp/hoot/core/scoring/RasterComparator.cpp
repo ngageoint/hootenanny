@@ -100,16 +100,13 @@ double RasterComparator::compareMaps()
   _renderImage(_mapP1, image1);
   _renderImage(_mapP2, image2);
 
-  CvMat i1 = image1;
-  CvMat i2 = image2;
   double min;
   double max;
   double minTemp;
   double maxTemp;
-  CvPoint p1, p2;
 
-  cvMinMaxLoc(&i1, &min, &max, &p1, &p2);
-  cvMinMaxLoc(&i2, &minTemp, &maxTemp, &p1, &p2);
+  cv::minMaxLoc(image1, &min, &max);
+  cv::minMaxLoc(image2, &minTemp, &maxTemp);
   min = std::min(min, minTemp);
   max = std::max(max, maxTemp);
 

@@ -29,10 +29,8 @@
 
 // OpenCV
 #define int64 opencv_broken_int
-#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
 #undef int64
-
-#include <opencv/cxcore.h>
 
 namespace tbs
 {

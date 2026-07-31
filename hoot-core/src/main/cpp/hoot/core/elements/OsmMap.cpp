@@ -52,6 +52,7 @@
 
 // Qt
 #include <QTextStream>
+#include <QUrl>
 
 using namespace std;
 

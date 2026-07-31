@@ -12,8 +12,8 @@ import textwrap
 import datetime
 
 if (len(sys.argv) != 4):
-    print "Usage:"
-    print sys.argv[0] + " (config file) (output header) (output defaults header)"
+    print("Usage:")
+    print(sys.argv[0] + " (config file) (output header) (output defaults header)")
     sys.exit(-1)
 
 fn = sys.argv[1]
@@ -56,7 +56,7 @@ notice = """/*
 notice = notice.replace("{XXXX}", datetime.date.today().strftime("%Y"));
 
 def escapeString(s):
-    return s.encode('string-escape').replace("\"", "\\\"");
+    return s.encode('unicode_escape').decode('ascii').replace("\"", "\\\"");
 
 def stripDefaultValue(s):
     m = re.search("\\* Default Value: `(.*)`", s)
@@ -120,7 +120,7 @@ def loadAsciiDoc(fn):
                 element['default'] = stripDefaultValue(l)
                 inBody = True
                 inList = False
-  	elif (ls.startswith("* Minimum: ")):
+        elif (ls.startswith("* Minimum: ")):
             if (element['type'] == 'int'):
                 element['minimum'] = stripInt("Minimum", ls)
             elif (element['type'] == 'double'):
@@ -185,7 +185,7 @@ def loadAsciiDoc(fn):
         else:
             raise Exception("unexpected line (%d) in: %s line: %s" % (ln, section, l))
 
-    for k, v in result.iteritems():
+    for k, v in result.items():
         v['description'] = v['description'].strip();
 
     return result
@@ -201,7 +201,7 @@ def cppTypeMap(s):
     if s == 'long' or s == 'int' or s == 'double' or s == 'bool':
         return s
     if s == 'list':
-    	  return 'QStringList';
+        return 'QStringList';
     raise Exception("Expected a type of string, long, int, bool, double, or list.")
 
 def toCamelCase(s):
@@ -264,7 +264,7 @@ public:
             else:
                 valueString = 'false'
         if v['type'] == 'list':
-          valueString = 'QString::fromUtf8("' + escapeString(';'.join(valueString)) + '").trimmed().split(";")'	
+          valueString = 'QString::fromUtf8("' + escapeString(';'.join(valueString)) + '").trimmed().split(";")'
         cc = toCamelCase(k)
         result += """
   /**
@@ -398,4 +398,3 @@ public:
 # and also avoids a circular dependency. See ticket #4703 for details.
 open(headerFn, 'w').write(createHeader(c))
 open(defaultsHeaderFn, 'w').write(createDefaultsHeader(c))
-

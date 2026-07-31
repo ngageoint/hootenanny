@@ -60,6 +60,7 @@
 #include <tgs/Statistics/Normal.h>
 
 // Qt
+#include <QDataStream>
 #include <QElapsedTimer>
 
 using namespace geos::geom;

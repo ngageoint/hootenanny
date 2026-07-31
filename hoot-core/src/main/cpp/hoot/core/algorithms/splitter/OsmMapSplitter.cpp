@@ -35,6 +35,7 @@
 
 //  Qt
 #include <QElapsedTimer>
+#include <QUrl>
 
 
 using geos::geom::Envelope;
@@ -189,4 +190,3 @@ void OsmMapSplitter::writeMaps(const QString& filename)
 }
 
 }
-

@@ -56,7 +56,7 @@ ToEnglishTranslateDictionary::ToEnglishTranslateDictionary()
 
   UErrorCode error = U_ZERO_ERROR;
 
-  _titler.reset(Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error));
+  _titler.reset(icu::Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error));
   if (_titler == nullptr || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
@@ -64,7 +64,7 @@ ToEnglishTranslateDictionary::ToEnglishTranslateDictionary()
   }
 
   _transliterator.reset(
-    Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error));
+    icu::Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error));
   if (_transliterator == nullptr || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);

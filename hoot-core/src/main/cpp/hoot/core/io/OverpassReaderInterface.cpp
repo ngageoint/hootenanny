@@ -29,6 +29,7 @@
 
 //  Qt
 #include <QRegularExpression>
+#include <QUrl>
 
 //  Hootenanny
 #include <hoot/core/util/ConfigOptions.h>

@@ -33,6 +33,9 @@
 #include <hoot/core/schema/SchemaVertex.h>
 #include <hoot/core/util/HootException.h>
 
+// Qt
+#include <QSet>
+
 // Standard
 #include <stdint.h>
 

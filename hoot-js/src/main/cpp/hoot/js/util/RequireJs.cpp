@@ -100,7 +100,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     MaybeLocal<Script> maybeScript;
     //  Remove $HOOT_HOME from the full path before setting it as the script origin
     QString relative_script_path = fullPath.right(fullPath.size() - hootHome.size() - 1);
-    ScriptOrigin origin(toV8(relative_script_path));
+    ScriptOrigin origin(current, toV8(relative_script_path));
 
     LOG_TRACE("Loading script: " << fullPath);
 
@@ -139,4 +139,3 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 }
 
 }
-

@@ -67,7 +67,7 @@ v8Engine::~v8Engine()
   //  Dispose of the v8 subsystem
   V8::Dispose();
   //  Shutdown the platform
-  V8::ShutdownPlatform();
+  V8::DisposePlatform();
   _allocator.reset();
   _platform.reset();
 }

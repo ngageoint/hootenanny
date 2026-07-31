@@ -57,8 +57,8 @@ public:
   void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText) const;
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
-  std::shared_ptr<Transliterator> getTransliterator() const { return _transliterator; }
-  std::shared_ptr<Transliterator> getTitler() const { return _titler; }
+  std::shared_ptr<icu::Transliterator> getTransliterator() const { return _transliterator; }
+  std::shared_ptr<icu::Transliterator> getTitler() const { return _titler; }
 
 private:
 
@@ -66,8 +66,8 @@ private:
 
   QMap<QString, QStringList> _translations;
   std::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
-  std::shared_ptr<Transliterator> _transliterator;
-  std::shared_ptr<Transliterator> _titler;
+  std::shared_ptr<icu::Transliterator> _transliterator;
+  std::shared_ptr<icu::Transliterator> _titler;
   bool _transliterationCachingEnabled;
 
   ToEnglishTranslateDictionary();

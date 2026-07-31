@@ -222,9 +222,9 @@ QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input
   return result;
 }
 
-QString ToEnglishDictionaryTranslator::_transform(const shared_ptr<Transliterator>& t, const QString& input) const
+QString ToEnglishDictionaryTranslator::_transform(const shared_ptr<icu::Transliterator>& t, const QString& input) const
 {
-  UnicodeString str((const UChar*)input.constData(), input.size());
+  icu::UnicodeString str((const UChar*)input.constData(), input.size());
 
   t->transliterate(str);
 

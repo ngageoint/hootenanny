@@ -35,7 +35,19 @@
 #endif
 // Python requires that it be included before other files. Ugh.
 // See http://docs.python.org/c-api/intro.html#includes
+#ifdef slots
+#define HOOT_QT_SLOTS_WAS_DEFINED
+#undef slots
+#endif
 #include <Python.h>
+#ifdef HOOT_QT_SLOTS_WAS_DEFINED
+#define slots Q_SLOTS
+#undef HOOT_QT_SLOTS_WAS_DEFINED
+#endif
+
+#if PY_MAJOR_VERSION < 3
+#error "Hootenanny requires Python 3."
+#endif
 
 #include "PythonSchemaTranslator.h"
 
@@ -44,17 +56,36 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 
-// Python version before 2.4 don't have a Py_ssize_t typedef.
-#if PY_VERSION_HEX < 0x02050000 && !defined(PY_SSIZE_T_MIN)
-using Py_ssize_t = int;
-#endif
-
 using namespace std;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ScriptSchemaTranslator, PythonSchemaTranslator)
+
+namespace
+{
+PyObject* pyUnicodeFromUtf8(const char* value)
+{
+  return PyUnicode_FromString(value);
+}
+
+QString pyObjectToQString(PyObject* value)
+{
+  PyObject* unicodeValue = PyUnicode_FromObject(value);
+  if (unicodeValue == nullptr)
+    throw HootException("Both the key and value in the return translation must be convertable to strings.");
+
+  PyObject* utf8Value = PyUnicode_AsUTF8String(unicodeValue);
+  Py_DECREF(unicodeValue);
+  if (utf8Value == nullptr)
+    throw HootException("Both the key and value in the return translation must be convertable to strings.");
+
+  QString result = QString::fromUtf8(PyBytes_AsString(utf8Value));
+  Py_DECREF(utf8Value);
+  return result;
+}
+}
 
 PythonSchemaTranslator::~PythonSchemaTranslator()
 {
@@ -141,8 +172,8 @@ void PythonSchemaTranslator::_finalize()
 
 void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
 {
-  PyObject* layerNamePy = PyString_FromString(layerName);
-  PyObject* geomTypePy = PyString_FromString(geomType);
+  PyObject* layerNamePy = pyUnicodeFromUtf8(layerName);
+  PyObject* geomTypePy = pyUnicodeFromUtf8(geomType);
   PyObject* attrs = PyDict_New();
 
   for (auto it = tags.begin(); it != tags.end(); ++it)
@@ -188,32 +219,8 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
     Py_ssize_t pos = 0;
     while (PyDict_Next(pyResult, &pos, &key, &value))
     {
-      PyObject* keyUnicode = PyUnicode_FromObject(key);
-      PyObject* valueUnicode = PyUnicode_FromObject(value);
-
-      if (keyUnicode == nullptr || valueUnicode == nullptr)
-        throw HootException("Both the key and value in the return translation must be convertable to strings.");
-
-      const Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
-      const Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
-      QString qKey, qValue;
-#       if (Py_UNICODE_SIZE == 4)
-      {
-        qKey = QString::fromUcs4(keyUnicodeData);
-        qValue = QString::fromUcs4(valueUnicodeData);
-      }
-#       elif (Py_UNICODE_SIZE == 2)
-      {
-#         warning "Untested unicode size."
-        qKey = QString::fromWCharArray(keyUnicodeData);
-        qValue = QString::fromWCharArray(valueUnicodeData);
-      }
-#       else
-#         error "Invalid Unicode Size."
-#       endif
-
-      Py_DECREF(keyUnicode);
-      Py_DECREF(valueUnicode);
+      QString qKey = pyObjectToQString(key);
+      QString qValue = pyObjectToQString(value);
 
       if (qValue.isEmpty() == false)
         tags[getStringLocation(qKey)] = getStringLocation(qValue);

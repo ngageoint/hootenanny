@@ -153,7 +153,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   TryCatch try_catch(current);
 
   // Compile the source code.
-  ScriptOrigin origin(toV8(scriptName));
+  ScriptOrigin origin(current, toV8(scriptName));
   script = Script::Compile(context, v8::String::NewFromUtf8(current, text.toUtf8().data()).ToLocalChecked(), &origin);
 
   if (script.IsEmpty())

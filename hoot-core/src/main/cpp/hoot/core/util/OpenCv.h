@@ -31,6 +31,8 @@
 // #1356 - OpenCV and Geos both have an int64 typedef
 #define int64 opencv_broken_int
 # include <opencv2/opencv.hpp>
+# include <opencv2/core/core_c.h>
+# include <opencv2/imgproc/imgproc_c.h>
 #undef int64
 #else
 # if HOOT_HAVE_OPENCV_CV_H

@@ -87,7 +87,8 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     //  Create the stack of work
     {
       std::lock_guard<std::mutex> geometry_stack_lock(_geometryStackMutex);
-      _geometryStack.empty();
+      while (!_geometryStack.empty())
+        _geometryStack.pop();
       for (size_t i = 0; i < geometries.size() - 1; i += 2)
         _geometryStack.emplace(geometries[i], geometries[i + 1]);
     }

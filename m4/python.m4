@@ -15,20 +15,17 @@
 #   $(PYTHON_EXTRA_LIBS) and $(PYTHON_EXTRA_LDFLAGS) for embedding
 #   Python in your code.
 #
-#   You can search for some particular version of Python by passing a
-#   parameter to this macro, for example ">= '2.3.1'", or "== '2.4'".
-#   Please note that you *have* to pass also an operator along with the
-#   version to match, and pay special attention to the single quotes
-#   surrounding the version number. Don't use "PYTHON_VERSION" for
-#   this: that environment variable is declared as precious and thus
-#   reserved for the end-user.
+#   You can require a particular minimum version of Python by passing a
+#   parameter to this macro, for example "3.9.0". Don't use
+#   "PYTHON_VERSION" for this: that environment variable is declared as
+#   precious and thus reserved for the end-user.
 #
-#   This macro should work for all versions of Python >= 2.1.0. As an
+#   This macro requires Python 3 or newer. As an
 #   end user, you can disable the check for the python version by
 #   setting the PYTHON_NOVERSIONCHECK environment variable to something
 #   else than the empty string.
 #
-#   If you need to use this macro for an older Python version, please
+#   If you need to use this macro for an older Python 3 version, please
 #   contact the authors. We're always open for feedback.
 #
 # LAST MODIFICATION
@@ -79,7 +76,7 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
 	# Allow the use of a (user set) custom python version
 	#
 	AC_ARG_VAR([PYTHON_VERSION],[The installed Python
-		version to use, for example '2.3'. This string
+		version to use, for example '3.9'. This string
 		will be appended to the Python interpreter
 		canonical name.])
 
@@ -90,19 +87,17 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
 	fi
 
 	#
-	# Check for a version of Python >= 2.1.0
+	# Check for a version of Python >= 3.0.0
 	#
-	AC_MSG_CHECKING([for a version of Python >= '2.1.0'])
-	ac_supports_python_ver=`$PYTHON -c "import sys, string; \
-		ver = string.split(sys.version)[[0]]; \
-		print ver >= '2.1.0'"`
+	AC_MSG_CHECKING([for a version of Python >= '3.0.0'])
+	ac_supports_python_ver=`$PYTHON -c "import sys; \
+		print(sys.version_info >= tuple(map(int, '3.0.0'.split('.'))))"`
 	if test "$ac_supports_python_ver" != "True"; then
 		if test -z "$PYTHON_NOVERSIONCHECK"; then
 			AC_MSG_RESULT([no])
 			AC_MSG_FAILURE([
 This version of the AC@&t@_PYTHON_DEVEL macro
-doesn't work properly with versions of Python before
-2.1.0. You may need to re-run configure, setting the
+requires Python 3 or newer. You may need to re-run configure, setting the
 variables PYTHON_CPPFLAGS, PYTHON_LDFLAGS, PYTHON_SITE_PKG,
 PYTHON_EXTRA_LIBS and PYTHON_EXTRA_LDFLAGS by hand.
 Moreover, to disable this check, set PYTHON_NOVERSIONCHECK
@@ -120,9 +115,8 @@ to something else than an empty string.
 	#
 	if test -n "$1"; then
 		AC_MSG_CHECKING([for a version of Python $1])
-		ac_supports_python_ver=`$PYTHON -c "import sys, string; \
-			ver = string.split(sys.version)[[0]]; \
-			print ver >= '$1'"`
+		ac_supports_python_ver=`$PYTHON -c "import sys; \
+			print(sys.version_info >= tuple(map(int, '$1'.split('.'))))"`
 		if test "$ac_supports_python_ver" = "True"; then
 	   	   AC_MSG_RESULT([yes])
 		else
@@ -157,7 +151,7 @@ $ac_distutils_result])
 	AC_MSG_CHECKING([for Python include path])
 	if test -z "$PYTHON_CPPFLAGS"; then
 		python_path=`$PYTHON -c "import distutils.sysconfig; \
-           		print distutils.sysconfig.get_python_inc();"`
+			print(distutils.sysconfig.get_python_inc());"`
 		if test -n "${python_path}"; then
 		   	python_path="-I$python_path"
 		fi
@@ -173,22 +167,27 @@ $ac_distutils_result])
 	if test -z "$PYTHON_LDFLAGS"; then
 		# (makes two attempts to ensure we've got a version number
 		# from the interpreter)
-		py_version=`$PYTHON -c "from distutils.sysconfig import *; \
-			from string import join; \
-			print join(get_config_vars('VERSION'))"`
-		if test "$py_version" == "[None]"; then
+		py_version=`$PYTHON -c "from distutils.sysconfig import get_config_var; \
+			print(get_config_var('VERSION') or '')"`
+		if test "$py_version" = "None" || test -z "$py_version"; then
 			if test -n "$PYTHON_VERSION"; then
 				py_version=$PYTHON_VERSION
 			else
 				py_version=`$PYTHON -c "import sys; \
-					print sys.version[[:3]]"`
+					print(sys.version[[:3]])"`
 			fi
 		fi
 
-		PYTHON_LDFLAGS=`$PYTHON -c "from distutils.sysconfig import *; \
-			from string import join; \
-			print '-L' + get_python_lib(0,1), \
-		      	'-lpython';"`$py_version
+		PYTHON_CONFIG="$PYTHON-config"
+		if test -x "$PYTHON_CONFIG"; then
+			PYTHON_LDFLAGS=`$PYTHON_CONFIG --embed --ldflags 2>/dev/null || $PYTHON_CONFIG --ldflags`
+		else
+			PYTHON_LDFLAGS=`$PYTHON -c "from distutils.sysconfig import get_config_var; \
+				import sys; \
+				libdir = get_config_var('LIBDIR') or get_config_var('LIBPL') or ''; \
+				version = get_config_var('VERSION') or '$py_version'; \
+				sys.stdout.write((libdir and ('-L' + libdir + ' ') or '') + '-lpython' + version)"`
+		fi
 	fi
 	AC_MSG_RESULT([$PYTHON_LDFLAGS])
 	AC_SUBST([PYTHON_LDFLAGS])
@@ -199,7 +198,7 @@ $ac_distutils_result])
 	AC_MSG_CHECKING([for Python site-packages path])
 	if test -z "$PYTHON_SITE_PKG"; then
 		PYTHON_SITE_PKG=`$PYTHON -c "import distutils.sysconfig; \
-		        print distutils.sysconfig.get_python_lib(0,0);"`
+		        print(distutils.sysconfig.get_python_lib(0,0));"`
 	fi
 	AC_MSG_RESULT([$PYTHON_SITE_PKG])
 	AC_SUBST([PYTHON_SITE_PKG])
@@ -210,8 +209,9 @@ $ac_distutils_result])
 	AC_MSG_CHECKING(python extra libraries)
 	if test -z "$PYTHON_EXTRA_LIBS"; then
 	   PYTHON_EXTRA_LIBS=`$PYTHON -c "import distutils.sysconfig; \
+			import sys; \
                 conf = distutils.sysconfig.get_config_var; \
-                print conf('LOCALMODLIBS'), conf('LIBS')"`
+                sys.stdout.write(str(conf('LOCALMODLIBS') or '') + ' ' + str(conf('LIBS') or ''))"`
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
 	AC_SUBST(PYTHON_EXTRA_LIBS)
@@ -223,7 +223,7 @@ $ac_distutils_result])
 	if test -z "$PYTHON_EXTRA_LDFLAGS"; then
 		PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
 			conf = distutils.sysconfig.get_config_var; \
-			print conf('LINKFORSHARED')"`
+			print(conf('LINKFORSHARED') or '')"`
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
 	AC_SUBST(PYTHON_EXTRA_LDFLAGS)
@@ -267,4 +267,3 @@ $ac_distutils_result])
 	# all done!
 	#
 ])
-

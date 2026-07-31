@@ -374,7 +374,7 @@ public:
 
   void cleanMapCache()
   {
-    _mapJs.Empty();
+    _mapJs.Reset();
   }
 
   std::shared_ptr<HilbertRTree>& getIndex()
