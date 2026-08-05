@@ -233,6 +233,18 @@ describe('TDS71 Rule Updates', function () {
             'FFN': '900',
             'FFN2': '912'
         });
-        assertRoundTrip(data, {'leisure': 'sports_centre'}, ['building', 'demolished:building', 'government', 'wall', 'proposed:building', 'police', 'facility', 'use', 'use:2']);
+        assertRoundTrip(data, {'leisure': 'sports_centre', 'government': 'administrative'}, ['building', 'demolished:building', 'wall', 'proposed:building', 'police', 'facility', 'use', 'use:2']);
+    });
+
+    it('should translate waterway=drystream to dry hydrologic persistence', function () {
+        var data = lineXml({
+            'waterway': 'drystream'
+        });
+        var tags = getTags(translateToTds(data), 'TDSv71');
+
+        assert.strictEqual(tags['F_CODE'], 'BH140');
+        assert.strictEqual(tags['ZI024_HYP'], '4');
+        assert.strictEqual(tags['WCC'], '999');
+        assert.strictEqual(tags['OTH'], '(WCC:drystream)');
     });
 });
