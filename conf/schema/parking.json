@@ -1,7 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [ "node", "area" ],
+        "geometries": [ "node", "linestring", "area" ],
         "influence": 1,
         "isA": "amenity=parking",
         "name": "parking",

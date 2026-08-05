@@ -1,6 +1,6 @@
 [
     {
-        "geometries": [ "node", "area" ],
+        "geometries": [ "node", "linestring", "area" ],
         "dataType": "enumeration",
         "influence": 1,
         "name": "emergency",
