@@ -145,7 +145,7 @@ RUN dnf -y --disablerepo=pgdg* \
         xorg-x11-server-Xvfb \
         zip
 
-@TODO: move these packages into hoot-repo so that they don't have to be built here.
+#@TODO: move these packages into hoot-repo so that they don't have to be built here. include a GDAL build that has libkml and filgdb enabled.
 RUN curl -fsSL -o /tmp/protobuf.tar.gz \
         https://github.com/protocolbuffers/protobuf/releases/download/v$protobuf_version/protobuf-cpp-$protobuf_version.tar.gz && \
     mkdir -p /tmp/protobuf-src /tmp/protobuf-build && \
