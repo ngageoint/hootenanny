@@ -1381,6 +1381,13 @@ tds71 = {
           break;
       }
       break;
+    case 'AL018':
+      if (attrs.BSU == '5') {
+        tags['tower:type'] = 'minaret';
+        delete tags['building:superstructure'];
+        delete tags['building:superstructure:type'];
+      }
+      break;
     // Fix up landuse tags
     case 'AL020':
       if (attrs.FFN == '540' && attrs.FFN2 == '541') {
@@ -1559,6 +1566,10 @@ tds71 = {
     case 'BH082': // Inland Water
       // This leaves us with just "natural=water"
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
+      if (attrs.IWT == '1' && attrs.ZI024_HYP == '4') {
+        tags.natural = 'dry_lake';
+        delete tags.water;
+      }
       break;
 
     case 'BH140': // River
@@ -2018,16 +2029,19 @@ tds71 = {
         ['t.leisure == "stadium" && t.building','delete t.building'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
         ['t.man_made == "bridge"','a.F_CODE = "AQ040"; delete t.man_made'],
+        ['t.man_made == "mast" && (t["tower:type"] == "communication" || t["tower:type"] == "observation")','a.F_CODE = "AL241"; a.TOS = "6"; a.TTC = "20"'],
         ['t.man_made == "submarine_cable" && t["seamark:type"] == "cable_submarine"','a.F_CODE = "AT005"; a.CAB = "7"; a.LOC = "17"; delete t.man_made; delete t["seamark:type"]'],
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
+        ['t.man_made == "tower" && t["tower:type"] == "minaret"','a.F_CODE = "AL018"; a.BSU = "5"'],
         ['t.man_made == "wastewater_plant"','a.F_CODE = "AL010"; a.FFN = "350"; a.FFN2 = "360"; a.FFN3 = "362"; delete t.man_made'],
         ['t.man_made == "works"','a.F_CODE = "AL010"; a.FFN = "99"'],
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
         ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t.natural == "desert" && t.surface','t.terrain_surface = t.surface; delete t.surface'],
+        ['t.natural == "dry_lake"','a.F_CODE = "BH082"; a.IWT = "1"; a.ZI024_HYP = "4"'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
