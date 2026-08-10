@@ -180,7 +180,11 @@ $ac_distutils_result])
 
 		PYTHON_CONFIG="$PYTHON-config"
 		if test -x "$PYTHON_CONFIG"; then
-			PYTHON_LDFLAGS=`$PYTHON_CONFIG --embed --ldflags 2>/dev/null || $PYTHON_CONFIG --ldflags`
+			if $PYTHON_CONFIG --embed --ldflags >/dev/null 2>&1; then
+				PYTHON_LDFLAGS=`$PYTHON_CONFIG --embed --ldflags`
+			else
+				PYTHON_LDFLAGS=`$PYTHON_CONFIG --ldflags`
+			fi
 		else
 			PYTHON_LDFLAGS=`$PYTHON -c "from distutils.sysconfig import get_config_var; \
 				import sys; \
