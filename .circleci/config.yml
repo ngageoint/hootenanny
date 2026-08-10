@@ -18,7 +18,7 @@ jobs:
             su-exec rpmbuild git submodule update --init --recursive
       - run:
           name: 'Python 3 Development Package'
-          command: rpm -q python3-devel || yum -q -y install python3-devel
+          command: rpm -q python3-devel || yum -q -y --disablerepo='pgdg*' install python3-devel
       - run:
           name: 'Make Hootenanny Archive'
           command: |
