@@ -6,6 +6,8 @@ jobs:
     working_directory: /rpmbuild/hootenanny
     docker:
       - image: hootenanny/rpmbuild-hoot-release@sha256:1f3fd7fe9b40dc4b650f2f1ecbe0f17bcae4d984149d6a84716ed5a3d05d6669
+        environment:
+          DEVTOOLSET_VERSION: "8"
     steps:
       - checkout
       - run:
