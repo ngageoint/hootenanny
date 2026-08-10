@@ -57,8 +57,17 @@ down: .env hoot.env
 
 distclean: .env hoot.env
 	DOCKER_BUILDKIT=1 $(PLATFORM) $(COMPOSE_COMMAND) down --volumes --rmi all
-	rm -fr .ccache lib bin \
-		.env hoot.env hoot-ui-2x/node_modules \
+	rm -fr .ccache .cache/ccache lib bin \
+		Makefile.qmake \
+		tbs/Makefile tbs/tmp \
+		tgs/Makefile tgs/tmp \
+		hoot-core/Makefile hoot-core/tmp \
+		hoot-core-test/Makefile hoot-core-test/tmp \
+		hoot-js/Makefile hoot-js/tmp \
+		hoot-josm/Makefile hoot-josm/tmp \
+		hoot-cmd/Makefile hoot-cmd/tmp \
+		hoot-test/Makefile hoot-test/tmp \
+		hoot-ui-2x/node_modules \
 		conf/database/DatabaseConfigLocal.sh
 
 PHONY: \

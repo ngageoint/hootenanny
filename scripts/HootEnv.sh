@@ -38,14 +38,53 @@ export GDAL_CONFIG="$GDAL_CONFIG_BIN"
 export GDAL_LIB_DIR=`"$GDAL_CONFIG_BIN" --libs | sed -e "s/-L//g" | sed -e "s/ *-lgdal.*//g"`
 export GDAL_DATA=`"$GDAL_CONFIG_BIN" --datadir`
 
-# Use JDK path for JAVA_HOME if present
-if [ -L "/usr/lib/jvm/java-1.8.0" ]; then
-  export JAVA_HOME="/usr/lib/jvm/java-1.8.0"
-  export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
-else # Assume there is just a 'jre' path
-  export JAVA_HOME="/usr/lib/jvm/jre-1.8.0"
-  export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
+find_jdk_home()
+{
+  local candidate
+  for candidate in \
+    "${JAVA_HOME:-}" \
+    "/usr/lib/jvm/java-${JDK_VERSION:-1.8.0}" \
+    /usr/lib/jvm/java-${JDK_VERSION:-1.8.0}-openjdk* \
+    /usr/lib/jvm/java
+  do
+    if [ -n "$candidate" ] && [ -f "$candidate/include/jni.h" ]; then
+      readlink -f "$candidate"
+      return 0
+    fi
+  done
+
+  while IFS= read -r candidate; do
+    candidate="$(dirname "$(dirname "$candidate")")"
+    if [ -f "$candidate/include/jni.h" ]; then
+      readlink -f "$candidate"
+      return 0
+    fi
+  done < <(find /usr/lib/jvm -path '*/include/jni.h' 2>/dev/null | sort -V)
+
+  return 1
+}
+
+if JAVA_HOME_RESOLVED="$(find_jdk_home)"; then
+  export JAVA_HOME="$JAVA_HOME_RESOLVED"
+else
+  echo "Unable to locate a JDK with JNI headers under /usr/lib/jvm. Install a java-*-openjdk-devel package." >&2
+  return 1 2>/dev/null || exit 1
 fi
+
+JVM_LIB_DIR=""
+for candidate in "$JAVA_HOME/lib/server" "$JAVA_HOME/jre/lib/amd64/server"; do
+  if [ -d "$candidate" ]; then
+    JVM_LIB_DIR="$candidate"
+    break
+  fi
+done
+
+if [ -z "$JVM_LIB_DIR" ]; then
+  echo "Unable to locate libjvm under JAVA_HOME=$JAVA_HOME." >&2
+  return 1 2>/dev/null || exit 1
+fi
+
+export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JVM_LIB_DIR:$HOOT_HOME/lib:${LD_LIBRARY_PATH:-}
 
 export PATH=$HOOT_HOME/bin/:$PATH
 export QT_SELECT=5

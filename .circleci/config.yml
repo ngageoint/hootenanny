@@ -5,7 +5,10 @@ jobs:
   archive-create:
     working_directory: /rpmbuild/hootenanny
     docker:
-      - image: hootenanny/rpmbuild-hoot-release@sha256:1f3fd7fe9b40dc4b650f2f1ecbe0f17bcae4d984149d6a84716ed5a3d05d6669
+      - image: hootenanny/rpmbuild-hoot-release@sha256:5d1cc92876b507aa401634ce0c2ca224648205717e2999caef0e7926d7e44242
+        environment:
+          DEVTOOLSET_VERSION: "8"
+          PYTHON_VERSION: "3"
     steps:
       - checkout
       - run:
@@ -13,6 +16,9 @@ jobs:
           command: |
             chown -R rpmbuild:rpmbuild .
             su-exec rpmbuild git submodule update --init --recursive
+      - run:
+          name: 'Python 3 Development Package'
+          command: rpm -q python3-devel || yum -q -y --disablerepo='pgdg*' install python3-devel
       - run:
           name: 'Make Hootenanny Archive'
           command: |

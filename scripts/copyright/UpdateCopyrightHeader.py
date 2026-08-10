@@ -17,7 +17,7 @@ def printDebug(output, debugMode):
 
 # Given a file determine first and last years it was changed in git.
 def findCopyrightYears(fileName, debugMode):
-    dates = run(["git", "log", "--date=short", "--format=format:%ad", fileName]).split()
+    dates = run(["git", "log", "--date=short", "--format=format:%ad", fileName]).decode(encoding='utf-8').split()
     years = []
     printDebug("\tfileName: " + fileName, debugMode)
     for l in dates:
@@ -340,17 +340,17 @@ try:
     # their copyright header. That causes a false positive condition to occur when comparing oldHeaderBlock to copyrightHeaderStr.
     # This change will fix that issue.
     if "DO NOT ALTER OR REMOVE COPYRIGHT NOTICES" in oldHeaderBlock:
-        print "Skipping header: " + options.fileName
+        print("Skipping header: " + options.fileName)
     elif updateNeeded: # oldHeaderBlock != copyrightHeaderStr
         if options.updateMode: # update-mode = 1 (True) - write a new copyright header
-            print "Updating copyright header --> <" + options.fileName + ">"  # Production version (tab-less)
+            print("Updating copyright header --> <" + options.fileName + ">")  # Production version (tab-less)
             printDebug("\tUpdating copyright header --> " + options.fileName, options.debugMode)
             printDebug("\tcopyrightHeaderStr:\n" + copyrightHeaderStr + "\n", options.debugMode)
             printDebug("\n\nnewFileStr:\n----------\n" + newFileStr + "-----------\n", options.debugMode)
             open(options.fileName, 'w').write(newFileStr)
             exitCode = 0
         elif not options.updateMode: # update-mode = 0 (False) - note files that need a new copyright header (needs updating)
-            print "Needs copyright header updated --> <" + options.fileName + ">"  # Production version (tab-less)
+            print("Needs copyright header updated --> <" + options.fileName + ">")  # Production version (tab-less)
             printDebug("\tNeeds copyright header updated --> " + options.fileName, options.debugMode)
             # Debug output - see what the old header looks like vs. what the new header would look like.
             printDebug("\toldHeaderBlock:\n" + oldHeaderBlock + "\n", options.debugMode)
@@ -358,8 +358,8 @@ try:
             exitCode = 1
 except Exception as e:
     exMsg = str(e)
-    print "Error occurred in UpdateCopyrightHeader.py."
-    print "\tError message --> <" + exMsg + ">"
+    print("Error occurred in UpdateCopyrightHeader.py.")
+    print("\tError message --> <" + exMsg + ">")
     exitCode = 2
 finally:
     printDebug("Exit code from Python: " + str(exitCode), options.debugMode)

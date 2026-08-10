@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2026 Maxar (http://www.maxar.com/)
  */
 
 #include "HttpTestServer.h"
@@ -178,7 +178,7 @@ void HttpTestServer::start_accept()
   if (_interupt)
     return;
   //  Creat the connection
-  HttpConnectionPtr new_connection = std::make_shared<HttpConnection>(_acceptor->get_io_service());
+  HttpConnectionPtr new_connection = std::make_shared<HttpConnection>(_io_service);
   //  Accept connections async
   _acceptor->async_accept(new_connection->socket(),
     boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));

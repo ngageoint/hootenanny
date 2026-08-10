@@ -11,8 +11,8 @@ import pprint
 import textwrap
 
 if (len(sys.argv) != 3):
-    print "Usage:"
-    print sys.argv[0] + " (config file) (output file)"
+    print("Usage:")
+    print(sys.argv[0] + " (config file) (output file)")
     sys.exit(-1)
 
 fn = sys.argv[1]
@@ -149,7 +149,7 @@ def loadAsciiDoc(fn):
         else:
             raise Exception("unexpected line (%d) in: %s line: %s" % (ln, section, l))
 
-    for k, v in result.iteritems():
+    for k, v in result.items():
         v['description'] = v['description'].strip();
 
     return result

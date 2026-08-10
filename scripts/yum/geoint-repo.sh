@@ -19,6 +19,7 @@ GEOINT_DEPS_CHANNEL="${GEOINT_DEPS_CHANNEL:-stable}"
 GEOINT_DEPS_BASEURL="${GEOINT_DEPS_BASEURL:-https://geoint-deps.s3.amazonaws.com/el7/${GEOINT_DEPS_CHANNEL}}"
 GEOINT_DEPS_KEY="${GEOINT_DEPS_KEY:-/etc/pki/rpm-gpg/RPM-GPG-KEY-GEOINT}"
 GEOINT_DEPS_REPO="${GEOINT_DEPS_REPO:-/etc/yum.repos.d/geoint-deps.repo}"
+GEOINT_DEPS_REPO_GPGCHECK="${GEOINT_DEPS_REPO_GPGCHECK:-1}"
 
 cat > "${GEOINT_DEPS_KEY}" <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -59,5 +60,5 @@ baseurl = ${GEOINT_DEPS_BASEURL}
 enable = 1
 gpgcheck = 1
 gpgkey=file://${GEOINT_DEPS_KEY}
-repo_gpgcheck = 1
+repo_gpgcheck = ${GEOINT_DEPS_REPO_GPGCHECK}
 EOF

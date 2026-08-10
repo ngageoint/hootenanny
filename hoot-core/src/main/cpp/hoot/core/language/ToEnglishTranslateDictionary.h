@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2026 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATE_DICTIONARY_H
@@ -57,8 +57,8 @@ public:
   void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText) const;
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
-  std::shared_ptr<Transliterator> getTransliterator() const { return _transliterator; }
-  std::shared_ptr<Transliterator> getTitler() const { return _titler; }
+  std::shared_ptr<icu::Transliterator> getTransliterator() const { return _transliterator; }
+  std::shared_ptr<icu::Transliterator> getTitler() const { return _titler; }
 
 private:
 
@@ -66,8 +66,8 @@ private:
 
   QMap<QString, QStringList> _translations;
   std::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
-  std::shared_ptr<Transliterator> _transliterator;
-  std::shared_ptr<Transliterator> _titler;
+  std::shared_ptr<icu::Transliterator> _transliterator;
+  std::shared_ptr<icu::Transliterator> _titler;
   bool _transliterationCachingEnabled;
 
   ToEnglishTranslateDictionary();
