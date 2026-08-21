@@ -1,20 +1,30 @@
-ARG postgres_server_version=16
-FROM postgres:${postgres_server_version}-bookworm
+FROM rockylinux:9
 
+ARG postgresql_version=16
 ARG pgdata=/var/lib/postgresql/data
 
-ENV LANG=C.UTF-8 \
-    LC_ALL=C.UTF-8 \
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
     PGDATA=${pgdata}
 
-COPY docker/scripts/postgres-initdb.sh /docker-entrypoint-initdb.d/10-postgres-initdb.sh
+COPY scripts/yum/pgdg-repo.sh \
+     docker/scripts/postgres-install.sh \
+     /tmp/
+
+RUN dnf -y install dnf-plugins-core glibc-langpack-en && \
+    /tmp/pgdg-repo.sh ${postgresql_version} && \
+    dnf -qy module disable postgresql && \
+    /tmp/postgres-install.sh ${postgresql_version} && \
+    rm -f /tmp/*.sh && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
 COPY docker/scripts/postgres-entrypoint.sh /docker-entrypoint.sh
 COPY docker/scripts/postgres-healthcheck.sh /docker-healthcheck.sh
 
-RUN chmod 0755 /docker-entrypoint-initdb.d/10-postgres-initdb.sh \
-               /docker-entrypoint.sh \
-               /docker-healthcheck.sh
+RUN chmod 0755 /docker-entrypoint.sh /docker-healthcheck.sh
 
+USER postgres
 ENTRYPOINT ["/docker-entrypoint.sh"]
 EXPOSE 5432/tcp
 HEALTHCHECK --interval=15s CMD ["/docker-healthcheck.sh"]
