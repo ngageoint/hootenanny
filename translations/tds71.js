@@ -1266,6 +1266,23 @@ tds71 = {
       }
       break;
 
+    case 'AL110': // Light Support Structure
+      if (attrs.TOS == '6')
+      {
+        tags.man_made = 'mast';
+        tags['tower:type'] = 'lighting';
+        delete tags['tower:shape'];
+      }
+      break;
+
+    case 'AL241': // Tower
+      if (attrs.TOS == '6')
+      {
+        tags.man_made = 'mast';
+        delete tags['tower:shape'];
+      }
+      break;
+
       case 'AF030': // Cooling Tower
         if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
@@ -2029,7 +2046,10 @@ tds71 = {
         ['t.leisure == "stadium" && t.building','delete t.building'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
         ['t.man_made == "bridge"','a.F_CODE = "AQ040"; delete t.man_made'],
-        ['t.man_made == "mast" && (t["tower:type"] == "communication" || t["tower:type"] == "observation")','a.F_CODE = "AL241"; a.TOS = "6"; a.TTC = "20"'],
+        ['t.man_made == "mast"','a.F_CODE = "AL241"; a.TOS = "6"'],
+        ['t.man_made == "mast" && t["tower:type"] == "lighting"','a.F_CODE = "AL110"; a.TOS = "6"'],
+        ['t.man_made == "mast" && t["tower:type"] == "communication"','a.TTC = "20"'],
+        ['t.man_made == "mast" && t["tower:type"] == "observation"','a.TTC = "2"'],
         ['t.man_made == "submarine_cable" && t["seamark:type"] == "cable_submarine"','a.F_CODE = "AT005"; a.CAB = "7"; a.LOC = "17"; delete t.man_made; delete t["seamark:type"]'],
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
@@ -3104,6 +3124,18 @@ tds71 = {
       else if (tags.leisure == 'stadium') {
         notUsedTags.leisure = 'stadium';
       }
+    }
+
+    // Do not preserve these translated source tags in OSMTAGS.
+    if (tags.man_made == 'petroleum_well' && attrs.F_CODE == 'AA054')
+      delete notUsedTags.man_made;
+
+    if (tags.man_made == 'mast' && attrs.TOS == '6' &&
+        (attrs.F_CODE == 'AL110' || attrs.F_CODE == 'AL241'))
+    {
+      delete notUsedTags.man_made;
+      if (attrs.F_CODE == 'AL110' && tags['tower:type'] == 'lighting')
+        delete notUsedTags['tower:type'];
     }
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes

@@ -28,6 +28,14 @@ function areaXml(tags) {
             </osm>';
 }
 
+function pointXml(tags) {
+    return '<osm version="0.6" upload="true" generator="hootenanny">\
+                <node id="-10" action="modify" visible="true" lat="0.68307256979" lon="18.45073925651">\
+                    ' + tagXml(tags) + '\
+                </node>\
+            </osm>';
+}
+
 function lineXml(tags) {
     return '<osm version="0.6" upload="true" generator="hootenanny">\
                 <node id="-10" action="modify" visible="true" lat="0.68307256979" lon="18.45073925651" />\
@@ -246,5 +254,70 @@ describe('TDS71 Rule Updates', function () {
         assert.strictEqual(tags['ZI024_HYP'], '4');
         assert.strictEqual(tags['WCC'], '999');
         assert.strictEqual(tags['OTH'], '(WCC:drystream)');
+    });
+
+    it('should translate lighting masts to AL110 in both directions', function () {
+        var data = pointXml({
+            'man_made': 'mast',
+            'tower:type': 'lighting'
+        });
+
+        var tags = getTags(translateToTds(data), 'TDSv71');
+        assert.strictEqual(tags['F_CODE'], 'AL110');
+        assert.strictEqual(tags['TOS'], '6');
+        assert.strictEqual(tags['TTC'], undefined);
+        assert.strictEqual(tags['OSMTAGS'], undefined);
+
+        assertRoundTrip(data, {'man_made': 'mast', 'tower:type': 'lighting'}, ['tower:shape']);
+    });
+
+    it('should translate masts to AL241 in both directions', function () {
+        var data = pointXml({'man_made': 'mast'});
+
+        var tags = getTags(translateToTds(data), 'TDSv71');
+        assert.strictEqual(tags['F_CODE'], 'AL241');
+        assert.strictEqual(tags['TOS'], '6');
+        assert.strictEqual(tags['TTC'], undefined);
+        assert.strictEqual(tags['OSMTAGS'], undefined);
+
+        assertRoundTrip(data, {'man_made': 'mast'}, ['tower:shape', 'tower:type']);
+    });
+
+    it('should translate observation masts to AL241 with TTC=2 in both directions', function () {
+        var data = pointXml({
+            'man_made': 'mast',
+            'tower:type': 'observation'
+        });
+
+        var tags = getTags(translateToTds(data), 'TDSv71');
+        assert.strictEqual(tags['F_CODE'], 'AL241');
+        assert.strictEqual(tags['TOS'], '6');
+        assert.strictEqual(tags['TTC'], '2');
+        assert.strictEqual(tags['TTC2'], undefined);
+        assert.strictEqual(tags['OSMTAGS'], undefined);
+
+        assertRoundTrip(data, {'man_made': 'mast', 'tower:type': 'observation'}, ['tower:shape']);
+    });
+
+    it('should preserve communication mast translation behavior', function () {
+        var data = pointXml({
+            'man_made': 'mast',
+            'tower:type': 'communication'
+        });
+
+        var tags = getTags(translateToTds(data), 'TDSv71');
+        assert.strictEqual(tags['F_CODE'], 'AL241');
+        assert.strictEqual(tags['TOS'], '6');
+        assert.strictEqual(tags['TTC'], '20');
+
+        assertRoundTrip(data, {'man_made': 'mast', 'tower:type': 'communication'}, ['tower:shape']);
+    });
+
+    it('should not preserve a translated petroleum well in OSMTAGS', function () {
+        var data = pointXml({'man_made': 'petroleum_well'});
+        var tags = getTags(translateToTds(data), 'TDSv71');
+
+        assert.strictEqual(tags['F_CODE'], 'AA054');
+        assert.strictEqual(tags['OSMTAGS'], undefined);
     });
 });
