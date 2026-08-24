@@ -1,4 +1,4 @@
-FROM centos:7
+FROM rockylinux:9
 
 ARG hoot_user
 ARG hoot_uid
@@ -7,38 +7,27 @@ ARG hoot_group
 ARG hoot_shell=/bin/bash
 ARG hoot_home
 ARG node_version
+ARG npm_version
 
 ENV HOOT_HOME=$hoot_home
 
-COPY scripts/node/nodesource-repo.sh scripts/yum/hoot-repo.sh /tmp/
+RUN dnf -y module enable nodejs:${node_version%%.*} && \
+    dnf -y makecache
 
-RUN --mount=type=cache,target=/var/cache/yum \
-    /tmp/nodesource-repo.sh $node_version && \
-    /tmp/hoot-repo.sh
-
-RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo && \
-    sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo && \
-    yum-config-manager --save \
-        --setopt=base.repo_gpgcheck=1 \
-        --setopt=extras.repo_gpgcheck=1 \
-        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
-    yum makecache -y
-
-RUN yum -q -y install epel-release
-
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash -
-
-RUN yum -y install \
+RUN dnf -y install \
         bzip2 \
         git \
         git-core \
-        nodejs-devel yarn \
-        google-chrome-stable-91.0.4472.114 && \
-    yum -q -y clean all && rm -f /tmp*.sh
+        nodejs-$node_version \
+        nodejs-devel-$node_version \
+        npm-$npm_version && \
+    dnf -y install \
+        https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    dnf -y clean all && \
+    rm -rf /var/cache/dnf
 
 RUN groupadd --non-unique -g ${hoot_gid} ${hoot_group} && \
-    useradd -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \
+    useradd --no-log-init -d ${hoot_home} -m -s ${hoot_shell} -u ${hoot_uid} -g ${hoot_gid} ${hoot_user} && \
     chmod 0755 ${hoot_home}
 
 COPY docker/scripts/frontend-entrypoint.sh /docker-entrypoint.sh
