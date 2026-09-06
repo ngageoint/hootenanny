@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2026 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheet.h"
@@ -60,6 +60,7 @@
 #include <tgs/Statistics/Normal.h>
 
 // Qt
+#include <QDataStream>
 #include <QElapsedTimer>
 
 using namespace geos::geom;

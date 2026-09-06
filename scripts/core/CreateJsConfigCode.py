@@ -11,8 +11,8 @@ import json
 import textwrap
 
 if (len(sys.argv) != 3):
-    print "Usage:"
-    print sys.argv[0] + " (config file) (output header)"
+    print("Usage:")
+    print(sys.argv[0] + " (config file) (output header)")
     sys.exit(-1)
 
 fn = sys.argv[1]
@@ -181,7 +181,7 @@ def loadAsciiDoc(fn):
         else:
             raise Exception("unexpected line (%d) in: %s line: %s" % (ln, section, l))
 
-    for k, v in result.iteritems():
+    for k, v in result.items():
         v['description'] = v['description'].strip();
 
     return result
@@ -197,7 +197,7 @@ def cppTypeMap(s):
     if s == 'int' or s == 'double' or s == 'bool':
         return s
     if s == 'list':
-    	  return 'QStringList';
+        return 'QStringList';
     raise Exception("Expected a type of string, int, bool, double, or list.")
 
 def toCamelCase(s):
@@ -290,7 +290,7 @@ def createHeader(c):
       if (tmp) 
       {
 """ % (
-	    toComment(3, v['description']), 
+            toComment(3, v['description']),
             cc,
             k )
 
@@ -318,4 +318,3 @@ def createHeader(c):
     return result
 
 open(headerFn, 'w').write(createHeader(c))
-

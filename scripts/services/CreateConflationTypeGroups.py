@@ -153,7 +153,7 @@ def createUiJSON(groups, options):
 
             uiGroupsArray.append({ 'name': conflateType, 'label': toLabel(conflateType), 'members': members  })
     except:
-        print 'failed to load %s' % fn2
+        print('failed to load %s' % fn)
     finally:
         return json.dumps({ 'hoot2': uiGroupsArray })
 

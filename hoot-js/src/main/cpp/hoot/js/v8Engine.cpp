@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2026 Maxar (http://www.maxar.com/)
  */
 #include "v8Engine.h"
 
@@ -67,7 +67,7 @@ v8Engine::~v8Engine()
   //  Dispose of the v8 subsystem
   V8::Dispose();
   //  Shutdown the platform
-  V8::ShutdownPlatform();
+  V8::DisposePlatform();
   _allocator.reset();
   _platform.reset();
 }

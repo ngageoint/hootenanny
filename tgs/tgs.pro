@@ -18,8 +18,8 @@ DESTDIR = ../lib/
 
 LIBS -= -lhdfs
 
-# allow the <algorithm> std::min
-unix:QMAKE_CXXFLAGS += -Wno-deprecated
+# Qt 5.15 headers trip these warnings under EL9 while the project uses -Werror.
+unix:QMAKE_CXXFLAGS += -Wno-deprecated -Wno-shadow -Wno-shadow-compatible-local
 #unix:QT -= core
 unix:QT -= gui
 UI_DIR = tmp/ui

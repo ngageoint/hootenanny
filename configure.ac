@@ -7,9 +7,9 @@ AC_INIT([hootenanny], [VERSION_NUMBER], [https://github.com/ngageoint/hootenanny
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hoot-core/src])
 
-# use C++ 11
+# use C++ 17
 AC_LANG([C++])
-AX_CXX_COMPILE_STDCXX_11([], [mandatory])
+AX_CXX_COMPILE_STDCXX_17([], [mandatory])
 
 ###
 # Checks for programs.
@@ -64,11 +64,16 @@ fi
 m4_include([m4/python.m4])
 saved_LIBS=$LIBS
 saved_CPPFLAGS=$CPPFLAGS
-AC_PYTHON_DEVEL([2.4.0])
+AC_PYTHON_DEVEL([3.0.0])
 LIBS="$saved_LIBS $PYTHON_LDFLAGS"
 CPPFLAGS="$saved_CPPFLAGS $PYTHON_CPPFLAGS"
 
 # OpenCV - the library names change from version to version so we have to search for the right name.
+AC_PATH_PROG([PKG_CONFIG], [pkg-config])
+AS_IF([test -n "$PKG_CONFIG"], [
+  OPENCV_CFLAGS=`$PKG_CONFIG --cflags opencv4 2>/dev/null || $PKG_CONFIG --cflags opencv 2>/dev/null || true`
+  CPPFLAGS="$CPPFLAGS $OPENCV_CFLAGS"
+])
 AC_LANG_PUSH([C++])
 AC_SEARCH_LIBS([cvSmooth], [opencv_imgproc opencv_core opencv_highgui cxcore cv], [], [AC_MSG_ERROR([A necessary OpenCV library was not found])])
 AC_SEARCH_LIBS([cvCreateImage], [opencv_imgproc opencv_core opencv_highgui cxcore cv], [], [AC_MSG_ERROR([A necessary OpenCV library was not found])])
@@ -109,7 +114,6 @@ AC_SEARCH_LIBS([_ZTIN6google8protobuf20FieldDescriptorProtoE], [protobuf], [], [
 
 AC_CHECK_LIB([icui18n], [main], [], [echo "Error! icui18n (libicu) is required."; exit -1])
 AC_CHECK_LIB([icuio], [main], [], [echo "Error! icuio (libicu) is required."; exit -1])
-AC_CHECK_LIB([iculx], [main], [], [echo "Error! iculx (libicu) is required."; exit -1])
 AC_CHECK_LIB([icutu], [main], [], [echo "Error! icutu (libicu) is required."; exit -1])
 AC_CHECK_LIB([icuuc], [main], [], [echo "Error! icuuc (libicu) is required."; exit -1])
 #AC_CHECK_LIB([pthread], [main], [], [echo "Error! pthread is required."; exit -1])

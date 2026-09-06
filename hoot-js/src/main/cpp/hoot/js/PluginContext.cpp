@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2026 Maxar (http://www.maxar.com/)
  */
 #include "PluginContext.h"
 
@@ -153,7 +153,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   TryCatch try_catch(current);
 
   // Compile the source code.
-  ScriptOrigin origin(toV8(scriptName));
+  ScriptOrigin origin(current, toV8(scriptName));
   script = Script::Compile(context, v8::String::NewFromUtf8(current, text.toUtf8().data()).ToLocalChecked(), &origin);
 
   if (script.IsEmpty())

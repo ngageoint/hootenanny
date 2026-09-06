@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2026 Maxar (http://www.maxar.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -31,6 +31,8 @@
 // #1356 - OpenCV and Geos both have an int64 typedef
 #define int64 opencv_broken_int
 # include <opencv2/opencv.hpp>
+# include <opencv2/core/core_c.h>
+# include <opencv2/imgproc/imgproc_c.h>
 #undef int64
 #else
 # if HOOT_HAVE_OPENCV_CV_H

@@ -4,7 +4,9 @@ set -euo pipefail
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/pgsql-$PG_MAJOR_VERSION/bin:$PATH"
 export GDAL_CONFIG="${GDAL_CONFIG:-/usr/local/bin/gdal-config}"
 
-. /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable
+if [ -f "/opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable" ]; then
+    . /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable
+fi
 
 
 source ./SetupEnv.sh

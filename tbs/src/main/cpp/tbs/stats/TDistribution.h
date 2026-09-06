@@ -22,17 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2026 Maxar (http://www.maxar.com/)
  */
 #ifndef __T_DISTRIBUTION_H__
 #define __T_DISTRIBUTION_H__
 
 // OpenCV
 #define int64 opencv_broken_int
-#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
 #undef int64
-
-#include <opencv/cxcore.h>
 
 namespace tbs
 {

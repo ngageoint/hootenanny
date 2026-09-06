@@ -7,11 +7,12 @@ LIBS += @LIBS@
 INCLUDEPATH += $$PWD
 QMAKE_CXXFLAGS += @CPPFLAGS@ 
 QMAKE_CXXFLAGS += @DEFS@
-QMAKE_CXXFLAGS += -frounding-math -std=c++14
+QMAKE_CXXFLAGS += -frounding-math -std=c++17
+QMAKE_CXXFLAGS += -Wno-deprecated-declarations
 
 CONFIG += @HAS_NEWMAT@ @HAS_CPPUNIT@ \
   @HAS_COVERAGE@ @HAS_SERVICES@ @HAS_STXXL@ @HAS_JOSM@ @HAS_NODEJS@ @HAS_UI_TESTS@ \
-  @HAS_LIBPOSTAL@ @HAS_LIBPHONENUMBER@ @HAS_GRAPHVIZ@ c++14
+  @HAS_LIBPOSTAL@ @HAS_LIBPHONENUMBER@ @HAS_GRAPHVIZ@ c++17
 
 # Default to release mode, this can be overridden in LocalConfig.pri
 CONFIG += release
@@ -38,4 +39,3 @@ release {
   DEFINES -= DEBUG
   DEFINES += NDEBUG
 }
-

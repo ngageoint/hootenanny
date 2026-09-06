@@ -18,6 +18,7 @@ set -euo pipefail
 PG_VERSION="$1"
 PG_DOTLESS="$(echo "$PG_VERSION" | awk '{ gsub(/\./, ""); print substr($0, 1, 2) }')"
 PG_MAJOR_VERSION="$(echo "$PG_VERSION" | awk -F. '{ if ($1 >= 10) print $1; else print $0 }')"
+EL_MAJOR_VERSION="$(. /etc/os-release; echo "${VERSION_ID%%.*}")"
 PGDG_KEY="${PGDG_KEY:-/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-$PG_DOTLESS}"
 PGDG_REPO="${PGDG_REPO:-/etc/yum.repos.d/pgdg-$PG_DOTLESS-centos.repo}"
 
@@ -31,7 +32,16 @@ fi
 find /etc/pki/rpm-gpg -type f -name RPM-GPG-KEY-PGDG-\* -delete
 find /etc/yum.repos.d -type f -name pgdg-\*-centos.repo -delete
 
-cat > "$PGDG_KEY" <<EOF
+# EL9's default crypto policy requires PGDG's current SHA-256 key. Install the
+# official repository package to obtain it, then replace its broad repository
+# configuration with the version-specific configuration below.
+if (( EL_MAJOR_VERSION >= 9 )); then
+    PGDG_REPO_RPM="https://download.postgresql.org/pub/repos/yum/reporpms/EL-${EL_MAJOR_VERSION}-$(uname -m)/pgdg-redhat-repo-latest.noarch.rpm"
+    dnf -q -y install "$PGDG_REPO_RPM"
+    rm -f /etc/yum.repos.d/pgdg-redhat-all.repo
+    PGDG_KEY=/etc/pki/rpm-gpg/PGDG-RPM-GPG-KEY-RHEL
+else
+    cat > "$PGDG_KEY" <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2.0.22 (GNU/Linux)
 
@@ -74,6 +84,7 @@ Ocmphnc2clno8y4lSc4NckEbL+teZZyww12kHph5NUDReITO4H/4XGEpq4PATT6P
 =fPP0
 -----END PGP PUBLIC KEY BLOCK-----
 EOF
+fi
 
 cat > "$PGDG_REPO" <<EOF
 [pgdg$PG_DOTLESS]

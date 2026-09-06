@@ -450,6 +450,7 @@ tds71 = {
   {
     // Add the first feature to the structure that we return
     var returnData = [{attrs:attrs, tableName:''}];
+    var splitSourceTags = ['highway','railway','bridge','tunnel','embankment','cutting','ford'];
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
@@ -641,7 +642,7 @@ tds71 = {
       // post processing
       tds71.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
-      returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
+      returnData.push({attrs: newFeatures[i]['attrs'],tableName: '', dropOsmTags: splitSourceTags});
     }
 
     return returnData;
@@ -1265,6 +1266,23 @@ tds71 = {
       }
       break;
 
+    case 'AL110': // Light Support Structure
+      if (attrs.TOS == '6')
+      {
+        tags.man_made = 'mast';
+        tags['tower:type'] = 'lighting';
+        delete tags['tower:shape'];
+      }
+      break;
+
+    case 'AL241': // Tower
+      if (attrs.TOS == '6')
+      {
+        tags.man_made = 'mast';
+        delete tags['tower:shape'];
+      }
+      break;
+
       case 'AF030': // Cooling Tower
         if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
@@ -1378,6 +1396,13 @@ tds71 = {
             delete tags['amenity:3'];
           }
           break;
+      }
+      break;
+    case 'AL018':
+      if (attrs.BSU == '5') {
+        tags['tower:type'] = 'minaret';
+        delete tags['building:superstructure'];
+        delete tags['building:superstructure:type'];
       }
       break;
     // Fix up landuse tags
@@ -1558,6 +1583,10 @@ tds71 = {
     case 'BH082': // Inland Water
       // This leaves us with just "natural=water"
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
+      if (attrs.IWT == '1' && attrs.ZI024_HYP == '4') {
+        tags.natural = 'dry_lake';
+        delete tags.water;
+      }
       break;
 
     case 'BH140': // River
@@ -2006,6 +2035,7 @@ tds71 = {
         ['t.office == "diplomatic" && t.diplomatic == "embassy"','a.F_CODE = "AL010"; a.FFN = "808"; a.FFN2 = "825"; a.FFN3 = "827"; delete t.office; delete t.diplomatic'],
         ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
         // ['t.highway == "steps"','t.highway = "footway"'],
+        ['t.highway == "road" || t.highway == "yes" || t.highway == "track"','delete t.seasonal'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.historic == "tomb" && t.tomb == "pyramid"','a.F_CODE = "AL036"; a.SSC = "12"; delete t.building; delete t.historic; delete t.tomb; delete t.tourism; delete t.material'],
@@ -2016,16 +2046,22 @@ tds71 = {
         ['t.leisure == "stadium" && t.building','delete t.building'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
         ['t.man_made == "bridge"','a.F_CODE = "AQ040"; delete t.man_made'],
+        ['t.man_made == "mast"','a.F_CODE = "AL241"; a.TOS = "6"'],
+        ['t.man_made == "mast" && t["tower:type"] == "lighting"','a.F_CODE = "AL110"; a.TOS = "6"'],
+        ['t.man_made == "mast" && t["tower:type"] == "communication"','a.TTC = "20"'],
+        ['t.man_made == "mast" && t["tower:type"] == "observation"','a.TTC = "2"'],
         ['t.man_made == "submarine_cable" && t["seamark:type"] == "cable_submarine"','a.F_CODE = "AT005"; a.CAB = "7"; a.LOC = "17"; delete t.man_made; delete t["seamark:type"]'],
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
+        ['t.man_made == "tower" && t["tower:type"] == "minaret"','a.F_CODE = "AL018"; a.BSU = "5"'],
         ['t.man_made == "wastewater_plant"','a.F_CODE = "AL010"; a.FFN = "350"; a.FFN2 = "360"; a.FFN3 = "362"; delete t.man_made'],
         ['t.man_made == "works"','a.F_CODE = "AL010"; a.FFN = "99"'],
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
         ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t.natural == "desert" && t.surface','t.terrain_surface = t.surface; delete t.surface'],
+        ['t.natural == "dry_lake"','a.F_CODE = "BH082"; a.IWT = "1"; a.ZI024_HYP = "4"'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
@@ -2052,6 +2088,8 @@ tds71 = {
         ['t.use == "islamic_prayer_hall" && t.amenity == "place_of_worship"','delete t.amenity'],
         ['t.wetland && t.natural == "wetland"','delete t.natural'],
         ['t.water == "river"','t.waterway = "river"'],
+        ['t.waterway == "river" && t.intermittent != "yes"','a.ZI024_HYP = "1"'],
+        ['t.waterway == "drystream"','a.ZI024_HYP = "4"'],
         ['t.waterway == "boatyard"','a.F_CODE = "AL010"; a.FFN = "99"; a.FFN2 = "330"; a.FFN3 = "340"'],
         ['t.waterway == "riverbank"','t.waterway = "river"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]']
@@ -3088,6 +3126,18 @@ tds71 = {
       }
     }
 
+    // Do not preserve these translated source tags in OSMTAGS.
+    if (tags.man_made == 'petroleum_well' && attrs.F_CODE == 'AA054')
+      delete notUsedTags.man_made;
+
+    if (tags.man_made == 'mast' && attrs.TOS == '6' &&
+        (attrs.F_CODE == 'AL110' || attrs.F_CODE == 'AL241'))
+    {
+      delete notUsedTags.man_made;
+      if (attrs.F_CODE == 'AL110' && tags['tower:type'] == 'lighting')
+        delete notUsedTags['tower:type'];
+    }
+
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
     // with similar names and roughly the same attributes. Bleah!
     if (tds71.rules.swapListOut[attrs.F_CODE])
@@ -3883,16 +3933,26 @@ tds71 = {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds71.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
 
+          var osmTags = notUsedTags;
+          if (returnData[i]['dropOsmTags'])
+          {
+            osmTags = JSON.parse(JSON.stringify(notUsedTags));
+            for (var j = 0, dLen = returnData[i]['dropOsmTags'].length; j < dLen; j++)
+            {
+              delete osmTags[returnData[i]['dropOsmTags'][j]];
+            }
+          }
+
           // If we have unused tags, add them to the memo field.
-          if (Object.keys(notUsedTags).length > 0 && tds71.configOut.OgrNoteExtra == 'attribute')
+          if (Object.keys(osmTags).length > 0 && tds71.configOut.OgrNoteExtra == 'attribute')
           {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
-            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            var str = JSON.stringify(osmTags,Object.keys(osmTags).sort());
             if (tds71.configOut.OgrFormat == 'shp')
             {
               // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
-              var tList = translate.packText(notUsedTags,tds71.configOut.OgrTextFieldNumber,250);
+              var tList = translate.packText(osmTags,tds71.configOut.OgrTextFieldNumber,250);
               returnData[i]['attrs']['OSMTAGS'] = tList[1];
               for (var j = 2, tLen = tList.length; j < tLen; j++)
               {
