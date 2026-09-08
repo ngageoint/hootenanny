@@ -37,6 +37,7 @@ function usage()
     '  node translations/checkTagPairing.js TDSv71 highway=primary bridge=yes',
     '  node translations/checkTagPairing.js TDSv71 Line highway=primary bridge=yes',
     '  node translations/checkTagPairing.js MGCP highway=primary bridge=yes',
+    '  node translations/checkTagPairing.js MUVD Line man_made=goods_conveyor',
     '  node translations/checkTagPairing.js TDSv71 natural=water',
     '',
     'If geometry is omitted, Point, Line, and Area are tested.',
@@ -77,6 +78,16 @@ function loadTranslation(name)
     hoot.require('fcode_common');
     hoot.require('translate');
     return {name: 'MGCP', module: mgcp};
+  }
+
+  if (key === 'muvd')
+  {
+    hoot.require('muvd');
+    hoot.require('muvd_schema');
+    hoot.require('muvd_rules');
+    hoot.require('fcode_common');
+    hoot.require('translate');
+    return {name: 'MUVD', module: muvd};
   }
 
   var tdsVersion = key.match(/^tdsv?([0-9]+)$/);

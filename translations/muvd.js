@@ -611,6 +611,10 @@ muvd = {
         attrs = {}; // This is the output <GLOBAL>
         attrs.F_CODE = '';
 
+        // MUVD uses Curve and Surface where Hoot's OSM geometry uses Line and Area.
+        if (geometryType == 'Line') geometryType = 'Curve';
+        if (geometryType == 'Area') geometryType = 'Surface';
+
         // Setup config variables. We could do this in initialize() but some things don't call it
         // Doing this so we don't have to keep calling into Hoot core
         if (muvd.configOut == undefined)
@@ -624,7 +628,6 @@ muvd = {
             muvd.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
             muvd.configOut.OgrCodedValues = hoot.Settings.get('ogr.coded.values');
             muvd.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
-            print(muvd.configOut.OgrThrowError);
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignement soon
