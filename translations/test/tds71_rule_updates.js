@@ -320,4 +320,28 @@ describe('TDS71 Rule Updates', function () {
         assert.strictEqual(tags['F_CODE'], 'AA054');
         assert.strictEqual(tags['OSMTAGS'], undefined);
     });
+
+    it('should translate a portal crane to AF040 with CRA=3', function () {
+        var data = pointXml({
+            'man_made': 'crane',
+            'crane:type': 'portal_crane'
+        });
+
+        var tags = getTags(translateToTds(data), 'TDSv71');
+
+        assert.strictEqual(tags['F_CODE'], 'AF040');
+        assert.strictEqual(tags['CRA'], '3');
+    });
+
+    it('should translate a tower crane to AF040 with CRA=7', function () {
+        var data = pointXml({
+            'man_made': 'crane',
+            'crane:type': 'tower_crane'
+        });
+
+        var tags = getTags(translateToTds(data), 'TDSv71');
+
+        assert.strictEqual(tags['F_CODE'], 'AF040');
+        assert.strictEqual(tags['CRA'], '7');
+    });
 });
