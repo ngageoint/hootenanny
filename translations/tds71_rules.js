@@ -4557,6 +4557,8 @@ tds71.rules = {
   // One2one translation table for converting "Other" OSM attributes to TDS
   // This is for Export only. The values are swapped before use
   one2oneOut : [
+    ['CRA','3','crane:type','portal_crane'], // Rotating Crane
+    ['CRA','7','crane:type','tower_crane'], // Tower Crane
     ['FFN','2','building','farm'], // Agriculture
     ['FFN','122','man_made','winery'], // Winery
     ['FFN','190','use','oil_gas_facility'], //
