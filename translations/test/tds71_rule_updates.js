@@ -344,4 +344,62 @@ describe('TDS71 Rule Updates', function () {
         assert.strictEqual(tags['F_CODE'], 'AF040');
         assert.strictEqual(tags['CRA'], '7');
     });
+
+    it('should translate an esker ridge line to DB100 in both directions', function () {
+        var data = lineXml({
+            'natural': 'ridge',
+            'ridge': 'esker'
+        });
+
+        assertForward(data, {'F_CODE': 'DB100'});
+        assertRoundTrip(data, {'natural': 'ridge', 'ridge': 'esker'}, ['landform']);
+    });
+
+    it('should translate an industrial mine area to AA010 in both directions', function () {
+        var data = areaXml({
+            'landuse': 'industrial',
+            'industrial': 'mine'
+        });
+
+        assertForward(data, {'F_CODE': 'AA010'});
+        assertRoundTrip(data, {'landuse': 'industrial', 'industrial': 'mine'}, []);
+    });
+
+    it('should translate a military range area to FA015 with FFN=835', function () {
+        var data = areaXml({
+            'landuse': 'military',
+            'military': 'range'
+        });
+
+        assertForward(data, {'F_CODE': 'FA015', 'FFN': '835'});
+        assertRoundTrip(data, {'landuse': 'military', 'military': 'range'}, ['use']);
+    });
+
+    it('should reject FA015 point geometry', function () {
+        var data = pointXml({
+            'landuse': 'military',
+            'military': 'range'
+        });
+        var tags = getTags(translateToTds(data), 'TDSv71');
+        var rejectedTags = JSON.parse(tags['tag1']);
+
+        assert.strictEqual(tags['F_CODE'], undefined);
+        assert.strictEqual(rejectedTags['o2s_reason'], 'Point geometry is not valid for FA015 (Firing Range)');
+    });
+
+    it('should translate a shooting ground area to FA015 with FFN=921 in both directions', function () {
+        var data = areaXml({'leisure': 'shooting_ground'});
+
+        assertForward(data, {'F_CODE': 'FA015', 'FFN': '921'});
+        assertRoundTrip(data, {'leisure': 'shooting_ground'}, ['military', 'use']);
+    });
+
+    it('should not translate a shooting ground point to FA015', function () {
+        var data = pointXml({'leisure': 'shooting_ground'});
+        var tags = getTags(translateToTds(data), 'TDSv71');
+        var rejectedTags = JSON.parse(tags['tag1']);
+
+        assert.strictEqual(tags['F_CODE'], undefined);
+        assert.strictEqual(rejectedTags['o2s_reason'], 'Unable to assign an F_CODE');
+    });
 });
