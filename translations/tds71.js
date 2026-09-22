@@ -38,6 +38,10 @@ tds71 = {
     // Warning: This is <GLOBAL> so we can get access to it from other functions
     tds71.rawSchema = tds71.schema.getDbSchema();
 
+    tds71.rawSchema = tds71.rawSchema.filter(function(feature) {
+      return !(feature.fcode == 'FA015' && feature.geom == 'Point');
+    });
+
     // Add empty "extra" feature layers if needed
     if (hoot.Settings.get('ogr.note.extra') == 'file') tds71.rawSchema = translate.addExtraFeature(tds71.rawSchema);
 
@@ -1119,6 +1123,11 @@ tds71 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    case 'AA010':
+      tags.landuse = 'industrial';
+      tags.industrial = 'mine';
+      break;
+
     case 'GB230':
       if (originalOsmTags.building && !originalOsmTags.aeroway) {
         tags.building = originalOsmTags.building;
@@ -1622,6 +1631,27 @@ tds71 = {
       }
       break;
 
+    case 'DB100':
+      tags.natural = 'ridge';
+      tags.ridge = 'esker';
+      delete tags.landform;
+      break;
+
+    case 'FA015':
+      if (attrs.FFN == '835')
+      {
+        tags.landuse = 'military';
+        tags.military = 'range';
+        delete tags.use;
+      }
+      else if (attrs.FFN == '921')
+      {
+        tags.leisure = 'shooting_ground';
+        delete tags.military;
+        delete tags.use;
+      }
+      break;
+
     case 'EA010': // Crop Land
       // Coffee is an orchard according to OSM. Tea is as well but GGDM calls it Crop Land
       // Or, Industrial Farm
@@ -2106,6 +2136,24 @@ tds71 = {
       if (tds71.tdsPreRules[i][0](tags)) tds71.tdsPreRules[i][1](tags,attrs);
     }
 
+    if (tags.natural == 'ridge' && tags.ridge == 'esker')
+    {
+      attrs.F_CODE = 'DB100';
+      if (geometryType == 'Line')
+      {
+        tags.landform = 'esker';
+        delete tags.natural;
+        delete tags.ridge;
+      }
+    }
+
+    if (geometryType == 'Area' && tags.leisure == 'shooting_ground')
+    {
+      attrs.F_CODE = 'FA015';
+      attrs.FFN = '921';
+      delete tags.leisure;
+    }
+
     // Fix Keeps and Martello Towers
     if (tags.defensive)
     {
@@ -2462,6 +2510,15 @@ tds71 = {
         delete tags.landuse;
         break;
 
+      case 'mine':
+        attrs.F_CODE = 'AA010';
+        if (geometryType == 'Point' || geometryType == 'Area')
+        {
+          delete tags.landuse;
+          delete tags.industrial;
+        }
+        break;
+
       case 'refinery':
         delete tags.landuse;
         break;
@@ -2475,8 +2532,19 @@ tds71 = {
       break;
 
     case 'military':
-      if (tags.military !== 'range') tags.military = 'installation';
-      delete tags.landuse;
+      if (tags.military == 'range')
+      {
+        if (geometryType == 'Area')
+        {
+          attrs.FFN = '835';
+          delete tags.landuse;
+        }
+      }
+      else
+      {
+        tags.military = 'installation';
+        delete tags.landuse;
+      }
       break;
 
     case 'orchard':
