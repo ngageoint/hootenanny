@@ -2021,6 +2021,7 @@ mgcp = {
       ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'slip_way'", "a.F_CODE = 'BB240'"],
       ["t['seamark:type'] == 'shoreline_construction' && t['seamark:shoreline_construction:category'] == 'training_wall'", "a.F_CODE = 'BB140'"],
       ["t.railway == 'rail' && (t.highspeed == 'yes' || t.maxspeed >= 200)", "a.RWC = '1'"],
+      ["t.railway == 'rail' && t.highspeed == 'yes' && t.electrified == 'contact_line'", "a.LOC = '45'"],
       ["t.railway == 'rail' && t.service == 'spur'", "a.F_CODE = 'AN050', a.RSA = '1'"],
       ["t.railway == 'rail' && t.service == 'siding'", "a.F_CODE = 'AN050', a.RSA = '2'"],
       ["t.railway == 'light_rail'", "a.F_CODE = 'AN010', a.RRC = '2'"],
