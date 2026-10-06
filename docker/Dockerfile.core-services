@@ -37,6 +37,7 @@ RUN dnf -y install dnf-plugins-core epel-release && \
         GEOINT_DEPS_REPO_GPGCHECK=0 \
         /tmp/geoint-repo.sh && \
     HOOT_DEPS_BASEURL=https://hoot-repo.s3.amazonaws.com/el9/deps/stable \
+        HOOT_DEPS_GPGCHECK=0 \
         HOOT_DEPS_REPO_GPGCHECK=0 /tmp/hoot-repo.sh && \
     /tmp/pgdg-repo.sh $postgresql_version && \
     dnf -y module enable nodejs:${node_version%%.*} && \
@@ -53,8 +54,6 @@ RUN dnf -y --disablerepo=pgdg* install \
         libgeotiff-devel-$libgeotiff_version \
         liboauthcpp-$liboauthcpp_version \
         liboauthcpp-devel-$liboauthcpp_version \
-        libphonenumber-$libphonenumber_version \
-        libphonenumber-devel-$libphonenumber_version \
         libpostal-$libpostal_version \
         libpostal-data-$libpostal_version \
         libpostal-devel-$libpostal_version \
@@ -99,6 +98,7 @@ RUN dnf -y --disablerepo=pgdg* \
         cmake \
         cppunit-devel \
         dblatex \
+        diffutils \
         doxygen \
         gcc-c++ \
         git \
@@ -166,6 +166,24 @@ RUN curl -fsSL -o /tmp/protobuf.tar.gz \
     ldconfig && \
     protoc --version && \
     rm -rf /tmp/protobuf.tar.gz /tmp/protobuf-src /tmp/protobuf-build
+
+# libphonenumber is built here (not from hoot-repo) so its generated .pb.h files
+# match the protobuf version built above; the el9 RPM was generated with protoc 3.14.
+RUN curl -fsSL -o /tmp/libphonenumber.tar.gz \
+        https://github.com/google/libphonenumber/archive/refs/tags/v$libphonenumber_version.tar.gz && \
+    mkdir -p /tmp/libphonenumber-src /tmp/libphonenumber-build && \
+    tar -xzf /tmp/libphonenumber.tar.gz -C /tmp/libphonenumber-src --strip-components=1 && \
+    cmake -S /tmp/libphonenumber-src/cpp -B /tmp/libphonenumber-build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib64 \
+        -DUSE_BOOST=OFF \
+        -DUSE_STDMUTEX=ON \
+        -DREGENERATE_METADATA=OFF && \
+    cmake --build /tmp/libphonenumber-build -j$(nproc) && \
+    cmake --install /tmp/libphonenumber-build && \
+    ldconfig && \
+    rm -rf /tmp/libphonenumber.tar.gz /tmp/libphonenumber-src /tmp/libphonenumber-build
 
 RUN dnf -y remove postgresql || true && \
     dnf install -y --nogpgcheck \
