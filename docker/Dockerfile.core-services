@@ -36,7 +36,8 @@ RUN dnf -y install dnf-plugins-core epel-release && \
     GEOINT_DEPS_BASEURL=https://geoint-deps.s3.amazonaws.com/el9/stable \
         GEOINT_DEPS_REPO_GPGCHECK=0 \
         /tmp/geoint-repo.sh && \
-    HOOT_DEPS_REPO_GPGCHECK=0 /tmp/hoot-repo.sh && \
+    HOOT_DEPS_BASEURL=https://hoot-repo.s3.amazonaws.com/el9/deps/stable \
+        HOOT_DEPS_REPO_GPGCHECK=0 /tmp/hoot-repo.sh && \
     /tmp/pgdg-repo.sh $postgresql_version && \
     dnf -y module enable nodejs:${node_version%%.*} && \
     dnf -y makecache
@@ -52,9 +53,13 @@ RUN dnf -y --disablerepo=pgdg* install \
         libgeotiff-devel-$libgeotiff_version \
         liboauthcpp-$liboauthcpp_version \
         liboauthcpp-devel-$liboauthcpp_version \
+        libphonenumber-$libphonenumber_version \
+        libphonenumber-devel-$libphonenumber_version \
         libpostal-$libpostal_version \
         libpostal-data-$libpostal_version \
         libpostal-devel-$libpostal_version \
+        stxxl-$stxxl_version \
+        stxxl-devel-$stxxl_version \
         npm-$npm_version \
         nodejs-$node_version \
         nodejs-devel-$node_version \
@@ -161,41 +166,6 @@ RUN curl -fsSL -o /tmp/protobuf.tar.gz \
     ldconfig && \
     protoc --version && \
     rm -rf /tmp/protobuf.tar.gz /tmp/protobuf-src /tmp/protobuf-build
-
-RUN curl -fsSL -o /tmp/stxxl.tar.gz \
-        https://github.com/stxxl/stxxl/archive/refs/tags/$stxxl_version.tar.gz && \
-    mkdir -p /tmp/stxxl-src /tmp/stxxl-build && \
-    tar -xzf /tmp/stxxl.tar.gz -C /tmp/stxxl-src --strip-components=1 && \
-    cmake -S /tmp/stxxl-src -B /tmp/stxxl-build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DINSTALL_LIB_DIR=/usr/lib64 \
-        -DINSTALL_PKGCONFIG_DIR=/usr/lib64/pkgconfig \
-        -DBUILD_SHARED_LIBS=ON \
-        -DBUILD_STATIC_LIBS=OFF \
-        -DBUILD_TESTS=OFF \
-        -DBUILD_EXAMPLES=OFF \
-        -DBUILD_EXTRAS=OFF && \
-    cmake --build /tmp/stxxl-build -j$(nproc) && \
-    cmake --install /tmp/stxxl-build && \
-    ldconfig && \
-    rm -rf /tmp/stxxl.tar.gz /tmp/stxxl-src /tmp/stxxl-build
-
-RUN curl -fsSL -o /tmp/libphonenumber.tar.gz \
-        https://github.com/google/libphonenumber/archive/refs/tags/v$libphonenumber_version.tar.gz && \
-    mkdir -p /tmp/libphonenumber-src /tmp/libphonenumber-build && \
-    tar -xzf /tmp/libphonenumber.tar.gz -C /tmp/libphonenumber-src --strip-components=1 && \
-    cmake -S /tmp/libphonenumber-src/cpp -B /tmp/libphonenumber-build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DCMAKE_INSTALL_LIBDIR=lib64 \
-        -DUSE_BOOST=OFF \
-        -DUSE_STDMUTEX=ON \
-        -DREGENERATE_METADATA=OFF && \
-    cmake --build /tmp/libphonenumber-build -j$(nproc) && \
-    cmake --install /tmp/libphonenumber-build && \
-    ldconfig && \
-    rm -rf /tmp/libphonenumber.tar.gz /tmp/libphonenumber-src /tmp/libphonenumber-build
 
 RUN dnf -y remove postgresql || true && \
     dnf install -y --nogpgcheck \
