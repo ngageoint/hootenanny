@@ -1264,6 +1264,40 @@ tds71 = {
       }
       break;
 
+    case 'AM071': // Petroleum Terminal / Tank Farm
+      tags.landuse = 'industrial';
+      tags.industrial = 'petroleum_terminal';
+      delete tags.place;
+      delete tags.amenity;
+      break;
+
+    case 'AM075': // Bulk Liquid Petroleum Storage
+      tags.landuse = 'industrial';
+      tags.industrial = 'oil';
+      tags.cargo = 'liquid_bulk';
+      delete tags.amenity;
+      break;
+
+    case 'AL080': // Gantry Crane
+      tags.man_made = 'crane';
+      tags['crane:type'] = 'gantry';
+      break;
+
+    case 'BI044': // Flood Control Structure
+      if (attrs.FCS == '3')
+      {
+        tags.waterway = 'floodgate';
+        delete tags.flood_control;
+        delete tags['flood_control:type'];
+      }
+      break;
+
+    case 'BH051': // Fish Farm Facility
+      tags.landuse = 'aquaculture';
+      tags.aquaculture = 'fish';
+      delete tags.place;
+      break;
+
     case 'AA054': // Non-water Well
       if (tags.product)
       {
@@ -1638,7 +1672,13 @@ tds71 = {
       break;
 
     case 'FA015':
-      if (attrs.FFN == '835')
+      if (attrs.FFN == '841')
+      {
+        tags.police = 'range';
+        delete tags.military;
+        delete tags.use;
+      }
+      else if (attrs.FFN == '835')
       {
         tags.landuse = 'military';
         tags.military = 'range';
@@ -1690,6 +1730,11 @@ tds71 = {
       {
         delete tags.landuse; // Default EC015 translation
         tags.natural = 'tree_row';
+      }
+      else
+      {
+        tags.landuse = 'forest';
+        tags.natural = 'wood';
       }
       break;
 
@@ -2128,12 +2173,63 @@ tds71 = {
       tds71.tdsPreRules = translate.buildComplexRules(rulesList);
     }
 
+    if (tags['seamark:type'] == 'gate' && tags['seamark:gate:category'] == 'flood_barrage')
+    {
+      attrs.F_CODE = 'BI044';
+      attrs.FCS = '3';
+      delete tags['seamark:type'];
+      delete tags['seamark:gate:category'];
+    }
+
     // Apply the rulesList.
     // translate.applyComplexRules(tags,attrs,tds71.tdsPreRules);
     // Pulling this out of translate
     for (var i = 0, rLen = tds71.tdsPreRules.length; i < rLen; i++)
     {
       if (tds71.tdsPreRules[i][0](tags)) tds71.tdsPreRules[i][1](tags,attrs);
+    }
+
+    // Specific OSM tags for features with established legacy tag equivalents.
+    if (tags.landuse == 'hydrocarbons_field')
+    {
+      attrs.F_CODE = 'AA052';
+      tags.landuse = 'industrial';
+      tags.industrial = 'oil';
+      tags.product = 'petroleum';
+    }
+
+    if (tags.landuse == 'industrial' && tags.industrial == 'petroleum_terminal')
+    {
+      attrs.F_CODE = 'AM071';
+      delete tags.landuse;
+      delete tags.industrial;
+    }
+    else if (tags.landuse == 'industrial' && tags.industrial == 'oil' && tags.cargo == 'liquid_bulk')
+    {
+      attrs.F_CODE = 'AM075';
+      delete tags.landuse;
+      delete tags.industrial;
+      delete tags.cargo;
+      delete tags.product;
+    }
+
+    if (tags.aquaculture == 'fish' && tags.landuse == 'aquaculture')
+    {
+      attrs.F_CODE = 'BH051';
+      delete tags.landuse;
+      delete tags.aquaculture;
+    }
+
+    if (tags.waterway == 'floodgate')
+    {
+      attrs.F_CODE = 'BI044';
+      attrs.FCS = '3';
+    }
+    if (tags.police == 'range')
+    {
+      attrs.F_CODE = 'FA015';
+      attrs.FFN = '841';
+      delete tags.police;
     }
 
     if (tags.natural == 'ridge' && tags.ridge == 'esker')
@@ -2208,7 +2304,14 @@ tds71 = {
     // Cranes
     if (tags.man_made == 'crane')
     {
-      attrs.F_CODE = 'AF040'; // Crane
+      if (tags['crane:type'] == 'gantry')
+      {
+        attrs.F_CODE = 'AL080'; // Gantry Crane
+      }
+      else
+      {
+        attrs.F_CODE = 'AF040'; // Crane
+      }
       if (tags.railway) tags['transport:type'] = 'railway';
       if (tags.highway) tags['transport:type'] = 'road';
     } // End Cranes
@@ -2496,7 +2599,7 @@ tds71 = {
 
       case 'oil':
         tags.product = 'petroleum';
-        tags.industrial = 'hydrocarbons_field';
+        attrs.F_CODE = 'AA052';
         delete tags.landuse;
         break;
 
