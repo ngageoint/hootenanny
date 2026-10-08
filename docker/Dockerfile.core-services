@@ -54,6 +54,10 @@ RUN dnf -y --disablerepo=pgdg* install \
         libgeotiff-devel-$libgeotiff_version \
         liboauthcpp-$liboauthcpp_version \
         liboauthcpp-devel-$liboauthcpp_version \
+        libphonenumber-$libphonenumber_version \
+        libphonenumber-devel-$libphonenumber_version \
+        protobuf-compiler \
+        protobuf-devel \
         libpostal-$libpostal_version \
         libpostal-data-$libpostal_version \
         libpostal-devel-$libpostal_version \
@@ -151,40 +155,6 @@ RUN dnf -y --disablerepo=pgdg* \
         zip
 
 #@TODO: move these packages into hoot-repo so that they don't have to be built here. include a GDAL build that has libkml and filgdb enabled.
-RUN curl -fsSL -o /tmp/protobuf.tar.gz \
-        https://github.com/protocolbuffers/protobuf/releases/download/v$protobuf_version/protobuf-cpp-$protobuf_version.tar.gz && \
-    mkdir -p /tmp/protobuf-src /tmp/protobuf-build && \
-    tar -xzf /tmp/protobuf.tar.gz -C /tmp/protobuf-src --strip-components=1 && \
-    cmake -S /tmp/protobuf-src/cmake -B /tmp/protobuf-build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DCMAKE_INSTALL_LIBDIR=lib64 \
-        -Dprotobuf_BUILD_TESTS=OFF \
-        -Dprotobuf_BUILD_SHARED_LIBS=ON && \
-    cmake --build /tmp/protobuf-build -j$(nproc) && \
-    cmake --install /tmp/protobuf-build && \
-    ldconfig && \
-    protoc --version && \
-    rm -rf /tmp/protobuf.tar.gz /tmp/protobuf-src /tmp/protobuf-build
-
-# libphonenumber is built here (not from hoot-repo) so its generated .pb.h files
-# match the protobuf version built above; the el9 RPM was generated with protoc 3.14.
-RUN curl -fsSL -o /tmp/libphonenumber.tar.gz \
-        https://github.com/google/libphonenumber/archive/refs/tags/v$libphonenumber_version.tar.gz && \
-    mkdir -p /tmp/libphonenumber-src /tmp/libphonenumber-build && \
-    tar -xzf /tmp/libphonenumber.tar.gz -C /tmp/libphonenumber-src --strip-components=1 && \
-    cmake -S /tmp/libphonenumber-src/cpp -B /tmp/libphonenumber-build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DCMAKE_INSTALL_LIBDIR=lib64 \
-        -DUSE_BOOST=OFF \
-        -DUSE_STDMUTEX=ON \
-        -DREGENERATE_METADATA=OFF && \
-    cmake --build /tmp/libphonenumber-build -j$(nproc) && \
-    cmake --install /tmp/libphonenumber-build && \
-    ldconfig && \
-    rm -rf /tmp/libphonenumber.tar.gz /tmp/libphonenumber-src /tmp/libphonenumber-build
-
 RUN dnf -y remove postgresql || true && \
     dnf install -y --nogpgcheck \
         postgresql$postgresql_version \
