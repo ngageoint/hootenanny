@@ -805,6 +805,9 @@ tds71 = {
       }
     } // End of Find an FCode
 
+    // OSM has no "other" geothermal outlet type; retain the generic F_CODE mapping.
+    if (attrs.GOT == '999') delete attrs.GOT;
+
     // Convert Rasilway guage widths
     if (attrs.ZI017_GAW)
     {
@@ -1128,6 +1131,55 @@ tds71 = {
       tags.industrial = 'mine';
       break;
 
+    case 'AB040':
+      tags.landuse = 'aeration';
+      tags.basin = 'aeration';
+      break;
+
+    case 'AK020':
+      if (!tags.attraction)
+      {
+        tags.attraction = 'amusement_ride';
+        if (tags.tourism == 'theme_park_attraction') delete tags.tourism;
+      }
+      break;
+
+    case 'AL142':
+      tags.man_made = 'observatory';
+      if (tags.landuse == 'observatory') delete tags.landuse;
+      break;
+
+    case 'AL376':
+      tags.historic = 'castle';
+      tags.castle_type = 'fortification';
+      break;
+
+    case 'AQ063':
+      tags.embankment = 'yes';
+      break;
+
+    case 'AQ055':
+      tags['bridge:support'] = 'pylon';
+      if (tags['bridge:pylon'] == 'yes') delete tags['bridge:pylon'];
+      break;
+
+    case 'BI045':
+      tags['seamark:type'] = 'gate';
+      delete tags.man_made;
+      break;
+
+    case 'DB115':
+      if (attrs.GOT == '4')
+      {
+        tags.natural = 'hot_spring';
+        tags.water_characteristic = 'sulfurous';
+      }
+      break;
+
+    case 'EB070':
+      if (tags.natural == 'brush') tags.natural = 'scrub';
+      break;
+
     case 'GB230':
       if (originalOsmTags.building && !originalOsmTags.aeroway) {
         tags.building = originalOsmTags.building;
@@ -1444,8 +1496,14 @@ tds71 = {
     case 'AL018':
       if (attrs.BSU == '5') {
         tags['tower:type'] = 'minaret';
+        delete tags['building:part'];
         delete tags['building:superstructure'];
         delete tags['building:superstructure:type'];
+      }
+      else
+      {
+        if (!tags['building:part']) tags['building:part'] = 'yes';
+        if (tags['building:superstructure'] == 'yes') delete tags['building:superstructure'];
       }
       break;
     // Fix up landuse tags
@@ -2113,6 +2171,7 @@ tds71 = {
         ['t.highway == "road" || t.highway == "yes" || t.highway == "track"','delete t.seasonal'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
+        ['t.historic == "castle" && t.castle_type == "fortification"','a.F_CODE = "AL376"; delete t.historic; delete t.castle_type'],
         ['t.historic == "tomb" && t.tomb == "pyramid"','a.F_CODE = "AL036"; a.SSC = "12"; delete t.building; delete t.historic; delete t.tomb; delete t.tourism; delete t.material'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
         ['t.landuse == "retail"','delete t.place'],
@@ -2127,7 +2186,8 @@ tds71 = {
         ['t.man_made == "mast" && t["tower:type"] == "observation"','a.TTC = "2"'],
         ['t.man_made == "submarine_cable" && t["seamark:type"] == "cable_submarine"','a.F_CODE = "AT005"; a.CAB = "7"; a.LOC = "17"; delete t.man_made; delete t["seamark:type"]'],
         ['t.man_made && t.building == "yes"','delete t.building'],
-        ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
+        ['t.man_made == "embankment"','a.F_CODE = "AQ063"; t.man_made = "causeway"'],
+        ['t.man_made == "causeway" && t.embankment == "yes"','a.F_CODE = "AQ063"'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
         ['t.man_made == "tower" && t["tower:type"] == "minaret"','a.F_CODE = "AL018"; a.BSU = "5"'],
         ['t.man_made == "wastewater_plant"','a.F_CODE = "AL010"; a.FFN = "350"; a.FFN2 = "360"; a.FFN3 = "362"; delete t.man_made'],
@@ -2137,6 +2197,7 @@ tds71 = {
         ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t.natural == "desert" && t.surface','t.terrain_surface = t.surface; delete t.surface'],
         ['t.natural == "dry_lake"','a.F_CODE = "BH082"; a.IWT = "1"; a.ZI024_HYP = "4"'],
+        ['(t.natural == "hot_spring" || t.natural == "sulphur_spring") && t.water_characteristic == "sulfurous"','t.natural = "sulphur_spring"; delete t.water_characteristic'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
@@ -2155,6 +2216,7 @@ tds71 = {
         ['t.resource','t.raw_material = t.resource; delete t.resource'],
         ['(t.shop || t.office) && !(t.facility) && !(t.building) && !(t.amenity == "fuel")','a.F_CODE = "AL013"'],
         ['t.amenity == "fuel" && t.building == "yes"','a.F_CODE = "AL013"'],
+        ['t["seamark:type"] == "gate"','a.F_CODE = "BI045"; delete t["seamark:type"]'],
         ['t["seamark:type"]','delete t["seamark:type"]'],
         ['t["seamark:mooring:category"]','delete t["seamark:mooring:category"]'],
         ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
@@ -2187,6 +2249,45 @@ tds71 = {
     for (var i = 0, rLen = tds71.tdsPreRules.length; i < rLen; i++)
     {
       if (tds71.tdsPreRules[i][0](tags)) tds71.tdsPreRules[i][1](tags,attrs);
+    }
+
+    if (tags.landuse == 'aeration' && tags.basin == 'aeration')
+    {
+      attrs.F_CODE = 'AB040';
+      delete tags.landuse;
+      delete tags.basin;
+    }
+
+    if (!attrs.F_CODE && tags['building:part'] == 'yes')
+    {
+      attrs.F_CODE = 'AL018';
+    }
+
+    if (!attrs.F_CODE && tags.attraction == 'amusement_ride')
+    {
+      attrs.F_CODE = 'AK020';
+      delete tags.attraction;
+    }
+
+    if (!attrs.F_CODE && tags.man_made == 'observatory')
+    {
+      attrs.F_CODE = 'AL142';
+    }
+
+    if (!attrs.F_CODE && tags['bridge:support'] == 'pylon')
+    {
+      attrs.F_CODE = 'AQ055';
+    }
+
+    if (!attrs.F_CODE && tags.natural == 'scrub')
+    {
+        attrs.F_CODE = 'EB070';
+    }
+
+    if (!attrs.F_CODE && ['fissure', 'fumarole', 'hot_spring', 'sulphur_spring',
+        'geyser', 'other_geothermal_outlet'].includes(tags.natural))
+    {
+      attrs.F_CODE = 'DB115';
     }
 
     // Specific OSM tags for features with established legacy tag equivalents.
@@ -3298,6 +3399,15 @@ tds71 = {
     }
 
     // Do not preserve these translated source tags in OSMTAGS.
+    if (tags['building:part'] == 'yes' && attrs.F_CODE == 'AL018')
+      delete notUsedTags['building:part'];
+
+    if (tags.man_made == 'observatory' && attrs.F_CODE == 'AL142')
+      delete notUsedTags.man_made;
+
+    if (tags['bridge:support'] == 'pylon' && attrs.F_CODE == 'AQ055')
+      delete notUsedTags['bridge:support'];
+
     if (tags.man_made == 'petroleum_well' && attrs.F_CODE == 'AA054')
       delete notUsedTags.man_made;
 
@@ -3745,6 +3855,11 @@ tds71 = {
       delete notUsedTags.tcrop;
     }
 
+    if (tags.leisure == 'golf_course' && attrs.F_CODE == 'AK100' && geometryType !== 'Area')
+    {
+      delete attrs.F_CODE;
+    }
+
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
@@ -3979,7 +4094,8 @@ tds71 = {
     if (tds71.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // The Nuke Option: If we have a relation, drop the feature and carry on
-    if (tags['building:part']) return null;
+    // Adding an exception here for building:part as per Ed's request
+    if (tags['building:part'] && tags['building:part'] != 'yes') return null;
 
     // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
     // There is no way we can translate these to a single TDS feature.
