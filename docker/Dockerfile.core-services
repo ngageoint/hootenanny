@@ -154,7 +154,6 @@ RUN dnf -y --disablerepo=pgdg* \
         xorg-x11-server-Xvfb \
         zip
 
-#@TODO: move these packages into hoot-repo so that they don't have to be built here. include a GDAL build that has libkml and filgdb enabled.
 RUN dnf -y remove postgresql || true && \
     dnf install -y --nogpgcheck \
         postgresql$postgresql_version \
