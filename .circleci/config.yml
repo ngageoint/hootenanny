@@ -1,5 +1,5 @@
 ---
-version: 2
+version: 2.1
 
 jobs:
   archive-create:
@@ -65,7 +65,6 @@ jobs:
             if [ $( cat lint.log | wc -l ) -gt 0 ]; then cat lint.log && exit 1; fi
 
 workflows:
-  version: 2
   tests:
     jobs:
       - archive-create
