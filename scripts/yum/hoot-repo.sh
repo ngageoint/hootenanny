@@ -5,6 +5,7 @@ HOOT_DEPS_CHANNEL="${HOOT_DEPS_CHANNEL:-stable}"
 HOOT_DEPS_BASEURL="${HOOT_DEPS_BASEURL:-https://hoot-repo.s3.amazonaws.com/el7/deps/${HOOT_DEPS_CHANNEL}}"
 HOOT_DEPS_KEY=/etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
 HOOT_DEPS_REPO_GPGCHECK="${HOOT_DEPS_REPO_GPGCHECK:-1}"
+HOOT_DEPS_GPGCHECK="${HOOT_DEPS_GPGCHECK:-1}"
 
 cat > $HOOT_DEPS_KEY <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -44,7 +45,7 @@ cat > /etc/yum.repos.d/hoot.repo <<EOF
 name = Hootenanny Dependencies
 baseurl = ${HOOT_DEPS_BASEURL}
 enable = 1
-gpgcheck = 1
+gpgcheck = ${HOOT_DEPS_GPGCHECK}
 repo_gpgcheck = ${HOOT_DEPS_REPO_GPGCHECK}
 gpgkey=file://${HOOT_DEPS_KEY}
 EOF
