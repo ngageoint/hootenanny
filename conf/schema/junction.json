@@ -16,6 +16,7 @@
     },
     {
         "description": "A conventional roundabout",
+        "geometries": [ "node", "linestring" ],
         "isA": "junction",
         "name": "junction=roundabout",
         "objectType": "tag",
