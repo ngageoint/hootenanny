@@ -319,9 +319,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(const Con
     // Hootenanny by default requires that an polygon element be an area in the schema in order
     // to be converted to a polygon, it is created as a linestring. There are situations, however,
     // where we want to relax this requirement (generic geometry matching).
-    if (w->isValidPolygon() && w->isClosedArea())
-      return GEOS_POLYGON;
-    else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
+    if (w->isValidPolygon() && areaCrit->isSatisfied(w))
       return GEOS_POLYGON;
     else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
       return GEOS_POLYGON;
