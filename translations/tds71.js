@@ -1060,7 +1060,6 @@ tds71 = {
 
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-    if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
     if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
@@ -1134,6 +1133,58 @@ tds71 = {
     case 'AB040':
       tags.landuse = 'aeration';
       tags.basin = 'aeration';
+      break;
+
+    case 'AH055':
+      delete tags.military;
+      tags.building = 'bunker';
+      break;
+
+    case 'AL025': // Cairn
+      tags.man_made = 'cairn';
+      tags.historic = 'archaeological_site';
+      break;
+
+    case 'AT041': // Cableway
+      var aerialwayTypes = {'2':'chair_lift', '5':'cable_car', '6':'gondola',
+        '7':'t-bar', '9':'goods', '999':'other'};
+      if (aerialwayTypes.hasOwnProperty(attrs.CAT))
+      {
+        tags.aerialway = aerialwayTypes[attrs.CAT];
+        delete tags.cableway;
+        delete tags['cableway:type'];
+      }
+      break;
+
+    case 'BI010': // Cistern
+      tags.man_made = 'tank';
+      tags.content = 'water';
+      delete tags.product;
+      break;
+
+    case 'AM020': // Grain Storage Structure
+      tags.man_made = 'silo';
+      tags.content = 'grain';
+      delete tags.building;
+      delete tags.product;
+      break;
+
+    case 'AM030': // Grain Elevator
+      tags.building = 'silo';
+      tags.content = 'grain';
+      delete tags.man_made;
+      delete tags.product;
+      break;
+
+    case 'EC010': // Cane
+      tags.landuse = 'farmland';
+      tags.crop = 'sugarcane';
+      delete tags.natural;
+      break;
+
+    case 'GB050': // Defensive Revetment
+      tags.barrier = 'berm';
+      delete tags.military;
       break;
 
     case 'AK020':
@@ -1417,6 +1468,15 @@ tds71 = {
 
     case 'AL013':
       switch (attrs.FFN) {
+        case '550':
+          if (attrs.FFN2 == '549' && attrs.FFN3 == '563')
+          {
+            tags.building = 'apartments';
+            delete tags.use;
+            delete tags['use:2'];
+            delete tags['use:3'];
+          }
+          break;
         case '99':
           delete tags.landuse;
           break;
@@ -1945,6 +2005,9 @@ tds71 = {
     // Unpack othertags if required
     translate.unpackOtherTags(tags);
 
+    // It's been requested that no feature with either of these tag pairings gets translated
+    if (tags.building == 'ship' || tags.historic == 'ship') return;
+
     if (tags.building == 'part') delete tags.building;
     if (tags.depot && tags.landuse == 'industrial') delete tags.landuse;
     delete tags['demolished:building'];
@@ -2141,7 +2204,9 @@ tds71 = {
         ['t.amenity == "cinema" && t.building == "retail"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "594"; delete t.amenity; delete t.building'],
         ['t.amenity == "courthouse"','a.F_CODE = "AL013"; a.FFN = "830"; a.FFN2 = "831"; a.FFN3 = "840"; delete t.amenity'],
         ['t.amenity == "exhibition_centre" && t.building == "commercial"','a.F_CODE = "AL020"; a.FFN = "970"; a.FFN2 = "579"; delete t.amenity; delete t.building'],
+        ['t.man_made == "cairn" && t.historic == "archaeological_site"','a.F_CODE = "AL025"; delete t.historic'],
         ['t.historic == "archaeological_site" && t.barrier == "fence"','a.F_CODE = "AL012"; delete t.historic; delete t.barrier'],
+        ['t.barrier == "berm"','a.F_CODE = "GB050"; delete t.barrier;'],
         ['t.barrier == "retaining_wall" && t.material == "stone"','a.F_CODE = "AL260"; a.MCC = "108"; a.WTI = "2"; delete t.barrier; delete t.material'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
@@ -2151,13 +2216,16 @@ tds71 = {
         ['t.building == "commercial" && t.amenity == "theatre"','a.F_CODE = "AL013"; a.FFN = "890"; a.FFN2 = "891"; delete t.building; delete t.amenity'],
         ['t.building == "yes" && t.office == "newspaper"','a.F_CODE = "AL013"; a.FFN = "580"; a.FFN2 = "582"; delete t.building; delete t.office'],
         ['t.building == "industrial"','a.FFN = "99"'],
+        ['t.building == "apartments"','a.F_CODE = "AL013"; a.FFN = "550"; a.FFN2 = "549"; a.FFN3 = "563"; delete t.building'],
+        ['t.building == "silo" && t.content == "grain"','a.F_CODE = "AM030"; delete t.building; delete t.content;'],
         ['t.building == "palace"','a.F_CODE = "AL013"; a.FFN = "808"; a.FFN2 = "811"; a.FFN3 = "815"; delete t.building'],
         ['t.building == "public" && t.amenity == "community_centre"','a.F_CODE = "AL013"; a.FFN = "970"; a.FFN2 = "893"; delete t.building'],
         ['t.building == "retail" && t.shop == "mall"','a.FFN = "460"; delete t.building'],
-        ['t.building == "ship"','delete t.building'], // TDS does not define floating buildings
         ['t.building == "yes" && t.abandoned == "yes"','a.PCF = "3"'],
         ['t.club == "yes"','a.F_CODE = "AL010"; a.FFN = "950"; a.FFN2 = "954"; delete t.club'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
+        ['t.man_made == "tank" && t.content == "water"','a.F_CODE = "BI010"; delete t.man_made; delete t.content;'],
+        ['t.man_made == "silo" && t.content == "grain"','a.F_CODE = "AM020"; delete t.content;'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
         ['t.crossing == "tank" && t.highway == "crossing"','delete t.highway'],
@@ -2174,6 +2242,7 @@ tds71 = {
         ['t.historic == "castle" && t.castle_type == "fortification"','a.F_CODE = "AL376"; delete t.historic; delete t.castle_type'],
         ['t.historic == "tomb" && t.tomb == "pyramid"','a.F_CODE = "AL036"; a.SSC = "12"; delete t.building; delete t.historic; delete t.tomb; delete t.tourism; delete t.material'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
+        ['t.landuse == "farmland" && t.crop == "sugarcane"','a.F_CODE = "EC010"; delete t.landuse; delete t.crop;'],
         ['t.landuse == "retail"','delete t.place'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
         ['t.leisure == "sports_centre"','a.F_CODE = "AL010"; a.FFN = "900"; a.FFN2 = "912"; delete t.leisure; delete t.building'],
@@ -2250,6 +2319,8 @@ tds71 = {
     {
       if (tds71.tdsPreRules[i][0](tags)) tds71.tdsPreRules[i][1](tags,attrs);
     }
+
+    if (!attrs.F_CODE && tags.aerialway) attrs.F_CODE = 'AT041';
 
     if (tags.landuse == 'aeration' && tags.basin == 'aeration')
     {
@@ -3369,6 +3440,21 @@ tds71 = {
 
   applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
   {
+    if (tags.building == 'ship' || tags.historic == 'ship')
+    {
+      delete attrs.F_CODE;
+      return;
+    }
+
+    if (attrs.F_CODE == 'AT041' && tags.aerialway)
+    {
+      var aerialwayTypes = {'gondola':'6', 'chair_lift':'2', 'cable_car':'5',
+        't-bar':'7', 'goods':'9'};
+      var knownAerialway = aerialwayTypes.hasOwnProperty(tags.aerialway);
+      attrs.CAT = knownAerialway ? aerialwayTypes[tags.aerialway] : '999';
+      delete notUsedTags.aerialway;
+    }
+
     // Shoreline Construction (BB081) covers a lot of features
     if (attrs.PWC) attrs.F_CODE = 'BB081';
 
@@ -3648,14 +3734,6 @@ tds71 = {
         if (!attrs.TID) attrs.TID = '1000'; // Not tidal
         break;
       
-      case 'AL013':
-        if (tags.building == 'apartments')
-        {
-          attrs.FFN = '550';
-          attrs.FFN2 = '549';
-          attrs.FFN3 = '563';
-        }
-        break;
     } // End switch F_CODE
 
     // Fix HGT and LMC to keep GAIT happy
@@ -3856,6 +3934,12 @@ tds71 = {
     }
 
     if (tags.leisure == 'golf_course' && attrs.F_CODE == 'AK100' && geometryType !== 'Area')
+    {
+      delete attrs.F_CODE;
+    }
+
+    if ((tags.tourism == 'caravan_site' && attrs.F_CODE == 'AI020' && geometryType == 'Point') ||
+        (tags.waterway == 'dam' && attrs.F_CODE == 'BI020' && geometryType !== 'Area'))
     {
       delete attrs.F_CODE;
     }
