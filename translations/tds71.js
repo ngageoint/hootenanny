@@ -1256,7 +1256,15 @@ tds71 = {
       break;
 
     case 'AL010':
-      if (attrs.FFN == '808' && attrs.FFN2 == '825' && attrs.FFN3 == '827')
+      if (attrs.FFN == '550' && attrs.FFN2 == '548' && attrs.FFN3 == '552')
+      {
+        tags.leisure = 'beach_resort';
+        delete tags.facility;
+        delete tags.tourism;
+        delete tags.use;
+        delete tags['use:2'];
+      }
+      else if (attrs.FFN == '808' && attrs.FFN2 == '825' && attrs.FFN3 == '827')
       {
         tags.office = 'diplomatic';
         tags.diplomatic = 'embassy';
@@ -1686,6 +1694,10 @@ tds71 = {
       {
         tags.electrified = 'contact_line';
       }
+      if (attrs.PCF == '5')
+      {
+        tags.railway = 'razed';
+      }
       break;
 
     // case 'AP010': // Track
@@ -1770,6 +1782,20 @@ tds71 = {
       break;
 
     case 'DA010': // Soil Surface Region
+      if (attrs.TSM == '13' && attrs.SRD == '1')
+      {
+        tags.natural = 'beach';
+        delete tags.landuse;
+        delete tags.geological;
+      }
+      else if (!attrs.TSM && !attrs.SRD && !attrs.SWC)
+      {
+        // Bare DA010 represents brownfield; keep material-specific imports unchanged.
+        tags.landuse = 'brownfield';
+        delete tags.natural;
+        delete tags.geological;
+      }
+
       if (tags.natural && (tags.natural == tags.terrain_surface))
       {
         delete tags.geological;  // The natural tag is the better one to use
@@ -2707,11 +2733,6 @@ tds71 = {
       attrs.F_CODE = 'DA010'
       break;
 
-    case 'construction':
-      tags.condition = 'construction';
-      tags.landuse = 'built_up_area';
-      break;
-
     case 'farm':
     case 'allotments':
     case 'farmland':
@@ -3434,6 +3455,9 @@ tds71 = {
       tags.crop = 'grape';
     }
 
+    // leaving this tag causes certain FFNs to be overridden later
+    if (tags.landuse == 'construction' && attrs.F_CODE) delete tags.landuse;
+
   }, // End applyToOgrPreProcessing
 
   // #####################################################################################################
@@ -3445,6 +3469,8 @@ tds71 = {
       delete attrs.F_CODE;
       return;
     }
+
+    if (attrs.F_CODE == 'DA010' && tags.natural == 'beach') delete notUsedTags.natural;
 
     if (attrs.F_CODE == 'AT041' && tags.aerialway)
     {
@@ -3862,6 +3888,7 @@ tds71 = {
 
       case 'razed':
         attrs.PCF = '5'; // Dismantled
+        if (attrs.F_CODE == 'AN010') delete notUsedTags.railway;
         break;
     }
 
